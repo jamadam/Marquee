@@ -48,8 +48,7 @@ use Mojolicious::Commands;
             $tx->res->body('403 Forbidden');
             $tx->res->code(403);
             $tx->res->headers->content_type($types->type('html'));
-            $tx->resume;
-            return $tx;
+            return $tx->resume;
         }
         
         my $path = $tx->req->url->path;
@@ -63,7 +62,7 @@ use Mojolicious::Commands;
         }
         
         # Try to dispatch to directory hierarcy
-        ROOTS: for my $root ($self->document_root, _asset()) {
+        for my $root ($self->document_root, _asset()) {
             
             my $path = File::Spec->catfile($root. $filled_path);
             
@@ -71,7 +70,7 @@ use Mojolicious::Commands;
             if (-f $path) {
                 $tx->res->content->asset(Mojo::Asset::File->new(path => $path));
                 $tx->res->code(200);
-                last ROOTS;
+                return $tx->resume;
             }
             
             # dynamic dispatch
@@ -80,42 +79,36 @@ use Mojolicious::Commands;
                 if (-f $path && $cb) {
                     $tx->res->body(encode('UTF-8', $cb->($path)));
                     $tx->res->code(200);
-                    last ROOTS;
+                    return $tx->resume;
                 }
             }
         }
         
-        if (! $tx->res->code) {
-            my $dir = File::Spec->catfile($self->document_root. $path);
+        if (-d (my $dir = File::Spec->catfile($self->document_root. $path))) {
             
-            if (-d $dir) {
-                
-                # redirect to trailing slashed path
-                if (substr($path, -1, 1) ne '/') {
-                    $tx->res->code(301);
-                    my $new_path = $path->clone->trailing_slash(1);
-                    $tx->res->headers->location($tx->req->url->clone->path($new_path)->to_abs);
-                }
-                
-                # auto index rendering
-                elsif ($self->auto_index) {
-                    $tx->res->body(encode('UTF-8', $self->indexes($path)));
-                    $tx->res->code(200);
-                    $tx->res->headers->content_type($types->type('html'));
-                }
+            # redirect to trailing slashed path
+            if (substr($path, -1, 1) ne '/') {
+                $tx->res->code(301);
+                my $new_path = $path->clone->trailing_slash(1);
+                $tx->res->headers->location($tx->req->url->clone->path($new_path)->to_abs);
+                return $tx->resume;
+            }
+            
+            # auto index rendering
+            if ($self->auto_index) {
+                $tx->res->body(encode('UTF-8', $self->indexes($path)));
+                $tx->res->code(200);
+                $tx->res->headers->content_type($types->type('html'));
+                return $tx->resume;
             }
         }
         
         # 404 rendering
-        if (! $tx->res->code) {
-            $tx->res->body('404 File Not Found');
-            $tx->res->code(404);
-            $tx->res->headers->content_type($types->type('html'));
-        }
+        $tx->res->body('404 File Not Found');
+        $tx->res->code(404);
+        $tx->res->headers->content_type($types->type('html'));
         
-        $tx->resume;
-        
-        return $tx;
+        return $tx->resume;
     }
     
     ### --

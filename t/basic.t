@@ -7,8 +7,9 @@ use Test::More;
 use Test::Mojo;
 use Directoricious;
 use FindBin;
+use Mojo::Date;
     
-    use Test::More tests => 81;
+    use Test::More tests => 88;
 
     my $app;
     my $t;
@@ -86,6 +87,17 @@ use FindBin;
 	$t->get_ok('/index3.html.test2')
         ->status_is(403)
         ->content_like(qr"403 Forbidden");
+    
+    ### if-modified-since
+    
+    my $mtime = Mojo::Date->new((stat "$FindBin::Bin/public_html/index.txt")[9]);
+    $t->get_ok('/index.txt')
+        ->status_is(200)
+        ->header_is('Content-Length', 20)
+        ->header_is('Last-Modified', $mtime);
+    $t->get_ok('/index.txt', {'If-Modified-Since' => $mtime})
+        ->status_is(304)
+        ->header_is('Content-Length', 0);
     
     ### auto index tests
     

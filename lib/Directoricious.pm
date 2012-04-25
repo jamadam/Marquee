@@ -68,8 +68,7 @@ use Mojolicious::Commands;
             
             # static dispatch
             if (-f $path) {
-                $tx->res->content->asset(Mojo::Asset::File->new(path => $path));
-                $tx->res->code(200);
+                $self->serve_static($tx, $path);
                 return $tx->resume;
             }
             
@@ -109,6 +108,32 @@ use Mojolicious::Commands;
         $tx->res->headers->content_type($types->type('html'));
         
         return $tx->resume;
+    }
+    
+    sub serve_static {
+        my ($self, $tx, $path) = @_;
+        
+        my $asset = Mojo::Asset::File->new(path => $path);
+        my $modified = (stat $path)[9];
+        
+        # If modified since
+        my $req_headers = $tx->req->headers;
+        my $res_headers = $tx->res->headers;
+        if (my $date = $req_headers->if_modified_since) {
+            my $since = Mojo::Date->new($date)->epoch;
+            if (defined $since && $since == $modified) {
+                $res_headers->remove('Content-Type')
+                    ->remove('Content-Length')
+                    ->remove('Content-Disposition');
+                return $tx->res->code(304);
+            }
+        }
+        
+        $tx->res->content->asset($asset);
+        $tx->res->code(200);
+        $res_headers->last_modified(Mojo::Date->new($modified));
+        
+        return $tx;
     }
     
     ### --

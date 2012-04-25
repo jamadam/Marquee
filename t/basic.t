@@ -31,12 +31,12 @@ use Mojo::Date;
         ->header_is('Content-Length', 25)
         ->content_like(qr{index.html.ep \d+\n});
     $t->get_ok('/index.html.ep')
+        ->status_is(403)
         ->content_type_is('text/html;charset=UTF-8')
-        ->header_is('Content-Length', 13)
-        ->status_is(403);
+        ->header_is('Content-Length', 13);
     $t->get_ok('/index.html')
-        ->content_type_is('text/html;charset=UTF-8')
         ->status_is(200)
+        ->content_type_is('text/html;charset=UTF-8')
         ->header_is('Content-Length', 25)
         ->content_like(qr{index.html.ep \d+\n});
     $t->get_ok('/index.txt')

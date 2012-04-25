@@ -74,7 +74,7 @@ use Mojolicious::Commands;
             
             # dynamic dispatch
             while (my ($ext, $cb) = each %{$self->template_handlers}) {
-                my $path = $path. ".$ext";
+                my $path = "$path.$ext";
                 if (-f $path && $cb) {
                     $tx->res->body(encode('UTF-8', $cb->($path)));
                     $tx->res->code(200);

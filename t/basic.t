@@ -88,9 +88,10 @@ use Mojo::Date;
     $app->document_root("$FindBin::Bin/public_html");
     $app->auto_index(1);
     $app->template_handlers({
-        test => sub {return $_[0]},
-        test2 => sub {return 'rendered'},
+        test    => sub {return $_[0]},
+        test2   => sub {return 'rendered'},
     });
+    
     $t = Test::Mojo->new($app);
 
 	$t->get_ok('/index2.html')

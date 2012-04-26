@@ -26,11 +26,6 @@ use Mojolicious::Commands;
     );
     
     ### --
-    ### extension regex for detecting templates
-    ### --
-    our $handler_re;
-    
-    ### --
     ### handler
     ### --
     sub handler {
@@ -40,10 +35,10 @@ use Mojolicious::Commands;
             die 'document_root is not a directory';
         }
         
-        local $handler_re =
-            '(?:'. join('|', keys %{$self->template_handlers}). ')';
+        $self->{_handler_re} =
+                    '\.(?:'. join('|', keys %{$self->template_handlers}). ')$';
         
-        if ($tx->req->url =~ qr{\.$handler_re$}) {
+        if ($tx->req->url =~ /$self->{_handler_re}/) {
             $self->serve_error_document($tx, 403);
         } else {
             my $res = $tx->res;
@@ -193,7 +188,7 @@ use Mojolicious::Commands;
             }
             my $fpath = File::Spec->catfile($dir, $file);
             push(@dset, {
-                name        => -f $fpath ? _strip_template_ext($file) : $file. '/',
+                name        => -f $fpath ? $self->_strip_template_ext($file) : $file. '/',
                 timestamp   => _file_timestamp($fpath),
                 size        => _file_size($fpath),
                 type        => -f $fpath ? _file_to_mime_class($file) : 'dir',
@@ -249,8 +244,8 @@ use Mojolicious::Commands;
     ### handler
     ### --
     sub _strip_template_ext {
-        my $file = shift;
-        $file =~ s{\.$handler_re$}{};
+        my ($self, $file) = @_;
+        $file =~ s/$self->{_handler_re}//;
         return $file;
     }
     

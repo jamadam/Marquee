@@ -9,7 +9,7 @@ use Directoricious;
 use FindBin;
 use Mojo::Date;
     
-    use Test::More tests => 101;
+    use Test::More tests => 106;
 
     my $app;
     my $t;
@@ -76,6 +76,11 @@ use Mojo::Date;
         ->content_type_is('text/plain')
         ->header_is('Content-Length', 19)
         ->content_like(qr{dynamic \d+\n});
+    $t->get_ok('/index.unknown')
+        ->status_is(200)
+        ->header_is('Content-Type', undef)
+        ->header_is('Content-Length', 14)
+        ->content_is('unknown format');
     
     ### adding template handler tests
     

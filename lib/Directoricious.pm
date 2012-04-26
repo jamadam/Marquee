@@ -19,6 +19,12 @@ use Mojolicious::Commands;
     
     my $types = Mojolicious::Types->new;
     
+    my %error_messages = (
+        404 => 'File not found',
+        500 => 'Internal server error',
+        403 => 'Forbidden',
+    );
+    
     ### --
     ### extension regex for detecting templates
     ### --
@@ -37,59 +43,57 @@ use Mojolicious::Commands;
         local $handler_re =
             '(?:'. join('|', keys %{$self->template_handlers}). ')';
         
-        my $res = $tx->res;
-        
         if ($tx->req->url =~ qr{\.$handler_re$}) {
             $self->serve_error_document($tx, 403);
-            return $tx->resume;
-        }
-        
-        my $path = $tx->req->url->path;
-        my $filled_path = $self->_auto_fill_filename($path->clone);
-        
-        # Content-type
-        if (my $ext = ($path =~ qr{\.(\w+)$})[0]) {
-            $res->headers->content_type($types->type($ext));
         } else {
-            $res->headers->content_type($types->type('html'));
-        }
-        
-        # Try to dispatch to directory hierarcy
-        for my $root ($self->document_root, _asset()) {
-            my $path = File::Spec->catfile($root. $filled_path);
-            if (-f $path) {
-                $self->serve_static($tx, $path);
-            } else {
-                $self->serve_dynamic($tx, $path);
+            my $res = $tx->res;
+            my $path = $tx->req->url->path;
+            my $filled_path = $self->_auto_fill_filename($path->clone);
+            
+            if (my $type = $self->mime_type($filled_path)) {
+                $res->headers->content_type($type);
             }
-            if ($res->code) {
-                last;
-            }
-        }
-        
-        if (! $res->code) {
-            my $dir = File::Spec->catfile($self->document_root. $path);
-            if (-d $dir) {
-                if (substr($path, -1, 1) ne '/') {
-                    $self->serve_redirect_to_slashed($tx, $path);
-                } elsif ($self->auto_index) {
-                    $self->serve_index($tx, $path);
+            
+            for my $root ($self->document_root, _asset()) {
+                my $path = File::Spec->catfile($root. $filled_path);
+                if (-f $path) {
+                    $self->serve_static($tx, $path);
+                } else {
+                    $self->serve_dynamic($tx, $path);
+                }
+                if ($res->code) {
+                    last;
                 }
             }
-        }
-        
-        if (! $res->code) {
-            $self->serve_error_document($tx, 404);
+            
+            if (! $res->code) {
+                my $dir = File::Spec->catfile($self->document_root. $path);
+                if (-d $dir) {
+                    if (substr($path, -1, 1) ne '/') {
+                        $self->serve_redirect_to_slashed($tx, $path);
+                    } elsif ($self->auto_index) {
+                        $self->serve_index($tx, $path);
+                    }
+                }
+            }
+            
+            if (! $res->code) {
+                $self->serve_error_document($tx, 404);
+            }
         }
         
         return $tx->resume;
     }
     
-    my %error_messages = (
-        404 => 'File not found',
-        500 => 'Internal server error',
-        403 => 'Forbidden',
-    );
+    ### --
+    ### detect mimt type out of path name
+    ### --
+    sub mime_type {
+        my ($self, $path) = @_;
+        if (my $ext = ($path =~ qr{\.(\w+)$})[0]) {
+            return $types->type($ext);
+        }
+    }
     
     ### --
     ### serve redirect to slashed directory

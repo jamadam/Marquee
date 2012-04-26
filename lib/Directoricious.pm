@@ -12,7 +12,7 @@ use Mojolicious::Commands;
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('auto_index', 0);
     __PACKAGE__->attr('default_file', 'index.html');
-    
+    __PACKAGE__->attr('inited');
     __PACKAGE__->attr('template_handlers', sub {{
         ep => sub {Mojo::Template->new->render_file($_[0])},
     }});
@@ -31,12 +31,9 @@ use Mojolicious::Commands;
     sub handler {
         my ($self, $tx) = @_;
         
-        if (! -d $self->document_root) {
-            die 'document_root is not a directory';
+        if (! $self->inited) {
+            $self->init;
         }
-        
-        $self->{_handler_re} =
-                    '\.(?:'. join('|', keys %{$self->template_handlers}). ')$';
         
         if ($tx->req->url =~ /$self->{_handler_re}/) {
             $self->serve_error_document($tx, 403);
@@ -78,6 +75,19 @@ use Mojolicious::Commands;
         }
         
         return $tx->resume;
+    }
+    
+    sub init {
+        my $self = shift;
+        
+        if (! -d $self->document_root) {
+            die 'document_root is not a directory';
+        }
+        
+        $self->{_handler_re} =
+                    '\.(?:'. join('|', keys %{$self->template_handlers}). ')$';
+        
+        $self->inited(1);
     }
     
     ### --
@@ -157,7 +167,8 @@ use Mojolicious::Commands;
         my ($self, $tx, $path) = @_;
         
         # dynamic dispatch
-        while (my ($ext, $cb) = each %{$self->template_handlers}) {
+        for my $ext (keys %{$self->template_handlers}) {
+            my $cb = $self->template_handlers->{$ext};
             my $path = "$path.$ext";
             if (-f $path && $cb) {
                 $tx->res->body(encode('UTF-8', $cb->($path)));
@@ -214,7 +225,9 @@ use Mojolicious::Commands;
     ### start app
     ### --
     sub start {
-        Mojolicious::Commands->start_app($_[0]);
+        my $self = shift;
+        $self->init;
+        Mojolicious::Commands->start_app($self);
     }
     
     ### --

@@ -117,6 +117,9 @@ use Mojo::Date;
     $app->auto_index(1);
     $t = Test::Mojo->new($app);
     
+    open(my $file, "> $FindBin::Bin/public_html_index/日本語.html");
+    close($file);
+    
 	$t->get_ok('/')
 		->status_is(200)
 		->content_like(qr{<title>Index of /</title>})
@@ -128,6 +131,8 @@ use Mojo::Date;
 		->content_like(qr{日本語})
 		->content_like(qr{<a class="image" href="image.png">image.png</a>});
 	
+    unlink("$FindBin::Bin/public_html_index/日本語.html");
+    
     $t->get_ok('/some_dir/')
 		->status_is(200)
 		->content_like(qr{<a class="dir" href="\.\./">\.\./</a>})

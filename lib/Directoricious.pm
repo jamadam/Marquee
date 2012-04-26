@@ -20,13 +20,6 @@ use Mojolicious::Commands;
     my $types = Mojolicious::Types->new;
     
     ### --
-    ### start app
-    ### --
-    sub start {
-        Mojolicious::Commands->start_app($_[0]);
-    }
-    
-    ### --
     ### extension regex for detecting templates
     ### --
     our $handler_re;
@@ -52,7 +45,7 @@ use Mojolicious::Commands;
         }
         
         my $path = $tx->req->url->path;
-        my $filled_path = $self->auto_fill_filename($path->clone);
+        my $filled_path = $self->_auto_fill_filename($path->clone);
         
         # Content-type
         if (my $ext = ($path =~ qr{\.(\w+)$})[0]) {
@@ -62,20 +55,15 @@ use Mojolicious::Commands;
         }
         
         # Try to dispatch to directory hierarcy
-        ROOT : for my $root ($self->document_root, _asset()) {
-            
+        for my $root ($self->document_root, _asset()) {
             my $path = File::Spec->catfile($root. $filled_path);
-            
             if (-f $path) {
-                # serve static content
                 $self->serve_static($tx, $path);
-                last ROOT;
             } else {
-                # serve dynamic content
                 $self->serve_dynamic($tx, $path);
-                if ($res->code) {
-                    last ROOT;
-                }
+            }
+            if ($res->code) {
+                last;
             }
         }
         
@@ -83,21 +71,14 @@ use Mojolicious::Commands;
             my $dir = File::Spec->catfile($self->document_root. $path);
             if (-d $dir) {
                 if (substr($path, -1, 1) ne '/') {
-                    # redirect to trailing slashed path
-                    $res->code(301);
-                    my $new_path = $path->clone->trailing_slash(1);
-                    $res->headers->location(
-                                $tx->req->url->clone->path($new_path)->to_abs);
-                }
-                elsif ($self->auto_index) {
-                    # serve auto index
+                    $self->serve_redirect_to_slashed($tx, $path);
+                } elsif ($self->auto_index) {
                     $self->serve_index($tx, $path);
                 }
             }
         }
         
         if (! $res->code) {
-            # serve 404
             $self->serve_error_document($tx, 404);
         }
         
@@ -109,6 +90,26 @@ use Mojolicious::Commands;
         500 => 'Internal server error',
         403 => 'Forbidden',
     );
+    
+    ### --
+    ### serve redirect to slashed directory
+    ### --
+    sub serve_redirect_to_slashed {
+        my ($self, $tx, $path) = @_;
+        my $uri =
+            $tx->req->url->clone->path($path->clone->trailing_slash(1))->to_abs;
+        return $self->serve_redirect($tx, $uri);
+    }
+    
+    ### --
+    ### serve redirect
+    ### --
+    sub serve_redirect {
+        my ($self, $tx, $uri) = @_;
+        $tx->res->code(301);
+        $tx->res->headers->location($uri);
+        return $tx;
+    }
     
     ### --
     ### serve error document
@@ -167,18 +168,6 @@ use Mojolicious::Commands;
         }
     }
     
-    ### --
-    ### auto fill files
-    ### --
-    sub auto_fill_filename {
-        my ($self, $path) = @_;
-        if ($path->trailing_slash || ! @{$path->parts}) {
-            push(@{$path->parts}, $self->default_file);
-            $path->trailing_slash(0);
-        }
-        return $path;
-    }
-    
     ### ---
     ### Render file list
     ### ---
@@ -220,6 +209,25 @@ use Mojolicious::Commands;
         $tx->res->headers->content_type($types->type('html'));
         
         return $tx;
+    }
+    
+    ### --
+    ### start app
+    ### --
+    sub start {
+        Mojolicious::Commands->start_app($_[0]);
+    }
+    
+    ### --
+    ### auto fill files
+    ### --
+    sub _auto_fill_filename {
+        my ($self, $path) = @_;
+        if ($path->trailing_slash || ! @{$path->parts}) {
+            push(@{$path->parts}, $self->default_file);
+            $path->trailing_slash(0);
+        }
+        return $path;
     }
 
     ### ---

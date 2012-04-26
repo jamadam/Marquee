@@ -44,10 +44,10 @@ use Mojolicious::Commands;
         local $handler_re =
             '(?:'. join('|', keys %{$self->template_handlers}). ')';
         
+        my $res = $tx->res;
+        
         if ($tx->req->url =~ qr{\.$handler_re$}) {
-            $tx->res->body('403 Forbidden');
-            $tx->res->code(403);
-            $tx->res->headers->content_type($types->type('html'));
+            $self->serve_error_document($tx, 403);
             return $tx->resume;
         }
         
@@ -56,60 +56,74 @@ use Mojolicious::Commands;
         
         # Content-type
         if (my $ext = ($path =~ qr{\.(\w+)$})[0]) {
-            $tx->res->headers->content_type($types->type($ext));
+            $res->headers->content_type($types->type($ext));
         } else {
-            $tx->res->headers->content_type($types->type('html'));
+            $res->headers->content_type($types->type('html'));
         }
         
         # Try to dispatch to directory hierarcy
-        for my $root ($self->document_root, _asset()) {
+        ROOT : for my $root ($self->document_root, _asset()) {
             
             my $path = File::Spec->catfile($root. $filled_path);
             
-            # static dispatch
             if (-f $path) {
+                # serve static content
                 $self->serve_static($tx, $path);
-                return $tx->resume;
-            }
-            
-            # dynamic dispatch
-            while (my ($ext, $cb) = each %{$self->template_handlers}) {
-                my $path = "$path.$ext";
-                if (-f $path && $cb) {
-                    $tx->res->body(encode('UTF-8', $cb->($path)));
-                    $tx->res->code(200);
-                    return $tx->resume;
+                last ROOT;
+            } else {
+                # serve dynamic content
+                $self->serve_dynamic($tx, $path);
+                if ($res->code) {
+                    last ROOT;
                 }
             }
         }
         
-        if (-d (my $dir = File::Spec->catfile($self->document_root. $path))) {
-            
-            # redirect to trailing slashed path
-            if (substr($path, -1, 1) ne '/') {
-                $tx->res->code(301);
-                my $new_path = $path->clone->trailing_slash(1);
-                $tx->res->headers->location($tx->req->url->clone->path($new_path)->to_abs);
-                return $tx->resume;
-            }
-            
-            # auto index rendering
-            if ($self->auto_index) {
-                $tx->res->body(encode('UTF-8', $self->indexes($path)));
-                $tx->res->code(200);
-                $tx->res->headers->content_type($types->type('html'));
-                return $tx->resume;
+        if (! $res->code) {
+            my $dir = File::Spec->catfile($self->document_root. $path);
+            if (-d $dir) {
+                if (substr($path, -1, 1) ne '/') {
+                    # redirect to trailing slashed path
+                    $res->code(301);
+                    my $new_path = $path->clone->trailing_slash(1);
+                    $res->headers->location(
+                                $tx->req->url->clone->path($new_path)->to_abs);
+                }
+                elsif ($self->auto_index) {
+                    # serve auto index
+                    $self->serve_index($tx, $path);
+                }
             }
         }
         
-        # 404 rendering
-        $tx->res->body('404 File Not Found');
-        $tx->res->code(404);
-        $tx->res->headers->content_type($types->type('html'));
+        if (! $res->code) {
+            # serve 404
+            $self->serve_error_document($tx, 404);
+        }
         
         return $tx->resume;
     }
     
+    my %error_messages = (
+        404 => 'File not found',
+        500 => 'Internal server error',
+        403 => 'Forbidden',
+    );
+    
+    ### --
+    ### serve error document
+    ### --
+    sub serve_error_document {
+        my ($self, $tx, $code, $message) = @_;
+        $tx->res->body($message || ($code. ' '. $error_messages{$code}));
+        $tx->res->code($code);
+        $tx->res->headers->content_type($types->type('html'));
+        return $tx;
+    }
+    
+    ### --
+    ### serve static content
+    ### --
     sub serve_static {
         my ($self, $tx, $path) = @_;
         
@@ -137,6 +151,23 @@ use Mojolicious::Commands;
     }
     
     ### --
+    ### serve dynamic content
+    ### --
+    sub serve_dynamic {
+        my ($self, $tx, $path) = @_;
+        
+        # dynamic dispatch
+        while (my ($ext, $cb) = each %{$self->template_handlers}) {
+            my $path = "$path.$ext";
+            if (-f $path && $cb) {
+                $tx->res->body(encode('UTF-8', $cb->($path)));
+                $tx->res->code(200);
+                return $tx->resume;
+            }
+        }
+    }
+    
+    ### --
     ### auto fill files
     ### --
     sub auto_fill_filename {
@@ -151,8 +182,8 @@ use Mojolicious::Commands;
     ### ---
     ### Render file list
     ### ---
-    sub indexes {
-        my ($self, $path) = @_;
+    sub serve_index {
+        my ($self, $tx, $path) = @_;
         
         $path = decode('UTF-8', url_unescape($path));
         my $dir = File::Spec->catfile($self->document_root, $path);
@@ -181,9 +212,14 @@ use Mojolicious::Commands;
             ||
             $a->{name} cmp $b->{name}
         } @dset;
+        
         my $mt = Mojo::Template->new;
-        my $rendered = $mt->render_file(_asset('index.ep'), $path, \@dset, 'static');
-        return $rendered;
+        my $body = $mt->render_file(_asset('index.ep'), $path, \@dset, 'static');
+        $tx->res->body(encode('UTF-8', $body));
+        $tx->res->code(200);
+        $tx->res->headers->content_type($types->type('html'));
+        
+        return $tx;
     }
 
     ### ---

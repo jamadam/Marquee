@@ -9,7 +9,7 @@ use Directoricious;
 use FindBin;
 use Mojo::Date;
     
-    use Test::More tests => 99;
+    use Test::More tests => 101;
 
     my $app;
     my $t;
@@ -24,7 +24,8 @@ use Mojo::Date;
         ->header_is('Content-Length', 0)
         ->header_like(Location => qr{/dir1/$});
     $t->get_ok('/nonexists.html')
-        ->status_is(404);
+        ->status_is(404)
+        ->content_like(qr'404 file not found'i);
     $t->get_ok('/')
         ->status_is(200)
         ->content_type_is('text/html;charset=UTF-8')
@@ -33,7 +34,8 @@ use Mojo::Date;
     $t->get_ok('/index.html.ep')
         ->status_is(403)
         ->content_type_is('text/html;charset=UTF-8')
-        ->header_is('Content-Length', 13);
+        ->header_is('Content-Length', 13)
+        ->content_like(qr'403 forbidden'i);
     $t->get_ok('/index.html')
         ->status_is(200)
         ->content_type_is('text/html;charset=UTF-8')
@@ -94,10 +96,10 @@ use Mojo::Date;
         ->content_is("rendered");
 	$t->get_ok('/index2.html.test')
         ->status_is(403)
-        ->content_like(qr"403 Forbidden");
+        ->content_like(qr"403 Forbidden"i);
 	$t->get_ok('/index3.html.test2')
         ->status_is(403)
-        ->content_like(qr"403 Forbidden");
+        ->content_like(qr"403 Forbidden"i);
     
     ### if-modified-since
     

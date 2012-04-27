@@ -9,7 +9,7 @@ use Directoricious;
 use FindBin;
 use Mojo::Date;
     
-    use Test::More tests => 112;
+    use Test::More tests => 116;
 
     my $app;
     my $t;
@@ -154,6 +154,25 @@ use Mojo::Date;
     $t->get_ok('/index.txt', {'If-Modified-Since' => $mtime})
         ->status_is(304)
         ->header_is('Content-Length', 0);
+    
+    ### around dispatch hook
+    
+    $app = Directoricious->new;
+    $app->document_root("$FindBin::Bin/public_html");
+    $app->log_file("$FindBin::Bin/directoricious.log");
+    
+    $app->hook(around_dispatch => sub {
+        my ($next, $c) = @_;
+        $next->();
+        $c->tx->res->body('orverridden');
+    });
+    
+    $t = Test::Mojo->new($app);
+
+	$t->get_ok('/index.txt')
+        ->status_is(200)
+        ->header_is('Content-Length', 11)
+        ->content_is("orverridden");
     
     ### auto index tests
     

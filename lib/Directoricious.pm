@@ -8,7 +8,9 @@ use Mojo::Asset::File;
 use Mojo::Util qw'url_unescape encode decode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
-    
+use Directoricious::Controller;
+use Directoricious::Plugin;
+
     our $stash;
 
     __PACKAGE__->attr('document_root');
@@ -31,6 +33,10 @@ use Mojolicious::Commands;
         },
     }});
     
+    __PACKAGE__->attr('plugin' => sub {
+        Directoricious::Plugin->new;
+    });
+    
     my $types = Mojolicious::Types->new;
     
     my %error_messages = (
@@ -40,14 +46,11 @@ use Mojolicious::Commands;
     );
     
     ### --
-    ### handler
+    ### dispatch
     ### --
-    sub handler {
-        my ($self, $tx) = @_;
-        
-        if (! $self->inited) {
-            $self->init;
-        }
+    sub dispatch {
+        my ($self, $c) = @_;
+        my $tx = $c->{tx};
         
         if ($tx->req->url =~ /$self->{_handler_re}/) {
             $self->serve_error_document($tx, 403);
@@ -90,6 +93,45 @@ use Mojolicious::Commands;
         }
         
         return $tx->resume;
+    }
+
+    ### --
+    ### handler
+    ### --
+    sub handler {
+        my ($self, $tx) = @_;
+        
+        if (! $self->inited) {
+            $self->init;
+        }
+        
+        if (! $self->{dispatch}) {
+            $self->plugin->on(around_dispatch => sub {
+                my ($next, $c) = @_;
+                $c->app->dispatch($c);
+            });
+            $self->{dispatch}++;
+        }
+        
+        my $ok = eval {
+            $self->plugin->emit_chain(
+                around_dispatch => Directoricious::Controller->new($self, $tx)
+            );
+        };
+        
+        # Process
+        if (! $ok) {
+            $self->log->fatal("Processing request failed: $@");
+            $tx->res->code(500);
+            $tx->resume;
+        }
+    }
+    
+    ### --
+    ### hook
+    ### --
+    sub hook {
+        shift->plugin->on(@_)
     }
     
     ### --

@@ -9,7 +9,7 @@ use Directoricious;
 use FindBin;
 use Mojo::Date;
     
-    use Test::More tests => 106;
+    use Test::More tests => 112;
 
     my $app;
     my $t;
@@ -81,6 +81,40 @@ use Mojo::Date;
         ->header_is('Content-Type', undef)
         ->header_is('Content-Length', 14)
         ->content_is('unknown format');
+    
+    ### real template tests
+    
+    {
+        package _Model;
+        use strict;
+        use warnings;
+        
+        sub new {
+            my ($class) = @_;
+            return bless {
+                foo => 'FOO',
+                bar => 'BAR',
+                baz => 'BAZ',
+            }, $class;
+        }
+        
+        sub retrieve {
+            return $_[0]->{$_[1]};
+        }
+    }
+    
+    $app = Directoricious->new;
+    $app->document_root("$FindBin::Bin/public_html");
+    $app->stash(model => _Model->new);
+    
+    $t = Test::Mojo->new($app);
+    
+    $t->get_ok('/stash.html')
+        ->status_is(200)
+        ->header_is('Content-Type', 'text/html;charset=UTF-8')
+        ->header_is('Content-Length', 18)
+        ->content_like(qr'stash.html.ep')
+        ->content_like(qr'FOO');
     
     ### adding template handler tests
     

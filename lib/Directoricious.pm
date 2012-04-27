@@ -8,13 +8,26 @@ use Mojo::Asset::File;
 use Mojo::Util qw'url_unescape encode decode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
+    
+    our $stash;
 
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('auto_index', 0);
     __PACKAGE__->attr('default_file', 'index.html');
     __PACKAGE__->attr('inited');
     __PACKAGE__->attr('template_handlers', sub {{
-        ep => sub {Mojo::Template->new->render_file($_[0])},
+        ep => sub {
+            (my $path, local $stash) = @_;
+            my $mt = Mojo::Template->new;
+            my $prepend = 'use strict;';
+            $prepend .= 'my $_S = $Directoricious::stash;';
+            for my $var (keys %{$stash}) {
+                next unless $var =~ /^\w+$/;
+                $prepend .= " my \$$var = \$_S->{'$var'};";
+            }
+            $mt->prepend($prepend);
+            $mt->render_file($path, $stash);
+        },
     }});
     
     my $types = Mojolicious::Types->new;
@@ -24,6 +37,25 @@ use Mojolicious::Commands;
         500 => 'Internal server error',
         403 => 'Forbidden',
     );
+    
+    sub stash {
+        my $self = shift;
+      
+        # Hash
+        my $stash = $self->{stash} ||= {};
+        return $stash unless @_;
+        
+        # Get
+        return $stash->{$_[0]} unless @_ > 1 || ref $_[0];
+      
+        # Set
+        my $values = ref $_[0] ? $_[0] : {@_};
+        for my $key (keys %$values) {
+            $stash->{$key} = $values->{$key};
+        }
+      
+        return $self;
+    }
     
     ### --
     ### handler
@@ -171,7 +203,7 @@ use Mojolicious::Commands;
             my $cb = $self->template_handlers->{$ext};
             my $path = "$path.$ext";
             if (-f $path && $cb) {
-                $tx->res->body(encode('UTF-8', $cb->($path)));
+                $tx->res->body(encode('UTF-8', $cb->($path, $self->{stash})));
                 $tx->res->code(200);
                 return $tx->resume;
             }

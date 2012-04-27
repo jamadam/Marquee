@@ -15,6 +15,7 @@ use Mojolicious::Commands;
     __PACKAGE__->attr('auto_index', 0);
     __PACKAGE__->attr('default_file', 'index.html');
     __PACKAGE__->attr('inited');
+    __PACKAGE__->attr('log_file');
     __PACKAGE__->attr('template_handlers', sub {{
         ep => sub {
             (my $path, local $stash) = @_;
@@ -37,25 +38,6 @@ use Mojolicious::Commands;
         500 => 'Internal server error',
         403 => 'Forbidden',
     );
-    
-    sub stash {
-        my $self = shift;
-      
-        # Hash
-        my $stash = $self->{stash} ||= {};
-        return $stash unless @_;
-        
-        # Get
-        return $stash->{$_[0]} unless @_ > 1 || ref $_[0];
-      
-        # Set
-        my $values = ref $_[0] ? $_[0] : {@_};
-        for my $key (keys %$values) {
-            $stash->{$key} = $values->{$key};
-        }
-      
-        return $self;
-    }
     
     ### --
     ### handler
@@ -103,12 +85,16 @@ use Mojolicious::Commands;
             
             if (! $res->code) {
                 $self->serve_error_document($tx, 404);
+                $self->log->fatal(qq{$path Not found});
             }
         }
         
         return $tx->resume;
     }
     
+    ### --
+    ### init
+    ### --
     sub init {
         my $self = shift;
         
@@ -118,6 +104,10 @@ use Mojolicious::Commands;
         
         $self->{_handler_re} =
                     '\.(?:'. join('|', keys %{$self->template_handlers}). ')$';
+        
+        if ($self->log_file) {
+            $self->log->path($self->log_file);
+        }
         
         $self->inited(1);
     }
@@ -251,6 +241,28 @@ use Mojolicious::Commands;
         $tx->res->headers->content_type($types->type('html'));
         
         return $tx;
+    }
+    
+    ### --
+    ### stash
+    ### --
+    sub stash {
+        my $self = shift;
+      
+        # Hash
+        my $stash = $self->{stash} ||= {};
+        return $stash unless @_;
+        
+        # Get
+        return $stash->{$_[0]} unless @_ > 1 || ref $_[0];
+      
+        # Set
+        my $values = ref $_[0] ? $_[0] : {@_};
+        for my $key (keys %$values) {
+            $stash->{$key} = $values->{$key};
+        }
+      
+        return $self;
     }
     
     ### --

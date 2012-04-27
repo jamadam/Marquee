@@ -16,6 +16,7 @@ use Mojo::Date;
     
     $app = Directoricious->new;
     $app->document_root("$FindBin::Bin/public_html");
+    $app->log_file("$FindBin::Bin/directoricious.log");
     $app->auto_index(1);
     $t = Test::Mojo->new($app);
     
@@ -105,6 +106,7 @@ use Mojo::Date;
     
     $app = Directoricious->new;
     $app->document_root("$FindBin::Bin/public_html");
+    $app->log_file("$FindBin::Bin/directoricious.log");
     $app->stash(model => _Model->new);
     
     $t = Test::Mojo->new($app);
@@ -120,6 +122,7 @@ use Mojo::Date;
     
     $app = Directoricious->new;
     $app->document_root("$FindBin::Bin/public_html");
+    $app->log_file("$FindBin::Bin/directoricious.log");
     $app->auto_index(1);
     $app->template_handlers({
         test    => sub {return $_[0]},
@@ -156,6 +159,7 @@ use Mojo::Date;
     
     $app = Directoricious->new;
     $app->document_root("$FindBin::Bin/public_html_index");
+    $app->log_file("$FindBin::Bin/directoricious.log");
     $app->auto_index(1);
     $t = Test::Mojo->new($app);
     

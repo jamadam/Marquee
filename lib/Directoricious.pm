@@ -50,49 +50,36 @@ use Directoricious::Plugin;
     ### --
     sub dispatch {
         my ($self, $c) = @_;
-        my $tx = $c->{tx};
+        my $tx = $c->tx;
+        my $res = $tx->res;
+        my $path = $tx->req->url->path;
+        my $filled_path = $self->_auto_fill_filename($path->clone);
         
-        if ($tx->req->url =~ /$self->{_handler_re}/) {
-            $self->serve_error_document($tx, 403);
-        } else {
-            my $res = $tx->res;
-            my $path = $tx->req->url->path;
-            my $filled_path = $self->_auto_fill_filename($path->clone);
-            
-            if (my $type = $self->mime_type($filled_path)) {
-                $res->headers->content_type($type);
+        if (my $type = $self->mime_type($filled_path)) {
+            $res->headers->content_type($type);
+        }
+        
+        for my $root ($self->document_root, _asset()) {
+            my $path = File::Spec->catfile($root. $filled_path);
+            if (-f $path) {
+                $self->serve_static($tx, $path);
+            } else {
+                $self->serve_dynamic($tx, $path);
             }
-            
-            for my $root ($self->document_root, _asset()) {
-                my $path = File::Spec->catfile($root. $filled_path);
-                if (-f $path) {
-                    $self->serve_static($tx, $path);
-                } else {
-                    $self->serve_dynamic($tx, $path);
-                }
-                if ($res->code) {
-                    last;
-                }
-            }
-            
-            if (! $res->code) {
-                my $dir = File::Spec->catfile($self->document_root. $path);
-                if (-d $dir) {
-                    if (substr($path, -1, 1) ne '/') {
-                        $self->serve_redirect_to_slashed($tx, $path);
-                    } elsif ($self->auto_index) {
-                        $self->serve_index($tx, $path);
-                    }
-                }
-            }
-            
-            if (! $res->code) {
-                $self->serve_error_document($tx, 404);
-                $self->log->fatal(qq{$path Not found});
+            if ($res->code) {
+                last;
             }
         }
         
-        return $tx->resume;
+        if (! $res->code) {
+            if (-d File::Spec->catfile($self->document_root. $path)) {
+                if (substr($path, -1, 1) ne '/') {
+                    $self->serve_redirect_to_slashed($tx, $path);
+                } elsif ($self->auto_index) {
+                    $self->serve_index($tx, $path);
+                }
+            }
+        }
     }
 
     ### --
@@ -101,17 +88,7 @@ use Directoricious::Plugin;
     sub handler {
         my ($self, $tx) = @_;
         
-        if (! $self->inited) {
-            $self->init;
-        }
-        
-        if (! $self->{dispatch}) {
-            $self->plugin->on(around_dispatch => sub {
-                my ($next, $c) = @_;
-                $c->app->dispatch($c);
-            });
-            $self->{dispatch}++;
-        }
+        $self->init;
         
         my $ok = eval {
             $self->plugin->emit_chain(
@@ -140,6 +117,11 @@ use Directoricious::Plugin;
     sub init {
         my $self = shift;
         
+        if ($self->inited) {
+            return;
+        }
+        $self->inited(1);
+        
         if (! -d $self->document_root) {
             die 'document_root is not a directory';
         }
@@ -151,7 +133,24 @@ use Directoricious::Plugin;
             $self->log->path($self->log_file);
         }
         
-        $self->inited(1);
+        if (! $self->{dispatch}) {
+            $self->plugin->on(around_dispatch => sub {
+                my ($next, $c) = @_;
+                my $tx = $c->tx;
+                if ($tx->req->url =~ /$self->{_handler_re}/) {
+                    $self->serve_error_document($tx, 403);
+                    $tx->resume;
+                } else {
+                    $c->app->dispatch($c);
+                }
+                if (! $tx->res->code) {
+                    $c->app->serve_error_document($tx, 404);
+                    $c->app->log->fatal($tx->req->url->path. qq{ Not found});
+                }
+                return $tx->resume;
+            });
+            $self->{dispatch}++;
+        }
     }
     
     ### --

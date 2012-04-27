@@ -17,6 +17,7 @@ use Mojo::Date;
     $app = Directoricious->new;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/directoricious.log");
+    $app->default_file('index.html');
     $app->auto_index(1);
     $t = Test::Mojo->new($app);
     
@@ -179,6 +180,7 @@ use Mojo::Date;
     $app = Directoricious->new;
     $app->document_root("$FindBin::Bin/public_html_index");
     $app->log_file("$FindBin::Bin/directoricious.log");
+    $app->default_file('index.html');
     $app->auto_index(1);
     $t = Test::Mojo->new($app);
     

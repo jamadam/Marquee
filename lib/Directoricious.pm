@@ -14,8 +14,8 @@ use Directoricious::Plugin;
     our $stash;
 
     __PACKAGE__->attr('document_root');
-    __PACKAGE__->attr('auto_index', 0);
-    __PACKAGE__->attr('default_file', 'index.html');
+    __PACKAGE__->attr('auto_index');
+    __PACKAGE__->attr('default_file');
     __PACKAGE__->attr('inited');
     __PACKAGE__->attr('log_file');
     __PACKAGE__->attr('template_handlers', sub {{

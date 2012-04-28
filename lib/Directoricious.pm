@@ -10,7 +10,8 @@ use Mojolicious::Types;
 use Mojolicious::Commands;
 
     our $stash;
-
+    our $tx;
+    
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('auto_index');
     __PACKAGE__->attr('default_file');
@@ -43,10 +44,10 @@ use Mojolicious::Commands;
     ### dispatch
     ### --
     sub dispatch {
-        my ($self, $tx) = @_;
+        my ($self) = @_;
         
         if ($tx->req->url =~ /$self->{_handler_re}/) {
-            $self->serve_error_document($tx, 403);
+            $self->serve_error_document(403);
         } else {
             my $res = $tx->res;
             my $path = $tx->req->url->path;
@@ -59,28 +60,28 @@ use Mojolicious::Commands;
             for my $root ($self->document_root, _asset()) {
                 my $path = File::Spec->catfile($root. $filled_path);
                 if (-f $path) {
-                    $self->serve_static($tx, $path);
+                    $self->serve_static($path);
                 } else {
-                    $self->serve_dynamic($tx, $path);
+                    $self->serve_dynamic($path);
                 }
                 if ($res->code) {
                     last;
                 }
             }
             
-            if (! $res->code) {
-                if (-d File::Spec->catfile($self->document_root. $path)) {
-                    if (substr($path, -1, 1) ne '/') {
-                        $self->serve_redirect_to_slashed($tx, $path);
-                    } elsif ($self->auto_index) {
-                        $self->serve_index($tx, $path);
-                    }
+            if (! $res->code &&
+                        -d File::Spec->catfile($self->document_root. $path)) {
+                if (substr($path, -1, 1) ne '/') {
+                    $self->serve_redirect_to_slashed($path);
+                } elsif ($self->auto_index) {
+                    $self->serve_index($path);
                 }
             }
-        }
-        if (! $tx->res->code) {
-            $self->serve_error_document($tx, 404);
-            $self->log->fatal($tx->req->url->path. qq{ Not found});
+            
+            if (! $res->code) {
+                $self->serve_error_document(404);
+                $self->log->fatal($tx->req->url->path. qq{ Not found});
+            }
         }
     }
 
@@ -88,12 +89,12 @@ use Mojolicious::Commands;
     ### handler
     ### --
     sub handler {
-        my ($self, $tx) = @_;
+        (my $self, local $tx) = @_;
         
         $self->init;
         
         eval {
-            $self->dispatch($tx);
+            $self->dispatch;
         };
         
         if ($@) {
@@ -140,17 +141,17 @@ use Mojolicious::Commands;
     ### serve redirect to slashed directory
     ### --
     sub serve_redirect_to_slashed {
-        my ($self, $tx, $path) = @_;
+        my ($self, $path) = @_;
         my $uri =
             $tx->req->url->clone->path($path->clone->trailing_slash(1))->to_abs;
-        return $self->serve_redirect($tx, $uri);
+        return $self->serve_redirect($uri);
     }
     
     ### --
     ### serve redirect
     ### --
     sub serve_redirect {
-        my ($self, $tx, $uri) = @_;
+        my ($self, $uri) = @_;
         $tx->res->code(301);
         $tx->res->headers->location($uri);
         return $tx;
@@ -160,7 +161,7 @@ use Mojolicious::Commands;
     ### serve error document
     ### --
     sub serve_error_document {
-        my ($self, $tx, $code, $message) = @_;
+        my ($self, $code, $message) = @_;
         $tx->res->body($message || ($code. ' '. $error_messages{$code}));
         $tx->res->code($code);
         $tx->res->headers->content_type($types->type('html'));
@@ -171,7 +172,7 @@ use Mojolicious::Commands;
     ### serve static content
     ### --
     sub serve_static {
-        my ($self, $tx, $path) = @_;
+        my ($self, $path) = @_;
         
         my $asset = Mojo::Asset::File->new(path => $path);
         my $modified = (stat $path)[9];
@@ -200,7 +201,7 @@ use Mojolicious::Commands;
     ### serve dynamic content
     ### --
     sub serve_dynamic {
-        my ($self, $tx, $path) = @_;
+        my ($self, $path) = @_;
         
         # dynamic dispatch
         for my $ext (keys %{$self->template_handlers}) {
@@ -218,7 +219,7 @@ use Mojolicious::Commands;
     ### Render file list
     ### ---
     sub serve_index {
-        my ($self, $tx, $path) = @_;
+        my ($self, $path) = @_;
         
         $path = decode('UTF-8', url_unescape($path));
         my $dir = File::Spec->catfile($self->document_root, $path);
@@ -286,6 +287,13 @@ use Mojolicious::Commands;
         my $self = shift;
         $self->init;
         Mojolicious::Commands->start_app($self);
+    }
+    
+    ### --
+    ### transaction
+    ### --
+    sub tx {
+        $tx;
     }
     
     ### --

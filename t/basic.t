@@ -165,9 +165,9 @@ use Mojo::Date;
         use Mojo::Base qw{Directoricious};
         
         sub dispatch {
-            my ($self, $tx) = @_;
-            $self->SUPER::dispatch($tx);
-            $tx->res->body('overridden');
+            my ($self) = @_;
+            $self->SUPER::dispatch;
+            $self->tx->res->body('overridden');
         }
     }
     

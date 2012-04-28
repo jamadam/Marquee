@@ -4,12 +4,12 @@ use warnings;
 use utf8;
 use lib 'lib';
 use Test::More;
-use Test::Mojo;
+use Test::Mojo::Dom;
 use Directoricious;
 use FindBin;
 use Mojo::Date;
     
-    use Test::More tests => 124;
+    use Test::More tests => 135;
 
     my $app;
     my $t;
@@ -194,7 +194,7 @@ use Mojo::Date;
     $app->log_file("$FindBin::Bin/directoricious.log");
     $app->default_file('index.html');
     $app->auto_index(1);
-    $t = Test::Mojo->new($app);
+    $t = Test::Mojo::Dom->new($app);
     
     open(my $file, "> $FindBin::Bin/public_html_index/日本語.html");
     close($file);
@@ -212,6 +212,27 @@ use Mojo::Date;
 		->content_like(qr{test3.html})
 		->content_unlike(qr{test3.html.ep})
 		->content_like(qr{test4.html.pub});
+
+	$t->get_ok('/')
+		->status_is(200)
+        ->test_dom(sub {
+            my $t = shift;
+            $t->find('title')
+                ->text_is('Index of /');
+            $t->find('tbody')->find('tr')->get(0)->find('a')
+                ->text_is('some_dir/')
+                ->attr_is('href', 'some_dir/')
+                ->has_class('dir');
+            $t->at('tbody tr:nth-child(1) td:nth-child(2)')
+                ->text_like(qr'\d\d\d\d-\d\d-\d\d \d\d:\d\d');
+            $t->at('tbody tr:nth-child(9)')->at('a')
+                ->text_is('日本語.html')
+                ->attr_is('href', '日本語.html')
+                ->has_class('text');
+            $t->at('tbody tr:nth-child(9)')->at('td:nth-child(2)')
+                ->text_like(qr'\d\d\d\d-\d\d-\d\d \d\d:\d\d');
+        });
+    
     
     unlink("$FindBin::Bin/public_html_index/日本語.html");
     

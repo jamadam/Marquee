@@ -9,7 +9,7 @@ use Directoricious;
 use FindBin;
 use Mojo::Date;
     
-    use Test::More tests => 116;
+    use Test::More tests => 124;
 
     my $app;
     my $t;
@@ -83,6 +83,11 @@ use Mojo::Date;
         ->header_is('Content-Type', undef)
         ->header_is('Content-Length', 14)
         ->content_is('unknown format');
+    $t->get_ok('/index4.html.pub')
+        ->status_is(200)
+        ->header_is('Content-Type', undef)
+        ->header_is('Content-Length', 15)
+        ->content_is('index4.html.pub');
     
     ### real template tests
     
@@ -203,8 +208,11 @@ use Mojo::Date;
 		->content_like(qr{<a class="dir" href="some_dir/">some_dir/</a>})
 		->content_like(qr{\d\d\d\d-\d\d-\d\d \d\d:\d\d})
 		->content_like(qr{日本語})
-		->content_like(qr{<a class="image" href="image.png">image.png</a>});
-	
+		->content_like(qr{<a class="image" href="image.png">image.png</a>})
+		->content_like(qr{test3.html})
+		->content_unlike(qr{test3.html.ep})
+		->content_like(qr{test4.html.pub});
+    
     unlink("$FindBin::Bin/public_html_index/日本語.html");
     
     $t->get_ok('/some_dir/')

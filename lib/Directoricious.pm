@@ -235,11 +235,21 @@ use Mojolicious::Commands;
                 next;
             }
             my $fpath = File::Spec->catfile($dir, $file);
+            my $name;
+            my $type;
+            if (-f $fpath) {
+                $name = $file;
+                $name =~ s{(\.\w+)$self->{_handler_re}}{$1};
+                $type = (split('/', Mojolicious::Types->type(($name =~ qr{\.(\w+)$}) ? $1 : '') || 'text/plain'))[0];
+            } else {
+                $name = $file. '/';
+                $type = 'dir';
+            }
             push(@dset, {
-                name        => -f $fpath ? $self->_strip_template_ext($file) : $file. '/',
+                name        => $name,
+                type        => $type,
                 timestamp   => _file_timestamp($fpath),
                 size        => _file_size($fpath),
-                type        => -f $fpath ? _file_to_mime_class($file) : 'dir',
             });
         }
         
@@ -317,24 +327,6 @@ use Mojolicious::Commands;
             return File::Spec->catdir(@seed, $_[0]);
         }
         return File::Spec->catdir(@seed);
-    }
-    
-    ### --
-    ### handler
-    ### --
-    sub _strip_template_ext {
-        my ($self, $file) = @_;
-        $file =~ s/$self->{_handler_re}//;
-        return $file;
-    }
-    
-    ### ---
-    ### Guess type by file extension
-    ### ---
-    sub _file_to_mime_class {
-        my $name = shift;
-        my $ext = ($name =~ qr{\.(\w+)$}) ? $1 : '';
-        return (split('/', Mojolicious::Types->type($ext) || 'text/plain'))[0];
     }
     
     ### ---

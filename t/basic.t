@@ -158,22 +158,29 @@ use Mojo::Date;
     
     ### around dispatch hook
     
-    $app = Directoricious->new;
+    {
+        package MyApp;
+        use strict;
+        use warnings;
+        use Mojo::Base qw{Directoricious};
+        
+        sub dispatch {
+            my ($self, $tx) = @_;
+            $self->SUPER::dispatch($tx);
+            $tx->res->body('overridden');
+        }
+    }
+    
+    $app = MyApp->new;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/directoricious.log");
-    
-    $app->hook(around_dispatch => sub {
-        my ($next, $c) = @_;
-        $next->();
-        $c->tx->res->body('orverridden');
-    });
     
     $t = Test::Mojo->new($app);
 
 	$t->get_ok('/index.txt')
         ->status_is(200)
-        ->header_is('Content-Length', 11)
-        ->content_is("orverridden");
+        ->header_is('Content-Length', 10)
+        ->content_is("overridden");
     
     ### auto index tests
     

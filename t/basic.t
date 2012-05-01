@@ -4,12 +4,12 @@ use warnings;
 use utf8;
 use lib 'lib';
 use Test::More;
-use Test::Mojo::Dom;
+use Test::Mojo::DOM;
 use Directoricious;
 use FindBin;
 use Mojo::Date;
     
-    use Test::More tests => 135;
+    use Test::More tests => 132;
 
     my $app;
     my $t;
@@ -137,16 +137,16 @@ use Mojo::Date;
     
     $t = Test::Mojo->new($app);
 
-	$t->get_ok('/index2.html')
+    $t->get_ok('/index2.html')
         ->status_is(200)
         ->content_is("$FindBin::Bin/public_html/index2.html.test");
-	$t->get_ok('/index3.html')
+    $t->get_ok('/index3.html')
         ->status_is(200)
         ->content_is("rendered");
-	$t->get_ok('/index2.html.test')
+    $t->get_ok('/index2.html.test')
         ->status_is(403)
         ->content_like(qr"403 Forbidden"i);
-	$t->get_ok('/index3.html.test2')
+    $t->get_ok('/index3.html.test2')
         ->status_is(403)
         ->content_like(qr"403 Forbidden"i);
     
@@ -182,7 +182,7 @@ use Mojo::Date;
     
     $t = Test::Mojo->new($app);
 
-	$t->get_ok('/index.txt')
+    $t->get_ok('/index.txt')
         ->status_is(200)
         ->header_is('Content-Length', 10)
         ->content_is("overridden");
@@ -194,62 +194,78 @@ use Mojo::Date;
     $app->log_file("$FindBin::Bin/directoricious.log");
     $app->default_file('index.html');
     $app->auto_index(1);
-    $t = Test::Mojo::Dom->new($app);
+    $t = Test::Mojo::DOM->new($app);
     
     open(my $file, "> $FindBin::Bin/public_html_index/日本語.html");
     close($file);
-    
-	$t->get_ok('/')
-		->status_is(200)
-		->content_like(qr{<title>Index of /</title>})
-		->content_like(qr{4B})
-		->content_like(qr{1.6KB})
-		->content_unlike(qr{<a class="dir" href="\./">})
-		->content_like(qr{<a class="dir" href="some_dir/">some_dir/</a>})
-		->content_like(qr{\d\d\d\d-\d\d-\d\d \d\d:\d\d})
-		->content_like(qr{日本語})
-		->content_like(qr{<a class="image" href="image.png">image.png</a>})
-		->content_like(qr{test3.html})
-		->content_unlike(qr{test3.html.ep})
-		->content_like(qr{test4.html.pub});
 
-	$t->get_ok('/')
-		->status_is(200)
-        ->test_dom(sub {
+    $t->get_ok('/')
+        ->status_is(200)
+        ->dom_inspector(sub {
             my $t = shift;
-            $t->find('title')
+            $t->at('title')
                 ->text_is('Index of /');
-            $t->find('tbody')->find('tr')->get(0)->find('a')
-                ->text_is('some_dir/')
-                ->attr_is('href', 'some_dir/')
-                ->has_class('dir');
-            $t->at('tbody tr:nth-child(1) td:nth-child(2)')
-                ->text_like(qr'\d\d\d\d-\d\d-\d\d \d\d:\d\d');
-            $t->at('tbody tr:nth-child(9)')->at('a')
-                ->text_is('日本語.html')
-                ->attr_is('href', '日本語.html')
-                ->has_class('text');
-            $t->at('tbody tr:nth-child(9)')->at('td:nth-child(2)')
-                ->text_like(qr'\d\d\d\d-\d\d-\d\d \d\d:\d\d');
-        });
+            
+            {
+                my $t = $t->at('tbody tr:nth-child(1)');
+                my $file = "$FindBin::Bin/public_html_index/some_dir";
+                $t->at('a')
+                    ->text_is('some_dir/')
+                    ->attr_is('href', 'some_dir/')
+                    ->has_class('dir');
+                $t->at('td:nth-child(2)')
+                    ->text_is(Directoricious::_file_timestamp($file));
+                $t->at('td:nth-child(3)')
+                    ->text_is(Directoricious::_file_size($file));
+            }
+            
+            {
+                my $t = $t->at('tbody tr:nth-child(4)');
+                my $file = "$FindBin::Bin/public_html_index/image.png";
+                $t->at('a')
+                    ->text_is('image.png')
+                    ->attr_is('href', 'image.png')
+                    ->has_class('image');
+                $t->at('td:nth-child(2)')
+                    ->text_is(Directoricious::_file_timestamp($file));
+                $t->at('td:nth-child(3)')
+                    ->text_is(Directoricious::_file_size($file));
+            }
+            
+            {
+                my $t = $t->at('tbody tr:nth-child(9)');
+                my $file = "$FindBin::Bin/public_html_index/日本語.html";
+                $t->at('a')
+                    ->text_is('日本語.html')
+                    ->attr_is('href', '日本語.html')
+                    ->has_class('text');
+                $t->at('td:nth-child(2)')
+                    ->text_is(Directoricious::_file_timestamp($file));
+                $t->at('td:nth-child(3)')
+                    ->text_is(Directoricious::_file_size($file));
+            }
+        })
+        ->content_like(qr{test3.html})
+        ->content_unlike(qr{test3.html.ep})
+        ->content_like(qr{test4.html.pub});
     
     
     unlink("$FindBin::Bin/public_html_index/日本語.html");
     
     $t->get_ok('/some_dir/')
-		->status_is(200)
-		->content_like(qr{<a class="dir" href="\.\./">\.\./</a>})
-		->content_like(qr{test.html});
-	$t->get_ok('/some_dir2/')
-		->status_is(200)
-		->content_is(q{index file exists});
-	$t->get_ok('/some_dir3/file_list.css')
-		->status_is(200)
-		->content_is(q{file_list.css});
-	$t->get_ok('/static/file_list.css')
-		->status_is(200)
-		->content_like(qr{\@charset "UTF\-8"});
-	$t->get_ok('/some_dir/not_exists.html')
-		->status_is(404);
+        ->status_is(200)
+        ->content_like(qr{<a class="dir" href="\.\./">\.\./</a>})
+        ->content_like(qr{test.html});
+    $t->get_ok('/some_dir2/')
+        ->status_is(200)
+        ->content_is(q{index file exists});
+    $t->get_ok('/some_dir3/file_list.css')
+        ->status_is(200)
+        ->content_is(q{file_list.css});
+    $t->get_ok('/static/file_list.css')
+        ->status_is(200)
+        ->content_like(qr{\@charset "UTF\-8"});
+    $t->get_ok('/some_dir/not_exists.html')
+        ->status_is(404);
 
 __END__

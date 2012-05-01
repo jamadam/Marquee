@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="54bb13ed-3c92-41de-9f68-a0d857210b7d" kpf_version="5" name="Directoricious.komodoproject">
+<preference-set idref="54bb13ed-3c92-41de-9f68-a0d857210b7d">
+  <string id="perlDefaultInterpreter"></string>
+  <string relative="path" id="perlExtraPaths">lib;C:/strawberry/perl/site/lib;C:/strawberry/perl/vendor/lib;C:/strawberry/perl/lib</string>
+  <boolean id="perl_lintOption_includeCurrentDirForLinter">1</boolean>
+</preference-set>
+</project>

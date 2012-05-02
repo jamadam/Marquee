@@ -9,7 +9,6 @@ use Mojo::Util qw'url_unescape encode decode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
 
-    our $stash;
     our $tx;
     
     __PACKAGE__->attr('document_root');
@@ -18,20 +17,9 @@ use Mojolicious::Commands;
     __PACKAGE__->attr('inited');
     __PACKAGE__->attr('log_file');
     __PACKAGE__->attr('template_handlers', sub {{
-        ep => sub {
-            (my $path, local $stash) = @_;
-            my $mt = Mojo::Template->new;
-            my $prepend = 'use strict;';
-            $prepend .= 'my $_S = $Directoricious::stash;';
-            for my $var (keys %{$stash}) {
-                next unless $var =~ /^\w+$/;
-                $prepend .= " my \$$var = \$_S->{'$var'};";
-            }
-            $mt->prepend($prepend);
-            $mt->render_file($path, $stash);
-        },
+        ep => \&handle_ep,
     }});
-    
+
     my $types = Mojolicious::Types->new;
     
     my %error_messages = (
@@ -102,6 +90,24 @@ use Mojolicious::Commands;
             $tx->res->code(500);
         }
         $tx->resume;
+    }
+    
+    ### --
+    ### ep handler
+    ### --
+    sub handle_ep {
+        my ($path, $args) = @_;
+        local $Directoricious::_Sandbox::args = $args;
+        my $mt = Mojo::Template->new;
+        my $prepend = 'use strict;';
+        $prepend .= 'my $_S = $Directoricious::_Sandbox::args;';
+        for my $var (keys %{$args}) {
+            if ($var =~ /^\w+$/) {
+                $prepend .= " my \$$var = \$_S->{'$var'};";
+            }
+        }
+        $mt->prepend($prepend);
+        $mt->render_file($path);
     }
     
     ### --
@@ -259,9 +265,13 @@ use Mojolicious::Commands;
             $a->{name} cmp $b->{name}
         } @dset;
         
-        my $mt = Mojo::Template->new;
-        my $body = $mt->render_file(_asset('index.ep'), $path, \@dset, 'static');
-        $tx->res->body(encode('UTF-8', $body));
+        $tx->res->body(
+            encode('UTF-8', handle_ep(_asset('index.ep'), {
+                dir         => $path,
+                dataset     => \@dset,
+                static_dir  => 'static'
+            }))
+        );
         $tx->res->code(200);
         $tx->res->headers->content_type($types->type('html'));
         

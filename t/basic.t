@@ -196,6 +196,7 @@ use Mojo::Date;
     $app->auto_index(1);
     $t = Test::Mojo::DOM->new($app);
     
+    unlink("$FindBin::Bin/public_html_index/.DS_Store");
     open(my $file, "> $FindBin::Bin/public_html_index/日本語.html");
     close($file);
 

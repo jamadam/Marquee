@@ -97,17 +97,17 @@ use Mojolicious::Commands;
     ### --
     sub handle_ep {
         my ($path, $args) = @_;
-        local $Directoricious::_Sandbox::args = $args;
+        
         my $mt = Mojo::Template->new;
         my $prepend = 'use strict;';
-        $prepend .= 'my $_S = $Directoricious::_Sandbox::args;';
+        $prepend .= 'my $_S = $_[0];';
         for my $var (keys %{$args}) {
             if ($var =~ /^\w+$/) {
                 $prepend .= " my \$$var = \$_S->{'$var'};";
             }
         }
         $mt->prepend($prepend);
-        $mt->render_file($path);
+        $mt->render_file($path, $args);
     }
     
     ### --

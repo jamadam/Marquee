@@ -2,11 +2,11 @@ package Template_Basic;
 use strict;
 use warnings;
 use utf8;
-use lib 'lib';
+use FindBin;
+use lib 'lib', "$FindBin::Bin/lib";
 use Test::More;
 use Test::Mojo::DOM;
 use Directoricious;
-use FindBin;
 use Mojo::Date;
     
     use Test::More tests => 140;

@@ -9,7 +9,7 @@ use Directoricious;
 use FindBin;
 use Mojo::Date;
     
-    use Test::More tests => 132;
+    use Test::More tests => 140;
 
     my $app;
     my $t;
@@ -249,13 +249,37 @@ use Mojo::Date;
         ->content_unlike(qr{test3.html.ep})
         ->content_like(qr{test4.html.pub});
     
-    
-    unlink("$FindBin::Bin/public_html_index/日本語.html");
-    
     $t->get_ok('/some_dir/')
         ->status_is(200)
-        ->content_like(qr{<a class="dir" href="\.\./">\.\./</a>})
-        ->content_like(qr{test.html});
+        ->dom_inspector(sub {
+            my $t = shift;
+            
+            {
+                my $t = $t->at('tbody tr:nth-child(1)');
+                my $file = "$FindBin::Bin/public_html_index/";
+                $t->at('a')
+                    ->text_is('../')
+                    ->attr_is('href', '../')
+                    ->has_class('dir');
+                $t->at('td:nth-child(2)')
+                    ->text_is(Directoricious::_file_timestamp($file));
+                $t->at('td:nth-child(3)')
+                    ->text_is(Directoricious::_file_size($file));
+            }
+            {
+                my $t = $t->at('tbody tr:nth-child(2)');
+                my $file = "$FindBin::Bin/public_html_index/test.html";
+                $t->at('a')
+                    ->text_is('test.html')
+                    ->attr_is('href', 'test.html')
+                    ->has_class('text');
+                $t->at('td:nth-child(2)')
+                    ->text_is(Directoricious::_file_timestamp($file));
+                $t->at('td:nth-child(3)')
+                    ->text_is(Directoricious::_file_size($file));
+            }
+        });
+    
     $t->get_ok('/some_dir2/')
         ->status_is(200)
         ->content_is(q{index file exists});
@@ -267,5 +291,7 @@ use Mojo::Date;
         ->content_like(qr{\@charset "UTF\-8"});
     $t->get_ok('/some_dir/not_exists.html')
         ->status_is(404);
+    
+    unlink("$FindBin::Bin/public_html_index/日本語.html");
 
 __END__

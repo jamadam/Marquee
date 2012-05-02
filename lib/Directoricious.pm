@@ -294,9 +294,9 @@ use Mojolicious::Commands;
     ### start app
     ### --
     sub start {
-        my $self = shift;
+        my $self = $ENV{MOJO_APP} = shift;
         $self->init;
-        Mojolicious::Commands->start_app($self);
+        Mojolicious::Commands->start;
     }
     
     ### --

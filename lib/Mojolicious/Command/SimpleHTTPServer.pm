@@ -16,8 +16,9 @@ hoge usage: $0 daemon [OPTIONS]
 
 These options are available:
   
-  -d, --document_root <path>   Set document root path, defaults to current dir.
-  -a, --auto_index             Activate auto index, defaults to 0.
+  -dr, --document_root <path>  Set document root path, defaults to current dir.
+  -df, --default_file <name>   Set default file name and activate auto fill.
+  -ai, --auto_index            Activate auto index, defaults to 0.
   -b, --backlog <size>         Set listen backlog size, defaults to
                                SOMAXCONN.
   -c, --clients <number>       Set maximum number of concurrent clients,
@@ -58,8 +59,9 @@ sub run {
     'p|proxy'           => sub { $ENV{MOJO_REVERSE_PROXY} = 1 },
     'r|requests=i'      => sub { $daemon->max_requests($_[1]) },
     'u|user=s'          => sub { $daemon->user($_[1]) },
-    'd|document_root=s' => sub { $app->document_root($_[1]) },
-    'a|auto_index'    => sub { $app->auto_index($_[1]) },
+    'dr|document_root=s' => sub { $app->document_root($_[1]) },
+    'ai|auto_index'      => sub { $app->auto_index($_[1]) },
+    'df|default_file'    => sub { $app->default_file($_[1]) },
   );
   
   $app->document_root || $app->document_root('./');

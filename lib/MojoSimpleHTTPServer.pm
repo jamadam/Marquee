@@ -9,6 +9,7 @@ use Mojo::Util qw'url_unescape encode decode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
 
+    our $VERSION = '0.01';
     our $tx;
     
     __PACKAGE__->attr('document_root');

@@ -12,7 +12,7 @@ Start SimpleHTTPServer.
 EOF
 
   has usage => <<"EOF";
-hoge usage: $0 daemon [OPTIONS]
+usage: $0 SimpleHTTPServer [OPTIONS]
 
 These options are available:
   

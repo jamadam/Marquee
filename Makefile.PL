@@ -5,8 +5,8 @@ use ExtUtils::MakeMaker;
 my %params = (
     NAME          => 'MojoSimpleHTTPServer',
     AUTHOR        => 'sugama <sugama@jamadam.com>',
-    VERSION_FROM  => 'MojoSimpleHTTPServer.pm',
-    ABSTRACT_FROM => 'MojoSimpleHTTPServer.pm',
+    VERSION_FROM  => 'lib/MojoSimpleHTTPServer.pm',
+    ABSTRACT_FROM => 'lib/MojoSimpleHTTPServer.pm',
     LICENSE       => 'perl',
     PREREQ_PM     => {
     },

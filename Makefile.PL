@@ -3,10 +3,10 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 my %params = (
-    NAME          => 'Directoricious',
+    NAME          => 'MojoSimpleHTTPServer',
     AUTHOR        => 'sugama <sugama@jamadam.com>',
-    VERSION_FROM  => 'lib/Directoricious.pm',
-    ABSTRACT_FROM => 'lib/Directoricious.pm',
+    VERSION_FROM  => 'MojoSimpleHTTPServer.pm',
+    ABSTRACT_FROM => 'MojoSimpleHTTPServer.pm',
     LICENSE       => 'perl',
     PREREQ_PM     => {
     },

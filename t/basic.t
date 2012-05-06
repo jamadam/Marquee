@@ -6,7 +6,7 @@ use FindBin;
 use lib 'lib', "$FindBin::Bin/lib";
 use Test::More;
 use Test::Mojo::DOM;
-use Directoricious;
+use MojoSimpleHTTPServer;
 use Mojo::Date;
     
     use Test::More tests => 140;
@@ -14,9 +14,9 @@ use Mojo::Date;
     my $app;
     my $t;
     
-    $app = Directoricious->new;
+    $app = MojoSimpleHTTPServer->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/directoricious.log");
+    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     $app->default_file('index.html');
     $app->auto_index(1);
     $t = Test::Mojo->new($app);
@@ -110,9 +110,9 @@ use Mojo::Date;
         }
     }
     
-    $app = Directoricious->new;
+    $app = MojoSimpleHTTPServer->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/directoricious.log");
+    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     $app->stash(model => _Model->new);
     
     $t = Test::Mojo->new($app);
@@ -126,9 +126,9 @@ use Mojo::Date;
     
     ### adding template handler tests
     
-    $app = Directoricious->new;
+    $app = MojoSimpleHTTPServer->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/directoricious.log");
+    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     $app->auto_index(1);
     $app->template_handlers({
         test    => sub {return $_[0]},
@@ -167,7 +167,7 @@ use Mojo::Date;
         package MyApp;
         use strict;
         use warnings;
-        use Mojo::Base qw{Directoricious};
+        use Mojo::Base qw{MojoSimpleHTTPServer};
         
         sub dispatch {
             my ($self) = @_;
@@ -178,7 +178,7 @@ use Mojo::Date;
     
     $app = MyApp->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/directoricious.log");
+    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     
     $t = Test::Mojo->new($app);
 
@@ -189,9 +189,9 @@ use Mojo::Date;
     
     ### auto index tests
     
-    $app = Directoricious->new;
+    $app = MojoSimpleHTTPServer->new;
     $app->document_root("$FindBin::Bin/public_html_index");
-    $app->log_file("$FindBin::Bin/directoricious.log");
+    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     $app->default_file('index.html');
     $app->auto_index(1);
     $t = Test::Mojo::DOM->new($app);
@@ -215,9 +215,9 @@ use Mojo::Date;
                     ->attr_is('href', 'some_dir/')
                     ->has_class('dir');
                 $t->at('td:nth-child(2)')
-                    ->text_is(Directoricious::_file_timestamp($file));
+                    ->text_is(MojoSimpleHTTPServer::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(Directoricious::_file_size($file));
+                    ->text_is(MojoSimpleHTTPServer::_file_size($file));
             }
             
             {
@@ -228,9 +228,9 @@ use Mojo::Date;
                     ->attr_is('href', 'image.png')
                     ->has_class('image');
                 $t->at('td:nth-child(2)')
-                    ->text_is(Directoricious::_file_timestamp($file));
+                    ->text_is(MojoSimpleHTTPServer::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(Directoricious::_file_size($file));
+                    ->text_is(MojoSimpleHTTPServer::_file_size($file));
             }
             
             {
@@ -241,9 +241,9 @@ use Mojo::Date;
                     ->attr_is('href', '日本語.html')
                     ->has_class('text');
                 $t->at('td:nth-child(2)')
-                    ->text_is(Directoricious::_file_timestamp($file));
+                    ->text_is(MojoSimpleHTTPServer::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(Directoricious::_file_size($file));
+                    ->text_is(MojoSimpleHTTPServer::_file_size($file));
             }
         })
         ->content_like(qr{test3.html})
@@ -263,9 +263,9 @@ use Mojo::Date;
                     ->attr_is('href', '../')
                     ->has_class('dir');
                 $t->at('td:nth-child(2)')
-                    ->text_is(Directoricious::_file_timestamp($file));
+                    ->text_is(MojoSimpleHTTPServer::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(Directoricious::_file_size($file));
+                    ->text_is(MojoSimpleHTTPServer::_file_size($file));
             }
             {
                 my $t = $t->at('tbody tr:nth-child(2)');
@@ -275,9 +275,9 @@ use Mojo::Date;
                     ->attr_is('href', 'test.html')
                     ->has_class('text');
                 $t->at('td:nth-child(2)')
-                    ->text_is(Directoricious::_file_timestamp($file));
+                    ->text_is(MojoSimpleHTTPServer::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(Directoricious::_file_size($file));
+                    ->text_is(MojoSimpleHTTPServer::_file_size($file));
             }
         });
     

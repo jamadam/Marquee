@@ -1,4 +1,4 @@
-package Directoricious;
+package MojoSimpleHTTPServer;
 use Mojo::Base 'Mojo';
 use Data::Dumper;
 use File::Spec;
@@ -100,7 +100,7 @@ use Mojolicious::Commands;
         
         my $mt = Mojo::Template->new;
         my $prepend = 'use strict;';
-        $prepend .= 'my $_S = $_[0];';
+        $prepend .= 'my $_S = shift;';
         for my $var (keys %{$args}) {
             if ($var =~ /^\w+$/) {
                 $prepend .= " my \$$var = \$_S->{'$var'};";
@@ -209,7 +209,6 @@ use Mojolicious::Commands;
     sub serve_dynamic {
         my ($self, $path) = @_;
         
-        # dynamic dispatch
         for my $ext (keys %{$self->template_handlers}) {
             my $cb = $self->template_handlers->{$ext};
             my $path = "$path.$ext";
@@ -246,7 +245,8 @@ use Mojolicious::Commands;
             if (-f $fpath) {
                 $name = $file;
                 $name =~ s{(\.\w+)$self->{_handler_re}}{$1};
-                $type = (split('/', Mojolicious::Types->type(($name =~ qr{\.(\w+)$}) ? $1 : '') || 'text/plain'))[0];
+                $type = ((Mojolicious::Types->type(
+                            ($name =~ qr{\.(\w+)$})) || 'text') =~ /^(\w+)/)[0];
             } else {
                 $name = $file. '/';
                 $type = 'dir';
@@ -364,7 +364,7 @@ __END__
 
 =head1 NAME
 
-Directoricious - Simple HTTP server with Server-side include
+MojoSimpleHTTPServer - Simple HTTP server with Server-side include
 
 =head1 SYNOPSIS
     
@@ -376,9 +376,9 @@ Directoricious - Simple HTTP server with Server-side include
     use File::Spec;
     use lib join '/', File::Spec->splitdir(dirname(__FILE__)), 'lib';
     
-    use Directoricious;
+    use MojoSimpleHTTPServer;
     
-    my $my_app = Directoricious->new;
+    my $my_app = MojoSimpleHTTPServer->new;
     $my_app->document_root($my_app->home->rel_dir('public_html'));
     $my_app->auto_index(1);
     $my_app->start;

@@ -40,7 +40,9 @@ use Mojolicious::Commands;
         } else {
             my $res = $tx->res;
             my $path = $tx->req->url->path;
-            my $filled_path = $self->_auto_fill_filename($path->clone);
+            my $filled_path =
+                $self->default_file
+                            ? $self->_auto_fill_filename($path->clone) : $path;
             
             if (my $type = $self->mime_type($filled_path)) {
                 $res->headers->content_type($type);
@@ -247,7 +249,7 @@ use Mojolicious::Commands;
                 $name = $file;
                 $name =~ s{(\.\w+)$self->{_handler_re}}{$1};
                 $type = ((Mojolicious::Types->type(
-                            ($name =~ qr{\.(\w+)$})) || 'text') =~ /^(\w+)/)[0];
+                    ($name =~ qr{\.(\w+)$})[0] || '') || 'text') =~ /^(\w+)/)[0];
             } else {
                 $name = $file. '/';
                 $type = 'dir';

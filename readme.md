@@ -3,9 +3,8 @@ MojoSimpleHTTPServer 0.01 beta
 
 ## SYNOPSIS
     
-    mojo SimpleHTTPServer [--start start URL] [--match match string] [--sleep seconds]
-        [--ua useragent header] [--cookie cookie string] [--timeout seconds]
-        [--evacuate second] [--noevacuate] [--resume]
+    mojo SimpleHTTPServer [--document_root path] [--dafault_file name]
+        [--auto_index] ..
 
 ## DESCRIPTION
 

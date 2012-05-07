@@ -63,7 +63,7 @@ use MojoSimpleHTTPServer::Helper;
             
             if (! $res->code &&
                         -d File::Spec->catfile($self->document_root. $path)) {
-                if (substr($path, -1, 1) ne '/') {
+                if (! $path->trailing_slash && scalar @{$path->parts}) {
                     $self->serve_redirect_to_slashed($path);
                 } elsif ($self->auto_index) {
                     $self->serve_index($path);

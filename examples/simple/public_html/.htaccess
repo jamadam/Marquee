@@ -1,0 +1,8 @@
+DirectoryIndex index.html
+Options +ExecCGI
+AddHandler cgi-script .cgi
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME}.ep -f [OR]
+RewriteCond %{REQUEST_URI} ^/static
+RewriteRule ^(.*)$ index.cgi/$1 [QSA,L]

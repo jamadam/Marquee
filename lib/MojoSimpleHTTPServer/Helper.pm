@@ -28,7 +28,17 @@ MojoSimpleHTTPServer::Helper - Helper functions for ep renderer
 
 =head1 DESCRIPTION
 
+=head1 FUNCTIONS
+
+=head2 <% param('key') %>
+
+Returns request parameters for given key.
+
 =head1 METHODS
+
+=head2 $instance->helpers()
+
+Generates hash of built-in hepler name and code refs.
 
 =head1 SEE ALSO
 

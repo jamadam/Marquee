@@ -394,14 +394,68 @@ MojoSimpleHTTPServer - Simple HTTP server with Server-side include
     
     use MojoSimpleHTTPServer;
     
-    my $my_app = MojoSimpleHTTPServer->new;
-    $my_app->document_root($my_app->home->rel_dir('public_html'));
-    $my_app->auto_index(1);
-    $my_app->start;
+    my $app = MojoSimpleHTTPServer->new;
+    $app->document_root($app->home->rel_dir('public_html'));
+    $app->auto_index(1);
+    $app->start;
 
 =head1 DESCRIPTION
 
+MojoSimpleHTTPServer is a simple web server base class. The module also is a
+backend of 'mojo SimpleHTTPServer', a command line tool.
+This is built on mojo modules in L<Mojolicious> distribution. 
+
+=head1 ATTRIBUTES
+
+=head2 document_root
+
+=head2 auto_index
+
+=head2 default_file
+
+=head2 inited
+
+=head2 log_file
+
+=head2 template_handlers
+
 =head1 METHODS
+
+=head2 $instance->dispatch()
+
+=head2 $instance->handler($tx)
+
+=head2 $instance->handle_ep($args)
+
+=head2 $instance->init()
+
+=head2 $instance->mime_type($path)
+
+=head2 $instance->serve_redirect_to_slashed($path)
+
+=head2 $instance->serve_redirect($uri)
+
+=head2 $instance->serve_error_document($code, $message)
+
+=head2 $instance->serve_static($path)
+
+=head2 $instance->serve_dynamic($path)
+
+=head2 $instance->serve_index($path)
+
+Generates file index for response and set to tx
+
+=head2 $instance->stash()
+
+Returns current stash
+
+=head2 $instance->start()
+
+Starts app
+
+=head2 $instance->tx()
+
+Returns current tx
 
 =head1 SEE ALSO
 

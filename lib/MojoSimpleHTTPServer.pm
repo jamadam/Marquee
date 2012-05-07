@@ -44,6 +44,7 @@ use MojoSimpleHTTPServer::Helper;
             my $filled_path =
                 $self->default_file
                             ? $self->_auto_fill_filename($path->clone) : $path;
+            $filled_path->leading_slash(1);
             
             if (my $type = $self->mime_type($filled_path)) {
                 $res->headers->content_type($type);

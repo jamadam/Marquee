@@ -9,6 +9,7 @@
 	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/yui-reset.css" />
 	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/yui-fonts.css" />
 	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/file_list.css" />
+	<link rel="shortcut icon" href="/static/favicon.ico" />
     <script type="text/javascript" src="/<%= $static_dir %>/jquery.1.7.1.js"></script>
     <script type="text/javascript" src="/<%= $static_dir %>/file_list.js"></script>
 </head>

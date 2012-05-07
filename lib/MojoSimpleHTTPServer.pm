@@ -8,6 +8,7 @@ use Mojo::Asset::File;
 use Mojo::Util qw'url_unescape encode decode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
+use MojoSimpleHTTPServer::Helper;
 
     our $VERSION = '0.01';
     our $tx;
@@ -102,7 +103,18 @@ use Mojolicious::Commands;
         my ($path, $args) = @_;
         
         my $mt = Mojo::Template->new;
-        my $prepend = 'use strict;';
+
+        # Be a bit more relaxed for helpers
+        my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
+
+        # Helpers
+        $prepend .= 'my $_H = MojoSimpleHTTPServer::Helper->helpers;';
+        for my $name (sort keys %{MojoSimpleHTTPServer::Helper->helpers}) {
+            next unless $name =~ /^\w+$/;
+            $prepend .= "sub $name; *$name = sub { \$_H->{$name}->(\@_) };";
+        }
+        
+        $prepend .= 'use strict;';
         $prepend .= 'my $_S = shift;';
         for my $var (keys %{$args}) {
             if ($var =~ /^\w+$/) {

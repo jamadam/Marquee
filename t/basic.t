@@ -9,7 +9,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 140;
+    use Test::More tests => 143;
 
     my $app;
     my $t;
@@ -88,6 +88,11 @@ use Mojo::Date;
         ->header_is('Content-Type', undef)
         ->header_is('Content-Length', 15)
         ->content_is('index4.html.pub');
+    
+    # helper
+    $t->get_ok('/helper.html?foo=bar')
+        ->status_is(200)
+        ->content_is('bar');
     
     ### real template tests
     

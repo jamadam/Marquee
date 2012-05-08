@@ -47,7 +47,7 @@ Returns stash value for given key.
 
 =head2 $instance->helpers()
 
-Generates hash of built-in helper name and code refs.
+Generates hash of built-in helper names and code refs.
 
 =head1 SEE ALSO
 

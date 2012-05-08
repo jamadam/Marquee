@@ -164,9 +164,21 @@ use Mojo::Date;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     $app->auto_index(1);
+    
+    {
+        package _TestHandler;
+        use Mojo::Base -base;
+        sub render {return $_[1]}
+    }
+    {
+        package _Test2Handler;
+        use Mojo::Base -base;
+        sub render {return 'rendered'}
+    }
+    
     $app->add_handler(
-        test => sub {return $_[0]},
-        test2 => sub {return 'rendered'},
+        test => _TestHandler->new,
+        test2 => _Test2Handler->new,
     );
     
     $t = Test::Mojo->new($app);

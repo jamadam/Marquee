@@ -44,7 +44,7 @@ use File::Basename 'dirname';
                 my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
                 my $handler = $context->app->template_handlers->{$ext};
                 if ($handler) {
-                    $handler->($path_abs, $context);
+                    $handler->render($path_abs, $context);
                 }
             }
         });

@@ -10,6 +10,7 @@ use Mojolicious::Types;
 use Mojolicious::Commands;
 use MojoSimpleHTTPServer::Helper;
 use MojoSimpleHTTPServer::Context;
+use MojoSimpleHTTPServer::TemplateHandler::EP;
 
     our $VERSION = '0.01';
     
@@ -21,7 +22,7 @@ use MojoSimpleHTTPServer::Context;
     __PACKAGE__->attr('inited');
     __PACKAGE__->attr('log_file');
     __PACKAGE__->attr('template_handlers', sub {{
-        ep => \&_handle_ep,
+        ep => MojoSimpleHTTPServer::TemplateHandler::EP->new,
     }});
     __PACKAGE__->attr('helper' => sub {
         MojoSimpleHTTPServer::Helper->new->load_preset;
@@ -231,11 +232,11 @@ use MojoSimpleHTTPServer::Context;
         my ($self, $path) = @_;
         
         for my $ext (keys %{$self->template_handlers}) {
-            my $cb = $self->template_handlers->{$ext};
+            my $handler = $self->template_handlers->{$ext};
             my $path = "$path.$ext";
-            if (-f $path && $cb) {
+            if (-f $path && $handler) {
                 my $tx = $context->tx;
-                $tx->res->body(encode('UTF-8', $cb->($path, $context)));
+                $tx->res->body(encode('UTF-8', $handler->render($path, $context)));
                 $tx->res->code(200);
             }
         }
@@ -292,8 +293,9 @@ use MojoSimpleHTTPServer::Context;
             dataset     => \@dset,
             static_dir  => 'static'
         );
+        my $handler = MojoSimpleHTTPServer::TemplateHandler::EP->new;
         $tx->res->body(
-            encode('UTF-8', _handle_ep(_asset('index.ep'), $context))
+            encode('UTF-8', $handler->render(_asset('index.ep'), $context))
         );
         $tx->res->code(200);
         $tx->res->headers->content_type($types->type('html'));
@@ -350,39 +352,6 @@ use MojoSimpleHTTPServer::Context;
         return ((stat($path))[7] > 1024)
             ? sprintf("%.1f",(stat($path))[7] / 1024) . 'KB'
             : (stat($path))[7]. 'B';
-    }
-    
-    ### --
-    ### ep handler
-    ### --
-    sub _handle_ep {
-        my ($path, $context) = @_;
-        
-        local $context->stash->{template_path} = $path;
-        
-        my $mt = Mojo::Template->new;
-
-        # Be a bit more relaxed for helpers
-        my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
-
-        # Helpers
-        $prepend .= 'my $_H = shift;';
-        my $helper = $context->app->helper;
-        for my $name (sort keys %{$helper->funcs}) {
-            if ($name =~ /^\w+$/) {
-                $prepend .=
-                "sub $name; *$name = sub {\$_H->funcs->{$name}->(\$_H, \@_)};";
-            }
-        }
-        
-        $prepend .= 'use strict;';
-        for my $var (keys %{$context->stash}) {
-            if ($var =~ /^\w+$/) {
-                $prepend .= " my \$$var = stash '$var';";
-            }
-        }
-        $mt->prepend($prepend);
-        $mt->render_file($path, $helper, $context);
     }
 
 1;

@@ -9,8 +9,37 @@ MojoSimpleHTTPServer 0.01 beta
 ## DESCRIPTION
 
 SimpleHTTPServer is a simple HTTP server with server-side include.
+The distribution is consist of object oriented API for Perl and command line
+interface.
 
-## USAGE
+## INSTALLATION
+
+To install this module, run the following commands:
+
+    $ perl Makefile.PL
+    $ make
+    $ make test
+    $ make install
+
+## Perl API
+
+MojoSimpleHTTPServer class is based on Mojo. You can run your app with with Mojo
+way
+
+    use MojoSimpleHTTPServer;
+    
+    my $app = MojoSimpleHTTPServer->new;
+    $app->document_root($path);
+    $app->auto_index(1);
+    $app->default_file('index.html');
+    $app->start;
+
+On command line..
+
+    $ ./myapp daemon
+    Server available at http://127.0.0.1:3000.
+
+## COMMAND LINE INTERFACE
 
 ./mojo SimpleHTTPServer [OPTIONS]
 

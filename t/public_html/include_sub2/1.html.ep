@@ -1,0 +1,2 @@
+<filename>/include_sub2/1.html.ep</filename>
+<test1><%= include('./2.html.ep') =%></test1>

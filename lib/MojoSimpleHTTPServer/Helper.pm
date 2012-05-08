@@ -1,5 +1,6 @@
 package MojoSimpleHTTPServer::Helper;
 use Mojo::Base -base;
+use File::Basename 'dirname';
 
     sub param {
         my $class = shift;
@@ -11,9 +12,30 @@ use Mojo::Base -base;
         $MojoSimpleHTTPServer::context->stash(@_);
     }
     
+    sub ctd {
+        my $class = shift;
+        $MojoSimpleHTTPServer::context->stash->{template_path};
+    }
+    
+    sub include {
+        my $class = shift;
+        my $path = shift;
+        
+        my $path_abs = dirname($class->ctd). '/'. $path;
+        
+        if (-f $path_abs) {
+            my $context = $MojoSimpleHTTPServer::context;
+            my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
+            my $handler = $context->app->template_handlers->{$ext};
+            if ($handler) {
+                $handler->($path_abs, $context);
+            }
+        }
+    }
+    
     sub helpers {
         my %names;
-        for my $name (qw/ param stash /) {
+        for my $name (qw/ param stash ctd include /) {
             $names{$name} = sub { __PACKAGE__->$name(@_) };
         }
         return \%names;

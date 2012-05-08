@@ -9,7 +9,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 152;
+    use Test::More tests => 158;
 
     my $app;
     my $t;
@@ -93,6 +93,15 @@ use Mojo::Date;
     $t->get_ok('/helper.html?foo=bar')
         ->status_is(200)
         ->content_is('bar');
+    
+    # sub template inclusion
+    
+    $t->get_ok('/include.html')
+        ->status_is(200)
+        ->text_is('filename', 'include.html.ep')
+        ->text_is('test1 filename', 'include_sub.html.ep')
+        ->text_is('test2 filename', '/include_sub2/1.html.ep')
+        ->text_is('test2 test1 filename', '/include_sub2/2.html.ep');
     
     ### real template tests
     

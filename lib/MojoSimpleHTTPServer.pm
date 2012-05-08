@@ -354,6 +354,8 @@ use MojoSimpleHTTPServer::Context;
     sub _handle_ep {
         my ($path, $context) = @_;
         
+        local $context->stash->{template_path} = $path;
+        
         my $mt = Mojo::Template->new;
 
         # Be a bit more relaxed for helpers

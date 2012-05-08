@@ -9,7 +9,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 143;
+    use Test::More tests => 144;
 
     my $app;
     my $t;
@@ -119,15 +119,17 @@ use Mojo::Date;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     $app->context->stash(model => _Model->new);
+    $app->context->stash(BAZ => 'BAZ VALUE');
     
     $t = Test::Mojo->new($app);
     
     $t->get_ok('/stash.html')
         ->status_is(200)
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
-        ->header_is('Content-Length', 18)
+        ->header_is('Content-Length', 82)
         ->content_like(qr'stash.html.ep')
-        ->content_like(qr'FOO');
+        ->content_like(qr'FOO')
+        ->content_like(qr'BAZ VALUE');
     
     ### adding template handler tests
     

@@ -1,2 +1,3 @@
-stash.html.ep
-<%= $model->retrieve('foo'); =%>
+<filename>stash.html.ep</filename>
+<test1><%= $model->retrieve('foo'); %></test1>
+<test2><%= stash('BAZ') =%></test2>

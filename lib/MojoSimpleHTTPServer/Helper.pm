@@ -5,10 +5,15 @@ use Mojo::Base -base;
         my $class = shift;
         $MojoSimpleHTTPServer::context->tx->req->param($_[0]);
     }
+
+    sub stash {
+        my $class = shift;
+        $MojoSimpleHTTPServer::context->stash(@_);
+    }
     
     sub helpers {
         my %names;
-        for my $name (qw/ param /) {
+        for my $name (qw/ param stash /) {
             $names{$name} = sub { __PACKAGE__->$name(@_) };
         }
         return \%names;

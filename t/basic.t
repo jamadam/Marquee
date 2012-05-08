@@ -127,9 +127,9 @@ use Mojo::Date;
         ->status_is(200)
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
         ->header_is('Content-Length', 82)
-        ->content_like(qr'stash.html.ep')
-        ->content_like(qr'FOO')
-        ->content_like(qr'BAZ VALUE');
+        ->text_is('filename', 'stash.html.ep')
+        ->text_is('test1', 'FOO')
+        ->text_is('test2', 'BAZ VALUE');
     
     ### adding template handler tests
     

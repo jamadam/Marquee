@@ -44,3 +44,4 @@ inited
 mojo
 tx
 ep
+stash

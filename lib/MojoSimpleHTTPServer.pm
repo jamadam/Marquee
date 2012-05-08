@@ -102,7 +102,7 @@ use MojoSimpleHTTPServer::Context;
     ### handler
     ### --
     sub handler {
-        (my $self, my $tx) = @_;
+        my ($self, $tx) = @_;
         
         local $context = MojoSimpleHTTPServer::Context->new(
             app     => $self,
@@ -127,7 +127,7 @@ use MojoSimpleHTTPServer::Context;
     ### ep handler
     ### --
     sub _handle_ep {
-        my ($path, $args) = @_;
+        my ($path, $context) = @_;
         
         my $mt = Mojo::Template->new;
 
@@ -137,19 +137,19 @@ use MojoSimpleHTTPServer::Context;
         # Helpers
         $prepend .= 'my $_H = MojoSimpleHTTPServer::Helper->helpers;';
         for my $name (sort keys %{MojoSimpleHTTPServer::Helper->helpers}) {
-            next unless $name =~ /^\w+$/;
-            $prepend .= "sub $name; *$name = sub { \$_H->{$name}->(\@_) };";
+            if ($name =~ /^\w+$/) {
+                $prepend .= "sub $name; *$name = sub { \$_H->{$name}->(\@_) };";
+            }
         }
         
         $prepend .= 'use strict;';
-        $prepend .= 'my $_S = shift;';
-        for my $var (keys %{$args}) {
+        for my $var (keys %{$context->stash}) {
             if ($var =~ /^\w+$/) {
-                $prepend .= " my \$$var = \$_S->{'$var'};";
+                $prepend .= " my \$$var = stash '$var';";
             }
         }
         $mt->prepend($prepend);
-        $mt->render_file($path, $args);
+        $mt->render_file($path, $context);
     }
     
     ### --
@@ -264,7 +264,7 @@ use MojoSimpleHTTPServer::Context;
             my $path = "$path.$ext";
             if (-f $path && $cb) {
                 my $tx = $context->tx;
-                $tx->res->body(encode('UTF-8', $cb->($path, $context->stash)));
+                $tx->res->body(encode('UTF-8', $cb->($path, $context)));
                 $tx->res->code(200);
             }
         }
@@ -316,12 +316,13 @@ use MojoSimpleHTTPServer::Context;
         } @dset;
         
         my $tx = $context->tx;
+        $context->stash(
+            dir         => $path,
+            dataset     => \@dset,
+            static_dir  => 'static'
+        );
         $tx->res->body(
-            encode('UTF-8', _handle_ep(_asset('index.ep'), {
-                dir         => $path,
-                dataset     => \@dset,
-                static_dir  => 'static'
-            }))
+            encode('UTF-8', _handle_ep(_asset('index.ep'), $context))
         );
         $tx->res->code(200);
         $tx->res->headers->content_type($types->type('html'));

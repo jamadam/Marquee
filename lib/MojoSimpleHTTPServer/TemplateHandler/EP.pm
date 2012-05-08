@@ -44,11 +44,17 @@ MojoSimpleHTTPServer::TemplateHandler::EP - EP template handler
 
 =head1 SYNOPSIS
 
+    $app->add_handler(ep => MojoSimpleHTTPServer::TemplateHandler::EP->new);
+
 =head1 DESCRIPTION
+
+EP handler.
 
 =head1 ATTRIBUTES
 
 =head1 METHODS
+
+=head2 $instance->render($path, $context)
 
 =head1 SEE ALSO
 

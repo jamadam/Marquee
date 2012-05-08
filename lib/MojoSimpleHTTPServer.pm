@@ -406,15 +406,8 @@ This is built on mojo modules in L<Mojolicious> distribution.
 Adds handlers for template rendering.
 
     $instance->add_handler(
-        ep => sub {
-            my ($path, $context) = @_;
-            my $tpl = MyTemplate->new;
-            my $result = $tpl->render($path, $context);
-            return $result;
-        },
-        tt => sub {
-            ...
-        },
+        ep => MojoSimpleHTTPServer::TemplateHandler::EP->new,
+        tt => MojoSimpleHTTPServer::TemplateHandler::TemplateToolkit->new,
     );
 
 =head2 $instance->context()

@@ -120,35 +120,6 @@ use MojoSimpleHTTPServer::Context;
     }
     
     ### --
-    ### ep handler
-    ### --
-    sub _handle_ep {
-        my ($path, $context) = @_;
-        
-        my $mt = Mojo::Template->new;
-
-        # Be a bit more relaxed for helpers
-        my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
-
-        # Helpers
-        $prepend .= 'my $_H = MojoSimpleHTTPServer::Helper->helpers;';
-        for my $name (sort keys %{MojoSimpleHTTPServer::Helper->helpers}) {
-            if ($name =~ /^\w+$/) {
-                $prepend .= "sub $name; *$name = sub { \$_H->{$name}->(\@_) };";
-            }
-        }
-        
-        $prepend .= 'use strict;';
-        for my $var (keys %{$context->stash}) {
-            if ($var =~ /^\w+$/) {
-                $prepend .= " my \$$var = stash '$var';";
-            }
-        }
-        $mt->prepend($prepend);
-        $mt->render_file($path, $context);
-    }
-    
-    ### --
     ### init
     ### --
     sub init {
@@ -375,6 +346,35 @@ use MojoSimpleHTTPServer::Context;
         return ((stat($path))[7] > 1024)
             ? sprintf("%.1f",(stat($path))[7] / 1024) . 'KB'
             : (stat($path))[7]. 'B';
+    }
+    
+    ### --
+    ### ep handler
+    ### --
+    sub _handle_ep {
+        my ($path, $context) = @_;
+        
+        my $mt = Mojo::Template->new;
+
+        # Be a bit more relaxed for helpers
+        my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
+
+        # Helpers
+        $prepend .= 'my $_H = MojoSimpleHTTPServer::Helper->helpers;';
+        for my $name (sort keys %{MojoSimpleHTTPServer::Helper->helpers}) {
+            if ($name =~ /^\w+$/) {
+                $prepend .= "sub $name; *$name = sub { \$_H->{$name}->(\@_) };";
+            }
+        }
+        
+        $prepend .= 'use strict;';
+        for my $var (keys %{$context->stash}) {
+            if ($var =~ /^\w+$/) {
+                $prepend .= " my \$$var = stash '$var';";
+            }
+        }
+        $mt->prepend($prepend);
+        $mt->render_file($path, $context);
     }
 
 1;

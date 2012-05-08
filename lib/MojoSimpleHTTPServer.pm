@@ -240,7 +240,6 @@ use MojoSimpleHTTPServer::Helper;
             if (-f $path && $cb) {
                 $tx->res->body(encode('UTF-8', $cb->($path, $self->{stash})));
                 $tx->res->code(200);
-                return $tx->resume;
             }
         }
     }

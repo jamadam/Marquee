@@ -135,10 +135,10 @@ use Mojo::Date;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     $app->auto_index(1);
-    $app->template_handlers({
-        test    => sub {return $_[0]},
-        test2   => sub {return 'rendered'},
-    });
+    $app->add_handler(
+        test => sub {return $_[0]},
+        test2 => sub {return 'rendered'},
+    );
     
     $t = Test::Mojo->new($app);
 

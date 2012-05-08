@@ -31,6 +31,15 @@ use MojoSimpleHTTPServer::Helper;
     );
     
     ### --
+    ### Add template handler
+    ### --
+    sub add_handler {
+        my ($self, %args) = @_;
+        $self->template_handlers({%{$self->template_handlers}, %args});
+        return $self;
+    }
+    
+    ### --
     ### dispatch
     ### --
     sub dispatch {
@@ -420,6 +429,22 @@ This is built on mojo modules in L<Mojolicious> distribution.
 =head2 template_handlers
 
 =head1 METHODS
+
+=head2 $instance->add_handler(name => $code_ref);
+
+Adds handlers for template rendering.
+
+    $instance->add_handler(
+        ep => sub {
+            my ($path, $args) = @_;
+            my $tpl = MyTemplate->new;
+            my $result = $tpl->render($path, $args);
+            return $result;
+        },
+        tt => sub {
+            ...
+        },
+    );
 
 =head2 $instance->dispatch()
 

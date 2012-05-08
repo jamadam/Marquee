@@ -40,7 +40,7 @@ On command line..
 
 ## COMMAND LINE INTERFACE
 
-./mojo SimpleHTTPServer [OPTIONS]
+mojo SimpleHTTPServer [OPTIONS]
 
 These options are available:
   
@@ -100,7 +100,7 @@ also available.
 [https://github.com/jamadam/MojoSimpleHTTPServer]
 [https://github.com/jamadam/MojoSimpleHTTPServer]:https://github.com/jamadam/MojoSimpleHTTPServer
 
-Copyright (c) 2011 [jamadam]
+Copyright (c) 2012 [jamadam]
 [jamadam]: http://blog2.jamadam.com/
 
 Dual licensed under the MIT and GPL licenses:

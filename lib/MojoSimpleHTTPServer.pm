@@ -19,7 +19,7 @@ use MojoSimpleHTTPServer::Helper;
     __PACKAGE__->attr('inited');
     __PACKAGE__->attr('log_file');
     __PACKAGE__->attr('template_handlers', sub {{
-        ep => \&handle_ep,
+        ep => \&_handle_ep,
     }});
 
     my $types = Mojolicious::Types->new;
@@ -100,7 +100,7 @@ use MojoSimpleHTTPServer::Helper;
     ### --
     ### ep handler
     ### --
-    sub handle_ep {
+    sub _handle_ep {
         my ($path, $args) = @_;
         
         my $mt = Mojo::Template->new;
@@ -282,7 +282,7 @@ use MojoSimpleHTTPServer::Helper;
         } @dset;
         
         $tx->res->body(
-            encode('UTF-8', handle_ep(_asset('index.ep'), {
+            encode('UTF-8', _handle_ep(_asset('index.ep'), {
                 dir         => $path,
                 dataset     => \@dset,
                 static_dir  => 'static'
@@ -424,8 +424,6 @@ This is built on mojo modules in L<Mojolicious> distribution.
 =head2 $instance->dispatch()
 
 =head2 $instance->handler($tx)
-
-=head2 $instance->handle_ep($args)
 
 =head2 $instance->init()
 

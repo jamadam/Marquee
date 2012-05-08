@@ -23,8 +23,7 @@ To install this module, run the following commands:
 
 ## Perl API
 
-MojoSimpleHTTPServer class is based on Mojo. You can run your app with with Mojo
-way
+MojoSimpleHTTPServer class is based on Mojo. You can run your app in Mojo way
 
     use MojoSimpleHTTPServer;
     

@@ -39,6 +39,10 @@ MojoSimpleHTTPServer::Helper - Helper functions for ep renderer
 
 Returns request parameters for given key.
 
+=head2 <% stash('key') %>
+
+Returns stash value for given key.
+
 =head1 METHODS
 
 =head2 $instance->helpers()

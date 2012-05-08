@@ -40,7 +40,17 @@ MojoSimpleHTTPServer::Context - Context
 
 =head1 ATTRIBUTES
 
+=head2 app
+
+MojoSimpleHTTPServer instance.
+
+=head2 tx
+
+Mojo::Transaction instance.
+
 =head1 METHODS
+
+=head2 $instance->stash(key => 'value')
 
 =head1 SEE ALSO
 

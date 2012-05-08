@@ -430,9 +430,9 @@ Adds handlers for template rendering.
 
     $instance->add_handler(
         ep => sub {
-            my ($path, $args) = @_;
+            my ($path, $context) = @_;
             my $tpl = MyTemplate->new;
-            my $result = $tpl->render($path, $args);
+            my $result = $tpl->render($path, $context);
             return $result;
         },
         tt => sub {

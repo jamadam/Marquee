@@ -9,10 +9,12 @@ use Mojo::Util qw'url_unescape encode decode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
 use MojoSimpleHTTPServer::Helper;
+use MojoSimpleHTTPServer::Context;
 
     our $VERSION = '0.01';
-    our $tx;
     
+    our $context = MojoSimpleHTTPServer::Context->new;
+
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('auto_index');
     __PACKAGE__->attr('default_file');
@@ -40,10 +42,19 @@ use MojoSimpleHTTPServer::Helper;
     }
     
     ### --
+    ### Context
+    ### --
+    sub context {
+        $context;
+    }
+    
+    ### --
     ### dispatch
     ### --
     sub dispatch {
         my ($self) = @_;
+        
+        my $tx = $context->tx;
         
         if ($tx->req->url =~ /$self->{_handler_re}/) {
             $self->serve_error_document(403);
@@ -91,7 +102,13 @@ use MojoSimpleHTTPServer::Helper;
     ### handler
     ### --
     sub handler {
-        (my $self, local $tx) = @_;
+        (my $self, my $tx) = @_;
+        
+        local $context = MojoSimpleHTTPServer::Context->new(
+            app     => $self,
+            tx      => $tx,
+            stash   => \%{$context->stash},
+        );
         
         $self->init;
         
@@ -173,8 +190,10 @@ use MojoSimpleHTTPServer::Helper;
     ### --
     sub serve_redirect_to_slashed {
         my ($self, $path) = @_;
+        
         my $uri =
-            $tx->req->url->clone->path($path->clone->trailing_slash(1))->to_abs;
+            $context->tx->req->url->clone->path(
+                                    $path->clone->trailing_slash(1))->to_abs;
         return $self->serve_redirect($uri);
     }
     
@@ -183,9 +202,11 @@ use MojoSimpleHTTPServer::Helper;
     ### --
     sub serve_redirect {
         my ($self, $uri) = @_;
+        
+        my $tx = $context->tx;
         $tx->res->code(301);
         $tx->res->headers->location($uri);
-        return $tx;
+        return $self;
     }
     
     ### --
@@ -193,10 +214,12 @@ use MojoSimpleHTTPServer::Helper;
     ### --
     sub serve_error_document {
         my ($self, $code, $message) = @_;
+        
+        my $tx = $context->tx;
         $tx->res->body($message || ($code. ' '. $error_messages{$code}));
         $tx->res->code($code);
         $tx->res->headers->content_type($types->type('html'));
-        return $tx;
+        return $self;
     }
     
     ### --
@@ -207,6 +230,8 @@ use MojoSimpleHTTPServer::Helper;
         
         my $asset = Mojo::Asset::File->new(path => $path);
         my $modified = (stat $path)[9];
+        
+        my $tx = $context->tx;
         
         # If modified since
         my $req_headers = $tx->req->headers;
@@ -225,7 +250,7 @@ use MojoSimpleHTTPServer::Helper;
         $tx->res->code(200);
         $res_headers->last_modified(Mojo::Date->new($modified));
         
-        return $tx;
+        return $self;
     }
     
     ### --
@@ -238,7 +263,8 @@ use MojoSimpleHTTPServer::Helper;
             my $cb = $self->template_handlers->{$ext};
             my $path = "$path.$ext";
             if (-f $path && $cb) {
-                $tx->res->body(encode('UTF-8', $cb->($path, $self->{stash})));
+                my $tx = $context->tx;
+                $tx->res->body(encode('UTF-8', $cb->($path, $context->stash)));
                 $tx->res->code(200);
             }
         }
@@ -289,6 +315,7 @@ use MojoSimpleHTTPServer::Helper;
             $a->{name} cmp $b->{name}
         } @dset;
         
+        my $tx = $context->tx;
         $tx->res->body(
             encode('UTF-8', _handle_ep(_asset('index.ep'), {
                 dir         => $path,
@@ -299,28 +326,6 @@ use MojoSimpleHTTPServer::Helper;
         $tx->res->code(200);
         $tx->res->headers->content_type($types->type('html'));
         
-        return $tx;
-    }
-    
-    ### --
-    ### stash
-    ### --
-    sub stash {
-        my $self = shift;
-      
-        # Hash
-        my $stash = $self->{stash} ||= {};
-        return $stash unless @_;
-        
-        # Get
-        return $stash->{$_[0]} unless @_ > 1 || ref $_[0];
-      
-        # Set
-        my $values = ref $_[0] ? $_[0] : {@_};
-        for my $key (keys %$values) {
-            $stash->{$key} = $values->{$key};
-        }
-      
         return $self;
     }
     
@@ -331,13 +336,6 @@ use MojoSimpleHTTPServer::Helper;
         my $self = $ENV{MOJO_APP} = shift;
         $self->init;
         Mojolicious::Commands->start;
-    }
-    
-    ### --
-    ### transaction
-    ### --
-    sub tx {
-        $tx;
     }
     
     ### --
@@ -445,6 +443,10 @@ Adds handlers for template rendering.
         },
     );
 
+=head2 $instance->context()
+
+Returns current context
+
 =head2 $instance->dispatch()
 
 =head2 $instance->handler($tx)
@@ -466,10 +468,6 @@ Adds handlers for template rendering.
 =head2 $instance->serve_index($path)
 
 Generates file index for response and set to tx
-
-=head2 $instance->stash()
-
-Returns current stash
 
 =head2 $instance->start()
 

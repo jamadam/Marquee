@@ -3,7 +3,7 @@ use Mojo::Base -base;
 
     sub param {
         my $class = shift;
-        $MojoSimpleHTTPServer::tx->req->param($_[0]);
+        $MojoSimpleHTTPServer::context->tx->req->param($_[0]);
     }
     
     sub helpers {

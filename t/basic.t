@@ -118,7 +118,7 @@ use Mojo::Date;
     $app = MojoSimpleHTTPServer->new;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
-    $app->stash(model => _Model->new);
+    $app->context->stash(model => _Model->new);
     
     $t = Test::Mojo->new($app);
     
@@ -177,7 +177,7 @@ use Mojo::Date;
         sub dispatch {
             my ($self) = @_;
             $self->SUPER::dispatch;
-            $self->tx->res->body('overridden');
+            $self->context->tx->res->body('overridden');
         }
     }
     

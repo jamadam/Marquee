@@ -71,36 +71,28 @@ These options are available:
 
 ### EXAMPLE2(specify port number)
 
-Since this program is based on Mojolicious, the options provided by it is
-also available.
-
     $ mojo SimpleHTTPServer --listen http://*:3001
 
 ### EXAMPLE3(specify document root)
-
-Since this program is based on Mojolicious, the options provided by it is
-also available.
 
     $ mojo SimpleHTTPServer --document_root ./public
 
 ### EXAMPLE4(specify default file name)
 
-Since this program is based on Mojolicious, the options provided by it is
-also available.
-
     $ mojo SimpleHTTPServer --default_file index.html
 
 ### EXAMPLE4(activate auto index)
-
-Since this program is based on Mojolicious, the options provided by it is
-also available.
 
     $ mojo SimpleHTTPServer --auto_index
 
 ![Site list](/jamadam/MojoSimpleHTTPServer/raw/master/screenshot/autoindex.png "Auto Index")
 
+## REPOSITORY
+
 [https://github.com/jamadam/MojoSimpleHTTPServer]
 [https://github.com/jamadam/MojoSimpleHTTPServer]:https://github.com/jamadam/MojoSimpleHTTPServer
+
+## COPYRIGHT AND LICENSE
 
 Copyright (c) 2012 [jamadam]
 [jamadam]: http://blog2.jamadam.com/

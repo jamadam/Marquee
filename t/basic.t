@@ -9,7 +9,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 144;
+    use Test::More tests => 152;
 
     my $app;
     my $t;
@@ -126,10 +126,20 @@ use Mojo::Date;
     $t->get_ok('/stash.html')
         ->status_is(200)
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
-        ->header_is('Content-Length', 82)
+        ->header_is('Content-Length', 138)
         ->text_is('filename', 'stash.html.ep')
         ->text_is('test1', 'FOO')
-        ->text_is('test2', 'BAZ VALUE');
+        ->text_is('test2', 'BAZ VALUE')
+        ->text_is('test3', '')
+        ->text_is('test4', '')
+        ->text_is('test5', 'ADDED');
+    
+    # overridden stash no longer available
+    $t->get_ok('/stash.html')
+        ->status_is(200)
+        ->header_is('Content-Type', 'text/html;charset=UTF-8')
+        ->header_is('Content-Length', 138)
+        ->text_is('test3', '');
     
     ### adding template handler tests
     

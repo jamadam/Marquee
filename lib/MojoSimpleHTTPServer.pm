@@ -104,11 +104,7 @@ use MojoSimpleHTTPServer::Context;
     sub handler {
         my ($self, $tx) = @_;
         
-        local $context = MojoSimpleHTTPServer::Context->new(
-            app     => $self,
-            tx      => $tx,
-            stash   => \%{$context->stash},
-        );
+        local $context = $context->clone(app => $self, tx => $tx);
         
         $self->init;
         

@@ -4,6 +4,12 @@ use Mojo::Base -base;
     __PACKAGE__->attr('app');
     __PACKAGE__->attr('tx');
     
+    sub clone {
+        my $self = shift;
+        my %stash = %{$self->stash};
+        __PACKAGE__->new(app => $self->app, stash => \%stash, @_);
+    }
+    
     ### --
     ### stash
     ### --

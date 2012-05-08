@@ -56,6 +56,8 @@ Mojo::Transaction instance.
 
 =head1 METHODS
 
+=head2 $instance->clone
+
 =head2 $instance->stash(key => 'value')
 
 =head1 SEE ALSO

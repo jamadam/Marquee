@@ -1,55 +1,74 @@
 package MojoSimpleHTTPServer::Helper;
 use Mojo::Base -base;
 use File::Basename 'dirname';
-
+    
+    __PACKAGE__->attr(funcs => sub {{}});
+    
     ### --
-    ### Request param
+    ### Add helper
     ### --
-    sub param {
-        my $class = shift;
-        $MojoSimpleHTTPServer::context->tx->req->param($_[0]);
+    sub add_helper {
+        my ($self, $name, $cb) = @_;
+        $self->funcs->{$name} = $cb;
+        return $self;
     }
-
+    
+    sub load_preset {
+        my ($self) = @_;
+        
+        $self->add_helper(param => sub {
+            my $self = shift;
+            $MojoSimpleHTTPServer::context->tx->req->param($_[0]);
+        });
+        
+        $self->add_helper(stash => sub {
+            my $self = shift;
+            $MojoSimpleHTTPServer::context->stash(@_);
+        });
+        
+        $self->add_helper(ctd => sub {
+            shift->_ctd;
+        });
+        
+        $self->add_helper(to_abs => sub {
+            shift->_to_abs(@_);
+        });
+        
+        $self->add_helper(include => sub {
+            my ($self, $path) = @_;
+            
+            my $path_abs = $self->_to_abs($path);
+            
+            if (-f $path_abs) {
+                my $context = $MojoSimpleHTTPServer::context;
+                my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
+                my $handler = $context->app->template_handlers->{$ext};
+                if ($handler) {
+                    $handler->($path_abs, $context);
+                }
+            }
+        });
+        
+        return $self;
+    }
+    
     ### --
-    ### Stash
+    ### abs
     ### --
-    sub stash {
-        my $class = shift;
-        $MojoSimpleHTTPServer::context->stash(@_);
+    sub _to_abs {
+        my ($self, $path) = @_;
+        
+        my $path_abs = dirname($self->_ctd). '/'. $path;
+        
+        return $path_abs;
     }
     
     ### --
     ### Current template path
     ### --
-    sub ctd {
-        my $class = shift;
+    sub _ctd {
+        my $self = shift;
         $MojoSimpleHTTPServer::context->stash->{template_path};
-    }
-    
-    ### --
-    ### Include template
-    ### --
-    sub include {
-        my ($class, $path) = @_;
-        
-        my $path_abs = dirname($class->ctd). '/'. $path;
-        
-        if (-f $path_abs) {
-            my $context = $MojoSimpleHTTPServer::context;
-            my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
-            my $handler = $context->app->template_handlers->{$ext};
-            if ($handler) {
-                $handler->($path_abs, $context);
-            }
-        }
-    }
-    
-    sub helpers {
-        my %names;
-        for my $name (qw/ param stash ctd include /) {
-            $names{$name} = sub { __PACKAGE__->$name(@_) };
-        }
-        return \%names;
     }
 
 1;
@@ -85,11 +104,19 @@ Returns request parameters for given key.
 
 Returns stash value for given key.
 
+=head2 <% to_abs() %>
+
+Generate absolute path with given relative one
+
 =head1 METHODS
 
-=head2 $instance->helpers()
+=head2 $instance->add_helper($name, $code_ref)
 
-Generates hash of built-in helper names and code refs.
+Adds helper
+
+=head2 $instance->load_preset()
+
+Loads preset helpers.
 
 =head1 SEE ALSO
 

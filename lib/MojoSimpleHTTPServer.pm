@@ -23,6 +23,9 @@ use MojoSimpleHTTPServer::Context;
     __PACKAGE__->attr('template_handlers', sub {{
         ep => \&_handle_ep,
     }});
+    __PACKAGE__->attr('helper' => sub {
+        MojoSimpleHTTPServer::Helper->new->load_preset;
+    });
 
     my $types = Mojolicious::Types->new;
     
@@ -114,6 +117,7 @@ use MojoSimpleHTTPServer::Context;
         
         if ($@) {
             $self->log->fatal("Processing request failed: $@");
+            warn $@;
             $tx->res->code(500);
         }
         $tx->resume;
@@ -362,10 +366,12 @@ use MojoSimpleHTTPServer::Context;
         my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
 
         # Helpers
-        $prepend .= 'my $_H = MojoSimpleHTTPServer::Helper->helpers;';
-        for my $name (sort keys %{MojoSimpleHTTPServer::Helper->helpers}) {
+        $prepend .= 'my $_H = shift;';
+        my $helper = $context->app->helper;
+        for my $name (sort keys %{$helper->funcs}) {
             if ($name =~ /^\w+$/) {
-                $prepend .= "sub $name; *$name = sub { \$_H->{$name}->(\@_) };";
+                $prepend .=
+                "sub $name; *$name = sub {\$_H->funcs->{$name}->(\$_H, \@_)};";
             }
         }
         
@@ -376,7 +382,7 @@ use MojoSimpleHTTPServer::Context;
             }
         }
         $mt->prepend($prepend);
-        $mt->render_file($path, $context);
+        $mt->render_file($path, $helper, $context);
     }
 
 1;

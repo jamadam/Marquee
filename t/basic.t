@@ -9,7 +9,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 158;
+    use Test::More tests => 163;
 
     my $app;
     my $t;
@@ -102,6 +102,14 @@ use Mojo::Date;
         ->text_is('test1 filename', 'include_sub.html.ep')
         ->text_is('test2 filename', '/include_sub2/1.html.ep')
         ->text_is('test2 test1 filename', '/include_sub2/2.html.ep');
+    
+    ### abs
+    
+    $t->get_ok('/to_abs.html')
+        ->status_is(200)
+        ->text_is('filename', 'to_abs.html.ep')
+        ->text_is('test1', 1)
+        ->text_is('test2', undef);
     
     ### real template tests
     

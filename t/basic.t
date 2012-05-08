@@ -109,7 +109,7 @@ use Mojo::Date;
         ->status_is(200)
         ->text_is('filename', 'to_abs.html.ep')
         ->text_is('test1', 1)
-        ->text_is('test2', undef);
+        ->text_is('test2', 0);
     
     ### real template tests
     

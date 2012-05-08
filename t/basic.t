@@ -177,8 +177,8 @@ use Mojo::Date;
     }
     
     $app->add_handler(
-        test => _TestHandler->new,
-        test2 => _Test2Handler->new,
+        test    => _TestHandler->new,
+        test2   => _Test2Handler->new,
     );
     
     $t = Test::Mojo->new($app);

@@ -9,8 +9,7 @@ MojoSimpleHTTPServer 0.01 beta
 ## DESCRIPTION
 
 SimpleHTTPServer is a simple HTTP server with server-side include.
-The distribution is consist of object oriented API for Perl and command line
-interface.
+The distribution is consist of object oriented Perl API and command line API.
 
 ## INSTALLATION
 
@@ -38,7 +37,7 @@ On command line..
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.
 
-## COMMAND LINE INTERFACE
+## COMMAND LINE API
 
 mojo SimpleHTTPServer [OPTIONS]
 

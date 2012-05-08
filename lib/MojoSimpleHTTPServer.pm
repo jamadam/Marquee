@@ -11,6 +11,7 @@ use Mojolicious::Commands;
 use MojoSimpleHTTPServer::Helper;
 use MojoSimpleHTTPServer::Context;
 use MojoSimpleHTTPServer::TemplateHandler::EP;
+use MojoSimpleHTTPServer::TemplateHandler::EPL;
 
     our $VERSION = '0.01';
     
@@ -22,7 +23,8 @@ use MojoSimpleHTTPServer::TemplateHandler::EP;
     __PACKAGE__->attr('inited');
     __PACKAGE__->attr('log_file');
     __PACKAGE__->attr('template_handlers', sub {{
-        ep => MojoSimpleHTTPServer::TemplateHandler::EP->new,
+        ep  => MojoSimpleHTTPServer::TemplateHandler::EP->new,
+        epl => MojoSimpleHTTPServer::TemplateHandler::EPL->new,
     }});
     __PACKAGE__->attr('helper' => sub {
         MojoSimpleHTTPServer::Helper->new->load_preset;
@@ -118,7 +120,6 @@ use MojoSimpleHTTPServer::TemplateHandler::EP;
         
         if ($@) {
             $self->log->fatal("Processing request failed: $@");
-            warn $@;
             $tx->res->code(500);
         }
         $tx->resume;
@@ -293,9 +294,11 @@ use MojoSimpleHTTPServer::TemplateHandler::EP;
             dataset     => \@dset,
             static_dir  => 'static'
         );
-        my $handler = MojoSimpleHTTPServer::TemplateHandler::EP->new;
+        
         $tx->res->body(
-            encode('UTF-8', $handler->render(_asset('index.ep'), $context))
+            encode('UTF-8',
+                MojoSimpleHTTPServer::TemplateHandler::EPL->new->render(
+                                                _asset('index.epl'), $context))
         );
         $tx->res->code(200);
         $tx->res->headers->content_type($types->type('html'));

@@ -19,6 +19,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     
     our $CONTEXT;
 
+    __PACKAGE__->attr('x_powered_by' => 'Simple HTTP Server with Mojo(Perl)');
     __PACKAGE__->attr('under_development' => 0);
     __PACKAGE__->attr('auto_index');
     __PACKAGE__->attr('document_root');
@@ -124,6 +125,8 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         
         $self->init;
         
+        $tx->res->headers->header('X-Powered-By' => $self->x_powered_by);
+
         eval {
             $self->dispatch;
         };

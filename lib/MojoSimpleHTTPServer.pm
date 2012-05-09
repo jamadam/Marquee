@@ -29,7 +29,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         MojoSimpleHTTPServer::Helper->new->load_preset;
     });
     
-    __PACKAGE__->attr('inited');
+    __PACKAGE__->attr('_inited');
     __PACKAGE__->attr('log_file');
     
     __PACKAGE__->attr('template_handlers', sub {{
@@ -123,7 +123,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         local $CONTEXT =
                     MojoSimpleHTTPServer::Context->new(app => $self, tx => $tx);
         
-        $self->init;
+        $self->_init;
         
         $tx->res->headers->header('X-Powered-By' => $self->x_powered_by);
 
@@ -141,29 +141,6 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         }
         
         $tx->resume;
-    }
-    
-    ### --
-    ### init
-    ### --
-    sub init {
-        my $self = shift;
-        
-        if ($self->inited) {
-            return;
-        }
-        $self->inited(1);
-        
-        if (! -d $self->document_root) {
-            die 'document_root is not a directory';
-        }
-        
-        $self->{_handler_re} =
-                    '\.(?:'. join('|', keys %{$self->template_handlers}). ')$';
-        
-        if ($self->log_file) {
-            $self->log->path($self->log_file);
-        }
     }
     
     ### --
@@ -391,6 +368,29 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     }
     
     ### --
+    ### init
+    ### --
+    sub _init {
+        my $self = shift;
+        
+        if ($self->_inited) {
+            return;
+        }
+        $self->_inited(1);
+        
+        if (! -d $self->document_root) {
+            die 'document_root is not a directory';
+        }
+        
+        $self->{_handler_re} =
+                    '\.(?:'. join('|', keys %{$self->template_handlers}). ')$';
+        
+        if ($self->log_file) {
+            $self->log->path($self->log_file);
+        }
+    }
+    
+    ### --
     ### detect mimt type out of path name
     ### --
     sub path_to_type {
@@ -453,11 +453,6 @@ Activate index page generation.
 
 Specify a default file name and activate auto fill.
 
-=head2 inited
-
-A flag to detect the app has been inted or not. init method is called just once
-on handler method.
-
 =head2 log_file
 
 Specify a log file path.
@@ -485,10 +480,6 @@ Front dispatcher.
 =head2 $instance->handler($tx)
 
 Handler called by mojo layer.
-
-=head2 $instance->init()
-
-Initialize app.
 
 =head2 $instance->path_to_type($path)
 

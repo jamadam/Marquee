@@ -12,7 +12,7 @@ use Mojo::Util qw/encode md5_sum/;
         my ($self, $path, $mt) = @_;
         
         my $cache =
-            $MojoSimpleHTTPServer::CONTEXT->app->stash->{template_cache}
+            $MojoSimpleHTTPServer::CONTEXT->app->stash->{'mshs.template_cache'}
                                                         ||= Mojo::Cache->new;
         
         my $key = md5_sum(encode('UTF-8', $path));

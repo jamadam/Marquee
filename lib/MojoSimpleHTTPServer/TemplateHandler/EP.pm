@@ -12,7 +12,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler';
         my $context = $MojoSimpleHTTPServer::CONTEXT;
         my $helper = $context->app->helper;
         
-        local $context->app->stash->{template_path} = $path;
+        local $context->app->stash->{'mshs.template_path'} = $path;
         
         my $mt = $self->cache($path) || Mojo::Template->new;
         

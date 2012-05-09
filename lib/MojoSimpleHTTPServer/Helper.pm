@@ -3,7 +3,8 @@ use strict;
 use warnings;
 use Mojo::Base -base;
 use File::Basename 'dirname';
-    
+use Data::Dumper;
+
     __PACKAGE__->attr(funcs => sub {{}});
     
     ### --
@@ -22,17 +23,22 @@ use File::Basename 'dirname';
         my ($self) = @_;
         
         $self->add_helper(param => sub {
-            my $self = shift;
+            shift;
             $MojoSimpleHTTPServer::CONTEXT->tx->req->param($_[0]);
         });
         
         $self->add_helper(stash => sub {
-            my $self = shift;
+            shift;
             $MojoSimpleHTTPServer::CONTEXT->app->stash(@_);
         });
         
         $self->add_helper(ctd => sub {
             shift->_ctd;
+        });
+        
+        $self->add_helper(dumper => sub {
+            shift;
+            Data::Dumper->new([@_])->Indent(1)->Terse(1)->Dump;
         });
         
         $self->add_helper(to_abs => sub {
@@ -73,7 +79,7 @@ use File::Basename 'dirname';
     ### --
     sub _ctd {
         my $self = shift;
-        $MojoSimpleHTTPServer::CONTEXT->app->stash->{template_path};
+        $MojoSimpleHTTPServer::CONTEXT->app->stash->{'mshs.template_path'};
     }
 
 1;

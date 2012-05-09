@@ -24,7 +24,7 @@ use MojoSimpleHTTPServer::Helper;
     $t->get_ok('/cache.html')
         ->status_is(200);
     
-    my $cache = $app->stash('template_cache')->{cache};
+    my $cache = $app->stash('mshs.template_cache')->{cache};
     is scalar keys %$cache, 1, 'right cache amount';
     my $mt = $cache->{(keys %$cache)[0]};
     is ref $mt, 'Mojo::Template';

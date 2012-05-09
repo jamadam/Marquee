@@ -177,8 +177,8 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         $self->stash(static_dir => 'static', exception => $exception);
         $tx->res->body(
             encode('UTF-8',
-                MojoSimpleHTTPServer::TemplateHandler::EPL->new->render(
-                                                _asset('debug_screen.epl'))));
+                MojoSimpleHTTPServer::TemplateHandler::EP->new->render(
+                                                _asset('debug_screen.ep'))));
         $tx->res->code(200);
         $tx->res->headers->content_type($self->types->type('html'));
         return $self;

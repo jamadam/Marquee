@@ -171,11 +171,16 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     ### serve error document
     ### --
     sub serve_debug_screen {
-        my ($self, $message) = @_;
+        my ($self, $exception) = @_;
+        
         my $tx = $CONTEXT->tx;
-        $tx->res->body($message);
+        $self->stash(static_dir => 'static', exception => $exception);
+        $tx->res->body(
+            encode('UTF-8',
+                MojoSimpleHTTPServer::TemplateHandler::EPL->new->render(
+                                                _asset('debug_screen.epl'))));
         $tx->res->code(200);
-        $tx->res->headers->content_type('text/plain');
+        $tx->res->headers->content_type($self->types->type('html'));
         return $self;
     }
     

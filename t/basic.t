@@ -275,7 +275,7 @@ use Mojo::Date;
     $t->get_ok('/some_dir3/file_list.css')
         ->status_is(200)
         ->content_is(q{file_list.css});
-    $t->get_ok('/static/file_list.css')
+    $t->get_ok('/static/site_file_list.css')
         ->status_is(200)
         ->content_like(qr{\@charset "UTF\-8"});
     $t->get_ok('/some_dir/not_exists.html')

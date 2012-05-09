@@ -8,7 +8,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 10;
+    use Test::More tests => 11;
 
     my $app;
     my $t;
@@ -30,7 +30,8 @@ use MojoSimpleHTTPServer;
     
     $t->get_ok('/not_good.html')
         ->status_is(200)
-        ->header_is('Content-Type', 'text/plain')
+        ->header_is('Content-Type', 'text/html;charset=UTF-8')
+        ->text_is('title', 'Debug Screen')
         ->content_like(qr{Global symbol "\$nonexitsts" requires explicit package name});
 
 __END__

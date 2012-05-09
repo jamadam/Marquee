@@ -30,7 +30,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         MojoSimpleHTTPServer::Helper->new->load_preset;
     });
 
-    my $types = Mojolicious::Types->new;
+    __PACKAGE__->attr('types', sub { Mojolicious::Types->new });
     
     my %error_messages = (
         404 => 'File not found',
@@ -72,7 +72,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
                             ? $self->_auto_fill_filename($path->clone) : $path;
             $filled_path->leading_slash(1);
             
-            if (my $type = $self->mime_type($filled_path)) {
+            if (my $type = $self->path_to_type($filled_path)) {
                 $res->headers->content_type($type);
             }
             
@@ -149,16 +149,6 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     }
     
     ### --
-    ### detect mimt type out of path name
-    ### --
-    sub mime_type {
-        my ($self, $path) = @_;
-        if (my $ext = ($path =~ qr{\.(\w+)$})[0]) {
-            return $types->type($ext);
-        }
-    }
-    
-    ### --
     ### serve redirect to slashed directory
     ### --
     sub serve_redirect_to_slashed {
@@ -191,7 +181,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         my $tx = $context->tx;
         $tx->res->body($message || ($code. ' '. $error_messages{$code}));
         $tx->res->code($code);
-        $tx->res->headers->content_type($types->type('html'));
+        $tx->res->headers->content_type($self->types->type('html'));
         return $self;
     }
     
@@ -268,8 +258,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
             if (-f $fpath) {
                 $name = $file;
                 $name =~ s{(\.\w+)$self->{_handler_re}}{$1};
-                $type = ((Mojolicious::Types->type(
-                    ($name =~ qr{\.(\w+)$})[0] || '') || 'text') =~ /^(\w+)/)[0];
+                $type = (($self->path_to_type($name) || 'text') =~ /^(\w+)/)[0];
             } else {
                 $name = $file. '/';
                 $type = 'dir';
@@ -301,7 +290,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
                                                 _asset('index.epl'), $context))
         );
         $tx->res->code(200);
-        $tx->res->headers->content_type($types->type('html'));
+        $tx->res->headers->content_type($self->types->type('html'));
         
         return $self;
     }
@@ -345,6 +334,16 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         my $path = shift;
         my @dt = localtime((stat($path))[9]);
         return sprintf('%d-%02d-%02d %02d:%02d', 1900 + $dt[5], $dt[4] + 1, $dt[3], $dt[2], $dt[1]);
+    }
+    
+    ### --
+    ### detect mimt type out of path name
+    ### --
+    sub path_to_type {
+        my ($self, $path) = @_;
+        if (my $ext = ($path =~ qr{\.(\w+)$})[0]) {
+            return $self->types->type($ext);
+        }
     }
     
     ### ---
@@ -422,8 +421,6 @@ Returns current context
 =head2 $instance->handler($tx)
 
 =head2 $instance->init()
-
-=head2 $instance->mime_type($path)
 
 =head2 $instance->serve_redirect_to_slashed($path)
 

@@ -9,7 +9,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 148;
+    use Test::More tests => 151;
 
     my $app;
     my $t;
@@ -166,6 +166,14 @@ use Mojo::Date;
     $t->get_ok('/index.txt', {'If-Modified-Since' => $mtime})
         ->status_is(304)
         ->header_is('Content-Length', 0);
+    
+    ### add mime type
+    
+    $app->types->type('unknown' => 'text/unknown');
+    
+    $t->get_ok('/index.unknown')
+        ->status_is(200)
+        ->header_is('Content-Type', 'text/unknown');
     
     ### auto index tests
     

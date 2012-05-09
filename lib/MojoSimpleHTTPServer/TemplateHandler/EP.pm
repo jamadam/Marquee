@@ -2,7 +2,6 @@ package MojoSimpleHTTPServer::TemplateHandler::EP;
 use strict;
 use warnings;
 use Mojo::Base -base;
-use MojoSimpleHTTPServer;
     
     ### --
     ### ep handler

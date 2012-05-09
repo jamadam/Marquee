@@ -2,7 +2,6 @@ package MojoSimpleHTTPServer::TemplateHandler::EPL;
 use strict;
 use warnings;
 use Mojo::Base -base;
-use MojoSimpleHTTPServer;
 
     ### --
     ### EPL handler

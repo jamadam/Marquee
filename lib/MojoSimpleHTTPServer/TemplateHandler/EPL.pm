@@ -40,7 +40,10 @@ EPL handler.
 
 =head1 METHODS
 
-=head2 $instance->render($path, $context)
+=head2 $instance->render($path)
+
+Renderes given template and returns the result. If rendering fails, die with
+Mojo::Exception.
 
 =head1 SEE ALSO
 

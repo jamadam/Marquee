@@ -460,6 +460,10 @@ Activate index page generation.
 
 Specify a default file name and activate auto fill.
 
+=head2 helper
+
+Contains L<MojoSimpleHTTPServer::Helper> instance.
+
 =head2 log_file
 
 Specify a log file path.
@@ -467,6 +471,18 @@ Specify a log file path.
 =head2 template_handlers
 
 An hash ref that contains template handlers.
+
+=head2 types
+
+Contains L<Mojolicious::Type> instance.
+
+=head2 under_development
+
+Activate debug screen.
+
+=head2 x_powered_by
+
+Set X-POWERED-BY response header.
 
 =head1 METHODS
 
@@ -507,6 +523,10 @@ Serves error document with given status code and message.
 =head2 $instance->serve_static($path)
 
 Serves static file of given path.
+
+=head2 $instance->serve_debug_screen($exception)
+
+Serves debug screen with given L<Mojo::Exception> instance.
 
 =head2 $instance->serve_dynamic($path)
 

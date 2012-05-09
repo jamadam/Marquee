@@ -9,6 +9,7 @@ use Test::More tests => 3;
 
 my $app = MojoSimpleHTTPServer->new;
 $app->document_root('./');
+$app->auto_index(1);
 my $t = Test::Mojo->new($app);
 $t->get_ok('/');
 memory_cycle_ok( $app );

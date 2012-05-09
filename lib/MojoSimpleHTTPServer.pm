@@ -1,4 +1,6 @@
 package MojoSimpleHTTPServer;
+use strict;
+use warnings;
 use Mojo::Base 'Mojo';
 use Data::Dumper;
 use File::Spec;
@@ -463,6 +465,8 @@ Returns current context
 =head2 $instance->serve_dynamic($path)
 
 =head2 $instance->serve_index($path)
+
+=head2 $instance->stash($key => $value)
 
 Generates file index for response and set to tx
 

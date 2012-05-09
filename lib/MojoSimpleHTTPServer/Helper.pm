@@ -1,4 +1,6 @@
 package MojoSimpleHTTPServer::Helper;
+use strict;
+use warnings;
 use Mojo::Base -base;
 use File::Basename 'dirname';
     

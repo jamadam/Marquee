@@ -192,7 +192,6 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     ### --
     sub serve_debug_screen {
         my ($self, $message) = @_;
-        
         my $tx = $CONTEXT->tx;
         $tx->res->body($message);
         $tx->res->code(200);

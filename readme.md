@@ -46,6 +46,7 @@ These options are available:
     -dr, --document_root <path>  Set document root path, defaults to current dir.
     -df, --default_file <name>   Set default file name and activate auto fill.
     -ai, --auto_index            Activate auto index, defaults to 0.
+    -ud, --under_development     Activate debug screen for server-side include.
     -b, --backlog <size>         Set listen backlog size, defaults to
                                  SOMAXCONN.
     -c, --clients <number>       Set maximum number of concurrent clients,

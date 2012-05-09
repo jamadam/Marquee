@@ -17,18 +17,21 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     
     our $context = MojoSimpleHTTPServer::Context->new;
 
-    __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('auto_index');
+    __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');
+    
+    __PACKAGE__->attr('helper' => sub {
+        MojoSimpleHTTPServer::Helper->new->load_preset;
+    });
+    
     __PACKAGE__->attr('inited');
     __PACKAGE__->attr('log_file');
+    
     __PACKAGE__->attr('template_handlers', sub {{
         ep  => MojoSimpleHTTPServer::TemplateHandler::EP->new,
         epl => MojoSimpleHTTPServer::TemplateHandler::EPL->new,
     }});
-    __PACKAGE__->attr('helper' => sub {
-        MojoSimpleHTTPServer::Helper->new->load_preset;
-    });
 
     __PACKAGE__->attr('types', sub { Mojolicious::Types->new });
     
@@ -227,7 +230,8 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
             my $path = "$path.$ext";
             if (-f $path && $handler) {
                 my $tx = $context->tx;
-                $tx->res->body(encode('UTF-8', $handler->render($path, $context)));
+                $tx->res->body(
+                            encode('UTF-8', $handler->render($path, $context)));
                 $tx->res->code(200);
             }
         }
@@ -333,7 +337,8 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     sub _file_timestamp {
         my $path = shift;
         my @dt = localtime((stat($path))[9]);
-        return sprintf('%d-%02d-%02d %02d:%02d', 1900 + $dt[5], $dt[4] + 1, $dt[3], $dt[2], $dt[1]);
+        return sprintf('%d-%02d-%02d %02d:%02d',
+                            1900 + $dt[5], $dt[4] + 1, $dt[3], $dt[2], $dt[1]);
     }
     
     ### --

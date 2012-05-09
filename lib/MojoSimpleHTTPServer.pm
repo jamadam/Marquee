@@ -51,9 +51,12 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     }
     
     ### --
-    ### Context
+    ### Accessor for localized context
     ### --
     sub context {
+        if ($_[1]) {
+            $CONTEXT = $_[1];
+        }
         $CONTEXT;
     }
     

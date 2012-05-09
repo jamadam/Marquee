@@ -15,7 +15,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
 
     our $VERSION = '0.01';
     
-    our $context = MojoSimpleHTTPServer::Context->new;
+    our $CONTEXT = MojoSimpleHTTPServer::Context->new;
 
     __PACKAGE__->attr('auto_index');
     __PACKAGE__->attr('document_root');
@@ -54,7 +54,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     ### Context
     ### --
     sub context {
-        $context;
+        $CONTEXT;
     }
     
     ### --
@@ -63,7 +63,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     sub dispatch {
         my ($self) = @_;
         
-        my $tx = $context->tx;
+        my $tx = $CONTEXT->tx;
         
         if ($tx->req->url =~ /$self->{_handler_re}/) {
             $self->serve_error_document(403);
@@ -113,7 +113,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     sub handler {
         my ($self, $tx) = @_;
         
-        local $context = $context->clone(app => $self, tx => $tx);
+        local $CONTEXT = $CONTEXT->clone(app => $self, tx => $tx);
         
         $self->init;
         
@@ -158,7 +158,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         my ($self, $path) = @_;
         
         my $uri =
-            $context->tx->req->url->clone->path(
+            $CONTEXT->tx->req->url->clone->path(
                                     $path->clone->trailing_slash(1))->to_abs;
         return $self->serve_redirect($uri);
     }
@@ -169,7 +169,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     sub serve_redirect {
         my ($self, $uri) = @_;
         
-        my $tx = $context->tx;
+        my $tx = $CONTEXT->tx;
         $tx->res->code(301);
         $tx->res->headers->location($uri);
         return $self;
@@ -181,7 +181,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     sub serve_error_document {
         my ($self, $code, $message) = @_;
         
-        my $tx = $context->tx;
+        my $tx = $CONTEXT->tx;
         $tx->res->body($message || ($code. ' '. $error_messages{$code}));
         $tx->res->code($code);
         $tx->res->headers->content_type($self->types->type('html'));
@@ -197,7 +197,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         my $asset = Mojo::Asset::File->new(path => $path);
         my $modified = (stat $path)[9];
         
-        my $tx = $context->tx;
+        my $tx = $CONTEXT->tx;
         
         # If modified since
         my $req_headers = $tx->req->headers;
@@ -229,9 +229,9 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
             my $handler = $self->template_handlers->{$ext};
             my $path = "$path.$ext";
             if (-f $path && $handler) {
-                my $tx = $context->tx;
+                my $tx = $CONTEXT->tx;
                 $tx->res->body(
-                            encode('UTF-8', $handler->render($path, $context)));
+                            encode('UTF-8', $handler->render($path, $CONTEXT)));
                 $tx->res->code(200);
             }
         }
@@ -281,8 +281,8 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
             $a->{name} cmp $b->{name}
         } @dset;
         
-        my $tx = $context->tx;
-        $context->stash(
+        my $tx = $CONTEXT->tx;
+        $CONTEXT->stash(
             dir         => $path,
             dataset     => \@dset,
             static_dir  => 'static'
@@ -291,7 +291,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         $tx->res->body(
             encode('UTF-8',
                 MojoSimpleHTTPServer::TemplateHandler::EPL->new->render(
-                                                _asset('index.epl'), $context))
+                                                _asset('index.epl'), $CONTEXT))
         );
         $tx->res->code(200);
         $tx->res->headers->content_type($self->types->type('html'));

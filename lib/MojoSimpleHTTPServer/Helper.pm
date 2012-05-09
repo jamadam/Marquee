@@ -21,12 +21,12 @@ use File::Basename 'dirname';
         
         $self->add_helper(param => sub {
             my $self = shift;
-            $MojoSimpleHTTPServer::context->tx->req->param($_[0]);
+            $MojoSimpleHTTPServer::CONTEXT->tx->req->param($_[0]);
         });
         
         $self->add_helper(stash => sub {
             my $self = shift;
-            $MojoSimpleHTTPServer::context->stash(@_);
+            $MojoSimpleHTTPServer::CONTEXT->stash(@_);
         });
         
         $self->add_helper(ctd => sub {
@@ -43,7 +43,7 @@ use File::Basename 'dirname';
             my $path_abs = $self->_to_abs($path);
             
             if (-f $path_abs) {
-                my $context = $MojoSimpleHTTPServer::context;
+                my $context = $MojoSimpleHTTPServer::CONTEXT;
                 my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
                 my $handler = $context->app->template_handlers->{$ext};
                 if ($handler) {
@@ -71,7 +71,7 @@ use File::Basename 'dirname';
     ### --
     sub _ctd {
         my $self = shift;
-        $MojoSimpleHTTPServer::context->stash->{template_path};
+        $MojoSimpleHTTPServer::CONTEXT->stash->{template_path};
     }
 
 1;

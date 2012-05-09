@@ -19,6 +19,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     
     our $CONTEXT;
 
+    __PACKAGE__->attr('under_development' => 0);
     __PACKAGE__->attr('auto_index');
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');
@@ -129,9 +130,13 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         
         if ($@) {
             $self->log->fatal("Processing request failed: $@");
-            $self->serve_error_document(500);
-            $tx->res->code(500);
+            if ($self->under_development) {
+                $self->serve_debug_screen($@);
+            } else {
+                $self->serve_error_document(500);
+            }
         }
+        
         $tx->resume;
     }
     
@@ -179,6 +184,19 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         my $tx = $CONTEXT->tx;
         $tx->res->code(301);
         $tx->res->headers->location($uri);
+        return $self;
+    }
+    
+    ### --
+    ### serve error document
+    ### --
+    sub serve_debug_screen {
+        my ($self, $message) = @_;
+        
+        my $tx = $CONTEXT->tx;
+        $tx->res->body($message);
+        $tx->res->code(200);
+        $tx->res->headers->content_type('text/plain');
         return $self;
     }
     

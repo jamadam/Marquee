@@ -8,7 +8,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 6;
+    use Test::More tests => 10;
 
     my $app;
     my $t;
@@ -25,5 +25,12 @@ use MojoSimpleHTTPServer;
     $t->get_ok('/not_good2.html')
         ->status_is(500)
         ->content_is('500 Internal server error');
+    
+    $app->under_development(1);
+    
+    $t->get_ok('/not_good.html')
+        ->status_is(200)
+        ->header_is('Content-Type', 'text/plain')
+        ->content_like(qr{Global symbol "\$nonexitsts" requires explicit package name});
 
 __END__

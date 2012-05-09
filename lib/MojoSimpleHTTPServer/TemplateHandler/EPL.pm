@@ -15,7 +15,9 @@ use Mojo::Base -base;
         
         my $mt = Mojo::Template->new;
         
-        $mt->render_file($path, $context);
+        my $output = $mt->render_file($path, $context);
+        
+        return ref $output ? die $output : $output;
     }
 
 1;

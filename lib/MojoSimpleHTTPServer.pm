@@ -129,6 +129,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         
         if ($@) {
             $self->log->fatal("Processing request failed: $@");
+            $self->serve_error_document(500);
             $tx->res->code(500);
         }
         $tx->resume;

@@ -35,7 +35,9 @@ use Mojo::Base -base;
             }
         }
         $mt->prepend($prepend);
-        $mt->render_file($path, $helper, $context);
+        my $output = $mt->render_file($path, $helper, $context);
+        
+        return ref $output ? die $output : $output;
     }
 
 1;

@@ -1,0 +1,4 @@
+<filename>not_good.html.ep</filename>
+
+
+<test1><%= $nonexitsts =%></test1>

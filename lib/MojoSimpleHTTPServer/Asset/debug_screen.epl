@@ -33,26 +33,26 @@
 			</tr>
 		% end
 		% my $kv = begin
-		  % my ($key, $value) = @_;
-		  <tr>
-			<td class="key"><%= $key %>:</td>
-			<td class="striped value"><pre><%== $value %></pre></td>
-		  </tr>
+			% my ($key, $value) = @_;
+			<tr>
+				<td class="key"><%= $key %>:</td>
+				<td class="striped value"><pre><%== $value %></pre></td>
+			</tr>
 		% end
 	    <div id="showcase" class="box code">
-        <pre><%= $exception->message %></pre>
+			<pre><%= $exception->message %></pre>
 			<div id="context">
-			  <table>
-				% for my $line (@{$exception->lines_before}) {
-				  %= $cv->($line->[0], $line->[1])
-				% }
-				% if (defined $exception->line->[1]) {
-				  %= $cv->($exception->line->[0], $exception->line->[1], 1)
-				% }
-				% for my $line (@{$exception->lines_after}) {
-				  %= $cv->($line->[0], $line->[1])
-				% }
-			  </table>
+				<table>
+					% for my $line (@{$exception->lines_before}) {
+						%= $cv->($line->[0], $line->[1])
+					% }
+					% if (defined $exception->line->[1]) {
+						%= $cv->($exception->line->[0], $exception->line->[1], 1)
+					% }
+					% for my $line (@{$exception->lines_after}) {
+						%= $cv->($line->[0], $line->[1])
+					% }
+				</table>
 			</div>
 			% if (defined $exception->line->[2]) {
 				<div id="insight">

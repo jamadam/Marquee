@@ -9,7 +9,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 163;
+    use Test::More tests => 159;
 
     my $app;
     my $t;
@@ -206,32 +206,6 @@ use Mojo::Date;
     $t->get_ok('/index.txt', {'If-Modified-Since' => $mtime})
         ->status_is(304)
         ->header_is('Content-Length', 0);
-    
-    ### around dispatch hook
-    
-    {
-        package MyApp;
-        use strict;
-        use warnings;
-        use Mojo::Base qw{MojoSimpleHTTPServer};
-        
-        sub dispatch {
-            my ($self) = @_;
-            $self->SUPER::dispatch;
-            $self->context->tx->res->body('overridden');
-        }
-    }
-    
-    $app = MyApp->new;
-    $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
-    
-    $t = Test::Mojo->new($app);
-
-    $t->get_ok('/index.txt')
-        ->status_is(200)
-        ->header_is('Content-Length', 10)
-        ->content_is("overridden");
     
     ### auto index tests
     

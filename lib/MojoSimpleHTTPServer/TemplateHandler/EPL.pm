@@ -1,7 +1,7 @@
 package MojoSimpleHTTPServer::TemplateHandler::EPL;
 use strict;
 use warnings;
-use Mojo::Base -base;
+use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler';
 
     ### --
     ### EPL handler
@@ -13,9 +13,16 @@ use Mojo::Base -base;
         
         local $context->app->stash->{template_path} = $path;
         
-        my $mt = Mojo::Template->new;
+        my $mt = $self->cache($path) || Mojo::Template->new;
         
-        my $output = $mt->render_file($path, $context);
+        my $output;
+        
+        if ($mt->compiled) {
+            $output = $mt->interpret($context);
+        } else {
+            $output = $mt->render_file($path, $context);
+            $self->cache($path => $mt);
+        }
         
         return ref $output ? die $output : $output;
     }

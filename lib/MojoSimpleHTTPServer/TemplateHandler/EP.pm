@@ -1,7 +1,7 @@
 package MojoSimpleHTTPServer::TemplateHandler::EP;
 use strict;
 use warnings;
-use Mojo::Base -base;
+use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler';
     
     ### --
     ### ep handler
@@ -10,32 +10,40 @@ use Mojo::Base -base;
         my ($self, $path) = @_;
         
         my $context = $MojoSimpleHTTPServer::CONTEXT;
+        my $helper = $context->app->helper;
         
         local $context->app->stash->{template_path} = $path;
         
-        my $mt = Mojo::Template->new;
-
-        # Be a bit more relaxed for helpers
-        my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
-
-        # Helpers
-        $prepend .= 'my $_H = shift;';
-        my $helper = $context->app->helper;
-        for my $name (sort keys %{$helper->funcs}) {
-            if ($name =~ /^\w+$/) {
-                $prepend .=
-                "sub $name; *$name = sub {\$_H->funcs->{$name}->(\$_H, \@_)};";
-            }
-        }
+        my $mt = $self->cache($path) || Mojo::Template->new;
         
-        $prepend .= 'use strict;';
-        for my $var (keys %{$context->app->stash}) {
-            if ($var =~ /^\w+$/) {
-                $prepend .= " my \$$var = stash '$var';";
+        my $output;
+        
+        if ($mt->compiled) {
+            $output = $mt->interpret($helper, $context);
+        } else {
+            # Be a bit more relaxed for helpers
+            my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
+    
+            # Helpers
+            $prepend .= 'my $_H = shift;';
+            for my $name (sort keys %{$helper->funcs}) {
+                if ($name =~ /^\w+$/) {
+                    $prepend .=
+                    "sub $name; *$name = sub {\$_H->funcs->{$name}->(\$_H, \@_)};";
+                }
             }
+            
+            $prepend .= 'use strict;';
+            for my $var (keys %{$context->app->stash}) {
+                if ($var =~ /^\w+$/) {
+                    $prepend .= " my \$$var = stash '$var';";
+                }
+            }
+            $mt->prepend($prepend);
+            $output = $mt->render_file($path, $helper, $context);
+            
+            $self->cache($path => $mt);
         }
-        $mt->prepend($prepend);
-        my $output = $mt->render_file($path, $helper, $context);
         
         return ref $output ? die $output : $output;
     }

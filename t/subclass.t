@@ -19,8 +19,6 @@ use Mojo::Date;
     $app->auto_index(1);
     $t = Test::Mojo->new($app);
     
-    is(MojoSimpleHTTPServer->context, SubClass->context, 'right namespace');
-    
     $t->get_ok('/dir1/index.html')
         ->status_is(200)
         ->content_type_is('text/html;charset=UTF-8')
@@ -43,6 +41,11 @@ use Mojo::Base 'MojoSimpleHTTPServer';
 use Test::More;
 
     our $CONTEXT = MojoSimpleHTTPServer::Context->new; # do nothing
+    
+    sub dispatch {
+        shift->SUPER::dispatch(@_);
+        is(MojoSimpleHTTPServer->context, SubClass->context, 'right namespace');
+    }
 
 package SubClass2;
 use Mojo::Base qw{MojoSimpleHTTPServer};

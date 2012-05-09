@@ -239,6 +239,8 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
                 $tx->res->code(200);
             }
         }
+        
+        return $self;
     }
     
     ### ---

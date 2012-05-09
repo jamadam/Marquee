@@ -45,8 +45,8 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     ### Add template handler
     ### --
     sub add_handler {
-        my ($self, %args) = @_;
-        $self->template_handlers({%{$self->template_handlers}, %args});
+        my ($self, $name, $handler) = @_;
+        $self->template_handlers->{$name} = $handler;
         return $self;
     }
     
@@ -415,10 +415,7 @@ This is built on mojo modules in L<Mojolicious> distribution.
 
 Adds handlers for template rendering.
 
-    $instance->add_handler(
-        ep => MojoSimpleHTTPServer::TemplateHandler::EP->new,
-        tt => MojoSimpleHTTPServer::TemplateHandler::TemplateToolkit->new,
-    );
+    $instance->add_handler(ep => MojoSimpleHTTPServer::TemplateHandler::EP->new);
 
 =head2 $instance->context()
 

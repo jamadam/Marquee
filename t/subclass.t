@@ -7,7 +7,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
     
-    use Test::More tests => 11;
+    use Test::More tests => 10;
 
     my $app;
     my $t;
@@ -18,6 +18,8 @@ use Mojo::Date;
     $app->default_file('index.html');
     $app->auto_index(1);
     $t = Test::Mojo->new($app);
+    
+    is(MojoSimpleHTTPServer->context, SubClass->context, 'right namespace');
     
     $t->get_ok('/dir1/index.html')
         ->status_is(200)
@@ -40,20 +42,7 @@ package SubClass;
 use Mojo::Base 'MojoSimpleHTTPServer';
 use Test::More;
 
-    ### --
-    ### around dispatch
-    ### --
-    sub dispatch {
-        my $self = shift;
-        
-        ### pre process
-        is(ref $self, 'SubClass', 'right class');
-        is(ref $self->context, 'MojoSimpleHTTPServer::Context', 'right namespace');
-        
-        $self->SUPER::dispatch(@_);
-        
-        ### post process
-    }
+    our $CONTEXT = MojoSimpleHTTPServer::Context->new; # do nothing
 
 package SubClass2;
 use Mojo::Base qw{MojoSimpleHTTPServer};

@@ -235,7 +235,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
             if (-f $path && $handler) {
                 my $tx = $CONTEXT->tx;
                 $tx->res->body(
-                            encode('UTF-8', $handler->render($path, $CONTEXT)));
+                            encode('UTF-8', $handler->render($path)));
                 $tx->res->code(200);
             }
         }
@@ -295,7 +295,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         $tx->res->body(
             encode('UTF-8',
                 MojoSimpleHTTPServer::TemplateHandler::EPL->new->render(
-                                                _asset('index.epl'), $CONTEXT))
+                                                        _asset('index.epl')))
         );
         $tx->res->code(200);
         $tx->res->headers->content_type($self->types->type('html'));

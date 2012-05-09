@@ -1,11 +1,14 @@
 package MojoSimpleHTTPServer::TemplateHandler::EP;
 use Mojo::Base -base;
+use MojoSimpleHTTPServer;
     
     ### --
     ### ep handler
     ### --
     sub render {
-        my ($self, $path, $context) = @_;
+        my ($self, $path) = @_;
+        
+        my $context = $MojoSimpleHTTPServer::CONTEXT;
         
         local $context->app->stash->{template_path} = $path;
         

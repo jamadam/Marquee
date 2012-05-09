@@ -39,7 +39,7 @@ On command line..
 
 ## COMMAND LINE API
 
-mojo SimpleHTTPServer [OPTIONS]
+    mojo SimpleHTTPServer [OPTIONS]
 
 These options are available:
   

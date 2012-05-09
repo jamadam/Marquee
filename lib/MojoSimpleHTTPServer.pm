@@ -447,13 +447,24 @@ This is built on mojo modules in L<Mojolicious> distribution.
 
 =head2 auto_index
 
+Activate index page generation.
+
 =head2 default_file
+
+Specify a default file name and activate auto fill.
 
 =head2 inited
 
+A flag to detect the app has been inted or not. init method is called just once
+on handler method.
+
 =head2 log_file
 
+Specify a log file path.
+
 =head2 template_handlers
+
+An hash ref that contains template handlers.
 
 =head1 METHODS
 
@@ -469,27 +480,47 @@ Returns current context
 
 =head2 $instance->dispatch()
 
+Front dispatcher.
+
 =head2 $instance->handler($tx)
+
+Handler called by mojo layer.
 
 =head2 $instance->init()
 
+Initialize app.
+
 =head2 $instance->path_to_type($path)
+
+Detect MIME type out of path name.
 
 =head2 $instance->serve_redirect_to_slashed($path)
 
+Serves response that redirects to trailing slashed URI.
+
 =head2 $instance->serve_redirect($uri)
+
+Serves response that redirects to given URI.
 
 =head2 $instance->serve_error_document($code, $message)
 
+Serves error document with given status code and message.
+
 =head2 $instance->serve_static($path)
+
+Serves static file of given path.
 
 =head2 $instance->serve_dynamic($path)
 
+Serves dynamic page with given template path.
+
 =head2 $instance->serve_index($path)
+
+Serves auto index page.
 
 =head2 $instance->stash($key => $value)
 
-Generates file index for response and set to tx
+Set or get stash for the app.
 
 =head2 $instance->start()
 

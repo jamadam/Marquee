@@ -9,7 +9,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 159;
+    use Test::More tests => 148;
 
     my $app;
     my $t;
@@ -111,52 +111,14 @@ use Mojo::Date;
         ->text_is('test1', 1)
         ->text_is('test2', 0);
     
-    ### real template tests
+    ### stash
     
-    {
-        package _Model;
-        use strict;
-        use warnings;
-        
-        sub new {
-            my ($class) = @_;
-            return bless {
-                foo => 'FOO',
-                bar => 'BAR',
-                baz => 'BAZ',
-            }, $class;
-        }
-        
-        sub retrieve {
-            return $_[0]->{$_[1]};
-        }
-    }
-    
-    $app = MojoSimpleHTTPServer->new;
-    $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
-    $app->context->stash(model => _Model->new);
-    $app->context->stash(BAZ => 'BAZ VALUE');
-    
-    $t = Test::Mojo->new($app);
+    $app->stash(baz => 'BAZ');
     
     $t->get_ok('/stash.html')
         ->status_is(200)
-        ->header_is('Content-Type', 'text/html;charset=UTF-8')
-        ->header_is('Content-Length', 138)
         ->text_is('filename', 'stash.html.ep')
-        ->text_is('test1', 'FOO')
-        ->text_is('test2', 'BAZ VALUE')
-        ->text_is('test3', '')
-        ->text_is('test4', '')
-        ->text_is('test5', 'ADDED');
-    
-    # overridden stash no longer available
-    $t->get_ok('/stash.html')
-        ->status_is(200)
-        ->header_is('Content-Type', 'text/html;charset=UTF-8')
-        ->header_is('Content-Length', 138)
-        ->text_is('test3', '');
+        ->text_is('test1', 'BAZ');
     
     ### adding template handler tests
     

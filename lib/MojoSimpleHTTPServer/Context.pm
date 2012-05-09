@@ -3,34 +3,6 @@ use Mojo::Base -base;
 
     __PACKAGE__->attr('app');
     __PACKAGE__->attr('tx');
-    
-    sub clone {
-        my $self = shift;
-        my %stash = %{$self->stash};
-        __PACKAGE__->new(app => $self->app, stash => \%stash, @_);
-    }
-    
-    ### --
-    ### stash
-    ### --
-    sub stash {
-        my $self = shift;
-      
-        # Hash
-        my $stash = $self->{stash} ||= {};
-        return $stash unless @_;
-        
-        # Get
-        return $stash->{$_[0]} unless @_ > 1 || ref $_[0];
-      
-        # Set
-        my $values = ref $_[0] ? $_[0] : {@_};
-        for my $key (keys %$values) {
-            $stash->{$key} = $values->{$key};
-        }
-      
-        return $self;
-    }
 
 1;
 

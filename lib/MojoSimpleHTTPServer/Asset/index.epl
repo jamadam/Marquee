@@ -4,9 +4,9 @@
 <head>
 	<%
 		my $c 			= shift;
-		my $dir 		= $c->stash('dir');
-		my $static_dir 	= $c->stash('static_dir');
-		my $dataset 	= $c->stash('dataset');
+		my $dir 		= $c->app->stash('dir');
+		my $static_dir 	= $c->app->stash('static_dir');
+		my $dataset 	= $c->app->stash('dataset');
 	%>
     <title>Index of <%= $dir %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

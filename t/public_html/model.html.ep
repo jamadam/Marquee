@@ -1,0 +1,2 @@
+<filename>model.html.ep</filename>
+<test1><%= $model->retrieve('foo'); %></test1>

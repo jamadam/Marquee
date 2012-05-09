@@ -1,6 +1,2 @@
 <filename>stash.html.ep</filename>
-<test1><%= $model->retrieve('foo'); %></test1>
-<test2><%= stash('BAZ') =%></test2>
-<test3><%= stash('add') || '' %></test3>
-<test4><% stash('add' => 'ADDED'); %></test4>
-<test5><%= stash('add') %></test5>
+<test1><%= stash('baz') =%></test1>

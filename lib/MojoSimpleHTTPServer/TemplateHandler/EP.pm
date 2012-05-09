@@ -7,7 +7,7 @@ use Mojo::Base -base;
     sub render {
         my ($self, $path, $context) = @_;
         
-        local $context->stash->{template_path} = $path;
+        local $context->app->stash->{template_path} = $path;
         
         my $mt = Mojo::Template->new;
 
@@ -25,7 +25,7 @@ use Mojo::Base -base;
         }
         
         $prepend .= 'use strict;';
-        for my $var (keys %{$context->stash}) {
+        for my $var (keys %{$context->app->stash}) {
             if ($var =~ /^\w+$/) {
                 $prepend .= " my \$$var = stash '$var';";
             }

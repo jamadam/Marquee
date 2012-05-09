@@ -26,7 +26,7 @@ use File::Basename 'dirname';
         
         $self->add_helper(stash => sub {
             my $self = shift;
-            $MojoSimpleHTTPServer::CONTEXT->stash(@_);
+            $MojoSimpleHTTPServer::CONTEXT->app->stash(@_);
         });
         
         $self->add_helper(ctd => sub {
@@ -71,7 +71,7 @@ use File::Basename 'dirname';
     ### --
     sub _ctd {
         my $self = shift;
-        $MojoSimpleHTTPServer::CONTEXT->stash->{template_path};
+        $MojoSimpleHTTPServer::CONTEXT->app->stash->{template_path};
     }
 
 1;

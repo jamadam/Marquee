@@ -15,7 +15,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
 
     our $VERSION = '0.01';
     
-    our $CONTEXT = MojoSimpleHTTPServer::Context->new;
+    our $CONTEXT;
 
     __PACKAGE__->attr('auto_index');
     __PACKAGE__->attr('document_root');
@@ -116,7 +116,8 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     sub handler {
         my ($self, $tx) = @_;
         
-        local $CONTEXT = $CONTEXT->clone(app => $self, tx => $tx);
+        local $CONTEXT =
+                    MojoSimpleHTTPServer::Context->new(app => $self, tx => $tx);
         
         $self->init;
         
@@ -285,7 +286,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         } @dset;
         
         my $tx = $CONTEXT->tx;
-        $CONTEXT->stash(
+        $self->stash(
             dir         => $path,
             dataset     => \@dset,
             static_dir  => 'static'
@@ -309,6 +310,28 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         my $self = $ENV{MOJO_APP} = shift;
         $self->init;
         Mojolicious::Commands->start;
+    }
+    
+    ### --
+    ### stash
+    ### --
+    sub stash {
+        my $self = shift;
+      
+        # Hash
+        my $stash = $self->{stash} ||= {};
+        return $stash unless @_;
+        
+        # Get
+        return $stash->{$_[0]} unless @_ > 1 || ref $_[0];
+      
+        # Set
+        my $values = ref $_[0] ? $_[0] : {@_};
+        for my $key (keys %$values) {
+            $stash->{$key} = $values->{$key};
+        }
+      
+        return $self;
     }
     
     ### --

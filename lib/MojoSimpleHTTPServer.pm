@@ -427,6 +427,8 @@ Returns current context
 
 =head2 $instance->init()
 
+=head2 $instance->path_to_type($path)
+
 =head2 $instance->serve_redirect_to_slashed($path)
 
 =head2 $instance->serve_redirect($uri)

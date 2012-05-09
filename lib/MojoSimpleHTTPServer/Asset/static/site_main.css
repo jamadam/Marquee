@@ -10,6 +10,10 @@ body {
 	min-height:100%;
 	background-color:#F5F6F8;
 }
+body {
+	font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+	line-height: 1.5;
+}
 	code {
 		background-color: #EEF9FF;
 		border: 1px solid #CCE4FF;

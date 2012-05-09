@@ -84,6 +84,61 @@
 				</script>
 			% }
 		</div>
+		<div id="trace" class="box spaced">
+			% if (@{$exception->frames}) {
+				<div class="infobox" id="frames">
+					<table>
+						% for my $frame (@{$exception->frames}) {
+							<tr>
+								<td class="striped value">
+									<pre><%= $frame->[1] . ':' . $frame->[2] %></pre>
+								</td>
+							</tr>
+						% }
+					</table>
+				</div>
+				<div class="tap">tap for more</div>
+				<script type="text/javascript">
+					$('#trace').click(function() {
+						$('#frames').slideToggle('slow');
+					});
+					$('#frames').toggle();
+				</script>
+			% }
+		</div>
+		<div id="request" class="box infobox spaced">
+			<table>
+				% my $req = $c->tx->req;
+				%= $kv->(Method => $req->method)
+				% my $url = $req->url;
+				%= $kv->(URL => $url->to_string)
+				%= $kv->('Base URL' => $url->base->to_string)
+				%# $kv->(Parameters => dumper $req->params->to_hash)
+				%# $kv->(Stash => dumper $snapshot)
+				%# $kv->(Session => dumper session)
+				%= $kv->(Version => $req->version)
+				% for my $name (@{$req->headers->names}) {
+					% my $value = $req->headers->header($name);
+					%= $kv->($name, $value)
+				% }
+			</table>
+		</div>
+		<div id="more" class="box infobox spaced">
+			<div id="infos">
+				<table>
+					%= $kv->(Perl => "$^V ($^O)")
+					% my $version  = $MojoSimpleHTTPServer::VERSION;
+					%= $kv->(MojoSimpleHTTPServer => "$version")
+					%= $kv->(Home => $c->app->home)
+					%# $kv->(Include => dumper \@INC)
+					%= $kv->(PID => $$)
+					%= $kv->(Name => $0)
+					%= $kv->(Executable => $^X)
+					%= $kv->(Time => scalar localtime(time))
+				</table>
+			</div>
+			<div class="tap">tap for more</div>
+		</div>
     </div>
 </body>
 </html>

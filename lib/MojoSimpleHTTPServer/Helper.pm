@@ -65,6 +65,40 @@ use Data::Dumper;
             }
         });
         
+        $self->add_helper(override => sub {
+            my ($self, $name, $value) = @_;
+            my $stash = $MojoSimpleHTTPServer::CONTEXT->app->stash;
+            $stash->{$name} = $value;
+        });
+        
+        $self->add_helper(placeholder => sub {
+            my ($self, $name, $defalut) = @_;
+            my $block =
+                $MojoSimpleHTTPServer::CONTEXT->app->stash($name) || $defalut;
+            return $block->() || '';
+        });
+        
+        $self->add_helper(extends => sub {
+            my ($self, $path, $block) = @_;
+            
+            my $path_abs = $self->_to_abs($path);
+            
+            if (-f $path_abs) {
+                my $context = $MojoSimpleHTTPServer::CONTEXT;
+                my $app = $context->app;
+                
+                local $app->{stash} = $app->{stash};
+                
+                $block->();
+                
+                my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
+                my $handler = $app->template_handlers->{$ext};
+                if ($handler) {
+                    $handler->render($path_abs, $context);
+                }
+            }
+        });
+        
         return $self;
     }
     
@@ -107,14 +141,60 @@ MojoSimpleHTTPServer::Helper - Helper functions for ep renderer
 
 Returns current template path.
 
+=head2 <% extends($path, block) %>
+
+Base template.
+
+    <!doctype html>
+    <html>
+        <head>
+          <title><%= placeholder 'title' => begin %>DEFAULT TITLE<% end %></title>
+        </head>
+        <body>
+            <div id="main">
+                <%= placeholder 'main' => begin %>
+                    DEFAULT MAIN
+                <% end %>
+            </div>
+            <div id="main2">
+                <%= placeholder 'main2' => begin %>
+                    DEFAULT MAIN2
+                <% end %>
+            </div>
+        </body>
+    </html>
+
+Extended template.
+
+    <%= extends './layout/common.html.ep' => begin %>
+        <% override 'title' => begin %>
+            title
+        <% end %>
+        <% override 'main' => begin %>
+            <div>
+                main content<%= time %>
+            </div>
+        <% end %>
+    <% end %>
+
+Extends template.
+
 =head2 <% include('./path/to/template.html.ep') %>
 
 Include a template into current template. Note that the path must be relative to
 current template directory.
 
+=head2 <% override($name, $block) %>
+
+Override placeholder. See extends method.
+
 =head2 <% param('key') %>
 
 Returns request parameters for given key.
+
+=head2 <% placeholder($name, $default_block) %>
+
+Set placeholder with default block. See extends method.
 
 =head2 <% stash('key') %>
 

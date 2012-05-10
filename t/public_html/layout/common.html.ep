@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+    <head>
+      <title><%= placeholder 'title' => begin %>DEFAULT TITLE<% end %></title>
+    </head>
+    <body>
+        <div id="main">
+            <%= placeholder 'main' => begin %>
+                DEFAULT MAIN
+            <% end %>
+        </div>
+        <div id="main2">
+            <%= placeholder 'main2' => begin %>
+                DEFAULT MAIN2
+            <% end %>
+        </div>
+    </body>
+</html>

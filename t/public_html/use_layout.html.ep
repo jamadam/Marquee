@@ -1,0 +1,10 @@
+<%= extends './layout/common.html.ep' => begin %>
+    <% override 'title' => begin %>
+        タイトル
+    <% end %>
+    <% override 'main' => begin %>
+        <div>
+            メインコンテンツ<%= time %>
+        </div>
+    <% end %>
+<% end %>

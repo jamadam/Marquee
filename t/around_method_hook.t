@@ -7,7 +7,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
     
-    use Test::More tests => 11;
+    use Test::More tests => 21;
 
     my $app;
     my $t;
@@ -41,6 +41,20 @@ use Mojo::Date;
         ->header_is('Content-Length', 23)
         ->content_is('static <%= time() %>mod');
     
+    $app->around_method_hook(serve_static => sub {
+        my ($app, $next, @args) = @_;
+        $next->(@args);
+        my $org = $MojoSimpleHTTPServer::CONTEXT->tx->res->body;
+        $MojoSimpleHTTPServer::CONTEXT->tx->res->body($org.'mod2');
+        return $app;
+    });
+    
+    $t->get_ok('/index.txt')
+        ->status_is(200)
+        ->content_type_is('text/plain')
+        ->header_is('Content-Length', 27)
+        ->content_is('static <%= time() %>modmod2');
+    
     $app = MyApp2->new;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
@@ -60,6 +74,20 @@ use Mojo::Date;
         ->content_type_is('text/plain')
         ->header_is('Content-Length', 23)
         ->content_is('static <%= time() %>mod');
+    
+    $app->around_method_hook(serve_static => sub {
+        my ($app, $next, @args) = @_;
+        $next->(@args);
+        my $org = $MojoSimpleHTTPServer::CONTEXT->tx->res->body;
+        $MojoSimpleHTTPServer::CONTEXT->tx->res->body($org.'mod2');
+        return $app;
+    });
+    
+    $t->get_ok('/index.txt')
+        ->status_is(200)
+        ->content_type_is('text/plain')
+        ->header_is('Content-Length', 27)
+        ->content_is('static <%= time() %>modmod2');
 
 package MyApp;
 use Mojo::Base 'MojoSimpleHTTPServer';

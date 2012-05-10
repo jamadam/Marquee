@@ -55,7 +55,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     }
     
     ### --
-    ### Add template handler
+    ### Wrap method
     ### --
     sub around_method_hook {
         no strict 'refs';

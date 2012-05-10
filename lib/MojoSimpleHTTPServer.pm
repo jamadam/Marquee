@@ -55,6 +55,31 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     }
     
     ### --
+    ### Add template handler
+    ### --
+    sub around_method_hook {
+        no strict 'refs';
+        no warnings 'redefine';
+        my ($class, $name, $cb) = @_;
+        
+        $class = ref $class || $class;
+        
+        if ($class =~ __PACKAGE__) {
+            die qr{Base class is not modifieable. Inherit it first.};
+        }
+        
+        if ($name =~ qr{^_}) {
+            die qr{Methods prefixed _ is not modifieable};
+        }
+        
+        my $code = $class->can($name);
+        *{$class. "::". $name} = sub {
+            my $app = shift;
+            $cb->($app, sub {$app->$code(@_)}, @_);
+        };
+    }
+    
+    ### --
     ### Accessor for localized context
     ### --
     sub context {
@@ -494,6 +519,17 @@ Set X-POWERED-BY response header.
 Adds handlers for template rendering.
 
     $instance->add_handler(ep => MojoSimpleHTTPServer::TemplateHandler::EP->new);
+
+=head2 around_method_hook(method => sub { ... });
+
+[EXPERIMENTAL] Wraps method of given name and adds pre and/or post process.
+    
+    $app->around_method_hook(serve_dynamic => sub {
+        my ($self, $next, @args) = @_;
+        ### pre-process
+        return $next->(@args). 'mod';
+        ### post-process
+    });
 
 =head2 $instance->context()
 

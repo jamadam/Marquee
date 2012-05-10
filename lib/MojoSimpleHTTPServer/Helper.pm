@@ -22,6 +22,11 @@ use Data::Dumper;
     sub load_preset {
         my ($self) = @_;
         
+        $self->add_helper(app => sub {
+            shift;
+            $MojoSimpleHTTPServer::CONTEXT->app;
+        });
+        
         $self->add_helper(param => sub {
             shift;
             $MojoSimpleHTTPServer::CONTEXT->tx->req->param($_[0]);

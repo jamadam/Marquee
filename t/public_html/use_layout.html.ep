@@ -3,8 +3,6 @@
         タイトル
     <% end %>
     <% override 'main' => begin %>
-        <div>
-            メインコンテンツ<%= time %>
-        </div>
+        メインコンテンツ<%= 'dynamic' %>
     <% end %>
 <% end %>

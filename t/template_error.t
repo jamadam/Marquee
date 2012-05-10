@@ -8,7 +8,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 43;
+    use Test::More tests => 50;
 
     my $app;
     my $t;
@@ -58,6 +58,8 @@ use MojoSimpleHTTPServer;
             $t->at('#request tr:nth-child(4) td.value pre')->content_xml_is("{}\n");
             $t->at('#request tr:nth-child(4) td.key')->content_xml_is('Parameters:');
             $t->at('#request tr:nth-child(4) td.value pre')->content_xml_is("{}\n");
+            $t->at('#request tr:nth-child(5) td.key')->content_xml_is('Stash:');
+            $t->at('#request tr:nth-child(5) td.value pre')->content_xml_is("{}\n");
             
             ### more
             
@@ -69,6 +71,19 @@ use MojoSimpleHTTPServer;
             ### others
             
             $t->at('#trace .value')->element_exists;
+        });
+    
+    ### stash
+    
+    $app->stash(test => 'value');
+    
+    $t->get_ok('/template_error.html')
+        ->status_is(200)
+        ->header_is('Content-Type', 'text/html;charset=UTF-8')
+        ->dom_inspector(sub {
+            my $t = shift;
+            $t->at('#request tr:nth-child(5) td.key')->content_xml_is('Stash:');
+            $t->at('#request tr:nth-child(5) td.value pre')->content_xml_is("{\n  &#39;test&#39; =&gt; &#39;value&#39;\n}\n");
         });
     
     ### error in included template

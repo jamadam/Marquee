@@ -174,7 +174,10 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         my ($self, $exception) = @_;
         
         my $tx = $CONTEXT->tx;
-        $self->stash(static_dir => 'static', exception => $exception);
+        $self->stash(
+            'mshs.static_dir' => 'static',
+            'mshs.exception' => $exception
+        );
         $tx->res->body(
             encode('UTF-8',
                 MojoSimpleHTTPServer::TemplateHandler::EP->new->render(

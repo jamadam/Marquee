@@ -4,8 +4,8 @@
 <head>
 	<%
 		my $c 			= shift;
-		my $exception	= app->stash('exception');
-		my $static_dir 	= app->stash('static_dir');
+		my $exception	= app->stash('mshs.exception');
+		my $static_dir 	= app->stash('mshs.static_dir');
 	%>
     <title>Debug Screen</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -114,7 +114,9 @@
 				%= $kv->(URL => $url->to_string)
 				%= $kv->('Base URL' => $url->base->to_string)
 				%= $kv->(Parameters => dumper $req->params->to_hash)
-				%= $kv->(Stash => dumper app->stash)
+				% my %snapshot = %{app->stash};
+				% %snapshot = map { $_ => $snapshot{$_} } grep { !/^mshs\./ and defined $snapshot{$_} } keys %snapshot;
+				%= $kv->(Stash => dumper \%snapshot)
 				%# $kv->(Session => dumper $c->session)
 				%= $kv->(Version => $req->version)
 				% for my $name (@{$req->headers->names}) {

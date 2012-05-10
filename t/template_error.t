@@ -8,7 +8,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 34;
+    use Test::More tests => 43;
 
     my $app;
     my $t;
@@ -69,6 +69,21 @@ use MojoSimpleHTTPServer;
             ### others
             
             $t->at('#trace .value')->element_exists;
+        });
+    
+    ### error in included template
+    
+    $t->get_ok('/template_error.html')
+        ->status_is(200)
+        ->header_is('Content-Type', 'text/html;charset=UTF-8')
+        ->dom_inspector(sub {
+            my $t = shift;
+            $t->at('title')->text_is('Debug Screen');
+            $t->at('#showcase pre')->text_like(qr{Global symbol "\$nonexist" requires explicit package name at (.+)/t/public_html/./template_error/1.html.ep line 2.});
+            $t->at('#context tr:nth-child(1) td.key')->text_is('1.');
+            $t->at('#context tr:nth-child(1) td.value pre')->content_xml_is('&lt;filename&gt;/template_error/1.html.ep&lt;/filename&gt;');
+            $t->at('#context tr:nth-child(2) td.key')->text_is('2.');
+            $t->at('#context tr:nth-child(2) td.value pre')->content_xml_is('&lt;%= $nonexist %&gt;');
         });
 
 __END__

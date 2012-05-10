@@ -62,6 +62,20 @@ use Test::More;
     return __PACKAGE__->new($self->dom(0)->root);
   }
   
+  sub element_exists {
+    my ($self, $desc) = @_;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    Test::More::ok $self->dom(0) , $desc || 'element exists';
+    return $self;
+  }
+  
+  sub element_exists_not {
+    my ($self, $desc) = @_;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    Test::More::ok ! $self->dom(0) , $desc || 'element not exists';
+    return $self;
+  }
+  
   sub text_is {
     my ($self, $value, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
@@ -167,6 +181,34 @@ use Test::More;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     my $len = scalar grep {$_ eq $name} (split(/\s/, $self->dom(0)->attrs('class')));
     Test::More::ok(! $len, $desc || qq/has class "$name"/);
+    return $self;
+  }
+  
+  sub content_xml_is {
+    my ($self, $value, $desc) = @_;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    Test::More::is $self->dom(0)->content_xml, $value, $desc || 'exact match for xml';
+    return $self;
+  }
+  
+  sub content_xml_isnt {
+    my ($self, $value, $desc) = @_;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    Test::More::isnt $self->dom(0)->content_xml, $value, $desc || 'no match for xml';
+    return $self;
+  }
+  
+  sub content_xml_like {
+    my ($self, $value, $desc) = @_;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    Test::More::like $self->dom(0)->content_xml, $value, $desc || 'xml is similar';
+    return $self;
+  }
+  
+  sub content_xml_unlike {
+    my ($self, $value, $desc) = @_;
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    Test::More::unlike $self->dom(0)->content_xml, $value, $desc || 'xml is not similar';
     return $self;
   }
 

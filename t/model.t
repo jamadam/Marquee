@@ -22,7 +22,7 @@ use Mojo::Date;
     $t->get_ok('/model.html')
         ->status_is(200)
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
-        ->header_is('Content-Length', 56)
+        ->header_is('Content-Length', 54)
         ->text_is('filename', 'model.html.ep')
         ->text_is('test1', 'FOO');
 

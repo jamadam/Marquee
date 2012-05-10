@@ -8,7 +8,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 19;
+    use Test::More tests => 34;
 
     my $app;
     my $t;

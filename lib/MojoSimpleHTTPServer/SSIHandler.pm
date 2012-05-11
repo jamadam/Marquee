@@ -1,4 +1,4 @@
-package MojoSimpleHTTPServer::TemplateHandler;
+package MojoSimpleHTTPServer::SSIHandler;
 use strict;
 use warnings;
 use Mojo::Base -base;

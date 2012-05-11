@@ -11,8 +11,9 @@ use Mojo::Util qw'url_unescape encode decode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
 use MojoSimpleHTTPServer::Context;
-use MojoSimpleHTTPServer::TemplateHandler::EP;
-use MojoSimpleHTTPServer::TemplateHandler::EPL;
+use MojoSimpleHTTPServer::SSIHandler::EP;
+use MojoSimpleHTTPServer::SSIHandler::EP;
+use MojoSimpleHTTPServer::SSIHandler::EPL;
 
     our $VERSION = '0.01';
     
@@ -25,9 +26,9 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     __PACKAGE__->attr('default_file');
     __PACKAGE__->attr('log_file');
     
-    __PACKAGE__->attr('template_handlers', sub {{
-        ep  => MojoSimpleHTTPServer::TemplateHandler::EP->new,
-        epl => MojoSimpleHTTPServer::TemplateHandler::EPL->new,
+    __PACKAGE__->attr('ssi_handlers', sub {{
+        ep  => MojoSimpleHTTPServer::SSIHandler::EP->new,
+        epl => MojoSimpleHTTPServer::SSIHandler::EPL->new,
     }});
     
     __PACKAGE__->attr('types', sub { Mojolicious::Types->new });
@@ -39,11 +40,11 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     );
     
     ### --
-    ### Add template handler
+    ### Add SSI handler
     ### --
     sub add_handler {
         my ($self, $name, $handler) = @_;
-        $self->template_handlers->{$name} = $handler;
+        $self->ssi_handlers->{$name} = $handler;
         return $self;
     }
     
@@ -164,10 +165,10 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     ### --
     ### detect and render
     ### --
-    sub render_template {
+    sub render_ssi {
         my ($self, $path, $ext) = @_;
         $ext ||= ($path =~ qr{\.\w+\.(\w+)$})[0];
-        if (my $handler = $self->template_handlers->{$ext}) {
+        if (my $handler = $self->ssi_handlers->{$ext}) {
             return $handler->render($path);
         }
     }
@@ -209,7 +210,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         );
         $tx->res->body(
             encode('UTF-8',
-                MojoSimpleHTTPServer::TemplateHandler::EP->new->render(
+                MojoSimpleHTTPServer::SSIHandler::EP->new->render(
                                                 _asset('debug_screen.ep'))));
         $tx->res->code(200);
         $tx->res->headers->content_type($self->types->type('html'));
@@ -268,10 +269,10 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         
         my $tx = $CONTEXT->tx;
         
-        for my $ext (keys %{$self->template_handlers}) {
+        for my $ext (keys %{$self->ssi_handlers}) {
             my $path = "$path.$ext";
             if (-f $path) {
-                my $ret = $self->render_template($path, $ext);
+                my $ret = $self->render_ssi($path, $ext);
                 if (defined $ret) {
                     $tx->res->body(encode('UTF-8', $ret));
                     $tx->res->code(200);
@@ -336,7 +337,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         
         $tx->res->body(
             encode('UTF-8',
-                MojoSimpleHTTPServer::TemplateHandler::EPL->new->render(
+                MojoSimpleHTTPServer::SSIHandler::EPL->new->render(
                                                         _asset('index.epl')))
         );
         $tx->res->code(200);
@@ -425,7 +426,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         }
         
         $self->{_handler_re} =
-                    '\.(?:'. join('|', keys %{$self->template_handlers}). ')$';
+                    '\.(?:'. join('|', keys %{$self->ssi_handlers}). ')$';
         
         if ($self->log_file) {
             $self->log->path($self->log_file);
@@ -499,9 +500,9 @@ Specify a default file name and activate auto fill.
 
 Specify a log file path.
 
-=head2 template_handlers
+=head2 ssi_handlers
 
-An hash ref that contains template handlers.
+An hash ref that contains SSI handlers.
 
 =head2 types
 
@@ -519,9 +520,9 @@ Set X-POWERED-BY response header.
 
 =head2 $instance->add_handler(name => $code_ref);
 
-Adds handlers for template rendering.
+Adds handlers for SSI rendering.
 
-    $instance->add_handler(ep => MojoSimpleHTTPServer::TemplateHandler::EP->new);
+    $instance->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
 
 =head2 around_method_hook(method => sub { ... });
 
@@ -550,7 +551,7 @@ Handler called by mojo layer.
 
 Detect MIME type out of path name.
 
-=head2 $instance->render_template($path, $ext)
+=head2 $instance->render_ssi($path, $ext)
 
 =head2 $instance->serve_redirect_to_slashed($path)
 
@@ -574,7 +575,7 @@ Serves debug screen with given L<Mojo::Exception> instance.
 
 =head2 $instance->serve_dynamic($path)
 
-Serves dynamic page with given template path.
+Serves dynamic SSI page with given file path.
 
 =head2 $instance->serve_index($path)
 

@@ -1,7 +1,7 @@
-package MojoSimpleHTTPServer::TemplateHandler::EP;
+package MojoSimpleHTTPServer::SSIHandler::EP;
 use strict;
 use warnings;
-use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler::EPL';
+use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler::EPL';
 use File::Basename 'dirname';
 
     ### --
@@ -64,7 +64,7 @@ use File::Basename 'dirname';
         $self->funcs->{include} = sub {
             my ($self, $path) = @_;
             
-            $MojoSimpleHTTPServer::CONTEXT->app->render_template(
+            $MojoSimpleHTTPServer::CONTEXT->app->render_ssi(
                                                         $self->_to_abs($path));
         };
         
@@ -90,7 +90,7 @@ use File::Basename 'dirname';
             
             $block->();
             
-            $app->render_template($self->_to_abs($path));
+            $app->render_ssi($self->_to_abs($path));
         };
         
         return $self;
@@ -158,11 +158,11 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::TemplateHandler::EP - EP template handler
+MojoSimpleHTTPServer::SSIHandler::EP - EP template handler
 
 =head1 SYNOPSIS
 
-    $app->add_handler(ep => MojoSimpleHTTPServer::TemplateHandler::EP->new);
+    $app->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
 
 =head1 DESCRIPTION
 

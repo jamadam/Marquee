@@ -1,7 +1,7 @@
-package MojoSimpleHTTPServer::TemplateHandler::EPL;
+package MojoSimpleHTTPServer::SSIHandler::EPL;
 use strict;
 use warnings;
-use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler';
+use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler';
 use Mojo::Cache;
 use Mojo::Util qw/encode md5_sum/;
     
@@ -53,11 +53,11 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::TemplateHandler::EPL - EPL template handler
+MojoSimpleHTTPServer::SSIHandler::EPL - EPL template handler
 
 =head1 SYNOPSIS
 
-    $app->add_handler(epl => MojoSimpleHTTPServer::TemplateHandler::EPL->new);
+    $app->add_handler(epl => MojoSimpleHTTPServer::SSIHandler::EPL->new);
 
 =head1 DESCRIPTION
 

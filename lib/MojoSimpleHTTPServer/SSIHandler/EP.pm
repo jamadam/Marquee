@@ -171,6 +171,75 @@ EP handler.
 
 =head1 ATTRIBUTES
 
+=head1 FUNCTIONS
+
+=head2 <% ctd() %>
+
+Returns current template path.
+
+=head2 <% extends($path, block) %>
+
+Base template.
+
+    <!doctype html>
+    <html>
+        <head>
+            <title><%= placeholder 'title' => begin %>DEFAULT TITLE<% end %></title>
+        </head>
+        <body>
+            <div id="main">
+                <%= placeholder 'main' => begin %>
+                    DEFAULT MAIN
+                <% end %>
+            </div>
+            <div id="main2">
+                <%= placeholder 'main2' => begin %>
+                    DEFAULT MAIN2
+                <% end %>
+            </div>
+        </body>
+    </html>
+
+Extended template.
+
+    <%= extends './layout/common.html.ep' => begin %>
+        <% override 'title' => begin %>
+            title
+        <% end %>
+        <% override 'main' => begin %>
+            <div>
+                main content<%= time %>
+            </div>
+        <% end %>
+    <% end %>
+
+Extends template.
+
+=head2 <% include('./path/to/template.html.ep') %>
+
+Include a template into current template. Note that the path must be relative to
+current template directory.
+
+=head2 <% override($name, $block) %>
+
+Override placeholder. See extends method.
+
+=head2 <% param('key') %>
+
+Returns request parameters for given key.
+
+=head2 <% placeholder($name, $default_block) %>
+
+Set placeholder with default block. See extends method.
+
+=head2 <% stash('key') %>
+
+Returns stash value for given key.
+
+=head2 <% to_abs() %>
+
+Generate absolute path with given relative one
+
 =head1 METHODS
 
 =head2 $instance->render($path)

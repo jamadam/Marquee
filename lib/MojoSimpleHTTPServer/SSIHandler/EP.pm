@@ -35,36 +35,36 @@ use File::Basename 'dirname';
         
         $self->funcs->{app} = sub {
             shift;
-            $MojoSimpleHTTPServer::CONTEXT->app;
+            return $MojoSimpleHTTPServer::CONTEXT->app;
         };
         
         $self->funcs->{param} = sub {
             shift;
-            $MojoSimpleHTTPServer::CONTEXT->tx->req->param($_[0]);
+            return $MojoSimpleHTTPServer::CONTEXT->tx->req->param($_[0]);
         };
         
         $self->funcs->{stash} = sub {
             shift;
-            $MojoSimpleHTTPServer::CONTEXT->stash->(@_);
+            return $MojoSimpleHTTPServer::CONTEXT->stash->(@_);
         };
         
         $self->funcs->{ctd} = sub {
-            shift->_ctd;
+            return shift->_ctd;
         };
         
         $self->funcs->{dumper} = sub {
             shift;
-            Data::Dumper->new([@_])->Indent(1)->Terse(1)->Dump;
+            return Data::Dumper->new([@_])->Indent(1)->Terse(1)->Dump;
         };
         
         $self->funcs->{to_abs} = sub {
-            shift->_to_abs(@_);
+            return shift->_to_abs(@_);
         };
         
         $self->funcs->{include} = sub {
             my ($self, $path) = @_;
             
-            $MojoSimpleHTTPServer::CONTEXT->app->render_ssi(
+            return $MojoSimpleHTTPServer::CONTEXT->app->render_ssi(
                                                         $self->_to_abs($path));
         };
         
@@ -72,6 +72,7 @@ use File::Basename 'dirname';
             my ($self, $name, $value) = @_;
             my $stash = $MojoSimpleHTTPServer::CONTEXT->stash->();
             $stash->{$name} = $value;
+            return;
         };
         
         $self->funcs->{placeholder} = sub {
@@ -91,7 +92,7 @@ use File::Basename 'dirname';
             
             $block->();
             
-            $app->render_ssi($self->_to_abs($path));
+            return $app->render_ssi($self->_to_abs($path));
         };
         
         return $self;

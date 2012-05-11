@@ -8,7 +8,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 5;
+    use Test::More tests => 6;
 
     my $app;
     my $t;
@@ -26,5 +26,7 @@ use MojoSimpleHTTPServer;
             $t->at('#main')->text_is('メインコンテンツdynamic');
             $t->at('#main2')->text_is('DEFAULT MAIN2');
         });
+    
+    is exists $app->stash->{title}, '';
 
 __END__

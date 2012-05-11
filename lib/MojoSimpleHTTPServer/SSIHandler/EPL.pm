@@ -5,16 +5,15 @@ use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler';
 use Mojo::Cache;
 use Mojo::Util qw/encode md5_sum/;
     
+    __PACKAGE__->attr('template_cache' => sub {Mojo::Cache->new});
+    
     ### --
     ### Accessor to template cache
     ### --
     sub cache {
         my ($self, $path, $mt) = @_;
         
-        my $cache =
-            $MojoSimpleHTTPServer::CONTEXT->app->stash->{'mshs.template_cache'}
-                                                        ||= Mojo::Cache->new;
-        
+        my $cache = $self->template_cache;
         my $key = md5_sum(encode('UTF-8', $path));
         if ($mt) {
             $cache->set($key => $mt);
@@ -31,7 +30,7 @@ use Mojo::Util qw/encode md5_sum/;
         
         my $context = $MojoSimpleHTTPServer::CONTEXT;
         
-        local $context->app->stash->{'mshs.template_path'} = $path;
+        local $context->stash->{'mshs.template_path'} = $path;
         
         my $mt = $self->cache($path) || Mojo::Template->new;
         

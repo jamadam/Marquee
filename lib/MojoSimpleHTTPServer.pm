@@ -12,7 +12,6 @@ use Mojolicious::Types;
 use Mojolicious::Commands;
 use MojoSimpleHTTPServer::Context;
 use MojoSimpleHTTPServer::SSIHandler::EP;
-use MojoSimpleHTTPServer::SSIHandler::EP;
 use MojoSimpleHTTPServer::SSIHandler::EPL;
 
     our $VERSION = '0.01';
@@ -204,7 +203,7 @@ use MojoSimpleHTTPServer::SSIHandler::EPL;
         my ($self, $exception) = @_;
         
         my $tx = $CONTEXT->tx;
-        $self->stash(
+        $CONTEXT->stash(
             'mshs.static_dir' => 'static',
             'mshs.exception' => $exception
         );
@@ -329,7 +328,7 @@ use MojoSimpleHTTPServer::SSIHandler::EPL;
         } @dset;
         
         my $tx = $CONTEXT->tx;
-        $self->stash(
+        $CONTEXT->stash(
             dir         => $path,
             dataset     => \@dset,
             static_dir  => 'static'
@@ -363,10 +362,14 @@ use MojoSimpleHTTPServer::SSIHandler::EPL;
       
         # Hash
         my $stash = $self->{stash} ||= {};
-        return $stash unless @_;
+        if (! @_) {
+            return $stash;
+        }
         
         # Get
-        return $stash->{$_[0]} unless @_ > 1 || ref $_[0];
+        if (! (@_ > 1 || ref $_[0])) {
+            return $stash->{$_[0]};
+        }
       
         # Set
         my $values = ref $_[0] ? $_[0] : {@_};

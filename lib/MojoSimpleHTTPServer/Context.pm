@@ -43,6 +43,10 @@ MojoSimpleHTTPServer instance.
 
 Mojo::Transaction instance.
 
+=head2 stash
+
+A stash that inherits app's one.
+
 =head1 METHODS
 
 =head1 SEE ALSO

@@ -1,4 +1,6 @@
 package MojoSimpleHTTPServer::Plugin::Router;
+use strict;
+use warnings;
 use Mojo::Base -base;
     
     ### --

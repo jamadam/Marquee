@@ -19,18 +19,63 @@ use File::Basename 'dirname';
     }
     
     ### --
-    ### Constractor
+    ### Constructor
     ### --
     sub new {
         my $class = shift;
         my $self = $class->SUPER::new(@_);
-        $self->load_funcs;
+        $self->_register_preset_funcs;
+    }
+    
+    ### --
+    ### ep handler
+    ### --
+    sub render {
+        my ($self, $path) = @_;
+        
+        if (! $self->cache($path)) {
+            my $mt = Mojo::Template->new;
+            
+            # Be a bit more relaxed for helpers
+            my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
+    
+            # Helpers
+            $prepend .= 'my $_H = shift;';
+            for my $name (sort keys %{$self->funcs}) {
+                if ($name =~ /^\w+$/) {
+                    $prepend .=
+                    "sub $name; *$name = sub {\$_H->funcs->{$name}->(\$_H, \@_)};";
+                }
+            }
+        
+            my $context = $MojoSimpleHTTPServer::CONTEXT;
+            
+            $prepend .= 'use strict;';
+            for my $var (keys %{$context->stash->()}) {
+                if ($var =~ /^\w+$/) {
+                    $prepend .= " my \$$var = stash '$var';";
+                }
+            }
+            $mt->prepend($prepend);
+            
+            $self->cache($path => $mt);
+        }
+        
+        return $self->SUPER::render($path);
+    }
+    
+    ### --
+    ### Current template path
+    ### --
+    sub _ctd {
+        my $self = shift;
+        $MojoSimpleHTTPServer::CONTEXT->stash->('mshs.template_path');
     }
     
     ### --
     ### load preset
     ### --
-    sub load_funcs {
+    sub _register_preset_funcs {
         my ($self) = @_;
         
         $self->funcs->{app} = sub {
@@ -99,43 +144,6 @@ use File::Basename 'dirname';
     }
     
     ### --
-    ### ep handler
-    ### --
-    sub render {
-        my ($self, $path) = @_;
-        
-        if (! $self->cache($path)) {
-            my $mt = Mojo::Template->new;
-            
-            # Be a bit more relaxed for helpers
-            my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
-    
-            # Helpers
-            $prepend .= 'my $_H = shift;';
-            for my $name (sort keys %{$self->funcs}) {
-                if ($name =~ /^\w+$/) {
-                    $prepend .=
-                    "sub $name; *$name = sub {\$_H->funcs->{$name}->(\$_H, \@_)};";
-                }
-            }
-        
-            my $context = $MojoSimpleHTTPServer::CONTEXT;
-            
-            $prepend .= 'use strict;';
-            for my $var (keys %{$context->stash->()}) {
-                if ($var =~ /^\w+$/) {
-                    $prepend .= " my \$$var = stash '$var';";
-                }
-            }
-            $mt->prepend($prepend);
-            
-            $self->cache($path => $mt);
-        }
-        
-        return $self->SUPER::render($path);
-    }
-    
-    ### --
     ### abs
     ### --
     sub _to_abs {
@@ -144,14 +152,6 @@ use File::Basename 'dirname';
         my $path_abs = dirname($self->_ctd). '/'. $path;
         
         return $path_abs;
-    }
-    
-    ### --
-    ### Current template path
-    ### --
-    sub _ctd {
-        my $self = shift;
-        $MojoSimpleHTTPServer::CONTEXT->stash->('mshs.template_path');
     }
 
 1;
@@ -242,6 +242,12 @@ Returns stash value for given key.
 Generate absolute path with given relative one
 
 =head1 METHODS
+
+=head2 $instance->new
+
+Constructor.
+
+=head2 $instance->add_function(name => sub {...})
 
 =head2 $instance->render($path)
 

@@ -7,7 +7,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
     
-    use Test::More tests => 6;
+    use Test::More tests => 15;
 
     my $app;
     my $t;
@@ -21,16 +21,13 @@ use Mojo::Date;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     
-    $app->around_method_hook('dispatch', sub {
-        my ($app, $next, @args) = @_;
-        my $tx = $MojoSimpleHTTPServer::CONTEXT->tx;
-        if ($tx->req->url->path =~ /index\.html/) {
-            ok 1;
-            $app->serve_static("$FindBin::Bin/public_html/index.txt");
-        } else {
-            $next->(@args);
-        }
-        return $app;
+    $app->load_plugin(Router => {
+        qr/index\.html/ => sub {
+            MyApp->context->app->serve_static("$FindBin::Bin/public_html/index.txt");
+        },
+        qr/special\.html/ => sub {
+            MyApp->context->app->serve_static("$FindBin::Bin/public_html/index.txt");
+        },
     });
     
     $t = Test::Mojo->new($app);
@@ -41,6 +38,18 @@ use Mojo::Date;
         ->header_is('Content-Length', 20)
         ->content_is('static <%= time() %>');
     
+    # twice
     
+    $t->get_ok('/index.html')
+        ->status_is(200)
+        ->header_is('Content-Type', 'text/plain')
+        ->header_is('Content-Length', 20)
+        ->content_is('static <%= time() %>');
+    
+    $t->get_ok('/special.html')
+        ->status_is(200)
+        ->header_is('Content-Type', 'text/plain')
+        ->header_is('Content-Length', 20)
+        ->content_is('static <%= time() %>');
 
 __END__

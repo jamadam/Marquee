@@ -160,6 +160,26 @@ use MojoSimpleHTTPServer::Stash;
     }
     
     ### --
+    ### load_plugin
+    ### --
+    sub load_plugin {
+        my ($self, $name, $args) = @_;
+        
+        my $prefix = 'MojoSimpleHTTPServer::Plugin';
+        if ($prefix) {
+            unless ($name =~ s/^\+// || $name =~ /^$prefix/) {
+                $name = "$prefix\::$name";
+            }
+        }
+        if (! $name->can('register')) {
+            my $file = $name;
+            $file =~ s!::!/!g;
+            require "$file.pm"; ## no critic
+        }
+        $name->new->register($self, $args);
+    }
+    
+    ### --
     ### detect and render
     ### --
     sub render_ssi {
@@ -530,6 +550,10 @@ Front dispatcher.
 =head2 $instance->handler($tx)
 
 Handler called by mojo layer.
+
+=head2 $instance->load_plugin(name => {})
+
+Loads plugin of given name with given arguments.
 
 =head2 $instance->path_to_type($path)
 

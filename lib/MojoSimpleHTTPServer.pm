@@ -382,7 +382,7 @@ use MojoSimpleHTTPServer::Stash;
     ### --
     sub start {
         my $self = $ENV{MOJO_APP} = shift;
-        $self->init;
+        $self->_init;
         Mojolicious::Commands->start;
     }
     

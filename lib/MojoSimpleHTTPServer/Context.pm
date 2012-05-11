@@ -14,14 +14,11 @@ use Mojo::Base -base;
     __PACKAGE__->attr('tx');
     
     ### ---
-    ### Transaction
+    ### Stash
     ### ---
-    __PACKAGE__->attr('stash');
-    
-    sub new {
-        my $class = shift;
-        my $self = $class->SUPER::new(@_);
-        $self->stash($self->app->stash->clone);
+    sub stash {
+        my $self = shift;
+        $self->{stash} ||= $self->app->stash->clone;
     }
 
 1;

@@ -7,7 +7,6 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
-use MojoSimpleHTTPServer::Helper;
 
     use Test::More tests => 7;
 

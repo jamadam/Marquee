@@ -64,16 +64,8 @@ use File::Basename 'dirname';
         $self->funcs->{include} = sub {
             my ($self, $path) = @_;
             
-            my $path_abs = $self->_to_abs($path);
-            
-            if (-f $path_abs) {
-                my $context = $MojoSimpleHTTPServer::CONTEXT;
-                my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
-                my $handler = $context->app->template_handlers->{$ext};
-                if ($handler) {
-                    $handler->render($path_abs, $context);
-                }
-            }
+            $MojoSimpleHTTPServer::CONTEXT->app->render_template(
+                                                        $self->_to_abs($path));
         };
         
         $self->funcs->{override} = sub {
@@ -92,22 +84,13 @@ use File::Basename 'dirname';
         $self->funcs->{extends} = sub {
             my ($self, $path, $block) = @_;
             
-            my $path_abs = $self->_to_abs($path);
+            my $app = $MojoSimpleHTTPServer::CONTEXT->app;
             
-            if (-f $path_abs) {
-                my $context = $MojoSimpleHTTPServer::CONTEXT;
-                my $app = $context->app;
-                
-                local $app->{stash} = $app->{stash};
-                
-                $block->();
-                
-                my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
-                my $handler = $app->template_handlers->{$ext};
-                if ($handler) {
-                    $handler->render($path_abs, $context);
-                }
-            }
+            local $app->{stash} = $app->{stash};
+            
+            $block->();
+            
+            $app->render_template($self->_to_abs($path));
         };
         
         return $self;

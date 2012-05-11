@@ -31,7 +31,7 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
         ep  => MojoSimpleHTTPServer::TemplateHandler::EP->new,
         epl => MojoSimpleHTTPServer::TemplateHandler::EPL->new,
     }});
-
+    
     __PACKAGE__->attr('types', sub { Mojolicious::Types->new });
     
     my %error_messages = (
@@ -164,6 +164,17 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     }
     
     ### --
+    ### detect and render
+    ### --
+    sub render_template {
+        my ($self, $path, $ext) = @_;
+        $ext ||= ($path =~ qr{\.\w+\.(\w+)$})[0];
+        if (my $handler = $self->template_handlers->{$ext}) {
+            return $handler->render($path);
+        }
+    }
+    
+    ### --
     ### serve redirect to slashed directory
     ### --
     sub serve_redirect_to_slashed {
@@ -257,14 +268,17 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     sub serve_dynamic {
         my ($self, $path) = @_;
         
+        my $tx = $CONTEXT->tx;
+        
         for my $ext (keys %{$self->template_handlers}) {
-            my $handler = $self->template_handlers->{$ext};
             my $path = "$path.$ext";
-            if (-f $path && $handler) {
-                my $tx = $CONTEXT->tx;
-                $tx->res->body(
-                            encode('UTF-8', $handler->render($path)));
-                $tx->res->code(200);
+            if (-f $path) {
+                my $ret = $self->render_template($path, $ext);
+                if (defined $ret) {
+                    $tx->res->body(encode('UTF-8', $ret));
+                    $tx->res->code(200);
+                    last;
+                }
             }
         }
         
@@ -537,6 +551,8 @@ Handler called by mojo layer.
 =head2 $instance->path_to_type($path)
 
 Detect MIME type out of path name.
+
+=head2 $instance->render_template($path, $ext)
 
 =head2 $instance->serve_redirect_to_slashed($path)
 

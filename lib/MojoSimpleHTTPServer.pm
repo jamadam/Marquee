@@ -91,14 +91,18 @@ use MojoSimpleHTTPServer::Stash;
         my ($self) = @_;
         
         my $tx = $CONTEXT->tx;
+        my $res = $tx->res;
+        my $path = $tx->req->url->path;
         
-        if ($tx->req->url =~ /$self->{_handler_re}/) {
-            $self->serve_error_document(403);
-        } else {
-            my $res = $tx->res;
-            my $path = $tx->req->url->path;
-            my $filled_path =
-                $self->default_file
+        if (! $res->code) {
+            if ($tx->req->url =~ /$self->{_handler_re}/) {
+                $self->serve_error_document(403);
+                return;
+            }
+        }
+        
+        if (! $res->code) {
+            my $filled_path = $self->default_file
                             ? $self->_auto_fill_filename($path->clone) : $path;
             $filled_path->leading_slash(1);
             
@@ -113,19 +117,19 @@ use MojoSimpleHTTPServer::Stash;
                     last;
                 }
             }
-            
-            if (! $res->code &&
-                        -d File::Spec->catfile($self->document_root. $path)) {
-                if (! $path->trailing_slash && scalar @{$path->parts}) {
-                    $self->serve_redirect_to_slashed($path);
-                } elsif ($self->auto_index) {
-                    $self->serve_index($path);
-                }
+        }
+        
+        if (! $res->code) {
+            if (-d File::Spec->catfile($self->document_root. $path) && 
+                        (! $path->trailing_slash && scalar @{$path->parts})) {
+                $self->serve_redirect_to_slashed($path);
             }
-            
-            if (! $res->code) {
-                $self->serve_error_document(404);
-                $self->log->fatal($tx->req->url->path. qq{ Not found});
+        }
+        
+        if (! $res->code) {
+            if (-d File::Spec->catfile($self->document_root. $path) && 
+                        ($path->trailing_slash || ! scalar @{$path->parts})) {
+                $self->serve_index($path);
             }
         }
     }
@@ -154,6 +158,11 @@ use MojoSimpleHTTPServer::Stash;
             } else {
                 $self->serve_error_document(500);
             }
+        }
+        
+        if (! $tx->res->code) {
+            $self->serve_error_document(404);
+            $self->log->fatal($tx->req->url->path. qq{ Not found});
         }
         
         $tx->resume;

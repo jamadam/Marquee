@@ -1,7 +1,7 @@
 package MojoSimpleHTTPServer::TemplateHandler::EP;
 use strict;
 use warnings;
-use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler';
+use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler::EPL';
 use File::Basename 'dirname';
 
     ### --
@@ -12,7 +12,7 @@ use File::Basename 'dirname';
     ### --
     ### Add helper
     ### --
-    sub add_helper {
+    sub add_function {
         my ($self, $name, $cb) = @_;
         $self->funcs->{$name} = $cb;
         return $self;
@@ -102,17 +102,9 @@ use File::Basename 'dirname';
     sub render {
         my ($self, $path) = @_;
         
-        my $context = $MojoSimpleHTTPServer::CONTEXT;
-        
-        local $context->app->stash->{'mshs.template_path'} = $path;
-        
-        my $mt = $self->cache($path) || Mojo::Template->new;
-        
-        my $output;
-        
-        if ($mt->compiled) {
-            $output = $mt->interpret($self, $context);
-        } else {
+        if (! $self->cache($path)) {
+            my $mt = Mojo::Template->new;
+            
             # Be a bit more relaxed for helpers
             my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
     
@@ -124,6 +116,8 @@ use File::Basename 'dirname';
                     "sub $name; *$name = sub {\$_H->funcs->{$name}->(\$_H, \@_)};";
                 }
             }
+        
+            my $context = $MojoSimpleHTTPServer::CONTEXT;
             
             $prepend .= 'use strict;';
             for my $var (keys %{$context->app->stash}) {
@@ -132,12 +126,11 @@ use File::Basename 'dirname';
                 }
             }
             $mt->prepend($prepend);
-            $output = $mt->render_file($path, $self, $context);
             
             $self->cache($path => $mt);
         }
         
-        return ref $output ? die $output : $output;
+        return $self->SUPER::render($path);
     }
     
     ### --

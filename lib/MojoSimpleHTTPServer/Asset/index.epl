@@ -3,6 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
 	<%
+		my $r 			= shift;
 		my $c 			= shift;
 		my $dir 		= $c->app->stash('dir');
 		my $static_dir 	= $c->app->stash('static_dir');

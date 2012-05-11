@@ -4,24 +4,6 @@ use warnings;
 use Mojo::Base -base;
 use Mojo::Cache;
 use Mojo::Util qw/encode md5_sum/;
-    
-    ### --
-    ### Accessor to template cache
-    ### --
-    sub cache {
-        my ($self, $path, $mt) = @_;
-        
-        my $cache =
-            $MojoSimpleHTTPServer::CONTEXT->app->stash->{'mshs.template_cache'}
-                                                        ||= Mojo::Cache->new;
-        
-        my $key = md5_sum(encode('UTF-8', $path));
-        if ($mt) {
-            $cache->set($key => $mt);
-        } else {
-            $cache->get($key);
-        }
-    }
 
 1;
 

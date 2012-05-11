@@ -2,6 +2,26 @@ package MojoSimpleHTTPServer::TemplateHandler::EPL;
 use strict;
 use warnings;
 use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler';
+use Mojo::Cache;
+use Mojo::Util qw/encode md5_sum/;
+    
+    ### --
+    ### Accessor to template cache
+    ### --
+    sub cache {
+        my ($self, $path, $mt) = @_;
+        
+        my $cache =
+            $MojoSimpleHTTPServer::CONTEXT->app->stash->{'mshs.template_cache'}
+                                                        ||= Mojo::Cache->new;
+        
+        my $key = md5_sum(encode('UTF-8', $path));
+        if ($mt) {
+            $cache->set($key => $mt);
+        } else {
+            $cache->get($key);
+        }
+    }
 
     ### --
     ### EPL handler
@@ -18,9 +38,9 @@ use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler';
         my $output;
         
         if ($mt->compiled) {
-            $output = $mt->interpret($context);
+            $output = $mt->interpret($self, $context);
         } else {
-            $output = $mt->render_file($path, $context);
+            $output = $mt->render_file($path, $self, $context);
             $self->cache($path => $mt);
         }
         

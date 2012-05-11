@@ -75,7 +75,7 @@ use MojoSimpleHTTPServer;
     
     ### stash
     
-    $app->stash(test => 'value');
+    $app->stash->(test => 'value');
     
     $t->get_ok('/template_error.html')
         ->status_is(200)

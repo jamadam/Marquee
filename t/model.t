@@ -15,7 +15,7 @@ use Mojo::Date;
     $app = MyApp->new;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
-    $app->stash(model => $app->model);
+    $app->stash->(model => $app->model);
     
     $t = Test::Mojo->new($app);
     

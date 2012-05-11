@@ -114,7 +114,7 @@ use Mojo::Date;
     
     ### stash
     
-    $app->stash(baz => 'BAZ');
+    $app->stash->(baz => 'BAZ');
     
     $t->get_ok('/stash.html')
         ->status_is(200)

@@ -27,6 +27,6 @@ use MojoSimpleHTTPServer;
             $t->at('#main2')->text_is('DEFAULT MAIN2');
         });
     
-    is exists $app->stash->{title}, '';
+    is exists $app->stash->()->{title}, '';
 
 __END__

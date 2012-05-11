@@ -13,6 +13,7 @@ use Mojolicious::Commands;
 use MojoSimpleHTTPServer::Context;
 use MojoSimpleHTTPServer::SSIHandler::EP;
 use MojoSimpleHTTPServer::SSIHandler::EPL;
+use MojoSimpleHTTPServer::Stash;
 
     our $VERSION = '0.01';
     
@@ -24,6 +25,7 @@ use MojoSimpleHTTPServer::SSIHandler::EPL;
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');
     __PACKAGE__->attr('log_file');
+    __PACKAGE__->attr('stash' => sub {MojoSimpleHTTPServer::Stash->new});
     
     __PACKAGE__->attr('ssi_handlers', sub {{
         ep  => MojoSimpleHTTPServer::SSIHandler::EP->new,
@@ -203,7 +205,7 @@ use MojoSimpleHTTPServer::SSIHandler::EPL;
         my ($self, $exception) = @_;
         
         my $tx = $CONTEXT->tx;
-        $CONTEXT->stash(
+        $CONTEXT->stash->(
             'mshs.static_dir' => 'static',
             'mshs.exception' => $exception
         );
@@ -328,7 +330,7 @@ use MojoSimpleHTTPServer::SSIHandler::EPL;
         } @dset;
         
         my $tx = $CONTEXT->tx;
-        $CONTEXT->stash(
+        $CONTEXT->stash->(
             dir         => $path,
             dataset     => \@dset,
             static_dir  => 'static'
@@ -352,32 +354,6 @@ use MojoSimpleHTTPServer::SSIHandler::EPL;
         my $self = $ENV{MOJO_APP} = shift;
         $self->init;
         Mojolicious::Commands->start;
-    }
-    
-    ### --
-    ### stash
-    ### --
-    sub stash {
-        my $self = shift;
-      
-        # Hash
-        my $stash = $self->{stash} ||= {};
-        if (! @_) {
-            return $stash;
-        }
-        
-        # Get
-        if (! (@_ > 1 || ref $_[0])) {
-            return $stash->{$_[0]};
-        }
-      
-        # Set
-        my $values = ref $_[0] ? $_[0] : {@_};
-        for my $key (keys %$values) {
-            $stash->{$key} = $values->{$key};
-        }
-      
-        return $self;
     }
     
     ### --
@@ -507,6 +483,10 @@ Specify a log file path.
 
 An hash ref that contains Server side include handlers.
 
+=head2 stash
+
+An MojoSimpleHTTPServer::Stash instance.
+
 =head2 types
 
 Contains L<Mojolicious::Type> instance.
@@ -583,10 +563,6 @@ Serves dynamic SSI page with given file path.
 =head2 $instance->serve_index($path)
 
 Serves auto index page.
-
-=head2 $instance->stash($key => $value)
-
-Set or get stash for the app.
 
 =head2 $instance->start()
 

@@ -45,7 +45,7 @@ use File::Basename 'dirname';
         
         $self->funcs->{stash} = sub {
             shift;
-            $MojoSimpleHTTPServer::CONTEXT->stash(@_);
+            $MojoSimpleHTTPServer::CONTEXT->stash->(@_);
         };
         
         $self->funcs->{ctd} = sub {
@@ -70,14 +70,14 @@ use File::Basename 'dirname';
         
         $self->funcs->{override} = sub {
             my ($self, $name, $value) = @_;
-            my $stash = $MojoSimpleHTTPServer::CONTEXT->stash;
+            my $stash = $MojoSimpleHTTPServer::CONTEXT->stash->();
             $stash->{$name} = $value;
         };
         
         $self->funcs->{placeholder} = sub {
             my ($self, $name, $defalut) = @_;
             my $block =
-                $MojoSimpleHTTPServer::CONTEXT->stash($name) || $defalut;
+                $MojoSimpleHTTPServer::CONTEXT->stash->($name) || $defalut;
             return $block->() || '';
         };
         
@@ -87,7 +87,7 @@ use File::Basename 'dirname';
             my $app = $MojoSimpleHTTPServer::CONTEXT->app;
             
             local $MojoSimpleHTTPServer::CONTEXT->{stash} =
-                                        $MojoSimpleHTTPServer::CONTEXT->{stash};
+                                $MojoSimpleHTTPServer::CONTEXT->{stash}->clone;
             
             $block->();
             
@@ -121,7 +121,7 @@ use File::Basename 'dirname';
             my $context = $MojoSimpleHTTPServer::CONTEXT;
             
             $prepend .= 'use strict;';
-            for my $var (keys %{$context->stash}) {
+            for my $var (keys %{$context->stash->()}) {
                 if ($var =~ /^\w+$/) {
                     $prepend .= " my \$$var = stash '$var';";
                 }
@@ -150,7 +150,7 @@ use File::Basename 'dirname';
     ### --
     sub _ctd {
         my $self = shift;
-        $MojoSimpleHTTPServer::CONTEXT->stash->{'mshs.template_path'};
+        $MojoSimpleHTTPServer::CONTEXT->stash->('mshs.template_path');
     }
 
 1;

@@ -30,7 +30,7 @@ use Mojo::Util qw/encode md5_sum/;
         
         my $context = $MojoSimpleHTTPServer::CONTEXT;
         
-        local $context->stash->{'mshs.template_path'} = $path;
+        local $context->stash->()->{'mshs.template_path'} = $path;
         
         my $mt = $self->cache($path) || Mojo::Template->new;
         

@@ -502,7 +502,7 @@ Specify a log file path.
 
 =head2 ssi_handlers
 
-An hash ref that contains SSI handlers.
+An hash ref that contains Server side include handlers.
 
 =head2 types
 
@@ -520,7 +520,7 @@ Set X-POWERED-BY response header.
 
 =head2 $instance->add_handler(name => $code_ref);
 
-Adds handlers for SSI rendering.
+Adds ssi_handlers entry.
 
     $instance->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
 

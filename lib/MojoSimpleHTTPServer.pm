@@ -102,10 +102,6 @@ use MojoSimpleHTTPServer::Stash;
                             ? $self->_auto_fill_filename($path->clone) : $path;
             $filled_path->leading_slash(1);
             
-            if (my $type = $self->path_to_type($filled_path)) {
-                $res->headers->content_type($type);
-            }
-            
             for my $root ($self->document_root, _asset()) {
                 my $path = File::Spec->catfile($root. $filled_path);
                 if (-f $path) {
@@ -258,6 +254,9 @@ use MojoSimpleHTTPServer::Stash;
         $tx->res->content->asset($asset);
         $tx->res->code(200);
         $res_headers->last_modified(Mojo::Date->new($modified));
+        if (my $type = $self->path_to_type($path)) {
+            $tx->res->headers->content_type($type);
+        }
         
         return $self;
     }
@@ -267,7 +266,6 @@ use MojoSimpleHTTPServer::Stash;
     ### --
     sub serve_dynamic {
         my ($self, $path) = @_;
-        
         my $tx = $CONTEXT->tx;
         
         for my $ext (keys %{$self->ssi_handlers}) {
@@ -277,6 +275,9 @@ use MojoSimpleHTTPServer::Stash;
                 if (defined $ret) {
                     $tx->res->body(encode('UTF-8', $ret));
                     $tx->res->code(200);
+                    if (my $type = $self->path_to_type($path)) {
+                        $tx->res->headers->content_type($type);
+                    }
                     last;
                 }
             }
@@ -417,7 +418,7 @@ use MojoSimpleHTTPServer::Stash;
     ### --
     sub path_to_type {
         my ($self, $path) = @_;
-        if (my $ext = ($path =~ qr{\.(\w+)$})[0]) {
+        if (my $ext = ($path =~ qr{\.(\w+)(?:\.\w+)?$})[0]) {
             return $self->types->type($ext);
         }
     }

@@ -23,8 +23,6 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     __PACKAGE__->attr('auto_index');
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');
-    
-    __PACKAGE__->attr('_inited');
     __PACKAGE__->attr('log_file');
     
     __PACKAGE__->attr('template_handlers', sub {{
@@ -417,10 +415,10 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     sub _init {
         my $self = shift;
         
-        if ($self->_inited) {
+        if ($self->{_inited}) {
             return;
         }
-        $self->_inited(1);
+        $self->{_inited} = 1;
         
         if (! -d $self->document_root) {
             die 'document_root is not a directory';

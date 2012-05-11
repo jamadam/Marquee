@@ -2,6 +2,116 @@ package MojoSimpleHTTPServer::TemplateHandler::EP;
 use strict;
 use warnings;
 use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler';
+use File::Basename 'dirname';
+
+    ### --
+    ### Function definitions for inside template
+    ### --
+    __PACKAGE__->attr(funcs => sub {{}});
+    
+    ### --
+    ### Add helper
+    ### --
+    sub add_helper {
+        my ($self, $name, $cb) = @_;
+        $self->funcs->{$name} = $cb;
+        return $self;
+    }
+    
+    ### --
+    ### Constractor
+    ### --
+    sub new {
+        my $class = shift;
+        my $self = $class->SUPER::new(@_);
+        $self->load_funcs;
+    }
+    
+    ### --
+    ### load preset
+    ### --
+    sub load_funcs {
+        my ($self) = @_;
+        
+        $self->funcs->{app} = sub {
+            shift;
+            $MojoSimpleHTTPServer::CONTEXT->app;
+        };
+        
+        $self->funcs->{param} = sub {
+            shift;
+            $MojoSimpleHTTPServer::CONTEXT->tx->req->param($_[0]);
+        };
+        
+        $self->funcs->{stash} = sub {
+            shift;
+            $MojoSimpleHTTPServer::CONTEXT->app->stash(@_);
+        };
+        
+        $self->funcs->{ctd} = sub {
+            shift->_ctd;
+        };
+        
+        $self->funcs->{dumper} = sub {
+            shift;
+            Data::Dumper->new([@_])->Indent(1)->Terse(1)->Dump;
+        };
+        
+        $self->funcs->{to_abs} = sub {
+            shift->_to_abs(@_);
+        };
+        
+        $self->funcs->{include} = sub {
+            my ($self, $path) = @_;
+            
+            my $path_abs = $self->_to_abs($path);
+            
+            if (-f $path_abs) {
+                my $context = $MojoSimpleHTTPServer::CONTEXT;
+                my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
+                my $handler = $context->app->template_handlers->{$ext};
+                if ($handler) {
+                    $handler->render($path_abs, $context);
+                }
+            }
+        };
+        
+        $self->funcs->{override} = sub {
+            my ($self, $name, $value) = @_;
+            my $stash = $MojoSimpleHTTPServer::CONTEXT->app->stash;
+            $stash->{$name} = $value;
+        };
+        
+        $self->funcs->{placeholder} = sub {
+            my ($self, $name, $defalut) = @_;
+            my $block =
+                $MojoSimpleHTTPServer::CONTEXT->app->stash($name) || $defalut;
+            return $block->() || '';
+        };
+        
+        $self->funcs->{extends} = sub {
+            my ($self, $path, $block) = @_;
+            
+            my $path_abs = $self->_to_abs($path);
+            
+            if (-f $path_abs) {
+                my $context = $MojoSimpleHTTPServer::CONTEXT;
+                my $app = $context->app;
+                
+                local $app->{stash} = $app->{stash};
+                
+                $block->();
+                
+                my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
+                my $handler = $app->template_handlers->{$ext};
+                if ($handler) {
+                    $handler->render($path_abs, $context);
+                }
+            }
+        };
+        
+        return $self;
+    }
     
     ### --
     ### ep handler
@@ -10,7 +120,6 @@ use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler';
         my ($self, $path) = @_;
         
         my $context = $MojoSimpleHTTPServer::CONTEXT;
-        my $helper = $context->app->helper;
         
         local $context->app->stash->{'mshs.template_path'} = $path;
         
@@ -19,14 +128,14 @@ use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler';
         my $output;
         
         if ($mt->compiled) {
-            $output = $mt->interpret($helper, $context);
+            $output = $mt->interpret($self, $context);
         } else {
             # Be a bit more relaxed for helpers
             my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
     
             # Helpers
             $prepend .= 'my $_H = shift;';
-            for my $name (sort keys %{$helper->funcs}) {
+            for my $name (sort keys %{$self->funcs}) {
                 if ($name =~ /^\w+$/) {
                     $prepend .=
                     "sub $name; *$name = sub {\$_H->funcs->{$name}->(\$_H, \@_)};";
@@ -40,12 +149,31 @@ use Mojo::Base 'MojoSimpleHTTPServer::TemplateHandler';
                 }
             }
             $mt->prepend($prepend);
-            $output = $mt->render_file($path, $helper, $context);
+            $output = $mt->render_file($path, $self, $context);
             
             $self->cache($path => $mt);
         }
         
         return ref $output ? die $output : $output;
+    }
+    
+    ### --
+    ### abs
+    ### --
+    sub _to_abs {
+        my ($self, $path) = @_;
+        
+        my $path_abs = dirname($self->_ctd). '/'. $path;
+        
+        return $path_abs;
+    }
+    
+    ### --
+    ### Current template path
+    ### --
+    sub _ctd {
+        my $self = shift;
+        $MojoSimpleHTTPServer::CONTEXT->app->stash->{'mshs.template_path'};
     }
 
 1;

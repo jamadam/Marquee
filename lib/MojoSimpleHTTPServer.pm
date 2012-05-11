@@ -10,7 +10,6 @@ use Mojo::Asset::File;
 use Mojo::Util qw'url_unescape encode decode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
-use MojoSimpleHTTPServer::Helper;
 use MojoSimpleHTTPServer::Context;
 use MojoSimpleHTTPServer::TemplateHandler::EP;
 use MojoSimpleHTTPServer::TemplateHandler::EPL;
@@ -24,10 +23,6 @@ use MojoSimpleHTTPServer::TemplateHandler::EPL;
     __PACKAGE__->attr('auto_index');
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');
-    
-    __PACKAGE__->attr('helper' => sub {
-        MojoSimpleHTTPServer::Helper->new->load_preset;
-    });
     
     __PACKAGE__->attr('_inited');
     __PACKAGE__->attr('log_file');
@@ -487,10 +482,6 @@ Activate index page generation.
 =head2 default_file
 
 Specify a default file name and activate auto fill.
-
-=head2 helper
-
-Contains L<MojoSimpleHTTPServer::Helper> instance.
 
 =head2 log_file
 

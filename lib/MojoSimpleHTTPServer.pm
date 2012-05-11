@@ -128,7 +128,7 @@ use MojoSimpleHTTPServer::Stash;
         
         if (! $res->code) {
             if (-d File::Spec->catfile($self->document_root. $path) && 
-                        ($path->trailing_slash || ! scalar @{$path->parts})) {
+                                                        ($self->auto_index)) {
                 $self->serve_index($path);
             }
         }

@@ -195,7 +195,7 @@ use MojoSimpleHTTPServer::Stash;
         my ($self, $path, $ext) = @_;
         $ext ||= ($path =~ qr{\.\w+\.(\w+)$})[0];
         if (my $handler = $self->ssi_handlers->{$ext}) {
-            return $handler->render($path);
+            return $handler->render_traceable($path);
         }
     }
     
@@ -236,7 +236,7 @@ use MojoSimpleHTTPServer::Stash;
         );
         $tx->res->body(
             encode('UTF-8',
-                MojoSimpleHTTPServer::SSIHandler::EP->new->render(
+                MojoSimpleHTTPServer::SSIHandler::EP->new->render_traceable(
                                                 _asset('debug_screen.ep'))));
         $tx->res->code(200);
         $tx->res->headers->content_type($self->types->type('html'));
@@ -368,7 +368,7 @@ use MojoSimpleHTTPServer::Stash;
         
         $tx->res->body(
             encode('UTF-8',
-                MojoSimpleHTTPServer::SSIHandler::EPL->new->render(
+                MojoSimpleHTTPServer::SSIHandler::EPL->new->render_traceable(
                                                         _asset('index.epl')))
         );
         $tx->res->code(200);

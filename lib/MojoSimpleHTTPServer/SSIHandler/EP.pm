@@ -19,15 +19,6 @@ use File::Basename 'dirname';
     }
     
     ### --
-    ### Constructor
-    ### --
-    sub new {
-        my $class = shift;
-        my $self = $class->SUPER::new(@_);
-        $self->_register_preset_funcs;
-    }
-    
-    ### --
     ### ep handler
     ### --
     sub render {
@@ -65,17 +56,9 @@ use File::Basename 'dirname';
     }
     
     ### --
-    ### Current template path
-    ### --
-    sub _ctd {
-        my $self = shift;
-        $MojoSimpleHTTPServer::CONTEXT->stash->('mshs.template_path');
-    }
-    
-    ### --
     ### load preset
     ### --
-    sub _register_preset_funcs {
+    sub init {
         my ($self) = @_;
         
         $self->funcs->{app} = sub {
@@ -93,8 +76,8 @@ use File::Basename 'dirname';
             return $MojoSimpleHTTPServer::CONTEXT->stash->(@_);
         };
         
-        $self->funcs->{ctd} = sub {
-            return shift->_ctd;
+        $self->funcs->{current_template} = sub {
+            return shift->current_template;
         };
         
         $self->funcs->{dumper} = sub {
@@ -149,7 +132,7 @@ use File::Basename 'dirname';
     sub _to_abs {
         my ($self, $path) = @_;
         
-        my $path_abs = dirname($self->_ctd). '/'. $path;
+        my $path_abs = dirname($self->current_template). '/'. $path;
         
         return $path_abs;
     }
@@ -174,7 +157,7 @@ EP handler.
 
 =head1 FUNCTIONS
 
-=head2 <% ctd() %>
+=head2 <% current_template() %>
 
 Returns current template path.
 
@@ -242,6 +225,8 @@ Returns stash value for given key.
 Generate absolute path with given relative one
 
 =head1 METHODS
+
+=head2 $instance->init
 
 =head2 $instance->new
 

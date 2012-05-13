@@ -9,7 +9,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 151;
+    use Test::More tests => 155;
 
     my $app;
     my $t;
@@ -100,9 +100,13 @@ use Mojo::Date;
     $t->get_ok('/include.html')
         ->status_is(200)
         ->text_is('filename', 'include.html.ep')
+        ->text_like('current_template', qr'public_html/include.html.ep$')
         ->text_is('test1 filename', 'include_sub.html.ep')
+        ->text_like('test1 current_template', qr'public_html/./include_sub.html.ep$')
         ->text_is('test2 filename', '/include_sub2/1.html.ep')
-        ->text_is('test2 test1 filename', '/include_sub2/2.html.ep');
+        ->text_like('test2 current_template', qr'public_html/./include_sub2/1.html.ep$')
+        ->text_is('test2 test1 filename', '/include_sub2/2.html.ep')
+        ->text_like('test2 test1 current_template', qr'public_html/./include_sub2/./2.html.ep$');
     
     ### abs
     
@@ -130,12 +134,12 @@ use Mojo::Date;
     
     {
         package _TestHandler;
-        use Mojo::Base -base;
+        use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler';
         sub render {return $_[1]}
     }
     {
         package _Test2Handler;
-        use Mojo::Base -base;
+        use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler';
         sub render {return 'rendered'}
     }
     

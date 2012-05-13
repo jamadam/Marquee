@@ -5,6 +5,50 @@ use Mojo::Base -base;
 use Mojo::Cache;
 use Mojo::Util qw/encode md5_sum/;
 
+    ### --
+    ### Constructor
+    ### --
+    sub new {
+        my $class = shift;
+        my $self = $class->SUPER::new(@_);
+        $self->init;
+        return $self;
+    }
+    
+    ### --
+    ### initialize
+    ### --
+    sub init {
+        ### Can override by sub classes
+    }
+    
+    ### --
+    ### render
+    ### --
+    sub render {
+        die "Class ". (ref $_[0]) . " must implements render method";
+    }
+    
+    ### --
+    ### render wrapper
+    ### --
+    sub render_traceable {
+        my $stack = $MojoSimpleHTTPServer::CONTEXT
+                                    ->stash->()->{'mshs.template_path'} ||= [];
+        unshift(@$stack, $_[1]);
+        my $ret = shift->render(@_);
+        shift(@$stack);
+        
+        return $ret;
+    }
+    
+    ### --
+    ### Get current template name recursively
+    ### --
+    sub current_template {
+        $MojoSimpleHTTPServer::CONTEXT->stash->()->{'mshs.template_path'}->[0];
+    }
+
 1;
 
 __END__

@@ -28,6 +28,7 @@ use MojoSimpleHTTPServer::Stash;
     __PACKAGE__->attr('log_file');
     __PACKAGE__->attr('hooks' => sub {MojoSimpleHTTPServer::Hooks->new});
     __PACKAGE__->attr('plugin_entry', sub {[]});
+    __PACKAGE__->attr('roots', sub {[]});
     __PACKAGE__->attr('stash' => sub {MojoSimpleHTTPServer::Stash->new});
     __PACKAGE__->attr('types', sub { Mojolicious::Types->new });
     
@@ -106,7 +107,7 @@ use MojoSimpleHTTPServer::Stash;
                             ? $self->_auto_fill_filename($path->clone) : $path;
             $filled_path->leading_slash(1);
             
-            for my $root ($self->document_root, _asset()) {
+            for my $root (@{$self->roots}) {
                 my $path = File::Spec->catfile($root. $filled_path);
                 if (-f $path) {
                     $self->hooks->emit_chain('around_static', $path);
@@ -370,6 +371,8 @@ use MojoSimpleHTTPServer::Stash;
             die 'document_root is not a directory';
         }
         
+        $self->roots([$self->document_root, _asset()]);
+
         $self->{_handler_re} =
                     '\.(?:'. join('|', keys %{$self->ssi_handlers}). ')$';
         

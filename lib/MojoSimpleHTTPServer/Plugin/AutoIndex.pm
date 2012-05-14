@@ -10,14 +10,16 @@ use Mojo::Util qw'url_unescape encode decode';
     sub register {
         my ($self, $app, $args) = @_;
         
+        push(@{$app->roots}, $self->_asset());
+        
         $app->hook(around_dispatch => sub {
             my ($next, @args) = @_;
             
             $next->();
             
             my $context = $MojoSimpleHTTPServer::CONTEXT;
-            my $res = $context->tx->res;
-            if (! $res->code) {
+            
+            if (! $context->tx->res->code) {
                 my $app = $context->app;
                 my $path = $context->tx->req->url->path;
                 if (-d File::Spec->catfile($app->document_root. $path)) {

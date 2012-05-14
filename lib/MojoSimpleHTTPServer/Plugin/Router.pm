@@ -9,8 +9,8 @@ use Mojo::Base -base;
     sub register {
         my ($self, $app, $args) = @_;
         
-        $app->around_method_hook('dispatch', sub {
-            my ($app, $next, @args) = @_;
+        $app->hook(around_dispatch => sub {
+            my ($next, @args) = @_;
             
             my $tx = $MojoSimpleHTTPServer::CONTEXT->tx;
             
@@ -22,8 +22,6 @@ use Mojo::Base -base;
                     $next->(@args);
                 }
             }
-            
-            return $app;
         });
     }
 

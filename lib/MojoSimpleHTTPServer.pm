@@ -10,6 +10,7 @@ use Mojo::Asset::File;
 use Mojo::Util qw'url_unescape encode decode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
+use MojoSimpleHTTPServer::Plugins;
 use MojoSimpleHTTPServer::Context;
 use MojoSimpleHTTPServer::SSIHandler::EP;
 use MojoSimpleHTTPServer::SSIHandler::EPL;
@@ -25,14 +26,14 @@ use MojoSimpleHTTPServer::Stash;
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');
     __PACKAGE__->attr('log_file');
+    __PACKAGE__->attr('plugins' => sub {MojoSimpleHTTPServer::Plugins->new});
     __PACKAGE__->attr('stash' => sub {MojoSimpleHTTPServer::Stash->new});
+    __PACKAGE__->attr('types', sub { Mojolicious::Types->new });
     
     __PACKAGE__->attr('ssi_handlers', sub {{
         ep  => MojoSimpleHTTPServer::SSIHandler::EP->new,
         epl => MojoSimpleHTTPServer::SSIHandler::EPL->new,
     }});
-    
-    __PACKAGE__->attr('types', sub { Mojolicious::Types->new });
     
     my %error_messages = (
         404 => 'File not found',
@@ -41,37 +42,35 @@ use MojoSimpleHTTPServer::Stash;
     );
     
     ### --
+    ### Constructor
+    ### --
+    sub new {
+        my $self = shift->SUPER::new(@_);
+        
+        ### hook points
+        $self->hook(around_dispatch => sub {
+            shift;
+            $CONTEXT->app->dispatch;
+        });
+        $self->hook(around_static => sub {
+            shift;
+            $CONTEXT->app->serve_static(@_);
+        });
+        $self->hook(around_dynamic => sub {
+            shift;
+            $CONTEXT->app->serve_dynamic(@_);
+        });
+        
+        return $self;
+    }
+    
+    ### --
     ### Add SSI handler
     ### --
     sub add_handler {
         my ($self, $name, $handler) = @_;
         $self->ssi_handlers->{$name} = $handler;
         return $self;
-    }
-    
-    ### --
-    ### Wrap method
-    ### --
-    sub around_method_hook {
-        no strict 'refs';
-        no warnings 'redefine';
-        my ($class, $name, $cb) = @_;
-        
-        $class = ref $class || $class;
-        
-        if ($class =~ __PACKAGE__) {
-            die qr{Base class is not modifieable. Inherit it first.};
-        }
-        
-        if ($name =~ qr{^_}) {
-            die qr{Methods prefixed _ is not modifieable};
-        }
-        
-        my $code = $class->can($name);
-        *{$class. "::". $name} = sub {
-            my $app = shift;
-            $cb->($app, sub {$app->$code(@_)}, @_);
-        };
     }
     
     ### --
@@ -109,9 +108,9 @@ use MojoSimpleHTTPServer::Stash;
             for my $root ($self->document_root, _asset()) {
                 my $path = File::Spec->catfile($root. $filled_path);
                 if (-f $path) {
-                    $self->serve_static($path);
+                    $self->plugins->emit_chain('around_static', $path);
                 } else {
-                    $self->serve_dynamic($path);
+                    $self->plugins->emit_chain('around_dynamic', $path);
                 }
                 if ($res->code) {
                     last;
@@ -148,7 +147,7 @@ use MojoSimpleHTTPServer::Stash;
         $tx->res->headers->header('X-Powered-By' => $self->x_powered_by);
 
         eval {
-            $self->dispatch;
+            $self->plugins->emit_chain('around_dispatch');
         };
         
         if ($@) {
@@ -166,6 +165,13 @@ use MojoSimpleHTTPServer::Stash;
         }
         
         $tx->resume;
+    }
+    
+    ### --
+    ### load_plugin
+    ### --
+    sub hook {
+        shift->plugins->on(@_);
     }
     
     ### --
@@ -513,6 +519,10 @@ Specify a log file path.
 
 An hash ref that contains Server side include handlers.
 
+=head2 plugins
+
+A MojoSimpleHTTPServer::Plugins instance.
+
 =head2 stash
 
 An MojoSimpleHTTPServer::Stash instance.
@@ -531,22 +541,15 @@ Set X-POWERED-BY response header.
 
 =head1 METHODS
 
+=head2 $instance->new;
+
+Constructor.
+
 =head2 $instance->add_handler(name => $code_ref);
 
 Adds ssi_handlers entry.
 
     $instance->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
-
-=head2 around_method_hook(method => sub { ... });
-
-[EXPERIMENTAL] Wraps method of given name and adds pre and/or post process.
-    
-    $app->around_method_hook(serve_dynamic => sub {
-        my ($self, $next, @args) = @_;
-        ### pre-process
-        return $next->(@args). 'mod';
-        ### post-process
-    });
 
 =head2 $instance->context()
 
@@ -559,6 +562,17 @@ Front dispatcher.
 =head2 $instance->handler($tx)
 
 Handler called by mojo layer.
+
+=head2 $instance->hook
+
+Alias to $instance->plugins->on. This adds a callback for the hook point.
+
+    $app->hook(around_dispatch => sub {
+        my ($next, @args) = @_;
+        ### pre-process
+        $next->(@args);
+        ### post-process
+    });
 
 =head2 $instance->load_plugin(name => {})
 

@@ -16,6 +16,13 @@ use Mojo::Util qw/encode md5_sum/;
     }
     
     ### --
+    ### Get current template name recursively
+    ### --
+    sub current_template {
+        $MojoSimpleHTTPServer::CONTEXT->stash->()->{'mshs.template_path'}->[0];
+    }
+    
+    ### --
     ### initialize
     ### --
     sub init {
@@ -41,13 +48,6 @@ use Mojo::Util qw/encode md5_sum/;
         
         return $ret;
     }
-    
-    ### --
-    ### Get current template name recursively
-    ### --
-    sub current_template {
-        $MojoSimpleHTTPServer::CONTEXT->stash->()->{'mshs.template_path'}->[0];
-    }
 
 1;
 
@@ -63,11 +63,21 @@ MojoSimpleHTTPServer::Context - Context
 
 =head1 ATTRIBUTES
 
-=head2 cache
+=head2 MojoSimpleHTTPServer::SSIHandler->new;
+
+Constructor
+
+=head2 MojoSimpleHTTPServer::SSIHandler->init;
+
+=head2 MojoSimpleHTTPServer::SSIHandler->render;
+
+=head2 MojoSimpleHTTPServer::SSIHandler->render_traceable;
+
+=head2 MojoSimpleHTTPServer::SSIHandler->current_template;
 
 =head1 METHODS
 
-=head2 get_cache
+=head2 new
 
 Get template cache for given path
 

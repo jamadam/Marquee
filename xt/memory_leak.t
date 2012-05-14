@@ -21,8 +21,8 @@ use Test::More tests => 6;
     my $app = MyApp->new;
     $app->document_root('./');
     $app->auto_index(1);
-    $app->around_method_hook(serve_static => sub {
-        my ($app, $next, @args) = @_;
+    $app->hook(around_static => sub {
+        my ($next, @args) = @_;
         return $next->(@args);
     });
     $app->load_plugin(Router => {

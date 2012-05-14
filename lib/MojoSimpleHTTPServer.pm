@@ -168,26 +168,6 @@ use MojoSimpleHTTPServer::Stash;
     }
     
     ### --
-    ### Load and instanciate plugin
-    ### --
-    sub load_plugin {
-        my ($self, $name, $args) = @_;
-        
-        my $prefix = 'MojoSimpleHTTPServer::Plugin';
-        if ($prefix) {
-            unless ($name =~ s/^\+// || $name =~ /^$prefix/) {
-                $name = "$prefix\::$name";
-            }
-        }
-        if (! $name->can('register')) {
-            my $file = $name;
-            $file =~ s!::!/!g;
-            require "$file.pm"; ## no critic
-        }
-        return $name->new->register($args);
-    }
-    
-    ### --
     ### Register plugin
     ### --
     sub plugin {
@@ -501,10 +481,6 @@ Alias to $instance->hooks->on. This adds a callback for the hook point.
         $next->(@args);
         ### post-process
     });
-
-=head2 $instance->load_plugin(name => {})
-
-Loads plugin of given name with given arguments.
 
 =head2 $instance->plugin('class', @args)
 

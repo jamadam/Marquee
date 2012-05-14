@@ -2,17 +2,6 @@ package MojoSimpleHTTPServer::Plugin;
 use strict;
 use warnings;
 use Mojo::Base -base;
-    
-    __PACKAGE__->attr('config');
-    
-    ### --
-    ### Emit events as chained hooks
-    ### --
-    sub new {
-        my $self = shift->SUPER::new();
-        $self->config($_[0]);
-        return $self;
-    }
 
 1;
 

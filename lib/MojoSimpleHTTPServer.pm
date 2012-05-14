@@ -25,12 +25,12 @@ use MojoSimpleHTTPServer::Stash;
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');
     __PACKAGE__->attr('log_file');
-    __PACKAGE__->attr('hooks' => sub {MojoSimpleHTTPServer::Hooks->new});
-    __PACKAGE__->attr('roots', sub {[]});
-    __PACKAGE__->attr('stash' => sub {MojoSimpleHTTPServer::Stash->new});
-    __PACKAGE__->attr('types', sub { Mojolicious::Types->new });
+    __PACKAGE__->attr(hooks => sub {MojoSimpleHTTPServer::Hooks->new});
+    __PACKAGE__->attr(roots => sub {[]});
+    __PACKAGE__->attr(stash => sub {MojoSimpleHTTPServer::Stash->new});
+    __PACKAGE__->attr(types => sub { Mojolicious::Types->new });
     
-    __PACKAGE__->attr('ssi_handlers', sub {{
+    __PACKAGE__->attr(ssi_handlers => sub {{
         ep  => MojoSimpleHTTPServer::SSIHandler::EP->new,
         epl => MojoSimpleHTTPServer::SSIHandler::EPL->new,
     }});

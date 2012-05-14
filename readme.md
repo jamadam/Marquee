@@ -28,8 +28,10 @@ MojoSimpleHTTPServer class is based on Mojo. You can run your app in Mojo way
     
     my $app = MojoSimpleHTTPServer->new;
     $app->document_root($path);
-    $app->auto_index(1);
     $app->default_file('index.html');
+    
+    $app->plugin('AutoIndex');
+    
     $app->start;
 
 On command line..

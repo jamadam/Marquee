@@ -10,7 +10,7 @@ use Test::More tests => 6;
 {
     my $app = MojoSimpleHTTPServer->new;
     $app->document_root('./');
-    $app->auto_index(1);
+    $app->plugin('AutoIndex');
     my $t = Test::Mojo->new($app);
     $t->get_ok('/');
     memory_cycle_ok( $app );
@@ -20,12 +20,12 @@ use Test::More tests => 6;
 {
     my $app = MyApp->new;
     $app->document_root('./');
-    $app->auto_index(1);
+    $app->plugin('AutoIndex');
     $app->hook(around_static => sub {
         my ($next, @args) = @_;
         return $next->(@args);
     });
-    $app->load_plugin(Router => {
+    $app->plugin(Router => {
         qr/index\.html/ => sub {
             MyApp->context->app->serve_static("");
         },

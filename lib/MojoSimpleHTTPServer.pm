@@ -7,10 +7,10 @@ use File::Spec;
 use File::Basename 'dirname';
 use Mojo::Path;
 use Mojo::Asset::File;
-use Mojo::Util qw'url_unescape encode decode';
+use Mojo::Util qw'encode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
-use MojoSimpleHTTPServer::Plugins;
+use MojoSimpleHTTPServer::Hooks;
 use MojoSimpleHTTPServer::Context;
 use MojoSimpleHTTPServer::SSIHandler::EP;
 use MojoSimpleHTTPServer::SSIHandler::EPL;
@@ -26,7 +26,8 @@ use MojoSimpleHTTPServer::Stash;
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');
     __PACKAGE__->attr('log_file');
-    __PACKAGE__->attr('plugins' => sub {MojoSimpleHTTPServer::Plugins->new});
+    __PACKAGE__->attr('hooks' => sub {MojoSimpleHTTPServer::Hooks->new});
+    __PACKAGE__->attr('plugin_entry', sub {[]});
     __PACKAGE__->attr('stash' => sub {MojoSimpleHTTPServer::Stash->new});
     __PACKAGE__->attr('types', sub { Mojolicious::Types->new });
     
@@ -108,9 +109,9 @@ use MojoSimpleHTTPServer::Stash;
             for my $root ($self->document_root, _asset()) {
                 my $path = File::Spec->catfile($root. $filled_path);
                 if (-f $path) {
-                    $self->plugins->emit_chain('around_static', $path);
+                    $self->hooks->emit_chain('around_static', $path);
                 } else {
-                    $self->plugins->emit_chain('around_dynamic', $path);
+                    $self->hooks->emit_chain('around_dynamic', $path);
                 }
                 if ($res->code) {
                     last;
@@ -122,13 +123,6 @@ use MojoSimpleHTTPServer::Stash;
             if (-d File::Spec->catfile($self->document_root. $path) && 
                         (! $path->trailing_slash && scalar @{$path->parts})) {
                 $self->serve_redirect_to_slashed($path);
-            }
-        }
-        
-        if (! $res->code) {
-            if (-d File::Spec->catfile($self->document_root. $path) && 
-                                                        ($self->auto_index)) {
-                $self->serve_index($path);
             }
         }
     }
@@ -147,7 +141,7 @@ use MojoSimpleHTTPServer::Stash;
         $tx->res->headers->header('X-Powered-By' => $self->x_powered_by);
 
         eval {
-            $self->plugins->emit_chain('around_dispatch');
+            $self->hooks->emit_chain('around_dispatch');
         };
         
         if ($@) {
@@ -168,14 +162,14 @@ use MojoSimpleHTTPServer::Stash;
     }
     
     ### --
-    ### load_plugin
+    ### Add hook
     ### --
     sub hook {
-        shift->plugins->on(@_);
+        shift->hooks->on(@_);
     }
     
     ### --
-    ### load_plugin
+    ### Load and instanciate plugin
     ### --
     sub load_plugin {
         my ($self, $name, $args) = @_;
@@ -191,7 +185,15 @@ use MojoSimpleHTTPServer::Stash;
             $file =~ s!::!/!g;
             require "$file.pm"; ## no critic
         }
-        $name->new->register($self, $args);
+        return $name->new($args);
+    }
+    
+    ### --
+    ### Register plugin
+    ### --
+    sub plugin {
+        my ($self, $class, @args) = @_;
+        push(@{$self->plugin_entry}, $self->load_plugin($class, \@args));
     }
     
     ### --
@@ -321,68 +323,6 @@ use MojoSimpleHTTPServer::Stash;
         return $self;
     }
     
-    ### ---
-    ### Render file list
-    ### ---
-    sub serve_index {
-        my ($self, $path) = @_;
-        
-        $path = decode('UTF-8', url_unescape($path));
-        my $dir = File::Spec->catfile($self->document_root, $path);
-        
-        opendir(my $DIR, $dir);
-        my @file = readdir($DIR);
-        closedir $DIR;
-        
-        my @dset = ();
-        for my $file (@file) {
-            $file = url_unescape(decode('UTF-8', $file));
-            if ($file =~ qr{^\.$} || $file =~ qr{^\.\.$} && $path eq '/') {
-                next;
-            }
-            my $fpath = File::Spec->catfile($dir, $file);
-            my $name;
-            my $type;
-            if (-f $fpath) {
-                $name = $file;
-                $name =~ s{(\.\w+)$self->{_handler_re}}{$1};
-                $type = (($self->path_to_type($name) || 'text') =~ /^(\w+)/)[0];
-            } else {
-                $name = $file. '/';
-                $type = 'dir';
-            }
-            push(@dset, {
-                name        => $name,
-                type        => $type,
-                timestamp   => _file_timestamp($fpath),
-                size        => _file_size($fpath),
-            });
-        }
-        
-        @dset = sort {
-            ($a->{type} ne 'dir') <=> ($b->{type} ne 'dir')
-            ||
-            $a->{name} cmp $b->{name}
-        } @dset;
-        
-        my $tx = $CONTEXT->tx;
-        $CONTEXT->stash->(
-            dir         => $path,
-            dataset     => \@dset,
-            static_dir  => 'static'
-        );
-        
-        $tx->res->body(
-            encode('UTF-8',
-                MojoSimpleHTTPServer::SSIHandler::EPL->new->render_traceable(
-                                                        _asset('index.epl')))
-        );
-        $tx->res->code(200);
-        $tx->res->headers->content_type($self->types->type('html'));
-        
-        return $self;
-    }
-    
     ### --
     ### start app
     ### --
@@ -415,16 +355,6 @@ use MojoSimpleHTTPServer::Stash;
         return File::Spec->catdir(@seed);
     }
     
-    ### ---
-    ### Get file utime
-    ### ---
-    sub _file_timestamp {
-        my $path = shift;
-        my @dt = localtime((stat($path))[9]);
-        return sprintf('%d-%02d-%02d %02d:%02d',
-                            1900 + $dt[5], $dt[4] + 1, $dt[3], $dt[2], $dt[1]);
-    }
-    
     ### --
     ### init
     ### --
@@ -446,6 +376,16 @@ use MojoSimpleHTTPServer::Stash;
         if ($self->log_file) {
             $self->log->path($self->log_file);
         }
+        
+        ### Prepend core plugins
+        if ($self->auto_index) {
+            unshift(@{$self->plugin_entry}, $self->load_plugin('AutoIndex'));
+        }
+        
+        ### Register plugins
+        for my $plugin (@{$self->plugin_entry}) {
+            $plugin->register($self, @{$plugin->config || []});
+        }
     }
     
     ### --
@@ -456,16 +396,6 @@ use MojoSimpleHTTPServer::Stash;
         if (my $ext = ($path =~ qr{\.(\w+)(?:\.\w+)?$})[0]) {
             return $self->types->type($ext);
         }
-    }
-    
-    ### ---
-    ### Get file size
-    ### ---
-    sub _file_size {
-        my $path = shift;
-        return ((stat($path))[7] > 1024)
-            ? sprintf("%.1f",(stat($path))[7] / 1024) . 'KB'
-            : (stat($path))[7]. 'B';
     }
 
 1;
@@ -519,9 +449,9 @@ Specify a log file path.
 
 An hash ref that contains Server side include handlers.
 
-=head2 plugins
+=head2 Hooks
 
-A MojoSimpleHTTPServer::Plugins instance.
+A MojoSimpleHTTPServer::Hooks instance.
 
 =head2 stash
 
@@ -565,7 +495,7 @@ Handler called by mojo layer.
 
 =head2 $instance->hook
 
-Alias to $instance->plugins->on. This adds a callback for the hook point.
+Alias to $instance->hooks->on. This adds a callback for the hook point.
 
     $app->hook(around_dispatch => sub {
         my ($next, @args) = @_;
@@ -577,6 +507,8 @@ Alias to $instance->plugins->on. This adds a callback for the hook point.
 =head2 $instance->load_plugin(name => {})
 
 Loads plugin of given name with given arguments.
+
+=head2 $instance->plugin('class', @args)
 
 =head2 $instance->path_to_type($path)
 

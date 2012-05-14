@@ -1,4 +1,4 @@
-package MojoSimpleHTTPServer::Plugins;
+package MojoSimpleHTTPServer::Hooks;
 use strict;
 use warnings;
 use Mojo::Base 'Mojo::EventEmitter';
@@ -23,13 +23,13 @@ use Mojo::Base 'Mojo::EventEmitter';
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Plugins - Hook manager
+MojoSimpleHTTPServer::Hooks - Hooks manager
 
 =head1 SYNOPSIS
 
-    use MojoSimpleHTTPServer::Plugins;
+    use MojoSimpleHTTPServer::Hooks;
     
-    my $hook = MojoSimpleHTTPServer::Plugins->new;
+    my $hook = MojoSimpleHTTPServer::Hooks->new;
     
     $hook->on(name => sub {
         my ($next, @args) = @_;
@@ -42,11 +42,11 @@ MojoSimpleHTTPServer::Plugins - Hook manager
 
 =head1 DESCRIPTION
 
-L<Mojolicious::Plugins> is the plugin manager of L<Mojolicious>.
+L<Mojolicious::Hooks> is the Hook manager of L<MojoSimpleHTTPServer>.
 
 =head1 METHODS
 
-L<Mojolicious::Plugins> inherits all methods from L<Mojo::EventEmitter> and
+L<Mojolicious::Hooks> inherits all methods from L<Mojo::EventEmitter> and
 implements the following new ones.
 
 =head2 C<emit_chain>

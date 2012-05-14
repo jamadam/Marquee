@@ -208,9 +208,9 @@ use Mojo::Date;
                     ->attr_is('href', 'some_dir/')
                     ->has_class('dir');
                 $t->at('td:nth-child(2)')
-                    ->text_is(MojoSimpleHTTPServer::_file_timestamp($file));
+                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(MojoSimpleHTTPServer::_file_size($file));
+                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_size($file));
             }
             
             {
@@ -221,9 +221,9 @@ use Mojo::Date;
                     ->attr_is('href', 'image.png')
                     ->has_class('image');
                 $t->at('td:nth-child(2)')
-                    ->text_is(MojoSimpleHTTPServer::_file_timestamp($file));
+                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(MojoSimpleHTTPServer::_file_size($file));
+                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_size($file));
             }
             
             {
@@ -234,9 +234,9 @@ use Mojo::Date;
                     ->attr_is('href', '日本語.html')
                     ->has_class('text');
                 $t->at('td:nth-child(2)')
-                    ->text_is(MojoSimpleHTTPServer::_file_timestamp($file));
+                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(MojoSimpleHTTPServer::_file_size($file));
+                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_size($file));
             }
         })
         ->content_like(qr{test3.html})
@@ -256,9 +256,9 @@ use Mojo::Date;
                     ->attr_is('href', '../')
                     ->has_class('dir');
                 $t->at('td:nth-child(2)')
-                    ->text_is(MojoSimpleHTTPServer::_file_timestamp($file));
+                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(MojoSimpleHTTPServer::_file_size($file));
+                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_size($file));
             }
             {
                 my $t = $t->at('tbody tr:nth-child(2)');
@@ -268,9 +268,9 @@ use Mojo::Date;
                     ->attr_is('href', 'test.html')
                     ->has_class('text');
                 $t->at('td:nth-child(2)')
-                    ->text_is(MojoSimpleHTTPServer::_file_timestamp($file));
+                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(MojoSimpleHTTPServer::_file_size($file));
+                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_size($file));
             }
         });
     

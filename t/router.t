@@ -21,7 +21,7 @@ use Mojo::Date;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     
-    $app->load_plugin(Router => {
+    $app->plugin(Router => {
         qr/index\.html/ => sub {
             MyApp->context->app->serve_static("$FindBin::Bin/public_html/index.txt");
         },

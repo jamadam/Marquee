@@ -1,7 +1,7 @@
 package MojoSimpleHTTPServer::Plugin::Router;
 use strict;
 use warnings;
-use Mojo::Base -base;
+use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     
     ### --
     ### Register the plugin into app

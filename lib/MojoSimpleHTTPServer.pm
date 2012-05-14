@@ -25,12 +25,7 @@ use MojoSimpleHTTPServer::Stash;
     __PACKAGE__->attr('log_file');
     __PACKAGE__->attr(hooks => sub {MojoSimpleHTTPServer::Hooks->new});
     __PACKAGE__->attr(roots => sub {[]});
-    
-    __PACKAGE__->attr(ssi_handlers => sub {{
-        ep  => MojoSimpleHTTPServer::SSIHandler::EP->new,
-        epl => MojoSimpleHTTPServer::SSIHandler::EPL->new,
-    }});
-
+    __PACKAGE__->attr(ssi_handlers => sub {{}});
     __PACKAGE__->attr(stash => sub {MojoSimpleHTTPServer::Stash->new});
     __PACKAGE__->attr(types => sub { Mojolicious::Types->new });
     __PACKAGE__->attr('under_development' => 0);
@@ -61,6 +56,9 @@ use MojoSimpleHTTPServer::Stash;
             shift;
             $CONTEXT->app->serve_dynamic(@_);
         });
+        
+        $self->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
+        $self->add_handler(epl => MojoSimpleHTTPServer::SSIHandler::EPL->new);
         
         return $self;
     }

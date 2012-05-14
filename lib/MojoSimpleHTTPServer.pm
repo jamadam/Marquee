@@ -26,7 +26,6 @@ use MojoSimpleHTTPServer::Stash;
     __PACKAGE__->attr('default_file');
     __PACKAGE__->attr('log_file');
     __PACKAGE__->attr('hooks' => sub {MojoSimpleHTTPServer::Hooks->new});
-    __PACKAGE__->attr('plugin_entry', sub {[]});
     __PACKAGE__->attr('roots', sub {[]});
     __PACKAGE__->attr('stash' => sub {MojoSimpleHTTPServer::Stash->new});
     __PACKAGE__->attr('types', sub { Mojolicious::Types->new });
@@ -185,15 +184,27 @@ use MojoSimpleHTTPServer::Stash;
             $file =~ s!::!/!g;
             require "$file.pm"; ## no critic
         }
-        return $name->new($args);
+        return $name->new->register($args);
     }
     
     ### --
     ### Register plugin
     ### --
     sub plugin {
-        my ($self, $class, @args) = @_;
-        push(@{$self->plugin_entry}, $self->load_plugin($class, \@args));
+        my ($self, $name, $args) = @_;
+        
+        my $prefix = 'MojoSimpleHTTPServer::Plugin';
+        if ($prefix) {
+            unless ($name =~ s/^\+// || $name =~ /^$prefix/) {
+                $name = "$prefix\::$name";
+            }
+        }
+        if (! $name->can('register')) {
+            my $file = $name;
+            $file =~ s!::!/!g;
+            require "$file.pm"; ## no critic
+        }
+        return $name->new->register($self, $args);
     }
     
     ### --
@@ -370,18 +381,13 @@ use MojoSimpleHTTPServer::Stash;
             die 'document_root is not a directory';
         }
         
-        $self->roots([$self->document_root, _asset()]);
+        unshift(@{$self->roots}, $self->document_root, _asset());
 
         $self->{_handler_re} =
                     '\.(?:'. join('|', keys %{$self->ssi_handlers}). ')$';
         
         if ($self->log_file) {
             $self->log->path($self->log_file);
-        }
-        
-        ### Register plugins
-        for my $plugin (@{$self->plugin_entry}) {
-            $plugin->register($self, @{$plugin->config || []});
         }
     }
     

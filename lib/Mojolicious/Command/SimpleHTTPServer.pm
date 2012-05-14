@@ -61,7 +61,7 @@ sub run {
     'r|requests=i'          => sub { $daemon->max_requests($_[1]) },
     'u|user=s'              => sub { $daemon->user($_[1]) },
     'dr|document_root=s'    => sub { $app->document_root($_[1]) },
-    'ai|auto_index'         => sub { $app->auto_index($_[1]) },
+    'ai|auto_index'         => sub { $app->plugin('AutoIndex') },
     'df|default_file=s'     => sub { $app->default_file($_[1]) },
     'ud|under_development'  => sub { $app->under_development(1) },
   );

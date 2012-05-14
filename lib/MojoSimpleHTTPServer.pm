@@ -22,7 +22,6 @@ use MojoSimpleHTTPServer::Stash;
 
     __PACKAGE__->attr('x_powered_by' => 'Simple HTTP Server with Mojo(Perl)');
     __PACKAGE__->attr('under_development' => 0);
-    __PACKAGE__->attr('auto_index');
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');
     __PACKAGE__->attr('log_file');
@@ -380,11 +379,6 @@ use MojoSimpleHTTPServer::Stash;
             $self->log->path($self->log_file);
         }
         
-        ### Prepend core plugins
-        if ($self->auto_index) {
-            unshift(@{$self->plugin_entry}, $self->load_plugin('AutoIndex'));
-        }
-        
         ### Register plugins
         for my $plugin (@{$self->plugin_entry}) {
             $plugin->register($self, @{$plugin->config || []});
@@ -423,7 +417,6 @@ MojoSimpleHTTPServer - Simple HTTP server with Server-side include
     
     my $app = MojoSimpleHTTPServer->new;
     $app->document_root($app->home->rel_dir('public_html'));
-    $app->auto_index(1);
     $app->start;
 
 =head1 DESCRIPTION
@@ -435,10 +428,6 @@ This is built on mojo modules in L<Mojolicious> distribution.
 =head1 ATTRIBUTES
 
 =head2 document_root
-
-=head2 auto_index
-
-Activate index page generation.
 
 =head2 default_file
 

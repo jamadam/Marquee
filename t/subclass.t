@@ -16,7 +16,6 @@ use Mojo::Date;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     $app->default_file('index.html');
-    $app->auto_index(1);
     $t = Test::Mojo->new($app);
     
     $t->get_ok('/dir1/index.html')

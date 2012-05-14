@@ -65,15 +65,23 @@ MojoSimpleHTTPServer::Context - Context
 
 =head2 MojoSimpleHTTPServer::SSIHandler->new;
 
-Constructor
+Constructor.
 
 =head2 MojoSimpleHTTPServer::SSIHandler->init;
 
+Initializes plugins.
+
 =head2 MojoSimpleHTTPServer::SSIHandler->render;
+
+Renders templates.
 
 =head2 MojoSimpleHTTPServer::SSIHandler->render_traceable;
 
+Traceably renders templates by stacking template names recursively.
+
 =head2 MojoSimpleHTTPServer::SSIHandler->current_template;
+
+Detects current template recursively.
 
 =head1 METHODS
 

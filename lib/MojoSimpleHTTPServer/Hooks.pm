@@ -31,14 +31,22 @@ MojoSimpleHTTPServer::Hooks - Hooks manager
     
     my $hook = MojoSimpleHTTPServer::Hooks->new;
     
-    $hook->on(name => sub {
-        my ($next, @args) = @_;
-        ### pre-process
-        $next->(@args);
-        ### post-process
+    my $out = '';
+    
+    $hook->on(myhook => sub {
+        my ($next, $open, $close) = @_;
+        $out .= $open. 'hook1'. $close;
     });
     
-    $hook->emit_chain('name');
+    $hook->on(myhook => sub {
+        my ($next, $open, $close) = @_;
+        $next->();
+        $out .= $open. 'hook2'. $close;
+    });
+    
+    $hook->emit_chain('myhook', '<', '>');
+    
+    say $out; # $out = '<hook1><hook2>'
 
 =head1 DESCRIPTION
 

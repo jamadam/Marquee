@@ -20,20 +20,21 @@ use MojoSimpleHTTPServer::Stash;
     
     our $CONTEXT;
 
-    __PACKAGE__->attr('x_powered_by' => 'Simple HTTP Server with Mojo(Perl)');
-    __PACKAGE__->attr('under_development' => 0);
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');
     __PACKAGE__->attr('log_file');
     __PACKAGE__->attr(hooks => sub {MojoSimpleHTTPServer::Hooks->new});
     __PACKAGE__->attr(roots => sub {[]});
-    __PACKAGE__->attr(stash => sub {MojoSimpleHTTPServer::Stash->new});
-    __PACKAGE__->attr(types => sub { Mojolicious::Types->new });
     
     __PACKAGE__->attr(ssi_handlers => sub {{
         ep  => MojoSimpleHTTPServer::SSIHandler::EP->new,
         epl => MojoSimpleHTTPServer::SSIHandler::EPL->new,
     }});
+
+    __PACKAGE__->attr(stash => sub {MojoSimpleHTTPServer::Stash->new});
+    __PACKAGE__->attr(types => sub { Mojolicious::Types->new });
+    __PACKAGE__->attr('under_development' => 0);
+    __PACKAGE__->attr('x_powered_by' => 'Simple HTTP Server with Mojo(Perl)');
     
     my %error_messages = (
         404 => 'File not found',
@@ -165,6 +166,16 @@ use MojoSimpleHTTPServer::Stash;
     ### --
     sub hook {
         shift->hooks->on(@_);
+    }
+    
+    ### --
+    ### detect mimt type out of path name
+    ### --
+    sub path_to_type {
+        my ($self, $path) = @_;
+        if (my $ext = ($path =~ qr{\.(\w+)(?:\.\w+)?$})[0]) {
+            return $self->types->type($ext);
+        }
     }
     
     ### --
@@ -370,16 +381,6 @@ use MojoSimpleHTTPServer::Stash;
             $self->log->path($self->log_file);
         }
     }
-    
-    ### --
-    ### detect mimt type out of path name
-    ### --
-    sub path_to_type {
-        my ($self, $path) = @_;
-        if (my $ext = ($path =~ qr{\.(\w+)(?:\.\w+)?$})[0]) {
-            return $self->types->type($ext);
-        }
-    }
 
 1;
 
@@ -423,13 +424,17 @@ Specify a default file name and activate auto fill.
 
 Specify a log file path.
 
+=head2 hooks
+
+A MojoSimpleHTTPServer::Hooks instance.
+
+=head2 roots
+
+Array of paths that contains static and templates.
+
 =head2 ssi_handlers
 
 An hash ref that contains Server side include handlers.
-
-=head2 Hooks
-
-A MojoSimpleHTTPServer::Hooks instance.
 
 =head2 stash
 
@@ -471,7 +476,7 @@ Front dispatcher.
 
 Handler called by mojo layer.
 
-=head2 $instance->hook
+=head2 $instance->hook($name => $cb)
 
 Alias to $instance->hooks->on. This adds a callback for the hook point.
 
@@ -482,11 +487,11 @@ Alias to $instance->hooks->on. This adds a callback for the hook point.
         ### post-process
     });
 
-=head2 $instance->plugin('class', @args)
-
 =head2 $instance->path_to_type($path)
 
 Detect MIME type out of path name.
+
+=head2 $instance->plugin('class', @args)
 
 =head2 $instance->render_ssi($path, $ext)
 

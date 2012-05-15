@@ -7,7 +7,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
     
-    use Test::More tests => 18;
+    use Test::More tests => 25;
 
     my $app;
     my $t;
@@ -21,7 +21,7 @@ use Mojo::Date;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     
-    $app->plugin(Router => {
+    $app->plugin(Router => [
         qr{^/index\.html} => sub {
             MyApp->context->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt");
             is $_[0], undef;
@@ -34,7 +34,7 @@ use Mojo::Date;
             is $a, 'foo';
             is $b, 'bar';
         },
-    });
+    ]);
     
     $t = Test::Mojo->new($app);
     

@@ -3,23 +3,26 @@ use strict;
 use warnings;
 use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     
+    __PACKAGE__->attr('routes');
+    
     ### --
     ### Register the plugin into app
     ### --
     sub register {
-        my ($self, $app, $args) = @_;
+        my ($self, $app, $routes) = @_;
+        
+        $self->routes($routes);
         
         $app->hook(around_dispatch => sub {
             my ($next, @args) = @_;
             
             my $tx = $MojoSimpleHTTPServer::CONTEXT->tx;
             
-            for my $regex (keys %$args) {
+            my @routes = @{$self->routes};
+            
+            while (my ($regex, $cb) = splice(@routes, 0,2)) {
                 if (my @captures = ($tx->req->url->path =~ $regex)) {
-                    if (! defined $1) {
-                        @captures = ();
-                    }
-                    $args->{$regex}->(@captures);
+                    $cb->(defined $1 ? @captures : ());
                     last;
                 }
             }
@@ -40,22 +43,23 @@ MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
 
 =head1 SYNOPSIS
 
-    $app->load_plugin(Router => {
+    $app->load_plugin(Router => [
         qr/index\.html/ => sub {
             my $context = MyApp->context;
             ### DO SOMETHING
         },
-        qr/special\.html/ => sub {
+        qr/(.+)_(.+)\.html/ => sub {
+            my ($capture1, $capture2) = @_;
             my $context = MyApp->context;
             ### DO SOMETHING
         },
-    });
+    ]);
 
 =head1 DESCRIPTION
 
 =head1 METHODS
 
-=head2 $instance->register($app, $hash_ref)
+=head2 $instance->register($app, $hash_ref, $array_ref)
 
 =head1 SEE ALSO
 

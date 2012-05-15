@@ -34,6 +34,17 @@ use Mojo::Date;
             is $a, 'foo';
             is $b, 'bar';
         },
+        qr{^/rare/} => {
+            method => 'get',
+            cb     => sub {
+                MyApp->context->tx->res->code(200);
+                MyApp->context->tx->res->body('rare');
+            },
+        },
+        qr{^/default} => sub {
+            MyApp->context->tx->res->code(200);
+            MyApp->context->tx->res->body('default');
+        }
     ]);
     
     $t = Test::Mojo->new($app);
@@ -67,5 +78,13 @@ use Mojo::Date;
         ->content_is('static <%= time() %>');
 
     $t->get_ok('/capture/foo-bar.html');
+
+    $t->get_ok('/default.html')
+        ->status_is(200)
+        ->content_is('default');
+
+    $t->get_ok('/rare/')
+        ->status_is(200)
+        ->content_is('rare');
 
 __END__

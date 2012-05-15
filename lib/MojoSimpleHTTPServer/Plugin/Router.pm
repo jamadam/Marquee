@@ -14,13 +14,15 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
             
             my $tx = $MojoSimpleHTTPServer::CONTEXT->tx;
             
-            my %args = %$args;
-            while (my ($regex, $cb) = each %args) {
+            for my $regex (keys %$args) {
                 if ($tx->req->url->path =~ $regex) {
-                    $cb->();
-                } else {
-                    $next->(@args);
+                    $args->{$regex}->();
+                    last;
                 }
+            }
+            
+            if (! $tx->res->code) {
+                $next->(@args);
             }
         });
     }

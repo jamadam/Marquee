@@ -15,8 +15,11 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
             my $tx = $MojoSimpleHTTPServer::CONTEXT->tx;
             
             for my $regex (keys %$args) {
-                if ($tx->req->url->path =~ $regex) {
-                    $args->{$regex}->();
+                if (my @captures = ($tx->req->url->path =~ $regex)) {
+                    if (! defined $1) {
+                        @captures = ();
+                    }
+                    $args->{$regex}->(@captures);
                     last;
                 }
             }

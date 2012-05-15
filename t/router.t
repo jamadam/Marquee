@@ -7,7 +7,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
     
-    use Test::More tests => 15;
+    use Test::More tests => 18;
 
     my $app;
     my $t;
@@ -24,9 +24,15 @@ use Mojo::Date;
     $app->plugin(Router => {
         qr{^/index\.html} => sub {
             MyApp->context->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt");
+            is $_[0], undef;
         },
         qr{^/special\.html} => sub {
             MyApp->context->app->serve_static("$FindBin::Bin/public_html/index.txt");
+        },
+        qr{^/capture/(.+)-(.+)\.html} => sub {
+            my ($a, $b) = @_;
+            is $a, 'foo';
+            is $b, 'bar';
         },
     });
     
@@ -59,5 +65,7 @@ use Mojo::Date;
         ->header_is('Content-Type', 'text/plain')
         ->header_is('Content-Length', 20)
         ->content_is('static <%= time() %>');
+
+    $t->get_ok('/capture/foo-bar.html');
 
 __END__

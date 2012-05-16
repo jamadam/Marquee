@@ -3,22 +3,24 @@ use strict;
 use warnings;
 use utf8;
 use FindBin;
-use lib 'lib', "$FindBin::Bin/lib";
+use File::Basename 'dirname';
+use File::Spec;
+use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
+use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
 use Test::More;
 use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 155;
+    use Test::More tests => 160;
 
     my $app;
     my $t;
-    
     $app = MojoSimpleHTTPServer->new;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
     $app->default_file('index.html');
-    
+
     $t = Test::Mojo->new($app);
     
     $t->get_ok('/dir1')
@@ -88,6 +90,14 @@ use Mojo::Date;
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
         ->header_is('Content-Length', 15)
         ->content_is('index4.html.pub');
+    
+    ### cwd
+    
+    $t->get_ok('/cwd.html')
+        ->status_is(200)
+        ->text_is('cwd1', "$FindBin::Bin/public_html")
+        ->text_is('cwd2', "$FindBin::Bin/public_html")
+        ->text_is('sub cwd', "$FindBin::Bin/public_html/cwd");
     
     # helper
     $t->get_ok('/helper.html?foo=bar')

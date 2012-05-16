@@ -4,6 +4,8 @@ use warnings;
 use Mojo::Base -base;
 use Mojo::Cache;
 use Mojo::Util qw/encode md5_sum/;
+use File::Basename;
+use Cwd;
 
     ### --
     ### Constructor
@@ -40,10 +42,22 @@ use Mojo::Util qw/encode md5_sum/;
     ### render wrapper
     ### --
     sub render_traceable {
+        my ($self, $path) = @_;
+        
         my $stack = $MojoSimpleHTTPServer::CONTEXT
                                     ->stash->()->{'mshs.template_path'} ||= [];
-        unshift(@$stack, $_[1]);
-        my $ret = shift->render(@_);
+        
+        if ($path !~ qr{^/}) {
+            $path = $MojoSimpleHTTPServer::CONTEXT->app->home->rel_file($path);
+        }
+        my $cwd_org = getcwd;
+        
+        unshift(@$stack, $path);
+        chdir(dirname $path);
+        
+        my $ret = shift->render($path);
+        
+        chdir($cwd_org);
         shift(@$stack);
         
         return $ret;

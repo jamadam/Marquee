@@ -3,7 +3,9 @@ use strict;
 use warnings;
 use utf8;
 use FindBin;
-use lib '../lib';
+use File::Basename 'dirname';
+use File::Spec;
+use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
 use MojoSimpleHTTPServer;
 
     my $app = MojoSimpleHTTPServer->new;

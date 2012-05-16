@@ -396,7 +396,7 @@ MojoSimpleHTTPServer - Simple HTTP server with Server-side include
     
     use File::Basename 'dirname';
     use File::Spec;
-    use lib join '/', File::Spec->splitdir(dirname(__FILE__)), 'lib';
+    use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
     
     use MojoSimpleHTTPServer;
     

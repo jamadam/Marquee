@@ -6,8 +6,8 @@ use warnings;
 use File::Basename 'dirname';
 use File::Spec;
 
-use lib join '/', File::Spec->splitdir(dirname(__FILE__)), './extlib';
-use lib join '/', File::Spec->splitdir(dirname(__FILE__)), './lib';
+use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
+use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
 
 # Check if Mojolicious is installed
 die <<EOF unless eval 'use Mojolicious::Commands; 1';

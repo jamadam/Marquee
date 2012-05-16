@@ -11,7 +11,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 6;
+    use Test::More tests => 10;
 
     my $app;
     my $t;
@@ -28,6 +28,10 @@ use MojoSimpleHTTPServer;
             $t->at('title')->text_is('タイトル');
             $t->at('#main')->text_is('メインコンテンツdynamic');
             $t->at('#main2')->text_is('DEFAULT MAIN2');
+            $t->at('current_template1')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
+            $t->at('current_template2')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
+            $t->at('layout current_template1')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
+            $t->at('layout #main2 current_template2')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
         });
     
     is exists $app->stash->()->{title}, '';

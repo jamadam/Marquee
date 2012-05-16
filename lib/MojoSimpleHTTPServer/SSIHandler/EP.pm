@@ -98,15 +98,17 @@ use File::Basename 'dirname';
         
         $self->funcs->{override} = sub {
             my ($self, $name, $value) = @_;
-            my $stash = $MojoSimpleHTTPServer::CONTEXT->stash->();
-            $stash->{$name} = $value;
+            my $path = $self->current_template;
+            $MojoSimpleHTTPServer::CONTEXT->stash->($name => sub {
+                return $self->render_traceable($path, $value);
+            });
             return;
         };
         
         $self->funcs->{placeholder} = sub {
             my ($self, $name, $defalut) = @_;
             my $block =
-                $MojoSimpleHTTPServer::CONTEXT->stash->($name) || $defalut;
+                    $MojoSimpleHTTPServer::CONTEXT->stash->($name) || $defalut;
             return $block->() || '';
         };
         

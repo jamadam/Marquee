@@ -36,18 +36,15 @@ use Mojo::Util qw/encode md5_sum/;
         die "Class ". (ref $_[0]) . " must implements render method";
     }
     
-    ### --
-    ### render wrapper
-    ### --
     sub render_traceable {
-        my ($self, $path) = @_;
+        my ($self, $path, $cb) = @_;
         
         my $stack = $MojoSimpleHTTPServer::CONTEXT
                                     ->stash->()->{'mshs.template_path'} ||= [];
         
         unshift(@$stack, $path);
         
-        my $ret = shift->render($path);
+        my $ret = $cb ? $cb->() : $self->render($path);
         
         shift(@$stack);
         

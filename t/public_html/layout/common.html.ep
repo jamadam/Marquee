@@ -12,7 +12,9 @@
         <div id="main2">
             <%= placeholder 'main2' => begin %>
                 DEFAULT MAIN2
+                <current_template2><%= current_template %></current_template2>
             <% end %>
         </div>
     </body>
 </html>
+<current_template1><%= current_template %></current_template1>

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     
-    __PACKAGE__->attr('routes');
+    __PACKAGE__->attr('routes', sub {[]});
     
     ### --
     ### Register the plugin into app
@@ -11,7 +11,11 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     sub register {
         my ($self, $app, $routes) = @_;
         
-        $self->routes($routes);
+        if (ref $routes eq 'ARRAY') {
+            $self->routes($routes);
+        } else {
+            $routes->($self);
+        }
         
         $app->hook(around_dispatch => sub {
             my ($next, @args) = @_;
@@ -20,9 +24,13 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
             
             my @routes = @{$self->routes};
             
-            while (my ($regex, $cb) = splice(@routes, 0,2)) {
-                if (ref $cb eq 'HASH') {
-                    $cb = _judge($tx->req, $cb) || next;
+            while (@routes) {
+                my $regex   = shift @routes;
+                my $cond    = shift @routes if (ref $routes[0] eq 'HASH');
+                my $cb      = shift @routes;
+                
+                if ($cond && ! _judge($tx->req, $cond)) {
+                    next;
                 }
                 
                 if (my @captures = ($tx->req->url->path =~ $regex)) {
@@ -35,6 +43,34 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
                 $next->(@args);
             }
         });
+        return $self;
+    }
+    
+    sub route {
+        my ($self, $regex) = @_;
+        push(@{$self->routes}, $regex, {});
+        return $self;
+    }
+    
+    sub to {
+        my ($self, $cb) = @_;
+        push(@{$self->routes}, $cb);
+        return $self;
+    }
+    
+    sub via {
+        my ($self, $method) = @_;
+        return $self->_add_cond(method => $method);
+    }
+    
+    sub _add_cond {
+        my ($self, $key, $value) = @_;
+        my @routes = @{$self->routes};
+        if (ref $routes[$#routes] ne 'HASH') {
+            push(@routes, {});
+        }
+        $routes[$#routes]->{$key} = $value;
+        return $self;
     }
     
     sub _judge {
@@ -44,7 +80,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
             return;
         }
         
-        return $cond->{cb};
+        return 1;
     }
 
 1;
@@ -57,25 +93,46 @@ MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
 
 =head1 SYNOPSIS
 
-    $app->load_plugin(Router => [
-        qr{index\.html} => sub {
-            my $context = MyApp->context;
+    $app->plugin(Router => [
+        qr{^/index\.html} => sub {
             ### DO SOMETHING
         },
-        qr{(.+)_(.+)\.html} => sub {
-            my ($capture1, $capture2) = @_;
-            my $context = MyApp->context;
+        qr{^/special\.html} => sub {
             ### DO SOMETHING
         },
-        qr{(.+)_(.+)\.html} => {
-            method  => 'GET',
-            cb      => sub {
-                my ($capture1, $capture2) = @_;
-                my $context = MyApp->context;
-                ### DO SOMETHING
-            },
-        }
+        qr{^/capture/(.+)-(.+)\.html} => sub {
+            my ($a, $b) = @_;
+            ### DO SOMETHING
+        },
+        qr{^/rare/} => {method => 'get'}, sub {
+            ### DO SOMETHING
+        },
+        qr{^/default} => sub {
+            ### DO SOMETHING
+        },
     ]);
+    
+    ### OR
+    
+    $app->plugin(Router => sub {
+        my $r = shift;
+        $r->route(qr{^/index\.html})->to(sub {
+            ### DO SOMETHING
+        });
+        $r->route(qr{^/special\.html})->to(sub {
+            ### DO SOMETHING
+        });
+        $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
+            my ($a, $b) = @_;
+            ### DO SOMETHING
+        });
+        $r->route(qr{^/rare/})->via('get')->to(sub {
+            ### DO SOMETHING
+        });
+        $r->route(qr{^/default})->to(sub {
+            ### DO SOMETHING
+        });
+    });
 
 =head1 DESCRIPTION
 

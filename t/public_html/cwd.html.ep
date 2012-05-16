@@ -1,4 +1,0 @@
-<% use Cwd; %>
-<cwd1><%= getcwd =%></cwd1>
-<sub><%= include('./cwd/cwd.html.ep') %></sub>
-<cwd2><%= getcwd =%></cwd2>

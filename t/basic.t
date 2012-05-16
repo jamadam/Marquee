@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 160;
+    use Test::More tests => 155;
 
     my $app;
     my $t;
@@ -90,14 +90,6 @@ use Mojo::Date;
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
         ->header_is('Content-Length', 15)
         ->content_is('index4.html.pub');
-    
-    ### cwd
-    
-    $t->get_ok('/cwd.html')
-        ->status_is(200)
-        ->text_is('cwd1', "$FindBin::Bin/public_html")
-        ->text_is('cwd2', "$FindBin::Bin/public_html")
-        ->text_is('sub cwd', "$FindBin::Bin/public_html/cwd");
     
     # helper
     $t->get_ok('/helper.html?foo=bar')

@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 155;
+    use Test::More tests => 159;
 
     my $app;
     my $t;
@@ -90,6 +90,13 @@ use Mojo::Date;
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
         ->header_is('Content-Length', 15)
         ->content_is('index4.html.pub');
+    
+    # auto escape activation
+    
+    $t->get_ok('/auto_escape1.html')
+        ->content_is('&amp;');
+    $t->get_ok('/auto_escape2.html')
+        ->content_is('<');
     
     # helper
     $t->get_ok('/helper.html?foo=bar')

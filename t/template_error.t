@@ -11,7 +11,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 50;
+    use Test::More tests => 47;
 
     my $app;
     my $t;
@@ -76,7 +76,7 @@ use MojoSimpleHTTPServer;
             $t->at('#trace .value')->element_exists;
         });
     
-    ### stash
+    ### error in included template
     
     $app->stash->(test => 'value');
     
@@ -87,21 +87,12 @@ use MojoSimpleHTTPServer;
             my $t = shift;
             $t->at('#request tr:nth-child(5) td.key')->content_xml_is('Stash:');
             $t->at('#request tr:nth-child(5) td.value pre')->content_xml_is("{\n  &#39;test&#39; =&gt; &#39;value&#39;\n}\n");
-        });
-    
-    ### error in included template
-    
-    $t->get_ok('/template_error.html')
-        ->status_is(200)
-        ->header_is('Content-Type', 'text/html;charset=UTF-8')
-        ->dom_inspector(sub {
-            my $t = shift;
             $t->at('title')->text_is('Debug Screen');
             $t->at('#showcase pre')->text_like(qr{Global symbol "\$nonexist" requires explicit package name at (.+)/t/public_html/./template_error/1.html.ep line 2.});
             $t->at('#context tr:nth-child(1) td.key')->text_is('1.');
             $t->at('#context tr:nth-child(1) td.value pre')->content_xml_is('&lt;filename&gt;/template_error/1.html.ep&lt;/filename&gt;');
             $t->at('#context tr:nth-child(2) td.key')->text_is('2.');
-            $t->at('#context tr:nth-child(2) td.value pre')->content_xml_is('&lt;%= $nonexist %&gt;');
+            $t->at('#context tr:nth-child(2) td.value pre')->content_xml_is('&lt;test1&gt;&lt;%= $nonexist %&gt;&lt;/test1&gt;');
         });
 
 __END__

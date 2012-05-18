@@ -25,7 +25,8 @@ use File::Basename 'dirname';
         my ($self, $path) = @_;
         
         if (! $self->cache($path)) {
-            my $mt = Mojo::Template->new;
+            my $mt = Mojo::Template->new();
+            $mt->auto_escape(1);
             
             # Be a bit more relaxed for helpers
             my $prepend = q/no strict 'refs'; no warnings 'redefine';/;

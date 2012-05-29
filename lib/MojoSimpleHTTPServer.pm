@@ -105,7 +105,8 @@ use MojoSimpleHTTPServer::Stash;
             $filled_path->leading_slash(1);
             
             for my $root (@{$self->roots}) {
-                my $path = File::Spec->catfile($root. $filled_path);
+                my $path = File::Spec->catfile(
+                                    $root, File::Spec->splitpath($filled_path));
                 if (-f $path) {
                     $self->hooks->emit_chain('around_static', $path);
                 } else {
@@ -118,7 +119,8 @@ use MojoSimpleHTTPServer::Stash;
         }
         
         if (! $res->code) {
-            if (-d File::Spec->catfile($self->document_root. $path) && 
+            if (-d File::Spec->catfile(
+                        $self->document_root, File::Spec->splitpath($path)) && 
                         (! $path->trailing_slash && scalar @{$path->parts})) {
                 $self->serve_redirect_to_slashed($path);
             }

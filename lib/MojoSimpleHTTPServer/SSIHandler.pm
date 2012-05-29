@@ -19,7 +19,9 @@ use Mojo::Util qw/encode md5_sum/;
     ### Get current template name recursively
     ### --
     sub current_template {
-        $MojoSimpleHTTPServer::CONTEXT->stash->()->{'mshs.template_path'}->[0];
+        my ($self, $index) = @_;
+        $MojoSimpleHTTPServer::CONTEXT->stash->()
+                                        ->{'mshs.template_path'}->[$index || 0];
     }
     
     ### --

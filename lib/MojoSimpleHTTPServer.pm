@@ -206,6 +206,8 @@ use MojoSimpleHTTPServer::Stash;
         $ext ||= ($path =~ qr{\.\w+\.(\w+)$})[0];
         if (my $handler = $self->ssi_handlers->{$ext}) {
             return $handler->render_traceable($path);
+        } else {
+            die "SSI handler not detected for $path";
         }
     }
     

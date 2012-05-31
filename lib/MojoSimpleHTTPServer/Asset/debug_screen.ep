@@ -29,14 +29,14 @@
 		  % my ($key, $value, $i) = @_;
 			<tr <%= $i ? 'class="important"' : '' %>>
 				<td class="key"><%= $key %>.</td>
-				<td class="value"><pre class="prettyprint"><%== $value %></pre></td>
+				<td class="value"><pre class="prettyprint"><%= $value %></pre></td>
 			</tr>
 		% end
 		% my $kv = begin
 			% my ($key, $value) = @_;
 			<tr>
 				<td class="key"><%= $key %>:</td>
-				<td class="striped value"><pre><%== $value %></pre></td>
+				<td class="striped value"><pre><%= $value %></pre></td>
 			</tr>
 		% end
 	    <div id="showcase" class="box code">

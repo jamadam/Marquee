@@ -1,5 +1,5 @@
 <filename>include.html.ep</filename>
 <current_template><%= current_template() %></current_template>
-<test1><%= include('./include_sub.html.ep') =%></test1>
-<test2><%= include('./include_sub2/1.html.ep') =%></test2>
-<test3><%= include('./include_sub2/3.html.ep', {myarg => 'myarg value'}) =%></test3>
+<test1><%== include('./include_sub.html.ep') =%></test1>
+<test2><%== include('./include_sub2/1.html.ep') =%></test2>
+<test3><%== include('./include_sub2/3.html.ep', {myarg => 'myarg value'}) =%></test3>

@@ -1,16 +1,16 @@
 <!doctype html>
 <html>
     <head>
-      <title><%= placeholder 'title' => begin %>DEFAULT TITLE<% end %></title>
+      <title><%== placeholder 'title' => begin %>DEFAULT TITLE<% end %></title>
     </head>
     <body>
         <div id="main">
-            <%= placeholder 'main' => begin %>
+            <%== placeholder 'main' => begin %>
                 DEFAULT MAIN
             <% end %>
         </div>
         <div id="main2">
-            <%= placeholder 'main2' => begin %>
+            <%== placeholder 'main2' => begin %>
                 DEFAULT MAIN2
                 <current_template2><%= current_template %></current_template2>
             <% end %>

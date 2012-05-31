@@ -1,2 +1,2 @@
 <filename>/template_error/1.html.ep</filename>
-<%= $nonexist %>
+<test1><%= $nonexist %></test1>

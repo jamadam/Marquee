@@ -90,10 +90,16 @@ use File::Basename 'dirname';
         };
         
         $self->funcs->{include} = sub {
-            my ($self, $path) = @_;
+            my ($self, $path, @args) = @_;
             
-            return $MojoSimpleHTTPServer::CONTEXT->app->render_ssi(
+            my $stash = $MojoSimpleHTTPServer::CONTEXT->stash;
+            my $stash_local = $stash->clone;
+            $stash_local->(@args);
+            $MojoSimpleHTTPServer::CONTEXT->stash($stash_local);
+            my $ret = $MojoSimpleHTTPServer::CONTEXT->app->render_ssi(
                                                         $self->_to_abs($path));
+            $MojoSimpleHTTPServer::CONTEXT->stash($stash);
+            return $ret;
         };
         
         $self->funcs->{override} = sub {
@@ -201,7 +207,7 @@ Extended template.
 
 Extends template.
 
-=head2 <% include('./path/to/template.html.ep') %>
+=head2 <% include('./path/to/template.html.ep', key => value) %>
 
 Include a template into current template. Note that the path must be relative to
 current template directory.

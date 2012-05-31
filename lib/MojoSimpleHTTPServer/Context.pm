@@ -17,8 +17,13 @@ use Mojo::Base -base;
     ### Stash
     ### ---
     sub stash {
-        my $self = shift;
-        $self->{stash} ||= $self->app->stash->clone;
+        my ($self, $stash) = @_;
+        if ($stash) {
+            $self->{stash} = $stash;
+        } else {
+            $self->{stash} ||= $self->app->stash->clone;
+        }
+        return $self->{stash};
     }
 
 1;

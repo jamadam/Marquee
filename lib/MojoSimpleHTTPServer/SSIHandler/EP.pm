@@ -100,14 +100,11 @@ use File::Basename 'dirname';
         $self->funcs->{include} = sub {
             my ($self, $path, @args) = @_;
             
-            my $stash = $MojoSimpleHTTPServer::CONTEXT->stash;
-            my $stash_local = $stash->clone;
-            $stash_local->set(@args);
-            $MojoSimpleHTTPServer::CONTEXT->stash($stash_local);
-            my $ret = $MojoSimpleHTTPServer::CONTEXT->app->render_ssi(
-                                                        $self->_to_abs($path));
-            $MojoSimpleHTTPServer::CONTEXT->stash($stash);
-            return $ret;
+            my $c = $MojoSimpleHTTPServer::CONTEXT;
+            local $c->{stash} = $c->{stash}->clone;
+            $c->{stash}->set(@args);
+            
+            return $c->app->render_ssi($self->_to_abs($path));
         };
         
         $self->funcs->{override} = sub {
@@ -129,14 +126,13 @@ use File::Basename 'dirname';
         $self->funcs->{extends} = sub {
             my ($self, $path, $block) = @_;
             
-            my $app = $MojoSimpleHTTPServer::CONTEXT->app;
+            my $c = $MojoSimpleHTTPServer::CONTEXT;
             
-            local $MojoSimpleHTTPServer::CONTEXT->{stash} =
-                                $MojoSimpleHTTPServer::CONTEXT->{stash}->clone;
+            local $c->{stash} = $c->{stash}->clone;
             
             $block->();
             
-            return $app->render_ssi($self->_to_abs($path));
+            return $c->app->render_ssi($self->_to_abs($path));
         };
         
         return $self;

@@ -85,7 +85,7 @@ use File::Basename 'dirname';
         };
         
         $self->funcs->{current_template} = sub {
-            return shift->current_template;
+            return shift->current_template(@_);
         };
         
         $self->funcs->{dumper} = sub {

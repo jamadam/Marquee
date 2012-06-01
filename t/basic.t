@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 161;
+    use Test::More tests => 162;
 
     my $app;
     my $t;
@@ -113,6 +113,7 @@ use Mojo::Date;
         ->text_like('test1 current_template', qr'public_html/./include_sub.html.ep$')
         ->text_is('test2 filename', '/include_sub2/1.html.ep')
         ->text_like('test2 current_template', qr'public_html/./include_sub2/1.html.ep$')
+        ->text_like('test2 parent_template', qr'/include.html.ep$')
         ->text_is('test2 test1 filename', '/include_sub2/2.html.ep')
         ->text_like('test2 test1 current_template', qr'public_html/./include_sub2/./2.html.ep$')
         ->text_is('test3 myarg', 'myarg value')

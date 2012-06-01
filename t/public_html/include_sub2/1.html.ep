@@ -1,3 +1,4 @@
 <filename>/include_sub2/1.html.ep</filename>
 <current_template><%= current_template() %></current_template>
+<parent_template><%= current_template(1) %></parent_template>
 <test1><%== include('./2.html.ep') =%></test1>

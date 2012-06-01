@@ -11,5 +11,5 @@ use MojoSimpleHTTPServer;
 my $app = MojoSimpleHTTPServer->new;
 $app->document_root(join '/', File::Spec->splitdir(dirname(__FILE__)), 'public_html');
 $app->default_file('index.html');
-$app->auto_index(1);
+$app->plugin('AutoIndex');
 $app->start;

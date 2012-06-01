@@ -12,5 +12,5 @@ use MojoSimpleHTTPServer;
     $app->document_root("./");
     $app->log_file("$FindBin::Bin/../log/MojoSimpleHTTPServer.log");
     $app->default_file('index.html');
-    $app->auto_index(1);
+    $app->plugin('AutoIndex');
 	$app->start;

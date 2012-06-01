@@ -6,3 +6,4 @@
     <%== include('./include_sub2/3.html.ep', {myarg => 'myarg value'}) =%>
     <stash_leak><%= stash('myarg') %></stash_leak>
 </test3>
+<current_template2><%= current_template() %></current_template2>

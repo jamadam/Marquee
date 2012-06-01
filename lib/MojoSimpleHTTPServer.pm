@@ -7,6 +7,7 @@ use File::Spec;
 use File::Basename 'dirname';
 use Mojo::Path;
 use Mojo::Asset::File;
+use Mojo::URL;
 use Mojo::Util qw'encode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
@@ -231,7 +232,7 @@ use MojoSimpleHTTPServer::Stash;
         
         my $tx = $CONTEXT->tx;
         $tx->res->code(301);
-        $tx->res->headers->location($uri);
+        $tx->res->headers->location(_to_abs($self, $uri)->to_string);
         return $self;
     }
     
@@ -382,6 +383,24 @@ use MojoSimpleHTTPServer::Stash;
         if ($self->log_file) {
             $self->log->path($self->log_file);
         }
+    }
+    
+    ### --
+    ### generate absolute uri
+    ### --
+    sub _to_abs {
+        my ($self, $url) = @_;
+        
+        $url = Mojo::URL->new($url);
+        
+        if (! $url->scheme) {
+            my $tx = $MojoSimpleHTTPServer::CONTEXT->tx;
+            my $base = $tx->req->url->clone;
+            $base->path($url->path);
+            $url = $base;
+        }
+        
+        return $url->to_abs;
     }
 
 1;

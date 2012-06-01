@@ -242,7 +242,7 @@ use MojoSimpleHTTPServer::Stash;
         my ($self, $exception) = @_;
         
         my $tx = $CONTEXT->tx;
-        $CONTEXT->stash->(
+        $CONTEXT->stash->set(
             'mshs.static_dir' => 'static',
             'mshs.exception' => $exception
         );

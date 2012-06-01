@@ -43,7 +43,7 @@ use File::Basename 'dirname';
             my $context = $MojoSimpleHTTPServer::CONTEXT;
             
             $prepend .= 'use strict;';
-            for my $var (keys %{$context->stash->()}) {
+            for my $var (keys %{$context->stash}) {
                 if ($var =~ /^\w+$/) {
                     $prepend .= " my \$$var = stash '$var';";
                 }
@@ -74,7 +74,14 @@ use File::Basename 'dirname';
         
         $self->funcs->{stash} = sub {
             shift;
-            return $MojoSimpleHTTPServer::CONTEXT->stash->(@_);
+            my $stash = $MojoSimpleHTTPServer::CONTEXT->stash;
+            if ($_[0] && $_[1]) {
+                return $stash->set(@_);
+            } elsif (! $_[0]) {
+                return $stash;
+            } else {
+                return $stash->{$_[0]};
+            }
         };
         
         $self->funcs->{current_template} = sub {
@@ -95,7 +102,7 @@ use File::Basename 'dirname';
             
             my $stash = $MojoSimpleHTTPServer::CONTEXT->stash;
             my $stash_local = $stash->clone;
-            $stash_local->(@args);
+            $stash_local->set(@args);
             $MojoSimpleHTTPServer::CONTEXT->stash($stash_local);
             my $ret = $MojoSimpleHTTPServer::CONTEXT->app->render_ssi(
                                                         $self->_to_abs($path));
@@ -106,7 +113,7 @@ use File::Basename 'dirname';
         $self->funcs->{override} = sub {
             my ($self, $name, $value) = @_;
             my $path = $self->current_template;
-            $MojoSimpleHTTPServer::CONTEXT->stash->($name => sub {
+            $MojoSimpleHTTPServer::CONTEXT->stash->set($name => sub {
                 return $self->render_traceable($path, $value);
             });
             return;
@@ -115,7 +122,7 @@ use File::Basename 'dirname';
         $self->funcs->{placeholder} = sub {
             my ($self, $name, $defalut) = @_;
             my $block =
-                    $MojoSimpleHTTPServer::CONTEXT->stash->($name) || $defalut;
+                    $MojoSimpleHTTPServer::CONTEXT->stash->{$name} || $defalut;
             return $block->() || '';
         };
         

@@ -78,7 +78,7 @@ use MojoSimpleHTTPServer;
     
     ### error in included template
     
-    $app->stash->(test => 'value');
+    $app->stash->set(test => 'value');
     
     $t->get_ok('/template_error.html')
         ->status_is(200)

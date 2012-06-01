@@ -12,24 +12,24 @@ use MojoSimpleHTTPServer::Stash;
     use Test::More tests => 12;
 
     my $stash = MojoSimpleHTTPServer::Stash->new(a => 'b', c => 'd');
-    is_deeply $stash->(), {a => 'b', c => 'd'};
+    is_deeply $stash->get(), {a => 'b', c => 'd'};
     
-    $stash->(e => 'f');
-    is_deeply $stash->(), {a => 'b', c => 'd', e => 'f'};
+    $stash->set(e => 'f');
+    is_deeply $stash->get(), {a => 'b', c => 'd', e => 'f'};
     
-    $stash->(e => 'g');
-    is_deeply $stash->(), {a => 'b', c => 'd', e => 'g'};
+    $stash->set(e => 'g');
+    is_deeply $stash->get(), {a => 'b', c => 'd', e => 'g'};
     
     my $clone = $stash->clone(e => 'h', i => 'j');
-    is_deeply $clone->(), {a => 'b', c => 'd', e => 'h', i => 'j'};
-    is_deeply $stash->(), {a => 'b', c => 'd', e => 'g'};
+    is_deeply $clone->get(), {a => 'b', c => 'd', e => 'h', i => 'j'};
+    is_deeply $stash->get(), {a => 'b', c => 'd', e => 'g'};
     
-    is $stash->('a'), 'b';
-    is $stash->('c'), 'd';
-    is $stash->('e'), 'g';
-    is $clone->('a'), 'b';
-    is $clone->('c'), 'd';
-    is $clone->('e'), 'h';
-    is $clone->('i'), 'j';
+    is $stash->get('a'), 'b';
+    is $stash->get('c'), 'd';
+    is $stash->get('e'), 'g';
+    is $clone->get('a'), 'b';
+    is $clone->get('c'), 'd';
+    is $clone->get('e'), 'h';
+    is $clone->get('i'), 'j';
 
 __END__

@@ -20,7 +20,7 @@ use Mojo::Util qw/encode md5_sum/;
     ### --
     sub current_template {
         my ($self, $index) = @_;
-        $MojoSimpleHTTPServer::CONTEXT->stash->()
+        $MojoSimpleHTTPServer::CONTEXT->stash
                                         ->{'mshs.template_path'}->[$index || 0];
     }
     
@@ -42,7 +42,7 @@ use Mojo::Util qw/encode md5_sum/;
         my ($self, $path, $cb) = @_;
         
         my $stack = $MojoSimpleHTTPServer::CONTEXT
-                                    ->stash->()->{'mshs.template_path'} ||= [];
+                                        ->stash->{'mshs.template_path'} ||= [];
         
         unshift(@$stack, $path);
         

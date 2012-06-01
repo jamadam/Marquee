@@ -34,6 +34,6 @@ use MojoSimpleHTTPServer;
             $t->at('layout #main2 current_template2')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
         });
     
-    is exists $app->stash->()->{title}, '';
+    is exists $app->stash->get()->{title}, '';
 
 __END__

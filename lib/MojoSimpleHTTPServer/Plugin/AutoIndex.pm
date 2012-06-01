@@ -77,7 +77,7 @@ use Mojo::Util qw'url_unescape encode decode';
         } @dset;
         
         my $tx = $context->tx;
-        $context->stash->(
+        $context->stash->set(
             dir         => $path,
             dataset     => \@dset,
             static_dir  => 'static'

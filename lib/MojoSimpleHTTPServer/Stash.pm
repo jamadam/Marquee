@@ -3,30 +3,21 @@ use strict;
 use warnings;
 use Mojo::Base -base;
     
-    ### --
-    ### Constractor
-    ### --
-    sub new {
-        my $class = shift;
-        my $stash = $class->SUPER::new(@_);
-        return bless sub {
-            
-            if (! @_) {
-                return $stash;
-            }
-            
-            # Get
-            if (! (@_ > 1 || ref $_[0])) {
-                return $stash->{$_[0]};
-            }
-          
-            # Set
-            my $values = ref $_[0] ? $_[0] : {@_};
-            for my $key (keys %$values) {
-                $stash->{$key} = $values->{$key};
-            }
-            return;
-        }, $class;
+    sub get {
+        my $self = shift;
+        if (! $_[0]) {
+            return $self;
+        }
+        
+        return $self->{$_[0]};
+    }
+    
+    sub set {
+        my $self = shift;
+        my $values = ref $_[0] ? $_[0] : {@_};
+        for my $key (keys %$values) {
+            $self->{$key} = $values->{$key};
+        }
     }
     
     ### --
@@ -34,7 +25,7 @@ use Mojo::Base -base;
     ### --
     sub clone {
         my $self = shift;
-        (ref $self)->new(%{$self->()}, @_);
+        (ref $self)->new(%{$self}, @_);
     }
 
 1;
@@ -50,17 +41,17 @@ MojoSimpleHTTPServer::Stash - stash
     use MojoSimpleHTTPServer::Stash;
     
     my $stash = MojoSimpleHTTPServer::Stash->new(a => 'b', c => 'd');
-    is_deeply $stash->(), {a => 'b', c => 'd'};
+    is_deeply $stash->set(), {a => 'b', c => 'd'};
     
-    $stash->(e => 'f');
-    is_deeply $stash->(), {a => 'b', c => 'd', e => 'f'};
+    $stash->set(e => 'f');
+    is_deeply $stash->get(), {a => 'b', c => 'd', e => 'f'};
     
-    $stash->(e => 'g');
-    is_deeply $stash->(), {a => 'b', c => 'd', e => 'g'};
+    $stash->set(e => 'g');
+    is_deeply $stash->get(), {a => 'b', c => 'd', e => 'g'};
     
     my $clone = $stash->clone(h => 'i');
-    is_deeply $clone->(), {a => 'b', c => 'd', e => 'g', h => 'i'};
-    is_deeply $stash->(), {a => 'b', c => 'd', e => 'g'};
+    is_deeply $clone->get(), {a => 'b', c => 'd', e => 'g', h => 'i'};
+    is_deeply $stash->get(), {a => 'b', c => 'd', e => 'g'};
 
 =head1 DESCRIPTION
 

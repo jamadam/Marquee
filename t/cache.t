@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 25;
+use Test::More tests => 32;
 
 use_ok 'MojoSimpleHTTPServer::Cache';
 
@@ -59,3 +59,20 @@ is $cache->get('foo'), undef, 'has expired';
 
 $cache = MojoSimpleHTTPServer::Cache->new();
 is eval {$cache->get('a')} ,undef, 'non exist key';
+
+# rewriting doesn't increase stack
+
+$cache = MojoSimpleHTTPServer::Cache->new();
+$cache->set(a => 'b');
+$cache->set(a => 'c');
+is keys %{$cache->{1}}, 1;
+is scalar @{$cache->{2}}, 1;
+
+# expired cache is vacuumed
+
+$cache->set('b', 'd', sub {1});
+is keys %{$cache->{1}}, 2;
+is scalar @{$cache->{2}}, 2;
+is $cache->get('b'), undef;
+is keys %{$cache->{1}}, 1;
+is scalar @{$cache->{2}}, 1;

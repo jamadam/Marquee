@@ -50,7 +50,7 @@ use File::Basename 'dirname';
             }
             $mt->prepend($prepend);
             
-            $self->cache($path => $mt);
+            $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
         }
         
         return $self->SUPER::render($path);

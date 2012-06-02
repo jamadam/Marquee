@@ -10,8 +10,9 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
+use Mojo::Util qw/encode md5_sum/;
 
-    use Test::More tests => 7;
+    use Test::More tests => 13;
 
     my $app;
     my $t;
@@ -26,10 +27,35 @@ use MojoSimpleHTTPServer;
     $t->get_ok('/cache.html')
         ->status_is(200);
     
-    my $cache = $app->ssi_handlers->{ep}->template_cache->{cache};
-    is scalar keys %$cache, 1, 'right cache amount';
-    my $mt = $cache->{(keys %$cache)[0]};
+    my $expected_key = md5_sum(encode('UTF-8', "$FindBin::Bin/public_html/cache.html.ep"));
+    my $cache = $app->ssi_handlers->{ep}->template_cache;
+    is scalar keys %{$cache->{1}}, 1, 'right cache amount';
+    my $mt = $cache->get($expected_key);
     is ref $mt, 'Mojo::Template';
     ok $mt->compiled;
+    
+    ### Detect template update
+    {
+        my $file;
+        open($file, "> $FindBin::Bin/public_html/cache2.html.ep");
+        print $file 'a';
+        close($file);
+        
+        $t->get_ok('/cache2.html')
+            ->status_is(200)
+            ->content_is("a\n");
+        
+        sleep(1);
+        
+        open($file, "> $FindBin::Bin/public_html/cache2.html.ep");
+        print $file 'b';
+        close($file);
+        
+        $t->get_ok('/cache2.html')
+            ->status_is(200)
+            ->content_is("b\n");
+        
+        unlink("$FindBin::Bin/public_html/cache2.html.ep");
+    }
 
 __END__

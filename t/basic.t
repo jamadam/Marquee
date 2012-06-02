@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 164;
+    use Test::More tests => 168;
 
     my $app;
     my $t;
@@ -90,6 +90,10 @@ use Mojo::Date;
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
         ->header_is('Content-Length', 15)
         ->content_is('index4.html.pub');
+    $t->get_ok('/..%2f/basic.t')
+        ->status_is(404);
+    $t->get_ok('/dir1/..%2f/..%2f/basic.t')
+        ->status_is(404);
     
     # auto escape activation
     

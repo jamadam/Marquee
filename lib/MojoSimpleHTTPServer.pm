@@ -91,7 +91,11 @@ use MojoSimpleHTTPServer::Stash;
         
         my $tx = $CONTEXT->tx;
         my $res = $tx->res;
-        my $path = $tx->req->url->path;
+        my $path = $tx->req->url->path->clone->canonicalize;
+        
+        if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
+            return;
+        }
         
         if (! $res->code) {
             if ($tx->req->url =~ /$self->{_handler_re}/) {

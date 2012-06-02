@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 164;
+    use Test::More tests => 180;
 
     my $app;
     my $t;
@@ -90,6 +90,15 @@ use Mojo::Date;
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
         ->header_is('Content-Length', 15)
         ->content_is('index4.html.pub');
+    $t->get_ok('/..%2f/basic.t')
+        ->status_is(404);
+    $t->get_ok('/dir1/..%2f/..%2f/basic.t')
+        ->status_is(404);
+    $t->get_ok('/dir1/.%2findex.html')
+        ->status_is(200)
+        ->content_type_is('text/html;charset=UTF-8')
+        ->header_is('Content-Length', 15)
+        ->content_is(qq{dir1/index.html});
     
     # auto escape activation
     
@@ -297,6 +306,13 @@ use Mojo::Date;
         ->content_like(qr{\@charset "UTF\-8"});
     $t->get_ok('/some_dir/not_exists.html')
         ->status_is(404);
+    $t->get_ok('/..%2f')
+        ->status_is(404);
+    $t->get_ok('/some_dir/..%2f..%2f')
+        ->status_is(404);
+    $t->get_ok('/some_dir/.%2f/')
+        ->status_is(200)
+        ->content_like(qr{test.html});
     
     unlink("$FindBin::Bin/public_html_index/日本語.html");
 

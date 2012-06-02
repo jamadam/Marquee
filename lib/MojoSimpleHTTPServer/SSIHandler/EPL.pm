@@ -2,21 +2,21 @@ package MojoSimpleHTTPServer::SSIHandler::EPL;
 use strict;
 use warnings;
 use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler';
-use Mojo::Cache;
+use MojoSimpleHTTPServer::Cache;
 use Mojo::Util qw/encode md5_sum/;
     
-    __PACKAGE__->attr('template_cache' => sub {Mojo::Cache->new});
+    __PACKAGE__->attr('template_cache' => sub {MojoSimpleHTTPServer::Cache->new});
     
     ### --
     ### Accessor to template cache
     ### --
     sub cache {
-        my ($self, $path, $mt) = @_;
+        my ($self, $path, $mt, $expire) = @_;
         
         my $cache = $self->template_cache;
         my $key = md5_sum(encode('UTF-8', $path));
         if ($mt) {
-            $cache->set($key => $mt);
+            $cache->set($key, $mt, $expire);
         } else {
             $cache->get($key);
         }
@@ -30,15 +30,18 @@ use Mojo::Util qw/encode md5_sum/;
         
         my $context = $MojoSimpleHTTPServer::CONTEXT;
         
-        my $mt = $self->cache($path) || Mojo::Template->new;
+        my $mt = $self->cache($path);
         
         my $output;
         
-        if ($mt->compiled) {
+        if ($mt && $mt->compiled) {
             $output = $mt->interpret($self, $context);
         } else {
+            if (! $mt) {
+                $mt = Mojo::Template->new;
+                $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
+            }
             $output = $mt->render_file($path, $self, $context);
-            $self->cache($path => $mt);
         }
         
         return ref $output ? die $output : $output;

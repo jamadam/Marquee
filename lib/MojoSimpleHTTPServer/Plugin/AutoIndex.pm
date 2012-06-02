@@ -21,8 +21,11 @@ use Mojo::Util qw'url_unescape encode decode';
             
             if (! $context->tx->res->code) {
                 my $app = $context->app;
-                my $path = $context->tx->req->url->path;
-                if (-d File::Spec->catfile($app->document_root. $path)) {
+                my $path = $context->tx->req->url->path->clone->canonicalize;
+                if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
+                    return;
+                }
+                if (-d File::Spec->catdir($app->document_root, $path)) {
                     $self->_serve_index($path);
                 }
             }
@@ -39,7 +42,7 @@ use Mojo::Util qw'url_unescape encode decode';
         my $app = $context->app;
         
         $path = decode('UTF-8', url_unescape($path));
-        my $dir = File::Spec->catfile($app->document_root, $path);
+        my $dir = File::Spec->catdir($app->document_root, $path);
         
         opendir(my $DIR, $dir);
         my @file = readdir($DIR);

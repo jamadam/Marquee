@@ -1,4 +1,12 @@
 Revision history for MojoSimpleHTTPServer
 
+0.02 2012/06/02
+  - Fixed directory traversal vulnerability.
+  - Improved template cache to expire on template change.
+  - Improved SSI to die when include path not found.
+  - Improved ep handler to auto escape.
+  - Improved to include function to accepts local args.
+  - Improved current_template function to get parent templates recursivly.
+
 0.01 2012/05/06
   - initial release

@@ -47,45 +47,36 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Stash - stash
+MojoSimpleHTTPServer::Cache - Cache
 
 =head1 SYNOPSIS
 
-    use MojoSimpleHTTPServer::Stash;
+    use MojoSimpleHTTPServer::Cache;
     
-    my $stash = MojoSimpleHTTPServer::Stash->new(a => 'b', c => 'd');
-    is_deeply $stash->set(), {a => 'b', c => 'd'};
-    
-    $stash->set(e => 'f');
-    is_deeply $stash->get(), {a => 'b', c => 'd', e => 'f'};
-    
-    $stash->set(e => 'g');
-    is_deeply $stash->get(), {a => 'b', c => 'd', e => 'g'};
-    
-    my $clone = $stash->clone(h => 'i');
-    is_deeply $clone->get(), {a => 'b', c => 'd', e => 'g', h => 'i'};
-    is_deeply $stash->get(), {a => 'b', c => 'd', e => 'g'};
+    $cache = MojoSimpleHTTPServer::Cache->new;
+    $cache->max_keys(2);
+    $cache->set(foo => 'bar');
+    $cache->get('foo');
+    $cache->set(baz => 'yada', sub {
+        my $cached_time = shift;
+        return $cached_time < (stat $file)[9];
+    });
 
 =head1 DESCRIPTION
 
-A class represents stash. The instance is a code ref accessing to closed hash
-ref.
+Simple cache manager with expire ferture.
 
 =head1 METHODS
 
-=head2 MojoSimpleHTTPServer::Stash->new(%key_value)
+=head2 MojoSimpleHTTPServer::Cache->new
 
 =head2 $instance->get($name)
 
-Get stash value for given name.
+Get cache value for given name.
 
-=head2 $instance->set(%key_value)
+=head2 $instance->set($name => $data)
 
-Set stash values with given hash or hash reference.
-
-=head2 $instance->clone(%key_value)
-
-Clone stash with given hash or hash reference merged.
+Set cache values with given name and data.
 
 =head1 SEE ALSO
 

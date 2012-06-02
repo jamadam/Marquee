@@ -17,7 +17,7 @@ use MojoSimpleHTTPServer::SSIHandler::EP;
 use MojoSimpleHTTPServer::SSIHandler::EPL;
 use MojoSimpleHTTPServer::Stash;
 
-    our $VERSION = '0.02';
+    our $VERSION = '0.03';
     
     our $CONTEXT;
 

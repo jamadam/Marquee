@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 168;
+    use Test::More tests => 172;
 
     my $app;
     my $t;
@@ -300,6 +300,10 @@ use Mojo::Date;
         ->status_is(200)
         ->content_like(qr{\@charset "UTF\-8"});
     $t->get_ok('/some_dir/not_exists.html')
+        ->status_is(404);
+    $t->get_ok('/..%2f')
+        ->status_is(404);
+    $t->get_ok('/some_dir/..%2f..%2f')
         ->status_is(404);
     
     unlink("$FindBin::Bin/public_html_index/日本語.html");

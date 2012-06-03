@@ -11,7 +11,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 47;
+    use Test::More tests => 51;
 
     my $app;
     my $t;
@@ -23,19 +23,22 @@ use MojoSimpleHTTPServer;
     
     $t->get_ok('/not_good.html')
         ->status_is(500)
-        ->content_is('500 Internal server error');
+        ->element_exists_not('body#debugScreen')
+        ->text_like('title', qr'500 Internal server error'i);
     
     $t->get_ok('/not_good2.html')
         ->status_is(500)
-        ->content_is('500 Internal server error');
+        ->element_exists_not('body#debugScreen')
+        ->text_like('title', qr'500 Internal server error'i);
     
     ### debug screen
     
     $app->under_development(1);
     
     $t->get_ok('/not_good.html')
-        ->status_is(200)
+        ->status_is(500)
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
+        ->element_exists('body#debugScreen')
         ->dom_inspector(sub {
             my $t = shift;
             $t->at('title')->text_is('Debug Screen');
@@ -81,8 +84,9 @@ use MojoSimpleHTTPServer;
     $app->stash->set(test => 'value');
     
     $t->get_ok('/template_error.html')
-        ->status_is(200)
+        ->status_is(500)
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
+        ->element_exists('body#debugScreen')
         ->dom_inspector(sub {
             my $t = shift;
             $t->at('#request tr:nth-child(5) td.key')->content_xml_is('Stash:');

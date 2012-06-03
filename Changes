@@ -1,5 +1,8 @@
 Revision history for MojoSimpleHTTPServer
 
+0.03 2012/06/03
+  - Made error documents replaceable.
+
 0.02 2012/06/02
   - Fixed directory traversal vulnerability.
   - Improved template cache to expire on template change.

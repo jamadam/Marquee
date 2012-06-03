@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 180;
+    use Test::More tests => 188;
 
     my $app;
     my $t;
@@ -29,6 +29,7 @@ use Mojo::Date;
         ->header_like(Location => qr{/dir1/$});
     $t->get_ok('/nonexists.html')
         ->status_is(404)
+        ->element_exists_not('body#debugScreen')
         ->content_like(qr'404 file not found'i);
     $t->get_ok('/')
         ->status_is(200)
@@ -38,7 +39,8 @@ use Mojo::Date;
     $t->get_ok('/index.html.ep')
         ->status_is(403)
         ->content_type_is('text/html;charset=UTF-8')
-        ->header_is('Content-Length', 13)
+        ->header_is('Content-Length', 1014)
+        ->element_exists_not('body#debugScreen')
         ->content_like(qr'403 forbidden'i);
     $t->get_ok('/index.html')
         ->status_is(200)
@@ -91,7 +93,8 @@ use Mojo::Date;
         ->header_is('Content-Length', 15)
         ->content_is('index4.html.pub');
     $t->get_ok('/..%2f/basic.t')
-        ->status_is(404);
+        ->status_is(404)
+        ->element_exists_not('body#debugScreen');
     $t->get_ok('/dir1/..%2f/..%2f/basic.t')
         ->status_is(404);
     $t->get_ok('/dir1/.%2findex.html')
@@ -174,9 +177,11 @@ use Mojo::Date;
         ->content_is("$FindBin::Bin/public_html/index2.html.test");
     $t->get_ok('/index3.html')
         ->status_is(200)
+        ->element_exists_not('body#debugScreen')
         ->content_is("rendered");
     $t->get_ok('/index2.html.test')
         ->status_is(403)
+        ->element_exists_not('body#debugScreen')
         ->content_like(qr"403 Forbidden"i);
     $t->get_ok('/index3.html.test2')
         ->status_is(403)
@@ -305,11 +310,14 @@ use Mojo::Date;
         ->status_is(200)
         ->content_like(qr{\@charset "UTF\-8"});
     $t->get_ok('/some_dir/not_exists.html')
-        ->status_is(404);
+        ->status_is(404)
+        ->element_exists_not('body#debugScreen');
     $t->get_ok('/..%2f')
-        ->status_is(404);
+        ->status_is(404)
+        ->element_exists_not('body#debugScreen');
     $t->get_ok('/some_dir/..%2f..%2f')
-        ->status_is(404);
+        ->status_is(404)
+        ->element_exists_not('body#debugScreen');
     $t->get_ok('/some_dir/.%2f/')
         ->status_is(200)
         ->content_like(qr{test.html});

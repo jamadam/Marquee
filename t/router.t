@@ -10,7 +10,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
     
-    use Test::More tests => 66;
+    use Test::More tests => 68;
 
     my $app;
     my $t;
@@ -88,7 +88,8 @@ use Mojo::Date;
         ->content_is('rare');
     
     $t->head_ok('/rare/')
-        ->status_is(404);
+        ->status_is(404)
+        ->element_exists_not('body#debugScreen');
     
     ### another syntax of the plugin
     
@@ -160,6 +161,7 @@ use Mojo::Date;
         ->content_is('rare');
     
     $t->head_ok('/rare/')
-        ->status_is(404);
+        ->status_is(404)
+        ->element_exists_not('body#debugScreen');
 
 __END__

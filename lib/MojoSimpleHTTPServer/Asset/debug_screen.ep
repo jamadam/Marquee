@@ -20,14 +20,14 @@
     <script type="text/javascript" src="/<%= $static_dir %>/jquery.1.7.1.js"></script>
     <script type="text/javascript" src="/<%= $static_dir %>/js/prettify.js"></script>
 </head>
-<body onload="prettyPrint()">
+<body id="debugScreen" onload="prettyPrint()">
     <h1>
         Debug Screen
     </h1>
     <div id="wrapper">
 		% my $cv = begin
 		  % my ($key, $value, $i) = @_;
-			<tr <%= $i ? 'class="important"' : '' %>>
+			<tr <%== $i ? 'class="important"' : '' %>>
 				<td class="key"><%= $key %>.</td>
 				<td class="value"><pre class="prettyprint"><%= $value %></pre></td>
 			</tr>
@@ -44,13 +44,13 @@
 			<div id="context">
 				<table>
 					% for my $line (@{$exception->lines_before}) {
-						%= $cv->($line->[0], $line->[1])
+						%== $cv->($line->[0], $line->[1])
 					% }
 					% if (defined $exception->line->[1]) {
-						%= $cv->($exception->line->[0], $exception->line->[1], 1)
+						%== $cv->($exception->line->[0], $exception->line->[1], 1)
 					% }
 					% for my $line (@{$exception->lines_after}) {
-						%= $cv->($line->[0], $line->[1])
+						%== $cv->($line->[0], $line->[1])
 					% }
 				</table>
 			</div>
@@ -58,11 +58,11 @@
 				<div id="insight">
 					<table>
 						% for my $line (@{$exception->lines_before}) {
-							%= $cv->($line->[0], $line->[2])
+							%== $cv->($line->[0], $line->[2])
 						% }
-						%= $cv->($exception->line->[0], $exception->line->[2], 1)
+						%== $cv->($exception->line->[0], $exception->line->[2], 1)
 						% for my $line (@{$exception->lines_after}) {
-							%= $cv->($line->[0], $line->[2])
+							%== $cv->($line->[0], $line->[2])
 						% }
 					</table>
 				</div>

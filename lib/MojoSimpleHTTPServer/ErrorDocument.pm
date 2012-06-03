@@ -5,7 +5,7 @@ use Mojo::Base -base;
 use Mojo::Cache;
 use Mojo::Util qw'encode';
     
-    my %error_messages = (
+    my %messages = (
         404 => 'File not found',
         500 => 'Internal server error',
         403 => 'Forbidden',
@@ -42,13 +42,13 @@ use Mojo::Util qw'encode';
                 $context->stash->set(
                     'mshs.static_dir'   => 'static',
                     code                => $code,
-                    message             => $error_messages{$code},
+                    message             => $messages{$code},
                 );
             } else {
                 $context->stash->set(
                     'mshs.static_dir'   => 'static',
                     code                => $code,
-                    message             => $message || $error_messages{$code},
+                    message             => $message || $messages{$code},
                 );
             }
         }

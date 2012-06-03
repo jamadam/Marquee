@@ -14,17 +14,14 @@
 	<meta http-equiv="Content-Style-Type" content="text/css" />
 	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/yui-reset.css" />
 	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/yui-fonts.css" />
-	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/site_main.css" />
 	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/site_error_document.css" />
 	<link rel="shortcut icon" href="/static/favicon.ico" />
     <script type="text/javascript" src="/<%= $static_dir %>/jquery.1.7.1.js"></script>
 </head>
 <body>
-    <h1>
-        <%= $code %> <%= $message %>
-    </h1>
-    <div id="wrapper">
-		<%= $message %>
-    </div>
+	<div id="wrapper">
+		<span id="code"><%= $code %></span>
+		<span id="message"><%= $message %></span>
+	</div>
 </body>
 </html>

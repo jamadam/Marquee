@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 188;
+    use Test::More tests => 187;
 
     my $app;
     my $t;
@@ -39,7 +39,6 @@ use Mojo::Date;
     $t->get_ok('/index.html.ep')
         ->status_is(403)
         ->content_type_is('text/html;charset=UTF-8')
-        ->header_is('Content-Length', 1014)
         ->element_exists_not('body#debugScreen')
         ->content_like(qr'403 forbidden'i);
     $t->get_ok('/index.html')

@@ -17,6 +17,7 @@ body {
 	background-color: #ccddee;
 	box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
 	text-shadow: 1px 1px 3px rgba(255,255,255,1.0);
+	font-family: Consolas,Menlo,Monaco,Courier,monospace;
 }
 		#code {
 			display: block;

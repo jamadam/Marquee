@@ -6,8 +6,8 @@ use Mojo::Cache;
 use Mojo::Util qw'encode';
     
     my %messages = (
-        404 => 'File not found',
-        500 => 'Internal server error',
+        404 => 'File Not Found',
+        500 => 'Internal Server Error',
         403 => 'Forbidden',
     );
     

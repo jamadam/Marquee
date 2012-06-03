@@ -94,6 +94,11 @@ These options are available:
 [https://github.com/jamadam/MojoSimpleHTTPServer]
 [https://github.com/jamadam/MojoSimpleHTTPServer]:https://github.com/jamadam/MojoSimpleHTTPServer
 
+## CREDIT
+
+Icons by [Yusuke Kamiyamane].
+[Yusuke Kamiyamane]:http://p.yusukekamiyamane.com/
+
 ## COPYRIGHT AND LICENSE
 
 Copyright (c) 2012 [jamadam]

@@ -27,7 +27,7 @@ use Mojo::Util qw'encode';
         
         $message ||= $messages{$code};
         
-        my $context     = $MojoSimpleHTTPServer::CONTEXT;
+        my $context     = $MSHS::CONTEXT;
         my $tx          = $context->tx;
         my $stash       = $context->stash;
         my $template    = ($self->status_template)->{$code} || $self->template;

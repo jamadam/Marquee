@@ -17,7 +17,7 @@ use Mojo::Util qw'url_unescape encode decode';
             
             $next->();
             
-            my $context = $MojoSimpleHTTPServer::CONTEXT;
+            my $context = $MSHS::CONTEXT;
             
             if (! $context->tx->res->code) {
                 my $app = $context->app;
@@ -38,7 +38,7 @@ use Mojo::Util qw'url_unescape encode decode';
     sub _serve_index {
         my ($self, $path) = @_;
         
-        my $context = $MojoSimpleHTTPServer::CONTEXT;
+        my $context = $MSHS::CONTEXT;
         my $app = $context->app;
         
         $path = decode('UTF-8', url_unescape($path));

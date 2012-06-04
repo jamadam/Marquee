@@ -25,6 +25,8 @@ use Mojo::Util qw'encode';
     sub render {
         my ($self, $code, $message) = @_;
         
+        $message ||= $messages{$code};
+        
         my $context     = $MojoSimpleHTTPServer::CONTEXT;
         my $tx          = $context->tx;
         my $stash       = $context->stash;
@@ -49,7 +51,7 @@ use Mojo::Util qw'encode';
             if (ref $message) {
                 $stash->set(message => $messages{$code});
             } else {
-                $stash->set(message => $message || $messages{$code});
+                $stash->set(message => $message);
             }
         }
         

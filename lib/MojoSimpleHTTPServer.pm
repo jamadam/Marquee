@@ -97,7 +97,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
         
         if (! $res->code) {
             if ($tx->req->url =~ /$self->{_handler_re}/) {
-                $self->error_document->render(403);
+                $self->error_document->serve(403);
                 return;
             }
         }
@@ -149,11 +149,11 @@ use MojoSimpleHTTPServer::ErrorDocument;
         
         if ($@) {
             $self->log->fatal("Processing request failed: $@");
-            $self->error_document->render(500, $@);
+            $self->error_document->serve(500, $@);
         }
         
         if (! $tx->res->code) {
-            $self->error_document->render(404);
+            $self->error_document->serve(404);
             $self->log->fatal($tx->req->url->path. qq{ Not found});
         }
         

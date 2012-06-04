@@ -22,7 +22,7 @@ use Mojo::Util qw'encode';
     ### --
     ### Serve error document
     ### --
-    sub render {
+    sub serve {
         my ($self, $code, $message) = @_;
         
         $message ||= $messages{$code};

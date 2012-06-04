@@ -11,7 +11,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 51;
+    use Test::More tests => 53;
 
     my $app;
     my $t;
@@ -39,6 +39,7 @@ use MojoSimpleHTTPServer;
         ->status_is(500)
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
         ->element_exists('body#debugScreen')
+        ->element_exists('#context .important')
         ->dom_inspector(sub {
             my $t = shift;
             $t->at('title')->text_is('Debug Screen');
@@ -87,6 +88,7 @@ use MojoSimpleHTTPServer;
         ->status_is(500)
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
         ->element_exists('body#debugScreen')
+        ->element_exists('#context .important')
         ->dom_inspector(sub {
             my $t = shift;
             $t->at('#request tr:nth-child(5) td.key')->content_xml_is('Stash:');

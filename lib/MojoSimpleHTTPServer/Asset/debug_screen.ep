@@ -44,13 +44,13 @@
 			<div id="context">
 				<table>
 					% for my $line (@{$exception->lines_before}) {
-						%== $cv->($line->[0], $line->[1])
+						%= $cv->($line->[0], $line->[1])
 					% }
 					% if (defined $exception->line->[1]) {
-						%== $cv->($exception->line->[0], $exception->line->[1], 1)
+						%= $cv->($exception->line->[0], $exception->line->[1], 1)
 					% }
 					% for my $line (@{$exception->lines_after}) {
-						%== $cv->($line->[0], $line->[1])
+						%= $cv->($line->[0], $line->[1])
 					% }
 				</table>
 			</div>
@@ -58,11 +58,11 @@
 				<div id="insight">
 					<table>
 						% for my $line (@{$exception->lines_before}) {
-							%== $cv->($line->[0], $line->[2])
+							%= $cv->($line->[0], $line->[2])
 						% }
-						%== $cv->($exception->line->[0], $exception->line->[2], 1)
+						%= $cv->($exception->line->[0], $exception->line->[2], 1)
 						% for my $line (@{$exception->lines_after}) {
-							%== $cv->($line->[0], $line->[2])
+							%= $cv->($line->[0], $line->[2])
 						% }
 					</table>
 				</div>

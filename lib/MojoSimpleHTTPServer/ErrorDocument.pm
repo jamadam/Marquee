@@ -25,41 +25,36 @@ use Mojo::Util qw'encode';
     sub render {
         my ($self, $code, $message) = @_;
         
-        my $context = $MojoSimpleHTTPServer::CONTEXT;
-        my $tx = $context->tx;
+        my $context     = $MojoSimpleHTTPServer::CONTEXT;
+        my $tx          = $context->tx;
+        my $stash       = $context->stash;
+        my $template    = ($self->status_template)->{$code} || $self->template;
+        my $ep          = $context->app->ssi_handlers->{ep};
         
-        my $template;
-        
-        if ($context->app->under_development && ref $message) {
-            $context->stash->set(
-                'mshs.static_dir'   => 'static',
-                'mshs.code'         => $code,
-                'mshs.exception'      => $message,
+        if ($context->app->under_development) {
+            my $snapshot = $stash->clone;
+            $ep->add_function(snapshot => sub {$snapshot});
+            $stash->set(
+                static_dir  => 'static',
+                code        => $code,
+                message     =>
+                    ref $message ? $message : Mojo::Exception->new($message),
             );
             $template = MojoSimpleHTTPServer::asset('debug_screen.ep');
         } else {
+            $stash->set(
+                static_dir  => 'static',
+                code        => $code,
+            );
             if (ref $message) {
-                $context->stash->set(
-                    'mshs.static_dir'   => 'static',
-                    code                => $code,
-                    message             => $messages{$code},
-                );
+                $stash->set(message => $messages{$code});
             } else {
-                $context->stash->set(
-                    'mshs.static_dir'   => 'static',
-                    code                => $code,
-                    message             => $message || $messages{$code},
-                );
+                $stash->set(message => $message || $messages{$code});
             }
         }
         
-        $template ||= ($self->status_template)->{$code} || $self->template;
-        
-        my $body =
-            MojoSimpleHTTPServer::SSIHandler::EP->new->render_traceable($template);
-        
         $tx->res->code($code);
-        $tx->res->body(encode('UTF-8', $body));
+        $tx->res->body(encode('UTF-8', $ep->render_traceable($template)));
         $tx->res->headers->content_type($type);
     }
 

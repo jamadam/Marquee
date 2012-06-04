@@ -6,7 +6,7 @@
 		my $c 			= shift;
 		my $code		= stash('code');
 		my $message		= stash('message');
-		my $static_dir 	= stash('mshs.static_dir');
+		my $static_dir 	= stash('static_dir');
 	%>
     <title><%= $code %> <%= $message %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

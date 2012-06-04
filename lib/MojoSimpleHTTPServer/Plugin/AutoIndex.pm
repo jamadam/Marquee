@@ -89,7 +89,7 @@ use Mojo::Util qw'url_unescape encode decode';
         $tx->res->body(
             encode('UTF-8',
                 MojoSimpleHTTPServer::SSIHandler::EPL->new->render_traceable(
-                                            __PACKAGE__->_asset('index.epl')))
+                                    __PACKAGE__->_asset('auto_index.html.epl')))
         );
         $tx->res->code(200);
         $tx->res->headers->content_type($app->types->type('html'));

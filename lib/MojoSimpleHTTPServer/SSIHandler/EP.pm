@@ -33,11 +33,11 @@ use Mojo::ByteStream;
             my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
     
             # Helpers
-            $prepend .= 'my $_H = shift;';
+            $prepend .= 'my $_H = shift; my $_F = $_H->funcs;';
             for my $name (sort keys %{$self->funcs}) {
                 if ($name =~ /^\w+$/) {
                     $prepend .=
-                    "sub $name; *$name = sub {\$_H->funcs->{$name}->(\$_H, \@_)};";
+                    "sub $name; *$name = sub {\$_F->{$name}->(\$_H, \@_)};";
                 }
             }
         

@@ -48,11 +48,7 @@ use Mojo::Util qw'encode';
                 static_dir  => 'static',
                 code        => $code,
             );
-            if (ref $message) {
-                $stash->set(message => $messages{$code});
-            } else {
-                $stash->set(message => $message);
-            }
+            $stash->set(message => ref $message ? $messages{$code} : $message);
         }
         
         $tx->res->code($code);

@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 187;
+    use Test::More tests => 195;
 
     my $app;
     my $t;
@@ -139,6 +139,17 @@ use Mojo::Date;
         ->text_is('filename', 'to_abs.html.ep')
         ->text_is('test1', 1)
         ->text_is('test2', 0);
+    
+    ### iter
+    
+    $t->get_ok('/iter.html')
+        ->status_is(200)
+        ->element_exists('test1 .test0')
+        ->element_exists('test1 .test1')
+        ->element_exists('test1 .test2')
+        ->element_exists('test2 .test0')
+        ->element_exists('test2 .test1')
+        ->element_exists('test2 .test2');
     
     ### stash
     

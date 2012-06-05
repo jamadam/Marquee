@@ -108,6 +108,20 @@ use Mojo::ByteStream;
                 Mojo::ByteStream->new($c->app->render_ssi($self->_to_abs($path)));
         };
         
+        $self->funcs->{iter} = sub {
+            my $self    = shift;
+            my $block   = pop;
+            my @array = (scalar @_ > 1 || ref $_[0] ne 'ARRAY') ? @_ : @{$_[0]};
+            
+            my $ret = '';
+            
+            for my $elem (@array) {
+                $ret .= $block->($elem);
+            }
+            
+            return Mojo::ByteStream->new($ret);
+        };
+        
         $self->funcs->{override} = sub {
             my ($self, $name, $value) = @_;
             my $path = $self->current_template;
@@ -174,7 +188,7 @@ EP handler.
 
 Returns current template path.
 
-=head2 <% extends($path, block) %>
+=head2 <% extends($path, $block) %>
 
 Base template.
 
@@ -211,6 +225,15 @@ Extended template.
     <% end %>
 
 Extends template.
+
+=head2 <% iter @array => $block %>
+
+Array iterator with block.
+
+    <%= iter @array => begin %>
+        <% my $elem = shift; %>
+        <%= $elem %>
+    <% end %>
 
 =head2 <% include('./path/to/template.html.ep', key => value) %>
 

@@ -1,5 +1,7 @@
 Revision history for MojoSimpleHTTPServer
 
+0.05 2012/06/05
+
 0.04 2012/06/05
   - Fixed a bug that aroud_dispatch hook has been invoked on wrong condition.
   - Added iter function for array iteration.

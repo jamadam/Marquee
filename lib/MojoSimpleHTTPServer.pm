@@ -31,7 +31,7 @@ use MojoSimpleHTTPServer::SSIHandler::EPL;
 use MojoSimpleHTTPServer::Stash;
 use MojoSimpleHTTPServer::ErrorDocument;
 
-    our $VERSION = '0.04';
+    our $VERSION = '0.05';
 
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');

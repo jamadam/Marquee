@@ -12,27 +12,48 @@ use Mojo::Date;
 use MojoSimpleHTTPServer;
 use Mojo::Util qw/encode md5_sum/;
 
-    use Test::More tests => 13;
+    use Test::More tests => 20;
 
     my $app;
     my $t;
-
-    $app = MojoSimpleHTTPServer->new;
-    $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
-    $t = Test::Mojo->new($app);
     
-    $t->get_ok('/cache.html')
-        ->status_is(200);
-    $t->get_ok('/cache.html')
-        ->status_is(200);
+    {
+        $app = MojoSimpleHTTPServer->new;
+        $app->document_root("$FindBin::Bin/public_html");
+        $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+        $t = Test::Mojo->new($app);
+        
+        $t->get_ok('/cache.html')
+            ->status_is(200);
+        $t->get_ok('/cache.html')
+            ->status_is(200);
+        
+        my $expected_key = md5_sum(encode('UTF-8', "$FindBin::Bin/public_html/cache.html.ep"));
+        my $cache = $app->ssi_handlers->{ep}->template_cache;
+        is scalar keys %{$cache->{1}}, 1, 'right cache amount';
+        my $mt = $cache->get($expected_key);
+        is ref $mt, 'Mojo::Template';
+        ok $mt->compiled;
+    }
     
-    my $expected_key = md5_sum(encode('UTF-8', "$FindBin::Bin/public_html/cache.html.ep"));
-    my $cache = $app->ssi_handlers->{ep}->template_cache;
-    is scalar keys %{$cache->{1}}, 1, 'right cache amount';
-    my $mt = $cache->get($expected_key);
-    is ref $mt, 'Mojo::Template';
-    ok $mt->compiled;
+    {
+        $app = MojoSimpleHTTPServer->new;
+        $app->document_root("$FindBin::Bin/public_html");
+        $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+        $t = Test::Mojo->new($app);
+        
+        $t->get_ok('/cache3.html')
+            ->status_is(200);
+        $t->get_ok('/cache3.html')
+            ->status_is(200);
+        
+        my $expected_key = md5_sum(encode('UTF-8', "$FindBin::Bin/public_html/cache3.html.epl"));
+        my $cache = $app->ssi_handlers->{epl}->template_cache;
+        is scalar keys %{$cache->{1}}, 1, 'right cache amount';
+        my $mt = $cache->get($expected_key);
+        is ref $mt, 'Mojo::Template';
+        ok $mt->compiled;
+    }
     
     ### Detect template update
     {

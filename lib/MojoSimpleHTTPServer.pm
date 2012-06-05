@@ -120,7 +120,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
                                     $root, File::Spec->splitpath($filled_path));
                 if (-f $path) {
                     $self->hooks->emit_chain('around_static', $path);
-                } else {
+                } elsif (my $path = $self->search_template($path)) {
                     $self->hooks->emit_chain('around_dynamic', $path);
                 }
                 if ($res->code) {
@@ -277,24 +277,35 @@ use MojoSimpleHTTPServer::ErrorDocument;
     }
     
     ### --
-    ### serve dynamic content
+    ### search template
     ### --
-    sub serve_dynamic {
+    sub search_template {
         my ($self, $path) = @_;
+        
         my $tx = $MSHS::CONTEXT->tx;
         
         for my $ext (keys %{$self->ssi_handlers}) {
             my $path = "$path.$ext";
             if (-f $path) {
-                my $ret = $self->render_ssi($path, $ext);
-                if (defined $ret) {
-                    $tx->res->body(encode('UTF-8', $ret));
-                    $tx->res->code(200);
-                    if (my $type = $self->path_to_type($path)) {
-                        $tx->res->headers->content_type($type);
-                    }
-                    last;
-                }
+                return $path;
+            }
+        }
+    }
+    
+    ### --
+    ### serve dynamic content
+    ### --
+    sub serve_dynamic {
+        my ($self, $path) = @_;
+        
+        my $ret = $self->render_ssi($path);
+        
+        if (defined $ret) {
+            my $tx = $MSHS::CONTEXT->tx;
+            $tx->res->body(encode('UTF-8', $ret));
+            $tx->res->code(200);
+            if (my $type = $self->path_to_type($path)) {
+                $tx->res->headers->content_type($type);
             }
         }
         

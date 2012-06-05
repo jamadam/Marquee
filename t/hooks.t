@@ -10,7 +10,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
     
-    use Test::More tests => 17;
+    use Test::More tests => 19;
 
     my $app;
     my $t;
@@ -79,6 +79,17 @@ use Mojo::Date;
         ->content_type_is('text/plain')
         ->header_is('Content-Length', 27)
         ->content_is('static <%= time() %>modmod2');
+    
+    ### Should not run hook for dynamic if the path not found
+    
+    $app->hook(around_dynamic => sub {
+        my ($next, @args) = @_;
+        ok 0, 'not to run';
+        $next->();
+    });
+    
+    $t->get_ok('/index2.html')
+        ->status_is(404);
 
 package MyApp;
 use Mojo::Base 'MojoSimpleHTTPServer';

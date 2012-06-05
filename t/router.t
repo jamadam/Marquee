@@ -26,7 +26,7 @@ use Mojo::Date;
     
     $app->plugin(Router => [
         qr{^/index\.html} => sub {
-            MyApp->context->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt");
+            MyApp->context->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt.ep");
             is $_[0], undef;
         },
         qr{^/special\.html} => sub {
@@ -100,7 +100,7 @@ use Mojo::Date;
     $app->plugin(Router => sub {
         my $r = shift;
         $r->route(qr{^/index\.html})->to(sub {
-            MyApp->context->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt");
+            MyApp->context->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt.ep");
             is $_[0], undef;
         });
         $r->route(qr{^/special\.html})->to(sub {

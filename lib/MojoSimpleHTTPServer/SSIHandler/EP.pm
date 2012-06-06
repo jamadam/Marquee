@@ -159,9 +159,11 @@ use Mojo::ByteStream;
     sub _to_abs {
         my ($self, $path) = @_;
         
-        my $path_abs = dirname($self->current_template). '/'. $path;
+        if ($path =~ qr{^/(.+)}) {
+            return File::Spec->catfile($MSHS::CONTEXT->app->document_root, $1);
+        }
         
-        return $path_abs;
+        return dirname($self->current_template). '/'. $path;
     }
 
 1;
@@ -237,8 +239,8 @@ Array iterator with block.
 
 =head2 <% include('./path/to/template.html.ep', key => value) %>
 
-Include a template into current template. Note that the path must be relative to
-current template directory.
+Include a template into current template. The path can be relative to
+current template directory or relative to document root if leading slashed.
 
 =head2 <% override($name, $block) %>
 

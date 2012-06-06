@@ -12,7 +12,7 @@ use Mojo::Date;
 use MojoSimpleHTTPServer;
 use Mojo::Util qw/encode md5_sum/;
 
-    use Test::More tests => 20;
+    use Test::More tests => 26;
 
     my $app;
     my $t;
@@ -77,6 +77,30 @@ use Mojo::Util qw/encode md5_sum/;
             ->content_is("b\n");
         
         unlink("$FindBin::Bin/public_html/cache2.html.ep");
+    }
+    
+    ### Detect sub template update
+    {
+        my $file;
+        open($file, "> $FindBin::Bin/public_html/cache4_sub.html.ep");
+        print $file 'a';
+        close($file);
+        
+        $t->get_ok('/cache4.html')
+            ->status_is(200)
+            ->content_is("a\n");
+        
+        sleep(1);
+        
+        open($file, "> $FindBin::Bin/public_html/cache4_sub.html.ep");
+        print $file 'b';
+        close($file);
+        
+        $t->get_ok('/cache4.html')
+            ->status_is(200)
+            ->content_is("b\n");
+        
+        unlink("$FindBin::Bin/public_html/cache4_sub.html.ep");
     }
 
 __END__

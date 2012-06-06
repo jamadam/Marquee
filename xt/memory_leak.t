@@ -25,11 +25,11 @@ use Test::More tests => 6;
         my ($next, @args) = @_;
         return $next->(@args);
     });
-    $app->plugin(Router => {
+    $app->plugin(Router => [
         qr/index\.html/ => sub {
             MyApp->context->app->serve_static("");
         },
-    });
+    ]);
     my $t = Test::Mojo->new($app);
     $t->get_ok('/');
     memory_cycle_ok( $app );

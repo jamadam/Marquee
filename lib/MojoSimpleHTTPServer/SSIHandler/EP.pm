@@ -125,7 +125,7 @@ use Mojo::ByteStream;
         $self->funcs->{override} = sub {
             my ($self, $name, $value) = @_;
             my $path = $self->current_template;
-            $MSHS::CONTEXT->stash->set($name => sub {
+            $MSHS::CONTEXT->stash->set(_ph_name($name) => sub {
                 return $self->render_traceable($path, $value);
             });
             return;
@@ -133,7 +133,7 @@ use Mojo::ByteStream;
         
         $self->funcs->{placeholder} = sub {
             my ($self, $name, $defalut) = @_;
-            my $block = $MSHS::CONTEXT->stash->{$name} || $defalut;
+            my $block = $MSHS::CONTEXT->stash->{_ph_name($name)} || $defalut;
             return $block->() || '';
         };
         
@@ -151,6 +151,13 @@ use Mojo::ByteStream;
         };
         
         return $self;
+    }
+    
+    ### --
+    ### Generate safe name for placeholder
+    ### --
+    sub _ph_name {
+        return "MSHS.SSIHandler.EP.". shift;
     }
     
     ### --

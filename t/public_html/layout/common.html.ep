@@ -15,6 +15,11 @@
                 <current_template2><%= current_template %></current_template2>
             <% end %>
         </div>
+        <div id="namespace_test">
+            <%= placeholder 'namespace_test' => begin %>
+                <%= $namespace_test %>
+            <% end %>
+        </div>
     </body>
 </html>
 <current_template1><%= current_template %></current_template1>

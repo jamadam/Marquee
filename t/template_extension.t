@@ -11,7 +11,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 10;
+    use Test::More tests => 11;
 
     my $app;
     my $t;
@@ -19,6 +19,7 @@ use MojoSimpleHTTPServer;
     $app = MojoSimpleHTTPServer->new;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->stash->set('namespace_test' => 'global stash content');
     $t = Test::Mojo::DOM->new($app);
     
     $t->get_ok('/use_layout.html')
@@ -32,8 +33,9 @@ use MojoSimpleHTTPServer;
             $t->at('current_template2')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
             $t->at('layout current_template1')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
             $t->at('layout #main2 current_template2')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
+            $t->at('layout #namespace_test')->text_is("global stash content");
         });
     
-    is exists $app->stash->get()->{title}, '';
+    ok ! exists $app->stash->{title};
 
 __END__

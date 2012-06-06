@@ -427,7 +427,7 @@ Specify a default file name and activate auto fill.
 
 =head2 error_document
 
-Error document renderer instace. Defaults to MojoSimpleHTTPServer::ErrorDocument
+Error document renderer instance. Defaults to MojoSimpleHTTPServer::ErrorDocument
 
 =head2 log_file
 

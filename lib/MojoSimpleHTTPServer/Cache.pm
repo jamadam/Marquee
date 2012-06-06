@@ -75,7 +75,7 @@ MojoSimpleHTTPServer::Cache - Cache
 
 =head1 DESCRIPTION
 
-Simple cache manager with expire ferture.
+Simple cache manager with expire feature.
 
 =head1 METHODS
 

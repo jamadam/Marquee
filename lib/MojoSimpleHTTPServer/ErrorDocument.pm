@@ -72,6 +72,10 @@ MojoSimpleHTTPServer::ErrorDocument - ErrorDocument
 
 =head1 METHODS
 
+=head2 $instance->serve($status_code, $message)
+
+Serves error document.
+
 =head1 SEE ALSO
 
 L<Mojolicious>

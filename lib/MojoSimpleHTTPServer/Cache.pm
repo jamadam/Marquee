@@ -93,6 +93,10 @@ Set cache values with given name and data.
     $cache->set(key, $data, sub {...});
     $cache->set(key, $data, [sub {...}, sub {...}]);
 
+=head2 $instance->vacuum()
+
+Fixes mismatches between the cache table and stack table.
+
 =head1 SEE ALSO
 
 L<Mojolicious>

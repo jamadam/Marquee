@@ -26,7 +26,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
             
             while (@routes) {
                 my $regex   = shift @routes;
-                my $cond    = shift @routes if (ref $routes[0] eq 'HASH');
+                my $cond    = (ref $routes[0] eq 'HASH') ? shift @routes : undef;
                 my $cb      = shift @routes;
                 
                 if ($cond && ! _judge($tx->req, $cond)) {
@@ -139,6 +139,18 @@ MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
 =head1 METHODS
 
 =head2 $instance->register($app, $hash_ref, $array_ref)
+
+=head2 $instance->route($regex)
+
+Set a regex that matches to request URI.
+
+=head2 $instance->to($code_ref)
+
+Set an action to invoke when the route matches.
+
+=head2 $instance->via($http_method)
+
+Filters route by HTTP method.
 
 =head1 SEE ALSO
 

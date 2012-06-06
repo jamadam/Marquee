@@ -1,16 +1,3 @@
-package MSHS;
-use strict;
-use warnings;
-
-    our $CONTEXT;
-    
-    ### --
-    ### Accessor for localized context
-    ### --
-    sub context {
-        return $_[1] ? $CONTEXT = $_[1] : $CONTEXT;
-    }
-
 package MojoSimpleHTTPServer;
 use strict;
 use warnings;
@@ -30,6 +17,21 @@ use MojoSimpleHTTPServer::SSIHandler::EP;
 use MojoSimpleHTTPServer::SSIHandler::EPL;
 use MojoSimpleHTTPServer::Stash;
 use MojoSimpleHTTPServer::ErrorDocument;
+    
+    {
+        package MSHS;
+        use strict;
+        use warnings;
+        
+            our $CONTEXT;
+            
+            ### --
+            ### Accessor for localized context
+            ### --
+            sub context {
+                return $_[1] ? $CONTEXT = $_[1] : $CONTEXT;
+            }
+    }
 
     our $VERSION = '0.05';
 
@@ -507,6 +509,10 @@ Detect MIME type out of path name.
 =head2 $instance->plugin('class', @args)
 
 =head2 $instance->render_ssi($path, $ext)
+
+=head2 search_template($path)
+
+Searches for SSI template for given path and returns the path with SSI extension.
 
 =head2 $instance->serve_redirect_to_slashed($path)
 

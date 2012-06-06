@@ -333,6 +333,10 @@ MojoSimpleHTTPServer::Plugin::AutoIndex - Auto index
 
 =head2 $instance->register($app, $hash_ref)
 
+=head2 $instance->mime_types()
+
+Returns common MIME types.
+
 =head1 SEE ALSO
 
 L<Mojolicious>

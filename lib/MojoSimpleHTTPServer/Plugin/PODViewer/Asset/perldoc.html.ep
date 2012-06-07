@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<%
+		my $c 			= shift;
+		my $static_dir 	= stash('static_dir');
+	%>
+    <title><%= stash('title') %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/yui-reset.css" />
+	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/yui-fonts.css" />
+	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/site_main.css" />
+	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/site_perldoc.css" />
+	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/css/prettify-mojo.css" />
+	<link rel="shortcut icon" href="/static/favicon.ico" />
+    <script type="text/javascript" src="/<%= $static_dir %>/jquery.1.7.1.js"></script>
+    <script type="text/javascript" src="/<%= $static_dir %>/js/prettify.js"></script>
+    <style type="text/css">
+    </style>
+  </head>
+  <body onload="prettyPrint()">
+	<h1>
+	  <code><%= stash('title') %></code>
+	</h1>
+    <div id="wrapper">
+	  % my $link = begin
+		<% my ($ancher, $url) = @_; %>
+		<a href="<%= $url%>" class="mojoscroll"><%= $ancher %></a>
+	  % end
+	  <h1>
+		<a id="toc">TABLE OF CONTENTS</a>
+	  </h1>
+	  <ul>
+		% for my $part (@$parts) {
+		  <li>
+			%= $link->(splice @$part, 0, 2)
+			% if (@$part) {
+			  <ul>
+				% while (@$part) {
+				  <li><%= $link->(splice @$part, 0, 2) %></li>
+				% }
+			  </ul>
+			% }
+		  </li>
+		% }
+	  </ul>
+	  <%== stash('perldoc') %>
+	  <div id="footer">
+	  </div>
+	</div>
+  </body>
+</html>

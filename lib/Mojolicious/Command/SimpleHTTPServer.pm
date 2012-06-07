@@ -19,6 +19,7 @@ These options are available:
   -dr, --document_root <path>  Set document root path, defaults to current dir.
   -df, --default_file <name>   Set default file name and activate auto fill.
   -ai, --auto_index            Activate auto index, defaults to 0.
+  -pv, --pod_viewer            Activate pod viewer.
   -ud, --under_development     Activate debug screen for server-side include.
   -b, --backlog <size>         Set listen backlog size, defaults to
                                SOMAXCONN.
@@ -64,6 +65,10 @@ sub run {
     'ai|auto_index'         => sub { $app->plugin('AutoIndex') },
     'df|default_file=s'     => sub { $app->default_file($_[1]) },
     'ud|under_development'  => sub { $app->under_development(1) },
+    'pv|pod_viewer'         => sub {
+        $app->plugin('AutoIndex');
+        $app->plugin('PODViewer');
+    },
   );
   
   $app->document_root || $app->document_root('./');

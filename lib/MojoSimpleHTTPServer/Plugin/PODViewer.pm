@@ -14,29 +14,35 @@ use Mojo::Base 'Mojolicious::Plugin';
     sub register {
         my ($self, $app, $conf) = @_;
         
-        push(@{$app->roots}, $self->_asset(), map { $_, "$_/pods" } @INC);
+        push(@{$app->roots}, $self->_asset());
         
-        $app->hook('around_static' => sub {
-            my ($next, @args) = @_;
-            
-            $next->();
-            
-            my $tx = $MSHS::CONTEXT->tx;
-            
-            if ($tx->req->url =~ qr{\.pm$} && $tx->res->code == 200) {
-                my $context = $MSHS::CONTEXT;
-                my $app     = $context->app;
+        my @PATHS = map { $_, "$_/pods" } @INC;
+        
+        $app->plugin('Router' => sub {
+            shift->route(qr{^/perldoc/(.+)})->to(sub {
+                my $module = shift;
                 
-                my $html = _pod_to_html($tx->res->body);
+                $module =~ s!/!\:\:!g;
+                
+                my $context = $MSHS::CONTEXT;
+                my $tx      = $context->tx;
+                my $app     = $context->app;
+                my $path    = Pod::Simple::Search->new->find($module, @PATHS);
+                
+                if (! $path || ! -r $path) {
+                    return $app->serve_redirect("http://metacpan.org/module/$module");
+                }
+                
+                open my $file, '<', $path;
+                my $html = _pod_to_html(join '', <$file>);
                 
                 # Rewrite links
                 my $dom = Mojo::DOM->new("$html");
                 $dom->find('a[href]')->each(sub {
                     my $attrs = shift->attrs;
                     if ($attrs->{href}
-                                =~ s!^http\://search\.cpan\.org/perldoc\?!/!) {
+                        =~ s!^http\://search\.cpan\.org/perldoc\?!/perldoc/!) {
                         $attrs->{href} =~ s!%3A%3A!/!gi;
-                        $attrs->{href} .= '.pm';
                     }
                 });
             
@@ -86,7 +92,7 @@ use Mojo::Base 'Mojolicious::Plugin';
                 );
                 $tx->res->code(200);
                 $tx->res->headers->content_type($MSHS::CONTEXT->app->types->type('html'));
-            }
+            });
         });
     }
 

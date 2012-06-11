@@ -65,10 +65,7 @@ sub run {
     'ai|auto_index'         => sub { $app->plugin('AutoIndex') },
     'df|default_file=s'     => sub { $app->default_file($_[1]) },
     'ud|under_development'  => sub { $app->under_development(1) },
-    'pv|pod_viewer'         => sub {
-        $app->plugin('AutoIndex');
-        $app->plugin('PODViewer');
-    },
+    'pv|pod_viewer'         => sub { $app->plugin('PODViewer') },
   );
   
   $app->document_root || $app->document_root('./');

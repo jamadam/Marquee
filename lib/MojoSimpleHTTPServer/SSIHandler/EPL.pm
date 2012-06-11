@@ -4,7 +4,8 @@ use warnings;
 use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler';
 use MojoSimpleHTTPServer::Cache;
 use Mojo::Util qw/encode md5_sum/;
-    
+use Mojo::Template;
+
     __PACKAGE__->attr('template_cache' => sub {MojoSimpleHTTPServer::Cache->new});
     
     ### --
@@ -32,15 +33,16 @@ use Mojo::Util qw/encode md5_sum/;
         
         my $mt = $self->cache($path);
         
+        if (! $mt) {
+            $mt = Mojo::Template->new;
+            $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
+        }
+        
         my $output;
         
-        if ($mt && $mt->compiled) {
+        if ($mt->compiled) {
             $output = $mt->interpret($self, $context);
         } else {
-            if (! $mt) {
-                $mt = Mojo::Template->new;
-                $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
-            }
             $output = $mt->render_file($path, $self, $context);
         }
         

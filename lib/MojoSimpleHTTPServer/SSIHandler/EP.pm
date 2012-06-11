@@ -4,6 +4,7 @@ use warnings;
 use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler::EPL';
 use File::Basename 'dirname';
 use Mojo::ByteStream;
+use Mojo::Template;
 
     ### --
     ### Function definitions for inside template
@@ -25,8 +26,12 @@ use Mojo::ByteStream;
     sub render {
         my ($self, $path) = @_;
         
-        if (! $self->cache($path)) {
-            my $mt = Mojo::Template->new();
+        my $context = $MSHS::CONTEXT;
+        
+        my $mt = $self->cache($path);
+        
+        if (! $mt) {
+            $mt = Mojo::Template->new();
             $mt->auto_escape(1);
             
             # Be a bit more relaxed for helpers
@@ -40,8 +45,6 @@ use Mojo::ByteStream;
                     "sub $name; *$name = sub {\$_F->{$name}->(\$_H, \@_)};";
                 }
             }
-        
-            my $context = $MSHS::CONTEXT;
             
             $prepend .= 'use strict;';
             for my $var (keys %{$context->stash}) {
@@ -54,7 +57,15 @@ use Mojo::ByteStream;
             $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
         }
         
-        return $self->SUPER::render($path);
+        my $output;
+        
+        if ($mt->compiled) {
+            $output = $mt->interpret($self, $context);
+        } else {
+            $output = $mt->render_file($path, $self, $context);
+        }
+        
+        return ref $output ? die $output : $output;
     }
     
     ### --

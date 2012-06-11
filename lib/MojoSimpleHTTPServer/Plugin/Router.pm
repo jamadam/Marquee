@@ -46,6 +46,19 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
         return $self;
     }
     
+    sub basic_auth {
+        my ($self, $realm, $cb) = @_;
+        push(@{$self->routes}, sub {
+            my $tx = $MSHS::CONTEXT->tx;
+            my $auth = $tx->req->url->to_abs->userinfo;
+            if (! $auth || ! $cb->(split /:/, $auth, 2)) {
+                $tx->res->headers->www_authenticate("Basic realm=$realm");
+                $tx->res->code(401);
+            }
+        });
+        return $self;
+    }
+    
     sub route {
         my ($self, $regex) = @_;
         push(@{$self->routes}, $regex, {});
@@ -139,6 +152,17 @@ MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
 =head1 METHODS
 
 =head2 $instance->register($app, $hash_ref, $array_ref)
+
+=head2 $instance->basic_auth($realm => sub {...})
+
+[EXPERIMENTAL] Basic Authentication
+    
+    $app->plugin(Router => sub {
+        my $r = shift;
+        $r->route(qr{^/index\.html})->basic_auth('Secret Area' => sub {
+            $_[0] eq 'user' && $_[1] eq 'pass'
+        });
+    });
 
 =head2 $instance->route($regex)
 

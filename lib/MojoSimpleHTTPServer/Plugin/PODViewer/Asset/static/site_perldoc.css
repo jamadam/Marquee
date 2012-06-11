@@ -66,6 +66,11 @@ body {
 	#wrapper p {
 		margin-bottom: 20px;
 	}
+	#wrapper code {
+		padding:0 0.1em;
+		color: #000;
+		line-height: inherit;
+	}
 	#wrapper > ul:first-of-type a { text-decoration: none }
 #footer {
 	padding-top: 1em;

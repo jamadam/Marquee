@@ -165,5 +165,5 @@ use Mojo::Date;
     $t->get_ok('/index.html', {Authorization => "Basic dXNlcjpwYXNz"})
         ->status_is(200)
         ->content_is('dynamicdynamic');
-    
+
 __END__

@@ -19,16 +19,16 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
         $app->hook(around_dispatch => sub {
             my ($next, @args) = @_;
             
-            my $tx = $MSHS::CONTEXT->tx;
+            my $tx      = $MSHS::CONTEXT->tx;
+            my $path    = $tx->req->url->path->clone->leading_slash(1)->to_string;
+            my @elems   = @{$self->route->elems};
             
-            my @elems = @{$self->route->elems};
-            
-            Route : while (@elems) {
+            while (@elems) {
                 my ($regex, $cond, $cb) = splice(@elems, 0,3);
-                map {$_->($tx) || next Route} @$cond;
-                if (my @captures = ($tx->req->url->path =~ $regex)) {
+                map {$_->($tx) || next} @$cond;
+                if (my @captures = ($path =~ $regex)) {
                     $cb->(defined $1 ? @captures : ());
-                    last Route;
+                    last;
                 }
             }
             

@@ -1,9 +1,12 @@
 package MojoSimpleHTTPServer::Plugin::Router;
 use strict;
 use warnings;
+use MojoSimpleHTTPServer::Plugin::Router::Route;
 use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     
-    __PACKAGE__->attr('routes', sub {[]});
+    __PACKAGE__->attr('route', sub {
+        MojoSimpleHTTPServer::Plugin::Router::Route->new;
+    });
     
     ### --
     ### Register the plugin into app
@@ -11,31 +14,21 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     sub register {
         my ($self, $app, $routes) = @_;
         
-        if (ref $routes eq 'ARRAY') {
-            $self->routes($routes);
-        } else {
-            $routes->($self);
-        }
+        $routes->($self->route);
         
         $app->hook(around_dispatch => sub {
             my ($next, @args) = @_;
             
             my $tx = $MSHS::CONTEXT->tx;
             
-            my @routes = @{$self->routes};
+            my @elems = @{$self->route->elems};
             
-            while (@routes) {
-                my $regex   = shift @routes;
-                my $cond    = (ref $routes[0] eq 'HASH') ? shift @routes : undef;
-                my $cb      = shift @routes;
-                
-                if ($cond && ! _judge($tx->req, $cond)) {
-                    next;
-                }
-                
+            Route : while (@elems) {
+                my ($regex, $cond, $cb) = splice(@elems, 0,3);
+                map {$_->($tx) || next Route} @$cond;
                 if (my @captures = ($tx->req->url->path =~ $regex)) {
                     $cb->(defined $1 ? @captures : ());
-                    last;
+                    last Route;
                 }
             }
             
@@ -43,57 +36,8 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
                 $next->(@args);
             }
         });
-        return $self;
-    }
-    
-    sub basic_auth {
-        my ($self, $realm, $cb) = @_;
-        push(@{$self->routes}, sub {
-            my $tx = $MSHS::CONTEXT->tx;
-            my $auth = $tx->req->url->to_abs->userinfo;
-            if (! $auth || ! $cb->(split /:/, $auth, 2)) {
-                $tx->res->headers->www_authenticate("Basic realm=$realm");
-                $tx->res->code(401);
-            }
-        });
-        return $self;
-    }
-    
-    sub route {
-        my ($self, $regex) = @_;
-        push(@{$self->routes}, $regex, {});
-        return $self;
-    }
-    
-    sub to {
-        my ($self, $cb) = @_;
-        push(@{$self->routes}, $cb);
-        return $self;
-    }
-    
-    sub via {
-        my ($self, $method) = @_;
-        return $self->_add_cond(method => $method);
-    }
-    
-    sub _add_cond {
-        my ($self, $key, $value) = @_;
-        my @routes = @{$self->routes};
-        if (ref $routes[$#routes] ne 'HASH') {
-            push(@routes, {});
-        }
-        $routes[$#routes]->{$key} = $value;
-        return $self;
-    }
-    
-    sub _judge {
-        my ($req, $cond) = @_;
         
-        if (defined $cond->{method} && uc $cond->{method} ne uc $req->method) {
-            return;
-        }
-        
-        return 1;
+        return $self;
     }
 
 1;
@@ -105,27 +49,6 @@ __END__
 MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
 
 =head1 SYNOPSIS
-
-    $app->plugin(Router => [
-        qr{^/index\.html} => sub {
-            ### DO SOMETHING
-        },
-        qr{^/special\.html} => sub {
-            ### DO SOMETHING
-        },
-        qr{^/capture/(.+)-(.+)\.html} => sub {
-            my ($a, $b) = @_;
-            ### DO SOMETHING
-        },
-        qr{^/rare/} => {method => 'get'}, sub {
-            ### DO SOMETHING
-        },
-        qr{^/default} => sub {
-            ### DO SOMETHING
-        },
-    ]);
-    
-    ### OR
     
     $app->plugin(Router => sub {
         my $r = shift;
@@ -149,32 +72,15 @@ MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
 
 =head1 DESCRIPTION
 
+=head1 ATTRIBUTES
+
+=head2 route
+
+MojoSimpleHTTPServer::Plugin::Router::Route instance.
+
 =head1 METHODS
 
-=head2 $instance->register($app, $hash_ref, $array_ref)
-
-=head2 $instance->basic_auth($realm => sub {...})
-
-[EXPERIMENTAL] Basic Authentication
-    
-    $app->plugin(Router => sub {
-        my $r = shift;
-        $r->route(qr{^/index\.html})->basic_auth('Secret Area' => sub {
-            $_[0] eq 'user' && $_[1] eq 'pass'
-        });
-    });
-
-=head2 $instance->route($regex)
-
-Set a regex that matches to request URI.
-
-=head2 $instance->to($code_ref)
-
-Set an action to invoke when the route matches.
-
-=head2 $instance->via($http_method)
-
-Filters route by HTTP method.
+=head2 $instance->register($app, $routes)
 
 =head1 SEE ALSO
 

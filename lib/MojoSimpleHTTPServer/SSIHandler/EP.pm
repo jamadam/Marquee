@@ -5,17 +5,40 @@ use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler::EPL';
 use File::Basename 'dirname';
 use Mojo::ByteStream;
 use Mojo::Template;
-
+use Carp;
+    
     ### --
     ### Function definitions for inside template
     ### --
     __PACKAGE__->attr(funcs => sub {{}});
     
     ### --
-    ### Add helper
+    ### Check if the name exists as a subroutine
+    ### --
+    sub _func_exists {
+        if ($_[0] =~ /\W/) {
+            croak "Function name must be consitsts of [a-bA-B0-9]";
+        }
+        no warnings;
+        eval "{package ". __PACKAGE__. "::_SandBox; $_[0]()}";
+        if ($@ !~ /Undefined subroutine/) {
+            return 1;
+        }
+    };
+    
+    ### --
+    ### Add function
     ### --
     sub add_function {
         my ($self, $name, $cb) = @_;
+        
+        if ($name =~ /\W/) {
+            croak "Function name must be consitsts of [a-bA-B0-9]";
+        }
+        if (_func_exists($name)) {
+            croak qq{Can't modify built-in function $name};
+        }
+        
         $self->funcs->{$name} = $cb;
         return $self;
     }

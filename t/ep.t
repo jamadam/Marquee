@@ -13,18 +13,37 @@ use MojoSimpleHTTPServer;
 use Mojo::Date;
 use MojoSimpleHTTPServer::SSIHandler::EP;
 
-    use Test::More tests => 1;
+    use Test::More tests => 8;
     
     ### add_function
     
     my $ep = MojoSimpleHTTPServer::SSIHandler::EP->new;
-    $ep->add_function(myfunc => sub {});
+    eval {
+        $ep->add_function(myfunc => sub {});
+    };
+    
     is ref $ep->funcs->{myfunc}, 'CODE';
+    is $@, '';
     
     eval {
         $ep->add_function(time => sub {});
     };
     
-    is $@, q{Can't modify core function time};
-
+    is $ep->funcs->{time}, undef;
+    like $@, qr{Can't modify built-in function time};
+    
+    eval {
+        $ep->add_function(add_function => sub {});
+    };
+    
+    is ref $ep->funcs->{add_function}, 'CODE';
+    is $@, '';
+    
+    eval {
+        $ep->add_function('a b c' => sub {});
+    };
+    
+    is ref $ep->funcs->{'a b c'}, '';
+    like $@, qr'Function name must be';
+    
 __END__

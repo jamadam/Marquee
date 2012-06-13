@@ -13,6 +13,9 @@
             <%= placeholder 'main2' => begin %>
                 DEFAULT MAIN2
                 <current_template2><%= current_template %></current_template2>
+                <current_template3><%= current_template(0) %></current_template3>
+                <current_template4><%= current_template(1) %></current_template4>
+                <current_template5><%= current_template(2) %></current_template5>
             <% end %>
         </div>
         <div id="namespace_test">

@@ -11,7 +11,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use MojoSimpleHTTPServer;
 
-    use Test::More tests => 11;
+    use Test::More tests => 18;
 
     my $app;
     my $t;
@@ -30,9 +30,16 @@ use MojoSimpleHTTPServer;
             $t->at('#main')->text_is('メインコンテンツdynamic');
             $t->at('#main2')->text_is('DEFAULT MAIN2');
             $t->at('current_template1')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
-            $t->at('current_template2')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
+            $t->at('current_template2')->text_is("");
+            $t->at('use_layout current_template3')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
+            $t->at('use_layout current_template4')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
+            $t->at('use_layout current_template5')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
+            $t->at('use_layout current_template6')->text_is("");
             $t->at('layout current_template1')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
             $t->at('layout #main2 current_template2')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
+            $t->at('layout #main2 current_template3')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
+            $t->at('layout #main2 current_template4')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
+            $t->at('layout #main2 current_template5')->text_is("");
             $t->at('layout #namespace_test')->text_is("global stash content");
         });
     

@@ -20,10 +20,14 @@ use Carp;
             croak "Function name must be consitsts of [a-bA-B0-9]";
         }
         no warnings;
-        eval "{package ". __PACKAGE__. "::_SandBox; $_[0]()}";
+        my $package = __PACKAGE__. "::_SandBox";
+        eval "{package $package; $_[0]()}";
         if ($@ !~ /Undefined subroutine/) {
             return 1;
         }
+        no strict 'refs';
+        %{$package.'::'} = ();
+        return;
     };
     
     ### --

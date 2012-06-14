@@ -63,39 +63,62 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Context - Context
+MojoSimpleHTTPServer::Context - SSI handler base class
 
 =head1 SYNOPSIS
 
+    package MojoSimpleHTTPServer::SSIHandler::EPL;
+    use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler';
+    
+    sub render {
+        my ($self, $path) = @_;
+        
+        ...;
+        
+        return $out;
+    }
+    
+    sub init {
+        ...
+    }
+
 =head1 DESCRIPTION
 
-=head1 ATTRIBUTES
+This is a SSI handler base class to be inherited by handler classes. The sub
+class is MUST implement render method.
+
+=head1 METHODS
 
 =head2 MojoSimpleHTTPServer::SSIHandler->new;
 
 Constructor.
 
-=head2 MojoSimpleHTTPServer::SSIHandler->init;
-
-Initializes plugins.
-
-=head2 MojoSimpleHTTPServer::SSIHandler->render;
-
-Renders templates.
-
-=head2 MojoSimpleHTTPServer::SSIHandler->render_traceable;
-
-Traceably renders templates by stacking template names recursively.
-
 =head2 MojoSimpleHTTPServer::SSIHandler->current_template;
 
 Detects current template recursively.
 
-=head1 METHODS
+    my $current_template = MojoSimpleHTTPServer::SSIHandler->current_template;
+    my $parent_template = MojoSimpleHTTPServer::SSIHandler->current_template(1);
 
-=head2 new
+=head2 $instance->init;
 
-Get template cache for given path
+Initializes plugin on instantiation stage.
+
+=head2 $instance->render;
+
+Renders templates. The sub classes MUST override(implement) the method.
+    
+    sub render {
+        my ($self, $path) = @_;
+        
+        ...;
+        
+        return $out;
+    }
+
+=head2 $instance->render_traceable;
+
+Traceably renders templates by stacking template names recursively.
 
 =head1 SEE ALSO
 

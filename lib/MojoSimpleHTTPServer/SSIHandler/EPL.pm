@@ -76,7 +76,7 @@ Get or set cache.
 =head2 $instance->render($path)
 
 Renders given template and returns the result. If rendering fails, die with
-Mojo::Exception.
+L<Mojo::Exception>.
 
 =head1 SEE ALSO
 

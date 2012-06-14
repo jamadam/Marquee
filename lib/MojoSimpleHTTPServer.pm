@@ -423,33 +423,50 @@ This is built on mojo modules in L<Mojolicious> distribution.
 
 =head2 document_root
 
+Specify a path to document root directory. The directory can contain both static
+files and templates.
+
+    $app->document_root($app->home->rel_dir('public_html'));
+
 =head2 default_file
 
 Specify a default file name and activate auto fill.
 
+    $app->default_file('index.html');
+
 =head2 error_document
 
-Error document renderer instance. Defaults to MojoSimpleHTTPServer::ErrorDocument
+Error document renderer instance. Defaults to
+L<MojoSimpleHTTPServer::ErrorDocument>
+
+    $app->error_document(MojoSimpleHTTPServer::ErrorDocument->new);
 
 =head2 log_file
 
 Specify a log file path.
 
+    $app->document_root($app->home->rel_dir('log/mshs.log'));
+
 =head2 hooks
 
-A MojoSimpleHTTPServer::Hooks instance.
+A L<MojoSimpleHTTPServer::Hooks> instance.
+
+    $app->hooks(MojoSimpleHTTPServer::Hooks->new);
 
 =head2 roots
 
 Array of paths that contains static and templates.
 
+    push(@{$app->roots}, 'path/to/additional_dir')
+
 =head2 ssi_handlers
 
-An hash ref that contains Server side include handlers.
+An hash ref that contains Server side include handlers. You can append
+SSI association by add_handler method.
 
 =head2 stash
 
-An MojoSimpleHTTPServer::Stash instance.
+An L<MojoSimpleHTTPServer::Stash> instance.
 
 =head2 types
 
@@ -475,7 +492,7 @@ Adds ssi_handlers entry.
 
     $instance->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
 
-=head2 __PACKAGE__::asset($filename);
+=head2 MojoSimpleHTTPServer::asset($filename);
 
 Returns bundled asset path for given file name.
 

@@ -136,78 +136,27 @@ use Mojo::Base 'Mojolicious::Plugin';
 
 =head1 NAME
 
-Mojolicious::Plugin::PODRenderer - POD renderer plugin
+MojoSimpleHTTPServer::Plugin::PODRenderer - POD renderer plugin
 
 =head1 SYNOPSIS
 
-  # Mojolicious
-  my $route = $self->plugin('PODRenderer');
-  my $route = $self->plugin(PODRenderer => {name => 'foo'});
-  my $route = $self->plugin(PODRenderer => {preprocess => 'epl'});
-  $self->render('some_template', handler => 'pod');
-  %= pod_to_html "=head1 TEST\n\nC<123>"
-
-  # Mojolicious::Lite
-  my $route = plugin 'PODRenderer';
-  my $route = plugin PODRenderer => {name => 'foo'};
-  my $route = plugin PODRenderer => {preprocess => 'epl'};
-  $self->render('some_template', handler => 'pod');
-  %= pod_to_html "=head1 TEST\n\nC<123>"
-
 =head1 DESCRIPTION
-
-L<Mojolicious::Plugin::PODRenderer> is a renderer for true Perl hackers, rawr!
-The code of this plugin is a good example for learning to build new plugins.
-
-=head1 OPTIONS
-
-L<Mojolicious::Plugin::PODRenderer> supports the following options.
-
-=head2 C<name>
-
-  # Mojolicious::Lite
-  plugin PODRenderer => {name => 'foo'};
-
-Handler name.
-
-=head2 C<no_perldoc>
-
-  # Mojolicious::Lite
-  plugin PODRenderer => {no_perldoc => 1};
-
-Disable perldoc browser.
-
-=head2 C<preprocess>
-
-  # Mojolicious::Lite
-  plugin PODRenderer => {preprocess => 'epl'};
-
-Name of handler used to preprocess POD.
-
-=head1 HELPERS
-
-L<Mojolicious::Plugin::PODRenderer> implements the following helpers.
-
-=head2 C<pod_to_html>
-
-  %= pod_to_html '=head2 lalala'
-  <%= pod_to_html begin %>=head2 lalala<% end %>
-
-Render POD to HTML.
 
 =head1 METHODS
 
-L<Mojolicious::Plugin::PODRenderer> inherits all methods from
-L<Mojolicious::Plugin> and implements the following new ones.
-
-=head2 C<register>
-
-  my $route = $plugin->register($app, $conf);
-
-Register renderer in L<Mojolicious> application.
-
 =head1 SEE ALSO
 
-L<Mojolicious>, L<Mojolicious::Guides>, L<http://mojolicio.us>.
+L<Mojolicious>
+
+=head1 AUTHOR
+
+Sugama Keita, E<lt>sugama@jamadam.comE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2012 by Sugama Keita.
+
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
 
 =cut

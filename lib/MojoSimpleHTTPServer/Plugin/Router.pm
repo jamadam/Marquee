@@ -76,7 +76,7 @@ MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
 
 =head2 route
 
-MojoSimpleHTTPServer::Plugin::Router::Route instance.
+L<MojoSimpleHTTPServer::Plugin::Router::Route> instance.
 
 =head1 METHODS
 

@@ -42,11 +42,11 @@ MojoSimpleHTTPServer::Context - Context
 
 =head2 app
 
-MojoSimpleHTTPServer instance.
+L<MojoSimpleHTTPServer> instance.
 
 =head2 tx
 
-Mojo::Transaction instance.
+L<Mojo::Transaction> instance.
 
 =head2 stash
 

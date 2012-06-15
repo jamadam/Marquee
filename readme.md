@@ -1,4 +1,4 @@
-MojoSimpleHTTPServer 0.01 beta
+MojoSimpleHTTPServer beta
 ---------------
 
 ## SYNOPSIS
@@ -104,9 +104,5 @@ Icons by [Yusuke Kamiyamane].
 Copyright (c) 2012 [jamadam]
 [jamadam]: http://blog2.jamadam.com/
 
-Dual licensed under the MIT and GPL licenses:
-
-- [http://www.opensource.org/licenses/mit-license.php]
-- [http://www.gnu.org/licenses/gpl.html]
-[http://www.opensource.org/licenses/mit-license.php]: http://www.opensource.org/licenses/mit-license.php
-[http://www.gnu.org/licenses/gpl.html]:http://www.gnu.org/licenses/gpl.html
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.

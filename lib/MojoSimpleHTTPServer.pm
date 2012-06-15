@@ -135,7 +135,10 @@ use MojoSimpleHTTPServer::ErrorDocument;
             if (-d File::Spec->catfile(
                         $self->document_root, File::Spec->splitpath($path)) && 
                         (! $path->trailing_slash && scalar @{$path->parts})) {
-                $self->serve_redirect_to_slashed($path);
+                my $uri =
+                    $MSHS::CONTEXT->tx->req->url->clone->path(
+                                    $path->clone->trailing_slash(1))->to_abs;
+                $self->serve_redirect($uri);
             }
         }
     }
@@ -211,25 +214,13 @@ use MojoSimpleHTTPServer::ErrorDocument;
     ### detect and render
     ### --
     sub render_ssi {
-        my ($self, $path, $ext) = @_;
-        $ext ||= ($path =~ qr{\.\w+\.(\w+)$})[0];
+        my ($self, $path) = @_;
+        my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
         if (my $handler = $self->ssi_handlers->{$ext}) {
             return $handler->render_traceable($path);
         } else {
             die "SSI handler not detected for $path";
         }
-    }
-    
-    ### --
-    ### serve redirect to slashed directory
-    ### --
-    sub serve_redirect_to_slashed {
-        my ($self, $path) = @_;
-        
-        my $uri =
-            $MSHS::CONTEXT->tx->req->url->clone->path(
-                                    $path->clone->trailing_slash(1))->to_abs;
-        return $self->serve_redirect($uri);
     }
     
     ### --
@@ -415,8 +406,8 @@ MojoSimpleHTTPServer - Simple HTTP server with Server-side include
 
 =head1 DESCRIPTION
 
-MojoSimpleHTTPServer is a simple web server base class. The module also is a
-backend of 'mojo SimpleHTTPServer', a command line tool.
+L<MojoSimpleHTTPServer> is a simple web server base class. The module also is a
+backend of C<mojo SimpleHTTPServer>, a command line tool.
 This is built on mojo modules in L<Mojolicious> distribution. 
 
 =head1 ATTRIBUTES
@@ -461,34 +452,49 @@ Array of paths that contains static and templates.
 
 =head2 ssi_handlers
 
-An hash ref that contains Server side include handlers. You can append
-SSI association by add_handler method.
+An hash ref that contains Server side include handlers.
+
+    $app->ssi_handlers->{ep} = MojoSimpleHTTPServer::SSIHandler::EP->new;
+
+You can append SSI association by C<add_handler> method instead of doing above.
 
 =head2 stash
 
 An L<MojoSimpleHTTPServer::Stash> instance.
 
+    $app->stash(MojoSimpleHTTPServer::Stash->new);
+    my $stash = $app->stash;
+
 =head2 types
 
 Contains L<Mojolicious::Type> instance.
+
+    my $type = $app->types;
+    $type->type(zip => 'application/zip');
 
 =head2 under_development
 
 Activate debug screen.
 
+    $app->under_development(1);
+
 =head2 x_powered_by
 
 Set X-POWERED-BY response header.
 
+    $app->x_powered_by('MyApp');
+
 =head1 METHODS
 
-=head2 $instance->new;
+=head2 MojoSimpleHTTPServer->new;
 
 Constructor.
 
+    my $app = MojoSimpleHTTPServer->new;
+
 =head2 $instance->add_handler(name => $code_ref);
 
-Adds ssi_handlers entry.
+Adds C<ssi_handlers> entry.
 
     $instance->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
 
@@ -496,17 +502,31 @@ Adds ssi_handlers entry.
 
 Returns bundled asset path for given file name.
 
+    my $asset = MojoSimpleHTTPServer::asset('path/to/common.css');
+    
+    say $asset # /path/to/lib/MojoSimpleHTTPServer/Asset/path/to/common.css
+    
+    my $asset = MojoSimpleHTTPServer::asset();
+    
+    say $asset # /path/to/lib/MojoSimpleHTTPServer/Asset
+
 =head2 $instance->context()
 
-Returns current context
+Returns current context. This referes to localized C<$MSHS::CONTEXT>.
+
+    my $context = $app->context;
 
 =head2 $instance->dispatch()
 
 Front dispatcher.
 
+    $app->dispatch()
+
 =head2 $instance->handler($tx)
 
 Handler called by mojo layer.
+
+    $app->handler($tx)
 
 =head2 $instance->hook($name => $cb)
 
@@ -523,41 +543,46 @@ Alias to $instance->hooks->on. This adds a callback for the hook point.
 
 Detect MIME type out of path name.
 
+    my $type = $app->path_to_type('/path/to/file.css') # text/css
+
 =head2 $instance->plugin('class', @args)
 
-=head2 $instance->render_ssi($path, $ext)
+    my $plugin = $app->plugin(PluginName => $params);
+
+=head2 $instance->render_ssi($path)
+
+    my $result = $app->render_ssi('/path/to/template.html.ep');
 
 =head2 search_template($path)
 
 Searches for SSI template for given path and returns the path with SSI extension.
 
-=head2 $instance->serve_redirect_to_slashed($path)
-
-Serves response that redirects to trailing slashed URI.
+    my $filename = $app->render_ssi('/path/to/template.html'); # /path/to/template.html.ep
 
 =head2 $instance->serve_redirect($uri)
 
 Serves response that redirects to given URI.
 
+    $app->serve_redirect('http://example.com/');
+    $app->serve_redirect('/path/');
+
 =head2 $instance->serve_static($path)
 
 Serves static file of given path.
+
+    $app->serve_static('/path/to/static.png');
 
 =head2 $instance->serve_dynamic($path)
 
 Serves dynamic SSI page with given file path.
 
-=head2 $instance->serve_index($path)
-
-Serves auto index page.
+    $app->serve_dynamic('/path/to/template.html.ep');
 
 =head2 $instance->start()
 
 Starts app
 
-=head2 $instance->tx()
-
-Returns current tx
+    $app->start();
 
 =head1 SEE ALSO
 

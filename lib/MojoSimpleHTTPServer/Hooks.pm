@@ -50,11 +50,11 @@ MojoSimpleHTTPServer::Hooks - Hooks manager
 
 =head1 DESCRIPTION
 
-L<Mojolicious::Hooks> is the Hook manager of L<MojoSimpleHTTPServer>.
+L<MojoSimpleHTTPServer::Hooks> is the Hook manager of L<MojoSimpleHTTPServer>.
 
 =head1 METHODS
 
-L<Mojolicious::Hooks> inherits all methods from L<Mojo::EventEmitter> and
+L<MojoSimpleHTTPServer::Hooks> inherits all methods from L<Mojo::EventEmitter> and
 implements the following new ones.
 
 =head2 C<emit_chain>
@@ -62,8 +62,7 @@ implements the following new ones.
   $plugins = $plugins->emit_chain('foo');
   $plugins = $plugins->emit_chain(foo => 123);
 
-Emit events as chained hooks. Note that the hook order is reverse to
-Mojolicious::Plugins.
+Emit events as chained hooks.
 
 =head1 SEE ALSO
 

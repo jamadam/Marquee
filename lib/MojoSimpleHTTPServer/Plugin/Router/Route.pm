@@ -81,7 +81,7 @@ MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
         my ($a, $b) = @_;
         ### DO SOMETHING
     });
-    $r->route(qr{^/rare/})->via('get', 'post')->to(sub {
+    $r->route(qr{^/rare/})->via('GET', 'POST')->to(sub {
         ### DO SOMETHING
     });
     $r->route(qr{^/default})->to(sub {
@@ -109,17 +109,29 @@ MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
         });
     });
 
+=head2 $instance->bridge(sub {...})
+
+    my $bridge = $r->bridge(sub {
+        return $bool;
+    });
+
 =head2 $instance->route($regex)
 
 Set a regex that matches to request URI.
+
+    $r->route(qr{^/index\.html});
 
 =head2 $instance->to($code_ref)
 
 Set an action to invoke when the route matches.
 
+    $r->to(sub {...});
+
 =head2 $instance->via(@http_methods)
 
 Filters route by HTTP method.
+
+    $r->via('GET', 'POST');
 
 =head1 SEE ALSO
 

@@ -59,7 +59,8 @@ MojoSimpleHTTPServer::SSIHandler::EPL - EPL template handler
 
 =head1 SYNOPSIS
 
-    $app->add_handler(epl => MojoSimpleHTTPServer::SSIHandler::EPL->new);
+    my $epl = MojoSimpleHTTPServer::SSIHandler::EPL->new;
+    $epl->render('/path/to/template.html.ep');
 
 =head1 DESCRIPTION
 
@@ -67,11 +68,24 @@ EPL handler.
 
 =head1 ATTRIBUTES
 
+L<MojoSimpleHTTPServer::SSIHandler::EPL> inherits all attributes from
+L<MojoSimpleHTTPServer::SSIHandler> and implements the following new ones.
+
+=head2 template_cache
+
+    my $cache = $epl->template_cache;
+
 =head1 METHODS
+
+L<MojoSimpleHTTPServer::SSIHandler::EPL> inherits all methods from
+L<MojoSimpleHTTPServer::SSIHandler> and implements the following new ones.
 
 =head2 $instance->cache($path, $mt)
 
 Get or set cache.
+
+    $epl->cache('/path/to/template.html.ep', $mt);
+    my $mt = $epl->cache('/path/to/template.html.ep');
 
 =head2 $instance->render($path)
 

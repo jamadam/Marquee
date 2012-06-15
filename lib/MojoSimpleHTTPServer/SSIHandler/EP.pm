@@ -221,21 +221,36 @@ MojoSimpleHTTPServer::SSIHandler::EP - EP template handler
 
 =head1 SYNOPSIS
 
-    $app->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
+    my $ep = MojoSimpleHTTPServer::SSIHandler::EP->new;
+    $ep->render('/path/to/template.html.ep');
 
 =head1 DESCRIPTION
 
-EP handler.
+EP handler. EP is a EPL.
 
 =head1 ATTRIBUTES
 
+L<MojoSimpleHTTPServer::SSIHandler::EP> inherits all attributes from
+L<MojoSimpleHTTPServer::SSIHandler::EPL> and implements the following new ones.
+
+=head2 funcs
+
+A Hash ref that contains template functions.
+
+    $ep->funcs->{some_func} = sub {...};
+
+You can use C<add_function> method to add a function entry instead of the code
+above.
+
 =head1 FUNCTIONS
 
-=head2 <% current_template() %>
+=head2 current_template()
 
 Returns current template path.
 
-=head2 <% extends($path, $block) %>
+    <% my $path = current_template(); %>
+
+=head2 extends($path, $block)
 
 Base template.
 
@@ -273,7 +288,7 @@ Extended template.
 
 Extends template.
 
-=head2 <% iter @array => $block %>
+=head2 iter @array => $block
 
 Array iterator with block.
 
@@ -282,45 +297,73 @@ Array iterator with block.
         <%= $elem %>
     <% end %>
 
-=head2 <% include('./path/to/template.html.ep', key => value) %>
+=head2 include('./path/to/template.html.ep', key => value)
 
 Include a template into current template. The path can be relative to
 current template directory or relative to document root if leading slashed.
 
-=head2 <% override($name, $block) %>
+    <%= include('./path/to/template.html.ep', key => value) %>
 
-Override placeholder. See extends method.
+=head2 override($name, $block)
 
-=head2 <% param('key') %>
+Override placeholder. See C<extends> method.
+
+=head2 param('key')
 
 Returns request parameters for given key.
 
-=head2 <% placeholder($name, $default_block) %>
+    <% param('key') %>
 
-Set placeholder with default block. See extends method.
+=head2 placeholder($name, $default_block)
 
-=head2 <% stash('key') %>
+Set placeholder with default block. See C<extends> method.
+
+=head2 stash('key')
 
 Returns stash value for given key.
 
-=head2 <% to_abs() %>
+    <% stash('key') %>
+
+=head2 to_abs()
 
 Generate absolute path with given relative one
 
+    <% to_abs('./path.css') %>
+
 =head1 METHODS
 
+L<MojoSimpleHTTPServer::SSIHandler::EP> inherits all methods from
+L<MojoSimpleHTTPServer::SSIHandler::EPL> and implements the following new ones.
+
 =head2 $instance->init
+
+This method automatically called by constructor.
+
+    $ep->init;
 
 =head2 $instance->new
 
 Constructor.
 
+    my $ep = MojoSimpleHTTPServer::SSIHandler::EP->new;
+
 =head2 $instance->add_function(name => sub {...})
+
+    $ep->add_function(html_to_text => sub {
+        my ($ep, $html) = @_;
+        return Mojo::DOM->new($html)->all_text;
+    });
+
+in tempaltes...
+
+    <%= html_to_text($html) %>
 
 =head2 $instance->render($path)
 
 Renders given template and returns the result. If rendering fails, die with
 Mojo::Exception.
+
+    $ep->render('/path/to/template.html.ep');
 
 =head1 SEE ALSO
 

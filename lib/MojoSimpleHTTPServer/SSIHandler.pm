@@ -46,6 +46,9 @@ use Mojo::Util qw/encode md5_sum/;
         die "Class ". (ref $_[0]) . " must implements render method";
     }
     
+    ### --
+    ### traceably render
+    ### --
     sub render_traceable {
         my ($self, $path, $cb) = @_;
         
@@ -85,7 +88,7 @@ MojoSimpleHTTPServer::Context - SSI handler base class
 =head1 DESCRIPTION
 
 This is a SSI handler base class to be inherited by handler classes. The sub
-class is MUST implement render method.
+class is MUST implement C<render> method.
 
 =head1 METHODS
 
@@ -122,7 +125,8 @@ Traceably renders templates by stacking template names recursively.
 
 =head1 SEE ALSO
 
-L<Mojolicious>
+L<MojoSimpleHTTPServer::SSIHandler::EPL>,
+L<MojoSimpleHTTPServer::SSIHandler::EP>, L<Mojolicious>
 
 =head1 AUTHOR
 

@@ -62,17 +62,27 @@ ref.
 
 =head2 MojoSimpleHTTPServer::Stash->new(%key_value)
 
+    my $stash = MojoSimpleHTTPServer::Stash->new(key => 'val', key2 => 'val2');
+
 =head2 $instance->get($name)
 
 Get stash value for given name.
 
+    my $hash_ref = $stash->get();
+    my $value    = $stash->get('key');
+    
 =head2 $instance->set(%key_value)
 
 Set stash values with given hash or hash reference.
 
+    $stash->set(key => 'value');
+
 =head2 $instance->clone(%key_value)
 
 Clone stash with given hash or hash reference merged.
+
+    my $clone = $stash->clone;
+    my $clone = $stash->clone(key => 'value');
 
 =head1 SEE ALSO
 

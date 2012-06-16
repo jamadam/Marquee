@@ -66,15 +66,30 @@ MojoSimpleHTTPServer::ErrorDocument - ErrorDocument
 
 =head1 SYNOPSIS
 
+    my $error_doc = MojoSimpleHTTPServer::ErrorDocument->new;
+    $error_doc->render(404, 'File not found');
+
 =head1 DESCRIPTION
 
+L<MojoSimpleHTTPServer::ErrorDocument> represents error document.
+
 =head1 ATTRIBUTES
+
+=head2 template
+
+    $error_doc->template('/path/to/template.html.ep');
+
+=head2 status_template
+
+    $error_doc->status_template->{404} = '/path/to/template.html.ep';
 
 =head1 METHODS
 
 =head2 $instance->serve($status_code, $message)
 
 Serves error document.
+
+    $error_doc->serve(404, 'File not found');
 
 =head1 SEE ALSO
 

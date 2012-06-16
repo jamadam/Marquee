@@ -115,21 +115,14 @@ use MojoSimpleHTTPServer::ErrorDocument;
         }
         
         if (! $res->code) {
-            my $filled_path = $self->default_file
+            my $path = $self->default_file
                             ? $self->_auto_fill_filename($path->clone) : $path;
-            $filled_path->leading_slash(1);
+            $path->leading_slash(0);
             
-            for my $root (@{$self->roots}) {
-                my $path = File::Spec->catfile(
-                                    $root, File::Spec->splitpath($filled_path));
-                if (-f $path) {
-                    $self->hooks->emit_chain('around_static', $path);
-                } elsif (my $path = $self->search_template($path)) {
-                    $self->hooks->emit_chain('around_dynamic', $path);
-                }
-                if ($res->code) {
-                    last;
-                }
+            if (my $try1 = $self->search_static($path)) {
+                $self->hooks->emit_chain('around_static', $try1);
+            } elsif (my $try2 = $self->search_template($path)) {
+                $self->hooks->emit_chain('around_dynamic', $try2);
             }
         }
         
@@ -226,6 +219,40 @@ use MojoSimpleHTTPServer::ErrorDocument;
     }
     
     ### --
+    ### search static file
+    ### --
+    sub search_static {
+        my ($self, $path) = @_;
+        
+        my $tx = $MSHS::CONTEXT->tx;
+        
+        for my $root (($path =~ qr{^/}) ? undef : @{$self->roots}) {
+            my $path = File::Spec->catdir($root, $path);
+            if (-f $path) {
+                return $path;
+            }
+        }
+    }
+    
+    ### --
+    ### search template
+    ### --
+    sub search_template {
+        my ($self, $path) = @_;
+        
+        my $tx = $MSHS::CONTEXT->tx;
+        
+        for my $root (($path =~ qr{^/}) ? undef : @{$self->roots}) {
+            for my $ext (keys %{$self->ssi_handlers}) {
+                my $path = File::Spec->catdir($root, "$path.$ext");
+                if (-f $path) {
+                    return $path;
+                }
+            }
+        }
+    }
+    
+    ### --
     ### serve redirect
     ### --
     sub serve_redirect {
@@ -269,24 +296,6 @@ use MojoSimpleHTTPServer::ErrorDocument;
         }
         
         return $self;
-    }
-    
-    ### --
-    ### search template
-    ### --
-    sub search_template {
-        my ($self, $path) = @_;
-        
-        my $tx = $MSHS::CONTEXT->tx;
-        
-        for my $root (($path =~ qr{^/}) ? '' : @{$self->roots}) {
-            for my $ext (keys %{$self->ssi_handlers}) {
-                my $path = File::Spec->catdir($root, "$path.$ext");
-                if (-f $path) {
-                    return $path;
-                }
-            }
-        }
     }
     
     ### --

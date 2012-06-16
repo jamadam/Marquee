@@ -279,10 +279,12 @@ use MojoSimpleHTTPServer::ErrorDocument;
         
         my $tx = $MSHS::CONTEXT->tx;
         
-        for my $ext (keys %{$self->ssi_handlers}) {
-            my $path = "$path.$ext";
-            if (-f $path) {
-                return $path;
+        for my $root (($path =~ qr{^/}) ? '' : @{$self->roots}) {
+            for my $ext (keys %{$self->ssi_handlers}) {
+                my $path = File::Spec->catdir($root, "$path.$ext");
+                if (-f $path) {
+                    return $path;
+                }
             }
         }
     }

@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 59;
+    use Test::More tests => 70;
 
     my $app;
     my $t;
@@ -181,6 +181,12 @@ use Mojo::Date;
             $res->body("Session is $value!");
             $res->code(200);
         });
+        $r->route(qr{^/session_cookie/3})->to(sub {
+            my $res = $MSHS::CONTEXT->tx->res;
+            $res->body('Session deleted!');
+            $res->code(200);
+            $MSHS::CONTEXT->session(undef);
+        });
         $r->route(qr{^/session_cookie})->to(sub {
             my $res = $MSHS::CONTEXT->tx->res;
             $res->body('Session set!');
@@ -216,4 +222,16 @@ use Mojo::Date;
     $t->get_ok('/session_cookie/2')->status_is(200)
         ->content_is('Session is missing!');
 
+    $t->get_ok('/session_cookie')
+        ->status_is(200)
+        ->header_like('Set-Cookie', qr{^mshs=eyJ0ZXN0Ijoic2Vzc2lvbiB0ZXN0In0---9a77f38057310a620345c9c300fc2ea1;})
+        ->content_is('Session set!');
+    
+    $t->get_ok('/session_cookie/3')->status_is(200)
+        ->header_is('Set-Cookie', 'mshs=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/; HttpOnly')
+        ->content_is('Session deleted!');
+    
+    $t->get_ok('/session_cookie/2')->status_is(200)
+        ->content_is('Session is missing!');
+    
 __END__

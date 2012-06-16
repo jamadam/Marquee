@@ -2,7 +2,7 @@ package MojoSimpleHTTPServer::Context;
 use strict;
 use warnings;
 use Mojo::Base -base;
-use Mojo::Util qw{hmac_md5_sum secure_compare};
+use Mojo::Util qw{hmac_md5_sum secure_compare b64_decode b64_encode};
 
     ### ---
     ### App
@@ -18,6 +18,11 @@ use Mojo::Util qw{hmac_md5_sum secure_compare};
     ### Restrict session to HTTPS
     ### ---
     __PACKAGE__->attr('session_secure', 0);
+
+    ### ---
+    ### Restrict session to HTTPS
+    ### ---
+    __PACKAGE__->attr('session_path', '/');
 
     ### ---
     ### Session expiretion
@@ -126,13 +131,20 @@ use Mojo::Util qw{hmac_md5_sum secure_compare};
         my $self = shift;
         
         if (my $session = $self->session) {
-            use Mojo::Util qw(b64_decode b64_encode);
             my $value = b64_encode(Mojo::JSON->new->encode($session), '');
             $value =~ s/=/-/g;
             $self->signed_cookie($self->session_name, $value, {
                 expires     => time + $self->session_expiretion,
                 secure      => $self->session_secure,
                 httponly    => 1,
+                path        => $self->session_path,
+            });
+        } elsif (defined $self->cookie($self->session_name)) {
+            $self->cookie($self->session_name, '', {
+                expires     => 1,
+                secure      => $self->session_secure,
+                httponly    => 1,
+                path        => $self->session_path,
             });
         }
     };

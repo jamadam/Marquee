@@ -41,8 +41,6 @@ use Mojo::Date;
 package SubClass;
 use Mojo::Base 'MojoSimpleHTTPServer';
 use Test::More;
-
-    our $CONTEXT = MojoSimpleHTTPServer::Context->new; # do nothing
     
     sub dispatch {
         shift->SUPER::dispatch(@_);

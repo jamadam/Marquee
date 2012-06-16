@@ -1,6 +1,7 @@
 Revision history for MojoSimpleHTTPServer
 
-0.05 2012/06/05
+0.05 2012/06/16
+  - Added ability to manage session data by signed cookie.
 
 0.04 2012/06/05
   - Fixed a bug that aroud_dispatch hook has been invoked on wrong condition.

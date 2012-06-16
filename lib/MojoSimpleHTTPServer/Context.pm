@@ -12,7 +12,7 @@ use Mojo::Util qw{hmac_md5_sum secure_compare b64_decode b64_encode};
     ### ---
     ### Session
     ### ---
-    __PACKAGE__->attr('session');
+    __PACKAGE__->attr('session', sub {{}});
 
     ### ---
     ### Restrict session to HTTPS
@@ -130,7 +130,9 @@ use Mojo::Util qw{hmac_md5_sum secure_compare b64_decode b64_encode};
     sub DESTROY {
         my $self = shift;
         
-        if (my $session = $self->session) {
+        my $session = $self->session;
+        
+        if (scalar keys %$session) {
             my $value = b64_encode(Mojo::JSON->new->encode($session), '');
             $value =~ s/=/-/g;
             $self->signed_cookie($self->session_name, $value, {

@@ -177,7 +177,7 @@ use Mojo::Date;
             my $req     = $MSHS::CONTEXT->tx->req;
             my $res     = $MSHS::CONTEXT->tx->res;
             my $session = $MSHS::CONTEXT->session;
-            my $value   = $session ? $session->{test} : 'missing';
+            my $value   = $session->{test} || 'missing';
             $res->body("Session is $value!");
             $res->code(200);
         });

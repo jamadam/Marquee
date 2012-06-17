@@ -115,9 +115,9 @@ use MojoSimpleHTTPServer::ErrorDocument;
         }
         
         if (! $res->code) {
-            my $path = $self->default_file
-                            ? $self->_auto_fill_filename($path->clone) : $path;
+            my $path = _auto_fill_filename($path->clone, $self->default_file);
             $path->leading_slash(0);
+            $path = "$path";
             
             if (my $try1 = $self->search_static($path)) {
                 $self->hooks->emit_chain('around_static', $try1);
@@ -331,10 +331,12 @@ use MojoSimpleHTTPServer::ErrorDocument;
     ### auto fill files
     ### --
     sub _auto_fill_filename {
-        my ($self, $path) = @_;
-        if ($path->trailing_slash || ! @{$path->parts}) {
-            push(@{$path->parts}, $self->default_file);
-            $path->trailing_slash(0);
+        my ($path, $default) = @_;
+        if ($default) {
+            if ($path->trailing_slash || ! @{$path->parts}) {
+                push(@{$path->parts}, $default);
+                $path->trailing_slash(0);
+            }
         }
         return $path;
     }

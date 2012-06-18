@@ -95,15 +95,4 @@ Serves error document.
 
 L<MojoSimpleHTTPServer>, L<Mojolicious>
 
-=head1 AUTHOR
-
-Sugama Keita, E<lt>sugama@jamadam.comE<gt>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) 2012 by Sugama Keita.
-
-This program is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
-
 =cut

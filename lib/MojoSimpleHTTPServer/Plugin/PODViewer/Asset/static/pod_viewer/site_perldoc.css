@@ -71,3 +71,22 @@ body {
 	padding-top: 1em;
 	text-align: center;
 }
+	#auto_detected_see_also {
+		background-color: #222;
+		padding:15px;
+		color:#fff;
+		border-radius: 15px;
+		margin:10px;
+		text-align: left;
+	}
+	#auto_detected_see_also h2 {
+		font-weight: bold;
+	}
+	#auto_detected_see_also a {
+		text-decoration: none;
+		color:#fff;
+	}
+	#auto_detected_see_also a:hover {
+		text-decoration: underline;
+		color:inherit;
+	}

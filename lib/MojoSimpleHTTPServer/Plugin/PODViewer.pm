@@ -83,6 +83,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
                     parts       => \@parts,
                     static_dir  => 'static',
                     perldoc     => "$dom",
+                    see_also    => _detect_see_also($module),
                 );
                 
                 $tx->res->body(
@@ -96,6 +97,23 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
                 $tx->res->headers->content_type($MSHS::CONTEXT->app->types->type('html'));
             });
         });
+    }
+    
+    sub _detect_see_also {
+        my $module = shift;
+        
+        my $search = Pod::Simple::Search->new;
+        my @relatives;
+        
+        if (my $parent = ($module =~ qr{(.+)::\w+$})[0]) {
+            my $b = $search->limit_glob($parent)->survey;
+            push(@relatives, keys %$b);
+        }
+        
+        my $a = $search->limit_glob($module. '::*')->survey;
+        push(@relatives, grep {$_ =~ qr{$module\::\w+$}} keys %$a);
+        
+        return \@relatives;
     }
 
     sub _pod_to_html {

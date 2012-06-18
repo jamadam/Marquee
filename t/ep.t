@@ -13,7 +13,7 @@ use MojoSimpleHTTPServer;
 use Mojo::Date;
 use MojoSimpleHTTPServer::SSIHandler::EP;
 
-    use Test::More tests => 58;
+    use Test::More tests => 61;
     
     ### add_function
     
@@ -66,12 +66,15 @@ use MojoSimpleHTTPServer::SSIHandler::EP;
     
     $t->get_ok('/iter.html')
         ->status_is(200)
-        ->element_exists('test1 .test0')
-        ->element_exists('test1 .test1')
-        ->element_exists('test1 .test2')
-        ->element_exists('test2 .test0')
-        ->element_exists('test2 .test1')
-        ->element_exists('test2 .test2');
+        ->text_is('test1 .test0', '0')
+        ->text_is('test1 .test1', '1')
+        ->text_is('test1 .test2', '2')
+        ->text_is('test2 .test0', '0')
+        ->text_is('test2 .test1', '1')
+        ->text_is('test2 .test2', '2')
+        ->text_is('test3 .testfoo', 'FOO')
+        ->text_is('test3 .testbar', 'BAR')
+        ->text_is('test3 .testbaz', 'BAZ');
     
     # sub template inclusion
     

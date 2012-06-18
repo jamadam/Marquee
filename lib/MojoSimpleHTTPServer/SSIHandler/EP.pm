@@ -149,12 +149,23 @@ use Carp;
         $self->funcs->{iter} = sub {
             my $self    = shift;
             my $block   = pop;
-            my @array = (scalar @_ > 1 || ref $_[0] ne 'ARRAY') ? @_ : @{$_[0]};
             
             my $ret = '';
             
-            for my $elem (@array) {
-                $ret .= $block->($elem);
+            if (! ref $_[0]) {
+                my $idx = 0;
+                for my $elem (@_) {
+                    $ret .= $block->($elem, $idx++);
+                }
+            } elsif (ref $_[0] eq 'ARRAY') {
+                my $idx = 0;
+                for my $elem (@{$_[0]}) {
+                    $ret .= $block->($elem, $idx++);
+                }
+            } elsif (ref $_[0] eq 'HASH') {
+                for my $key (keys %{$_[0]}) {
+                    $ret .= $block->($key, $_[0]->{$key});
+                }
             }
             
             return Mojo::ByteStream->new($ret);

@@ -1,12 +1,18 @@
 <test1>
     <%= iter [0, 1, 2] => begin %>
-        <% my $num = shift; %>
-        <div class="test<%= $num %>"></div>
+        <% my ($num, $idx) = @_; %>
+        <div class="test<%= $idx %>"><%= $num %></div>
     <% end %>
 </test1>
 <test2>
     <%= iter 0, 1, 2 => begin %>
-        <% my $num = shift; %>
-        <div class="test<%= $num %>"></div>
+        <% my ($num, $idx) = @_; %>
+        <div class="test<%= $idx%>"><%= $num %></div>
     <% end %>
 </test2>
+<test3>
+    <%= iter {foo => 'FOO', bar => 'BAR', baz => 'BAZ'} => begin %>
+        <% my ($key, $value) = @_; %>
+        <div class="test<%= $key %>"><%= $value %></div>
+    <% end %>
+</test3>

@@ -21,7 +21,7 @@ use Mojo::Util qw'url_unescape encode decode';
             }
         }
         
-        push(@{$app->roots}, $self->_asset());
+        push(@{$app->roots}, __PACKAGE__->MojoSimpleHTTPServer::asset());
         
         $app->hook(around_dispatch => sub {
             my ($next, @args) = @_;
@@ -100,24 +100,14 @@ use Mojo::Util qw'url_unescape encode decode';
         $tx->res->body(
             encode('UTF-8',
                 MojoSimpleHTTPServer::SSIHandler::EPL->new->render_traceable(
-                                    __PACKAGE__->_asset('auto_index.html.epl')))
+                __PACKAGE__->MojoSimpleHTTPServer::asset('auto_index.html.epl')
+                )
+            )
         );
         $tx->res->code(200);
         $tx->res->headers->content_type($app->types->type('html'));
         
         return $app;
-    }
-
-    ### ---
-    ### Asset directory
-    ### ---
-    sub _asset {
-        my $class = shift;
-        my @seed = (substr(__FILE__, 0, -3), 'Asset');
-        if ($_[0]) {
-            return File::Spec->catdir(@seed, $_[0]);
-        }
-        return File::Spec->catdir(@seed);
     }
     
     ### ---

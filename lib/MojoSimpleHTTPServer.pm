@@ -345,7 +345,10 @@ use MojoSimpleHTTPServer::ErrorDocument;
     ### Asset directory
     ### ---
     sub asset {
-        my @seed = (substr(__FILE__, 0, -3), 'Asset');
+        my $class = shift;
+        my $pm = $class. '.pm';
+        $pm =~ s{::}{/}g;
+        my @seed = (substr($INC{$pm}, 0, -3), 'Asset');
         if ($_[0]) {
             return File::Spec->catdir(@seed, $_[0]);
         }
@@ -367,7 +370,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
             die 'document_root is not a directory';
         }
         
-        unshift(@{$self->roots}, $self->document_root, asset());
+        unshift(@{$self->roots}, $self->document_root, __PACKAGE__->asset());
 
         $self->{_handler_re} =
                     '\.(?:'. join('|', keys %{$self->ssi_handlers}). ')$';

@@ -14,7 +14,7 @@ use Mojo::Base 'Mojolicious::Plugin';
     sub register {
         my ($self, $app, $conf) = @_;
         
-        push(@{$app->roots}, $self->_asset());
+        push(@{$app->roots}, __PACKAGE__->MojoSimpleHTTPServer::asset());
         
         my @PATHS = map { $_, "$_/pods" } @INC;
         
@@ -88,7 +88,9 @@ use Mojo::Base 'Mojolicious::Plugin';
                 $tx->res->body(
                     encode('UTF-8',
                         MojoSimpleHTTPServer::SSIHandler::EP->new->render_traceable(
-                                            __PACKAGE__->_asset('perldoc.html.ep')))
+                            __PACKAGE__->MojoSimpleHTTPServer::asset('perldoc.html.ep')
+                        )
+                    )
                 );
                 $tx->res->code(200);
                 $tx->res->headers->content_type($MSHS::CONTEXT->app->types->type('html'));
@@ -118,18 +120,6 @@ use Mojo::Base 'Mojolicious::Plugin';
         $output =~ s!<a class='u'.*?name=".*?"\s*>(.*?)</a>!$1!sg;
       
         return $output;
-    }
-
-    ### ---
-    ### Asset directory
-    ### ---
-    sub _asset {
-        my $class = shift;
-        my @seed = (substr(__FILE__, 0, -3), 'Asset');
-        if ($_[0]) {
-            return File::Spec->catdir(@seed, $_[0]);
-        }
-        return File::Spec->catdir(@seed);
     }
 
 1;

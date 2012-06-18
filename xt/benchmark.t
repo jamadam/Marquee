@@ -11,6 +11,10 @@ use MojoSimpleHTTPServer::SSIHandler::EPL;
 use MojoSimpleHTTPServer::SSIHandler::EP;
 use Benchmark qw( timethese cmpthese countit);
 use Mojo::Template;
+use MojoSimpleHTTPServer;
+use MojoSimpleHTTPServer::Context;
+use MojoSimpleHTTPServer::Stash;
+use Mojo::Transaction::HTTP;
 
     no strict 'refs';
     *{'MojoSimpleHTTPServer::SSIHandler::EPL::render_nocache'} = \&epl_render_nocache;
@@ -33,9 +37,9 @@ use Mojo::Template;
     }
     
     {
-        use MojoSimpleHTTPServer::Context;
-        use MojoSimpleHTTPServer::Stash;
-        $MSHS::CONTEXT = MojoSimpleHTTPServer::Context->new;
+        my $app = MojoSimpleHTTPServer->new;
+        my $tx  = Mojo::Transaction::HTTP->new;
+        local $MSHS::CONTEXT = MojoSimpleHTTPServer::Context->new(app => $app, tx => $tx);
         $MSHS::CONTEXT->stash(MojoSimpleHTTPServer::Stash->new);
         my $renderer = MojoSimpleHTTPServer::SSIHandler::EP->new;
         

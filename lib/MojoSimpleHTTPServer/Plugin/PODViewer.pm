@@ -152,6 +152,8 @@ MojoSimpleHTTPServer::Plugin::PODRenderer - POD renderer plugin
 
 =head1 METHODS
 
+=head2 $instance->register($app)
+
 =head1 SEE ALSO
 
 L<MojoSimpleHTTPServer>, L<Mojolicious>

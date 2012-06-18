@@ -536,7 +536,7 @@ In other packages
 
 =head2 $instance->context()
 
-Returns current context. This referes to localized C<$MSHS::CONTEXT>.
+Returns current context. This refers to localized C<$MSHS::CONTEXT>.
 
     my $context = $app->context;
 

@@ -31,7 +31,9 @@ of L<MojoSimpleHTTPServer> plugins.
 
 =head1 METHODS
 
-=head2 MojoSimpleHTTPServer::Plugin->new(@args)
+=head2 MojoSimpleHTTPServer::Plugin->register($app, $conf)
+
+This must be overridden by sub classes.
 
 =head1 SEE ALSO
 

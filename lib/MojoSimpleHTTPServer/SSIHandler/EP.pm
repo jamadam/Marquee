@@ -365,7 +365,7 @@ Constructor.
         return Mojo::DOM->new($html)->all_text;
     });
 
-in tempaltes...
+in templates...
 
     <%= html_to_text($html) %>
 

@@ -55,3 +55,7 @@ callback
 iter
 Traceably
 ErrorDocument
+JSON
+HTTPS
+mshs
+funcs

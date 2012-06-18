@@ -516,17 +516,27 @@ Adds C<ssi_handlers> entry.
 
     $instance->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
 
-=head2 MojoSimpleHTTPServer::asset($filename);
+=head2 MojoSimpleHTTPServer->asset($filename);
 
 Returns bundled asset path for given file name.
 
-    my $asset = MojoSimpleHTTPServer::asset('path/to/common.css');
+    my $asset = MojoSimpleHTTPServer->asset('path/to/common.css');
     
     say $asset # /path/to/lib/MojoSimpleHTTPServer/Asset/path/to/common.css
     
-    my $asset = MojoSimpleHTTPServer::asset();
+    my $asset = MojoSimpleHTTPServer->asset();
     
     say $asset # /path/to/lib/MojoSimpleHTTPServer/Asset
+
+In other packages
+
+    my $asset = SomePackage->MojoSimpleHTTPServer::asset('path/to/common.css');
+    
+    say $asset # /path/to/lib/SomePackage/Asset/path/to/common.css
+    
+    my $asset = SomePackage->MojoSimpleHTTPServer::asset();
+    
+    say $asset # /path/to/lib/SomePackage/Asset
 
 =head2 $instance->context()
 

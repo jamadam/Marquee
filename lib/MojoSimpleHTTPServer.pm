@@ -581,11 +581,20 @@ Detect MIME type out of path name.
 
     my $result = $app->render_ssi('/path/to/template.html.ep');
 
-=head2 search_template($path)
+=head2 $instance->search_static($path)
 
-Searches for SSI template for given path and returns the path with SSI extension.
+Searches for static files for given path and returns the path if exists.
 
-    my $filename = $app->render_ssi('/path/to/template.html'); # /path/to/template.html.ep
+    $app->search_static('./a.html'); # /path/to/document_root/a.css
+    $app->search_static('/path/to/a.html'); # /path/to/a.css
+
+=head2 $instance->search_template($path)
+
+Searches for SSI template for given path and returns the path with SSI
+extension if exists.
+
+    $app->search_template('./template.html'); # /path/to/document_root/template.html.ep
+    $app->search_template('/path/to/template.html'); # /path/to/template.html.ep
 
 =head2 $instance->serve_redirect($uri)
 

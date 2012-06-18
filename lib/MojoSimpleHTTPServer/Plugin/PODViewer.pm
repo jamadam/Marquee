@@ -37,7 +37,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
                 my $html = _pod_to_html(join '', <$file>);
                 
                 # Rewrite links
-                my $dom = Mojo::DOM->new("$html");
+                my $dom = Mojo::DOM->new($html);
                 $dom->find('a[href]')->each(sub {
                     my $attrs = shift->attrs;
                     if ($attrs->{href}
@@ -57,7 +57,6 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
                 });
                 
                 # Rewrite headers
-                my $url = $tx->req->url->clone;
                 my @parts;
                 $dom->find('h1, h2, h3')->each(sub {
                     my $e = shift;
@@ -66,10 +65,8 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
                     $anchor = url_escape $anchor, '^A-Za-z0-9_';
                     $anchor =~ s/\%//g;
                     push @parts, [] if $e->type eq 'h1' || !@parts;
-                    push @{$parts[-1]}, $text, $url->fragment($anchor)->to_abs;
-                    $e->replace_content(
-                        sprintf(qq{<a href="%s" id="%s" class="mojoscroll">%s</a>}, $url->fragment('toc')->to_abs, $anchor, $text)
-                    );
+                    push @{$parts[-1]}, $text, "#$anchor";
+                    $e->replace_content(qq{<a name="$anchor">$text</a>});
                 });
                 
                 # Try to find a title
@@ -119,9 +116,6 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     sub _pod_to_html {
         return unless defined(my $pod = shift);
       
-        # Block
-        $pod = $pod->() if ref $pod eq 'CODE';
-      
         # Parser
         my $parser = Pod::Simple::HTML->new;
         $parser->force_title('');
@@ -131,7 +125,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
       
         # Parse
         $parser->output_string(\(my $output));
-        return $@ unless eval { $parser->parse_string_document("$pod"); 1 };
+        return $@ unless eval { $parser->parse_string_document($pod); 1 };
       
         # Filter
         $output =~ s!<a name='___top' class='dummyTopAnchor'\s*?></a>\n!!g;

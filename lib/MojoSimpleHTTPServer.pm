@@ -224,8 +224,6 @@ use MojoSimpleHTTPServer::ErrorDocument;
     sub search_static {
         my ($self, $path) = @_;
         
-        my $tx = $MSHS::CONTEXT->tx;
-        
         for my $root (($path =~ qr{^/}) ? undef : @{$self->roots}) {
             my $path = File::Spec->catdir($root, $path);
             if (-f $path) {
@@ -239,8 +237,6 @@ use MojoSimpleHTTPServer::ErrorDocument;
     ### --
     sub search_template {
         my ($self, $path) = @_;
-        
-        my $tx = $MSHS::CONTEXT->tx;
         
         for my $root (($path =~ qr{^/}) ? undef : @{$self->roots}) {
             for my $ext (keys %{$self->ssi_handlers}) {

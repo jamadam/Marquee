@@ -12,7 +12,19 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 110;
+    use Test::More tests => 113;
+    
+    {
+        use Mojo::Transaction::HTTP;
+        my $app = MojoSimpleHTTPServer->new;
+        my $tx = Mojo::Transaction::HTTP->new;
+        $app->document_root("$FindBin::Bin/public_html");
+        $app->_init;
+        local $MSHS::CONTEXT = MojoSimpleHTTPServer::Context->new(app => $app, tx => $tx);
+        is $app->search_template('index.html'), "$FindBin::Bin/public_html/index.html.ep";
+        is $app->search_template('./index.html'), "$FindBin::Bin/public_html/index.html.ep";
+        is $app->search_template("$FindBin::Bin/public_html/index.html"), "$FindBin::Bin/public_html/index.html.ep";
+    }
 
     my $app;
     my $t;

@@ -7,7 +7,7 @@ use Pod::Simple::HTML;
 use Pod::Simple::Search;
 use Mojo::DOM;
 use Mojo::Util qw'url_unescape encode decode';
-use Mojo::Base 'Mojolicious::Plugin';
+use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     
     # "This is my first visit to the Galaxy of Terror and I'd like it to be a
     #  pleasant one."

@@ -329,7 +329,7 @@ Returns common MIME types.
 
 =head1 SEE ALSO
 
-L<Mojolicious>
+L<MojoSimpleHTTPServer>, L<Mojolicious>
 
 =head1 AUTHOR
 

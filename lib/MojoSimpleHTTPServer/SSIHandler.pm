@@ -126,7 +126,7 @@ Traceably renders templates by stacking template names recursively.
 =head1 SEE ALSO
 
 L<MojoSimpleHTTPServer::SSIHandler::EPL>,
-L<MojoSimpleHTTPServer::SSIHandler::EP>, L<Mojolicious>
+L<MojoSimpleHTTPServer::SSIHandler::EP>, L<MojoSimpleHTTPServer>, L<Mojolicious>
 
 =head1 AUTHOR
 

@@ -84,7 +84,8 @@ L<MojoSimpleHTTPServer::Plugin::Router::Route> instance.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer::Plugin::Router::Route>, L<Mojolicious>
+L<MojoSimpleHTTPServer::Plugin::Router::Route>, L<MojoSimpleHTTPServer>,
+L<Mojolicious>
 
 =head1 AUTHOR
 

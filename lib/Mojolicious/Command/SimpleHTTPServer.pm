@@ -97,4 +97,6 @@ Mojolicious::Command::SimpleHTTPServer - SimpleHTTPServer command
 
 =head1 SEE ALSO
 
+L<MojoSimpleHTTPServer>
+
 =cut

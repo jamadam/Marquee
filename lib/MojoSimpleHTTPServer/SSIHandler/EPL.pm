@@ -94,7 +94,7 @@ L<Mojo::Exception>.
 
 =head1 SEE ALSO
 
-L<Mojolicious>
+L<MojoSimpleHTTPServer::SSIHandler>, L<MojoSimpleHTTPServer>, L<Mojolicious>
 
 =head1 AUTHOR
 

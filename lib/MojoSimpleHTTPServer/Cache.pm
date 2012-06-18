@@ -99,7 +99,7 @@ Fixes mismatches between the cache table and stack table.
 
 =head1 SEE ALSO
 
-L<Mojolicious>
+L<MojoSimpleHTTPServer>, L<Mojolicious>
 
 =head1 AUTHOR
 

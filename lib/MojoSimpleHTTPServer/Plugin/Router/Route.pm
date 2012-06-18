@@ -135,7 +135,7 @@ Filters route by HTTP method.
 
 =head1 SEE ALSO
 
-L<Mojolicious>
+L<MojoSimpleHTTPServer::Plugin::Router>, L<MojoSimpleHTTPServer>, L<Mojolicious>
 
 =head1 AUTHOR
 

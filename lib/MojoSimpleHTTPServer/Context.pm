@@ -257,7 +257,7 @@ Cookies failing signature verification will be automatically discarded.
 
 =head1 SEE ALSO
 
-L<Mojolicious>
+L<MojoSimpleHTTPServer>, L<Mojolicious>
 
 =head1 AUTHOR
 

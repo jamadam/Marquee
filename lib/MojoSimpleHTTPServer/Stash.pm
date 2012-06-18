@@ -86,7 +86,7 @@ Clone stash with given hash or hash reference merged.
 
 =head1 SEE ALSO
 
-L<Mojolicious>
+L<MojoSimpleHTTPServer>, L<Mojolicious>
 
 =head1 AUTHOR
 

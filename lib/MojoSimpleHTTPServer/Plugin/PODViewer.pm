@@ -85,13 +85,13 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
                 
                 $tx->res->body(
                     encode('UTF-8',
-                        MojoSimpleHTTPServer::SSIHandler::EP->new->render_traceable(
+                        $app->ssi_handlers->{ep}->render_traceable(
                             __PACKAGE__->MojoSimpleHTTPServer::asset('perldoc.html.ep')
                         )
                     )
                 );
                 $tx->res->code(200);
-                $tx->res->headers->content_type($MSHS::CONTEXT->app->types->type('html'));
+                $tx->res->headers->content_type($app->types->type('html'));
             });
         });
     }

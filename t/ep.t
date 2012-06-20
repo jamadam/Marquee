@@ -13,7 +13,7 @@ use MojoSimpleHTTPServer;
 use Mojo::Date;
 use MojoSimpleHTTPServer::SSIHandler::EP;
 
-    use Test::More tests => 61;
+    use Test::More tests => 64;
     
     ### add_function
     
@@ -74,7 +74,10 @@ use MojoSimpleHTTPServer::SSIHandler::EP;
         ->text_is('test2 .test2', '2')
         ->text_is('test3 .testfoo', 'FOO')
         ->text_is('test3 .testbar', 'BAR')
-        ->text_is('test3 .testbaz', 'BAZ');
+        ->text_is('test3 .testbaz', 'BAZ')
+        ->text_is('test4 .test0', 'FOO')
+        ->text_is('test4 .test1', 'BAR')
+        ->text_is('test4 .test2', 'BAZ');
     
     # sub template inclusion
     

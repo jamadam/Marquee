@@ -152,12 +152,7 @@ use Carp;
             
             my $ret = '';
             
-            if (! ref $_[0]) {
-                my $idx = 0;
-                for my $elem (@_) {
-                    $ret .= $block->($elem, $idx++);
-                }
-            } elsif (ref $_[0] eq 'ARRAY') {
+            if (ref $_[0] eq 'ARRAY') {
                 my $idx = 0;
                 for my $elem (@{$_[0]}) {
                     $ret .= $block->($elem, $idx++);
@@ -165,6 +160,11 @@ use Carp;
             } elsif (ref $_[0] eq 'HASH') {
                 for my $key (keys %{$_[0]}) {
                     $ret .= $block->($key, $_[0]->{$key});
+                }
+            } else {
+                my $idx = 0;
+                for my $elem (@_) {
+                    $ret .= $block->($elem, $idx++);
                 }
             }
             

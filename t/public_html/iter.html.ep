@@ -16,3 +16,9 @@
         <div class="test<%= $key %>"><%= $value %></div>
     <% end %>
 </test3>
+<test4>
+    <%= iter bless(['FOO'], 'Class'), bless(['BAR'], 'Class'), bless(['BAZ'], 'Class') => begin %>
+        <% my ($elem, $idx) = @_; %>
+        <div class="test<%= $idx %>"><%= $elem->[0] %></div>
+    <% end %>
+</test4>

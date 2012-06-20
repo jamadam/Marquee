@@ -1,6 +1,8 @@
 Revision history for MojoSimpleHTTPServer
 
-0.05 2012/06/16
+0.06 2012/06/20
+
+0.05 2012/06/20
   - Added ability to manage session data by signed cookie.
   - Added pod viewer for commandline.
 

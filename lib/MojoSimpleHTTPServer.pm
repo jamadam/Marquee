@@ -34,7 +34,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
             }
     }
 
-    our $VERSION = '0.05';
+    our $VERSION = '0.06';
 
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');

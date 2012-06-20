@@ -464,6 +464,14 @@ Array of paths that contains static and templates.
 
     push(@{$app->roots}, 'path/to/additional_dir')
 
+=head2 secret
+
+A secret passphrase used for signed cookies and the like, defaults to random
+string. 
+
+    my $secret = $app->secret;
+    $app       = $app->secret('passw0rd');
+
 =head2 ssi_handlers
 
 An hash ref that contains Server side include handlers.

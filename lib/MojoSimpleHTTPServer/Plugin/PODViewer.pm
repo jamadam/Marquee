@@ -20,11 +20,13 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
         
         $self->paths([map { $_, "$_/pods" } @INC]);
         
-        $app->plugin('Router' => sub {
-            shift->route(qr{^/perldoc/(.+)})->to(sub {
-                $self->serve_pod_by_name(shift)
+        if (! $conf->{no_route}) {
+            $app->plugin('Router' => sub {
+                shift->route(qr{^/perldoc/(.+)})->to(sub {
+                    $self->serve_pod_by_name(shift)
+                });
             });
-        });
+        }
     }
     
     sub serve_pod {

@@ -142,7 +142,15 @@ MojoSimpleHTTPServer::Plugin::PODRenderer - POD renderer plugin
 
 =head1 SYNOPSIS
 
+    $app->plugin('PODViewer');
+    
+    # on brower the following url for example will be available.
+    #
+    # http://localhost:3000/perldoc/LWP
+
 =head1 DESCRIPTION
+
+This is a plugin for POD Veiwer server.
 
 =head1 METHODS
 

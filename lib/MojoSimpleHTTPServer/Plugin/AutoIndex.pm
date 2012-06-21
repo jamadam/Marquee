@@ -315,9 +315,13 @@ MojoSimpleHTTPServer::Plugin::AutoIndex - Auto index
 
 =head1 SYNOPSIS
 
-    $app->load_plugin('AutoIndex');
+    $app->plugin('AutoIndex');
 
 =head1 DESCRIPTION
+
+This is a plugin for auto index. When app attribute default_file is undefined
+or the file is not found, the directory access causes the auto index to be
+served.
 
 =head1 METHODS
 

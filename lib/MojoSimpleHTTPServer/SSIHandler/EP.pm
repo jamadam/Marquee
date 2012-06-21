@@ -305,19 +305,19 @@ Array iterator with block.
 
     <%= iter @array => begin %>
         <% my ($elem, $index) = @_; %>
-        <%= $elem %>
+        No.<%= $index %> is <%= $elem %>
     <% end %>
 
 Array refs and Hash refs are also accepted.
 
     <%= iter $array_ref => begin %>
         <% my ($elem, $index) = @_; %>
-        <%= $elem %>
+        No.<%= $index %> is <%= $elem %>
     <% end %>
 
     <%= iter $hash_ref => begin %>
         <% my ($key, $value) = @_; %>
-        <%= $elem %>
+        <%= $key %> is <%= $value %>
     <% end %>
 
 =head2 include('./path/to/template.html.ep', key => value)

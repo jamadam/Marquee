@@ -583,6 +583,12 @@ Alias to $instance->hooks->on. This adds a callback for the hook point.
         ### post-process
     });
 
+=head2 $instance->is_directory($path)
+
+Returns if the path is directory.
+
+    $app->is_directory('/path/to/directory') # bool
+
 =head2 $instance->path_to_type($path)
 
 Detect MIME type out of path name.

@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 113;
+    use Test::More tests => 117;
     
     {
         use Mojo::Transaction::HTTP;
@@ -39,6 +39,10 @@ use Mojo::Date;
         ->status_is(301)
         ->header_is('Content-Length', 0)
         ->header_like(Location => qr{/dir1/$});
+    $t->get_ok('/static')
+        ->status_is(301)
+        ->header_is('Content-Length', 0)
+        ->header_like(Location => qr{/static/$});
     $t->get_ok('/nonexists.html')
         ->status_is(404)
         ->element_exists_not('body#debugScreen')

@@ -127,16 +127,15 @@ use MojoSimpleHTTPServer::ErrorDocument;
         }
         
         if (! $res->code) {
-            if (-d File::Spec->catfile(
-                        $self->document_root, File::Spec->splitpath($path)) && 
-                        (! $path->trailing_slash && scalar @{$path->parts})) {
+            if (! $path->trailing_slash && scalar @{$path->parts}
+                                                && $self->is_directory($path)) {
                 my $uri = $tx->req->url->clone->path(
                                     $path->clone->trailing_slash(1))->to_abs;
                 $self->serve_redirect($uri);
             }
         }
     }
-
+    
     ### --
     ### handler
     ### --
@@ -172,6 +171,20 @@ use MojoSimpleHTTPServer::ErrorDocument;
     ### --
     sub hook {
         shift->hooks->on(@_);
+    }
+    
+    ### --
+    ### Check if the path is a directory or not
+    ### --
+    sub is_directory {
+        my ($self, $path) = @_;
+        
+        for my $root (@{$self->roots}) {
+            my $path = File::Spec->catdir($root, $path);
+            if (-d $path) {
+                return 1;
+            }
+        }
     }
     
     ### --

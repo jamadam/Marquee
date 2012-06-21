@@ -108,7 +108,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
         }
         
         if (! $res->code) {
-            if ($tx->req->url =~ /$self->{_handler_re}/) {
+            if ($path =~ /$self->{_handler_re}/) {
                 $self->error_document->serve(403);
                 return;
             }
@@ -130,8 +130,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
             if (-d File::Spec->catfile(
                         $self->document_root, File::Spec->splitpath($path)) && 
                         (! $path->trailing_slash && scalar @{$path->parts})) {
-                my $uri =
-                    $MSHS::CONTEXT->tx->req->url->clone->path(
+                my $uri = $tx->req->url->clone->path(
                                     $path->clone->trailing_slash(1))->to_abs;
                 $self->serve_redirect($uri);
             }

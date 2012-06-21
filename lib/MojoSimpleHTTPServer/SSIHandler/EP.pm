@@ -304,7 +304,19 @@ Extends template.
 Array iterator with block.
 
     <%= iter @array => begin %>
-        <% my $elem = shift; %>
+        <% my ($elem, $index) = @_; %>
+        <%= $elem %>
+    <% end %>
+
+Array refs and Hash refs are also accepted.
+
+    <%= iter $array_ref => begin %>
+        <% my ($elem, $index) = @_; %>
+        <%= $elem %>
+    <% end %>
+
+    <%= iter $hash_ref => begin %>
+        <% my ($key, $value) = @_; %>
         <%= $elem %>
     <% end %>
 

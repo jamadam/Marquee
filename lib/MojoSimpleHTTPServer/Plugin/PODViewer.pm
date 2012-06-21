@@ -9,6 +9,8 @@ use Mojo::DOM;
 use Mojo::Util qw'url_unescape encode decode';
 use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     
+    __PACKAGE__->attr('paths');
+    
     # "This is my first visit to the Galaxy of Terror and I'd like it to be a
     #  pleasant one."
     sub register {
@@ -16,84 +18,98 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
         
         push(@{$app->roots}, __PACKAGE__->MojoSimpleHTTPServer::asset());
         
-        my @PATHS = map { $_, "$_/pods" } @INC;
+        $self->paths([map { $_, "$_/pods" } @INC]);
         
         $app->plugin('Router' => sub {
             shift->route(qr{^/perldoc/(.+)})->to(sub {
-                my $module = shift;
-                
-                $module =~ s!/!\:\:!g;
-                
-                my $context = $MSHS::CONTEXT;
-                my $tx      = $context->tx;
-                my $app     = $context->app;
-                my $path    = Pod::Simple::Search->new->find($module, @PATHS);
-                
-                if (! $path || ! -r $path) {
-                    return $app->serve_redirect("http://metacpan.org/module/$module");
-                }
-                
-                open my $file, '<', $path;
-                my $html = _pod_to_html(join '', <$file>);
-                
-                # Rewrite links
-                my $dom = Mojo::DOM->new($html);
-                $dom->find('a[href]')->each(sub {
-                    my $attrs = shift->attrs;
-                    if ($attrs->{href}
-                        =~ s!^http\://search\.cpan\.org/perldoc\?!/perldoc/!) {
-                        $attrs->{href} =~ s!%3A%3A!/!gi;
-                    }
-                });
-            
-                # Rewrite code blocks for syntax highlighting
-                $dom->find('pre')->each(sub {
-                    my $e = shift;
-                    return if $e->all_text =~ /^\s*\$\s+/m;
-                    my $attrs = $e->attrs;
-                    my $class = $attrs->{class};
-                    $attrs->{class}
-                      = defined $class ? "$class prettyprint" : 'prettyprint';
-                });
-                
-                # Rewrite headers
-                my @parts;
-                $dom->find('h1, h2, h3')->each(sub {
-                    my $e = shift;
-                    my $anchor = my $text = $e->all_text;
-                    $anchor =~ s/\s+/_/g;
-                    $anchor = url_escape $anchor, '^A-Za-z0-9_';
-                    $anchor =~ s/\%//g;
-                    push @parts, [] if $e->type eq 'h1' || !@parts;
-                    push @{$parts[-1]}, $text, "#$anchor";
-                    $e->replace_content(qq{<a name="$anchor">$text</a>});
-                });
-                
-                # Try to find a title
-                my $title = 'Perldoc';
-                $dom->find('h1 + p')->first(sub {
-                    $title = shift->text
-                });
-                
-                $MSHS::CONTEXT->stash->set(
-                    title       => $title,
-                    parts       => \@parts,
-                    static_dir  => 'static',
-                    perldoc     => "$dom",
-                    see_also    => _detect_see_also($module),
-                );
-                
-                $tx->res->body(
-                    encode('UTF-8',
-                        $app->ssi_handlers->{ep}->render_traceable(
-                            __PACKAGE__->MojoSimpleHTTPServer::asset('perldoc.html.ep')
-                        )
-                    )
-                );
-                $tx->res->code(200);
-                $tx->res->headers->content_type($app->types->type('html'));
+                $self->serve_pod_by_name(shift)
             });
         });
+    }
+    
+    sub serve_pod {
+        my ($self, $source) = @_;
+        
+        my $context = $MSHS::CONTEXT;
+        my $tx      = $context->tx;
+        my $app     = $context->app;
+        
+        my $html = _pod_to_html($source);
+        
+        # Rewrite links
+        my $dom = Mojo::DOM->new($html);
+        $dom->find('a[href]')->each(sub {
+            my $attrs = shift->attrs;
+            if ($attrs->{href}
+                =~ s!^http\://search\.cpan\.org/perldoc\?!/perldoc/!) {
+                $attrs->{href} =~ s!%3A%3A!/!gi;
+            }
+        });
+    
+        # Rewrite code blocks for syntax highlighting
+        $dom->find('pre')->each(sub {
+            my $e = shift;
+            return if $e->all_text =~ /^\s*\$\s+/m;
+            my $attrs = $e->attrs;
+            my $class = $attrs->{class};
+            $attrs->{class}
+              = defined $class ? "$class prettyprint" : 'prettyprint';
+        });
+        
+        # Rewrite headers
+        my @parts;
+        $dom->find('h1, h2, h3')->each(sub {
+            my $e = shift;
+            my $anchor = my $text = $e->all_text;
+            $anchor =~ s/\s+/_/g;
+            $anchor = url_escape $anchor, '^A-Za-z0-9_';
+            $anchor =~ s/\%//g;
+            push @parts, [] if $e->type eq 'h1' || !@parts;
+            push @{$parts[-1]}, $text, "#$anchor";
+            $e->replace_content(qq{<a name="$anchor">$text</a>});
+        });
+        
+        # Try to find a title
+        my $title = 'Perldoc';
+        $dom->find('h1 + p')->first(sub {
+            $title = shift->text
+        });
+        
+        $MSHS::CONTEXT->stash->set(
+            title       => $title,
+            parts       => \@parts,
+            static_dir  => 'static',
+            perldoc     => "$dom",
+            see_also    => _detect_see_also(($title =~ qr{(^[a-zA-Z0-9:]+)})[0]),
+        );
+        
+        $tx->res->body(
+            encode('UTF-8',
+                $app->ssi_handlers->{ep}->render_traceable(
+                    __PACKAGE__->MojoSimpleHTTPServer::asset('perldoc.html.ep')
+                )
+            )
+        );
+        $tx->res->code(200);
+        $tx->res->headers->content_type($app->types->type('html'));
+    }
+    
+    sub serve_pod_by_name {
+        my ($self, $module) = @_;
+        
+        $module =~ s!/!\:\:!g;
+        
+        my $context = $MSHS::CONTEXT;
+        my $tx      = $context->tx;
+        my $app     = $context->app;
+        my $path    = Pod::Simple::Search->new->find($module, @{$self->paths});
+        
+        if (! $path || ! -r $path) {
+            return $app->serve_redirect("http://metacpan.org/module/$module");
+        }
+        
+        open my $file, '<', $path;
+        return $self->serve_pod(join '', <$file>);
     }
     
     sub _detect_see_also {
@@ -155,6 +171,10 @@ This is a plugin for POD Veiwer server.
 =head1 METHODS
 
 =head2 $instance->register($app)
+
+=head2 $instance->serve_pod($html)
+
+=head2 $instance->serve_pod_by_name($module_name)
 
 =head1 SEE ALSO
 

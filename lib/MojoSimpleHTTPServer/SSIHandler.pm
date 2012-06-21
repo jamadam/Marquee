@@ -66,7 +66,7 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Context - SSI handler base class
+MojoSimpleHTTPServer::SSIHandler - SSI handler base class
 
 =head1 SYNOPSIS
 

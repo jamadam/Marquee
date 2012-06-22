@@ -184,7 +184,9 @@ use Carp;
         $self->funcs->{url_for} = sub {
             my ($self, $path) = @_;
             $path =~ s{^\.*/}{};
-            my $abs = Mojo::Path->new($ENV{'MSHS_BASE_PATH'})->merge($path);
+            my $abs = Mojo::Path->new($ENV{'MSHS_BASE_PATH'});
+            $abs->trailing_slash(1);
+            $abs->merge($path);
             $abs->leading_slash(1);
             return $abs;
         };

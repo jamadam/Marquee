@@ -42,8 +42,9 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
         my $dom = Mojo::DOM->new($html);
         $dom->find('a[href]')->each(sub {
             my $attrs = shift->attrs;
-            if ($attrs->{href}
-                =~ s!^http\://search\.cpan\.org/perldoc\?!/perldoc/!) {
+            if ($attrs->{href} =~ s{^http\://search\.cpan\.org/perldoc\?}{
+                    $app->ssi_handlers->{ep}->url_for('/perldoc/')
+                }e) {
                 $attrs->{href} =~ s!%3A%3A!/!gi;
             }
         });

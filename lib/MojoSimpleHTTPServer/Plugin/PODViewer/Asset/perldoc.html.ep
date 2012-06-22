@@ -27,7 +27,7 @@
     <div id="wrapper">
 	  % my $link = begin
 		<% my ($ancher, $url) = @_; %>
-		<a href="<%= $url%>" class="mojoscroll"><%= $ancher %></a>
+		<a href="<%= $url %>" class="mojoscroll"><%= $ancher %></a>
 	  % end
 	  <h1>
 		<a id="toc">TABLE OF CONTENTS</a>

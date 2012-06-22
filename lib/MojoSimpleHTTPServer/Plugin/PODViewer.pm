@@ -10,6 +10,7 @@ use Mojo::Util qw'url_unescape encode decode';
 use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     
     __PACKAGE__->attr('paths');
+    __PACKAGE__->attr('no_see_also');
     
     # "This is my first visit to the Galaxy of Terror and I'd like it to be a
     #  pleasant one."
@@ -19,6 +20,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
         push(@{$app->roots}, __PACKAGE__->MojoSimpleHTTPServer::asset());
         
         $self->paths([map { $_, "$_/pods" } @INC]);
+        $self->no_see_also($conf->{no_see_also} || 0);
         
         if (! $conf->{no_route}) {
             $app->plugin('Router' => sub {
@@ -83,7 +85,9 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
             parts       => \@parts,
             static_dir  => 'static',
             perldoc     => "$dom",
-            see_also    => _detect_see_also(($title =~ qr{(^[a-zA-Z0-9:]+)})[0]),
+            see_also    => ! $self->no_see_also
+                ? _detect_see_also(($title =~ qr{(^[a-zA-Z0-9:]+)})[0])
+                : undef,
         );
         
         $tx->res->body(

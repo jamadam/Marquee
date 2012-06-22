@@ -49,18 +49,20 @@
 	  <%== stash('perldoc') %>
 	</div>
 	<div id="footer">
-	  <div id="auto_detected_see_also">
-		<h2>
-		  AUTO DETECTED SEE ALSO
-		</h2>
-		<%= iter $see_also => begin %>
-		  % my ($module, $idx) = @_;
-		  % my $path = $module;
-		  % $path =~ s{::}{/}g;
-		  <%= $idx ? ', ' : '' %>
-		  <a href="/perldoc/<%= $path %>"><%= $module %></a>
-		<% end %>
-	  </div>
+	  <% if (scalar $see_also) { %>
+		<div id="auto_detected_see_also">
+		  <h2>
+			AUTO DETECTED SEE ALSO
+		  </h2>
+		  <%= iter $see_also => begin %>
+			% my ($module, $idx) = @_;
+			% my $path = $module;
+			% $path =~ s{::}{/}g;
+			<%= $idx ? ', ' : '' %>
+			<a href="/perldoc/<%= $path %>"><%= $module %></a>
+		  <% end %>
+		</div>
+	  <% } %>
 	</div>
   </body>
 </html>

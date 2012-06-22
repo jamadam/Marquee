@@ -50,10 +50,18 @@ use MojoSimpleHTTPServer;
     
     # other lib path
     
-    $t->get_ok('/perldoc/perl')
+    $app = MojoSimpleHTTPServer->new;
+    $app->document_root("$FindBin::Bin/public_html");
+    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->plugin('PODViewer', {no_see_also => 1});
+    
+    $t = Test::Mojo::DOM->new($app);
+    
+    $t->get_ok('/perldoc/MojoSimpleHTTPServer/SSIHandler')
         ->status_is(200)
         ->header_is('Content-Type', 'text/html;charset=UTF-8')
-        ->text_is('title', 'perl - Practical Extraction and Report Language')
+        ->text_is('title', 'MojoSimpleHTTPServer::SSIHandler - SSI handler base class')
         ->element_exists('a[name=SEE_ALSO]');
+        
 
 __END__

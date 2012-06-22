@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use MojoSimpleHTTPServer;
 use Mojo::Date;
     
-    use Test::More tests => 117;
+    use Test::More tests => 124;
     
     {
         use Mojo::Transaction::HTTP;
@@ -189,5 +189,30 @@ use Mojo::Date;
     $t->get_ok('/index.unknown')
         ->status_is(200)
         ->header_is('Content-Type', 'text/unknown');
+    
+    ### path base
+    
+    {
+        local $ENV{'MSHS_BASE_PATH'} = '/base/';
+        $app = MojoSimpleHTTPServer->new;
+        $app->document_root("$FindBin::Bin/public_html");
+        $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+        $app->default_file('index.html');
+        
+        $t = Test::Mojo->new($app);
+        
+        $t->get_ok('/path_base.html')
+            ->status_is(200)
+            ->text_is('test1', '/base/a/b/c')
+            ->text_is('test2', '/base/a/b/c')
+            ->text_is('test3', '/base/a/b/c');
+    }
+    {
+        local $ENV{'MOJO_HOME'} = "$FindBin::Bin/public_html";
+        local $ENV{'DOCUMENT_ROOT'} = "$FindBin::Bin";
+        $app = MojoSimpleHTTPServer->new;
+        is $app->home, "$FindBin::Bin/public_html";
+        is $ENV{'MSHS_BASE_PATH'}, "/public_html";
+    }
 
 __END__

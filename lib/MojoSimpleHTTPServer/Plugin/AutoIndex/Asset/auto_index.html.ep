@@ -3,7 +3,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
 	<%
-		my $r 			= shift;
 		my $c 			= shift;
 		my $dir 		= $c->stash->{dir};
 		my $static_dir 	= $c->stash->{static_dir};
@@ -13,13 +12,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="Content-Script-Type" content="text/javascript" />
 	<meta http-equiv="Content-Style-Type" content="text/css" />
-	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/yui-reset.css" />
-	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/yui-fonts.css" />
-	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/site_main.css" />
-	<link type="text/css" rel="stylesheet" href="/<%= $static_dir %>/site_file_list.css" />
-	<link rel="shortcut icon" href="/static/favicon.ico" />
-    <script type="text/javascript" src="/<%= $static_dir %>/jquery.1.7.1.js"></script>
-    <script type="text/javascript" src="/<%= $static_dir %>/site_file_list.js"></script>
+	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/yui-reset.css") %>" />
+	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/yui-fonts.css") %>" />
+	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/site_main.css") %>" />
+	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/site_file_list.css") %>" />
+	<link rel="shortcut icon" href="<%= url_for("$static_dir/favicon.ico") %>" />
+    <script type="text/javascript" src="<%= url_for("$static_dir/jquery.1.7.1.js") %>"></script>
+    <script type="text/javascript" src="<%= url_for("$static_dir/site_file_list.js") %>"></script>
 </head>
 <body>
     <h1>

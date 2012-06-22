@@ -74,6 +74,12 @@ use MojoSimpleHTTPServer::ErrorDocument;
         $self->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
         $self->add_handler(epl => MojoSimpleHTTPServer::SSIHandler::EPL->new);
         
+        # base path for CGI environment
+        if ($ENV{DOCUMENT_ROOT} && ! defined $ENV{MSHS_BASE_PATH}) {
+            $ENV{MSHS_BASE_PATH} = $self->home->to_string;
+            $ENV{MSHS_BASE_PATH} =~ s{^$ENV{DOCUMENT_ROOT}}{};
+        }
+        
         return $self;
     }
     

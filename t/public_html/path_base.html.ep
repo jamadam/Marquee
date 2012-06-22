@@ -1,0 +1,3 @@
+<test1><%= url_for('a/b/c') =%></test1>
+<test2><%= url_for('/a/b/c') =%></test2>
+<test3><%= url_for('./a/b/c') =%></test3>

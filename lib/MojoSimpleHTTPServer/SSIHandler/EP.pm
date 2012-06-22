@@ -5,6 +5,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler::EPL';
 use File::Basename 'dirname';
 use Mojo::ByteStream;
 use Mojo::Template;
+use Mojo::Path;
 use Carp;
     
     ### --
@@ -180,6 +181,14 @@ use Carp;
             return;
         };
         
+        $self->funcs->{url_for} = sub {
+            my ($self, $path) = @_;
+            $path =~ s{^\.*/}{};
+            my $abs = Mojo::Path->new($ENV{'MSHS_BASE_PATH'})->merge($path);
+            $abs->leading_slash(1);
+            return $abs;
+        };
+        
         $self->funcs->{placeholder} = sub {
             my ($self, $name, $defalut) = @_;
             my $block = $MSHS::CONTEXT->stash->{_ph_name($name)} || $defalut;
@@ -352,6 +361,12 @@ Returns stash value for given key.
 Generate absolute path with given relative one
 
     <% to_abs('./path.css') %>
+
+=head2 url_for('path/to/file')
+
+Generate a portable URL.
+
+    <% url_for('./path.css') %>
 
 =head1 METHODS
 

@@ -36,8 +36,6 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
                 $next->(@args);
             }
         });
-        
-        return $self;
     }
 
 1;

@@ -220,7 +220,9 @@ use MojoSimpleHTTPServer::ErrorDocument;
             $file =~ s!::!/!g;
             require "$file.pm"; ## no critic
         }
-        return $name->new->register($self, $args);
+        my $plug = $name->new;
+        $plug->register($self, $args);
+        return $plug;
     }
     
     ### --

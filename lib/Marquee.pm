@@ -33,7 +33,7 @@ our $VERSION = '0.06';
     __PACKAGE__->attr(stash => sub {Marquee::Stash->new});
     __PACKAGE__->attr(types => sub { Mojolicious::Types->new });
     __PACKAGE__->attr('under_development' => 0);
-    __PACKAGE__->attr('x_powered_by' => 'Simple HTTP Server with Mojo(Perl)');
+    __PACKAGE__->attr('x_powered_by' => 'Marquee(Perl)');
     
     ### --
     ### Constructor

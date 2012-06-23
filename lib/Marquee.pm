@@ -552,6 +552,10 @@ In other packages
     
     say $asset # /path/to/lib/SomePackage/Asset
 
+=head2 $instance->c()
+
+An alias for C<context> method.
+
 =head2 $instance->context()
 
 Returns current context. This refers to localized C<$Marquee::CONTEXT>.

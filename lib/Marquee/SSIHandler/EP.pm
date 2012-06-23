@@ -22,7 +22,7 @@ use Carp;
         }
         no warnings;
         my $package = __PACKAGE__. "::_SandBox";
-        eval "{package $package; $_[0]()}";
+        eval "{package $package; $_[0]()}"; ## no critic
         if ($@ !~ /Undefined subroutine/) {
             return 1;
         }

@@ -47,6 +47,7 @@ ep
 epl
 stash
 URI
+URL
 SSI
 pre
 app's
@@ -58,3 +59,4 @@ JSON
 HTTPS
 mrqe
 funcs
+passphrase

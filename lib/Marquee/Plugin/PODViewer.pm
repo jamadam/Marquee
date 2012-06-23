@@ -1,4 +1,6 @@
 package Marquee::Plugin::PODViewer;
+use strict;
+use warnings;
 use Mojo::Asset::File;
 use Mojo::ByteStream 'b';
 use Mojo::DOM;
@@ -173,7 +175,7 @@ Marquee::Plugin::PODRenderer - POD renderer plugin
 
 =head1 DESCRIPTION
 
-This is a plugin for POD Veiwer server.
+This is a plugin for POD Viewer server.
 
 =head1 METHODS
 

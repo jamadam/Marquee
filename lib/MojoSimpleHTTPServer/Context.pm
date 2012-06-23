@@ -99,7 +99,6 @@ use Mojo::Util qw{hmac_md5_sum secure_compare b64_decode b64_encode};
         my $secret = $self->app->secret;
         
         if (defined $value) {
-            $self->tx->res->cookies();
             return $self->cookie($name,
                             "$value--" . hmac_md5_sum($value, $secret), $opt);
         }

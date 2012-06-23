@@ -34,7 +34,7 @@ use Mojo::Base 'Marquee::Plugin';
     sub serve_pod {
         my ($self, $source) = @_;
         
-        my $context = $Marquee::CONTEXT;
+        my $context = Marquee->c;
         my $tx      = $context->tx;
         my $app     = $context->app;
         
@@ -80,7 +80,7 @@ use Mojo::Base 'Marquee::Plugin';
             $title = shift->text
         });
         
-        $Marquee::CONTEXT->stash->set(
+        Marquee->c->stash->set(
             title       => $title,
             parts       => \@parts,
             static_dir  => 'static',
@@ -106,7 +106,7 @@ use Mojo::Base 'Marquee::Plugin';
         
         $module =~ s!/!\:\:!g;
         
-        my $context = $Marquee::CONTEXT;
+        my $context = Marquee->c;
         my $tx      = $context->tx;
         my $app     = $context->app;
         my $path    = Pod::Simple::Search->new->find($module, @{$self->paths});

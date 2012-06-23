@@ -27,7 +27,7 @@ use Mojo::Util qw'encode';
         
         $message ||= $messages{$code};
         
-        my $context     = $Marquee::CONTEXT;
+        my $context     = Marquee->c;
         my $tx          = $context->tx;
         my $stash       = $context->stash;
         my $template    = ($self->status_template)->{$code} || $self->template;

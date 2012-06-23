@@ -28,7 +28,7 @@ use Mojo::Util qw'url_unescape encode decode';
             
             $next->();
             
-            my $context = $Marquee::CONTEXT;
+            my $context = Marquee->c;
             
             if (! $context->tx->res->code) {
                 my $app = $context->app;
@@ -49,7 +49,7 @@ use Mojo::Util qw'url_unescape encode decode';
     sub _serve_index {
         my ($self, $path) = @_;
         
-        my $context = $Marquee::CONTEXT;
+        my $context = Marquee->c;
         my $app = $context->app;
         
         $path = decode('UTF-8', url_unescape($path));

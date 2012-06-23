@@ -17,7 +17,7 @@ use Mojo::Base 'Marquee::Plugin';
         $app->hook(around_dispatch => sub {
             my ($next, @args) = @_;
             
-            my $tx      = $Marquee::CONTEXT->tx;
+            my $tx      = Marquee->c->tx;
             my $path    = $tx->req->url->path->clone->leading_slash(1)->to_string;
             my @elems   = @{$self->route->elems};
             

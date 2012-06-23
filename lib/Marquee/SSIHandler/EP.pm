@@ -54,7 +54,7 @@ use Carp;
     sub render {
         my ($self, $path) = @_;
         
-        my $context = $Marquee::CONTEXT;
+        my $context = Marquee->c;
         
         my $mt = $self->cache($path);
         
@@ -104,17 +104,17 @@ use Carp;
         
         $self->funcs->{app} = sub {
             shift;
-            return $Marquee::CONTEXT->app;
+            return Marquee->c->app;
         };
         
         $self->funcs->{param} = sub {
             shift;
-            return $Marquee::CONTEXT->tx->req->param($_[0]);
+            return Marquee->c->tx->req->param($_[0]);
         };
         
         $self->funcs->{stash} = sub {
             shift;
-            my $stash = $Marquee::CONTEXT->stash;
+            my $stash = Marquee->c->stash;
             if ($_[0] && $_[1]) {
                 return $stash->set(@_);
             } elsif (! $_[0]) {
@@ -140,7 +140,7 @@ use Carp;
         $self->funcs->{include} = sub {
             my ($self, $path, @args) = @_;
             
-            my $c = $Marquee::CONTEXT;
+            my $c = Marquee->c;
             local $c->{stash} = $c->{stash}->clone;
             $c->{stash}->set(@args);
             return
@@ -175,7 +175,7 @@ use Carp;
         $self->funcs->{override} = sub {
             my ($self, $name, $value) = @_;
             my $path = $self->current_template;
-            $Marquee::CONTEXT->stash->set(_ph_name($name) => sub {
+            Marquee->c->stash->set(_ph_name($name) => sub {
                 return $self->render_traceable($path, $value);
             });
             return;
@@ -187,14 +187,14 @@ use Carp;
         
         $self->funcs->{placeholder} = sub {
             my ($self, $name, $defalut) = @_;
-            my $block = $Marquee::CONTEXT->stash->{_ph_name($name)} || $defalut;
+            my $block = Marquee->c->stash->{_ph_name($name)} || $defalut;
             return $block->() || '';
         };
         
         $self->funcs->{extends} = sub {
             my ($self, $path, $block) = @_;
             
-            my $c = $Marquee::CONTEXT;
+            my $c = Marquee->c;
             
             local $c->{stash} = $c->{stash}->clone;
             
@@ -234,7 +234,7 @@ use Carp;
         my ($self, $path) = @_;
         
         if ($path =~ qr{^/(.+)}) {
-            return File::Spec->catfile($Marquee::CONTEXT->app->document_root, $1);
+            return File::Spec->catfile(Marquee->c->app->document_root, $1);
         }
         
         return dirname($self->current_template). '/'. $path;

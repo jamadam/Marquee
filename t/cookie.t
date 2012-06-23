@@ -25,15 +25,15 @@ use Mojo::Date;
     $app->plugin(Router => sub {
         my $r = shift;
         $r->route(qr{^/session_cookie/2})->to(sub {
-            my $req     = $Marquee::CONTEXT->tx->req;
-            my $res     = $Marquee::CONTEXT->tx->res;
+            my $req     = Marquee->c->tx->req;
+            my $res     = Marquee->c->tx->res;
             my $session = $req->cookie('session');
             my $value   = $session ? $session->value : 'missing';
             $res->body("Session is $value!");
             $res->code(200);
         });
         $r->route(qr{^/session_cookie})->to(sub {
-            my $res = $Marquee::CONTEXT->tx->res;
+            my $res = Marquee->c->tx->res;
             $res->body('Cookie set!');
             $res->code(200);
             $res->cookies(
@@ -78,18 +78,18 @@ use Mojo::Date;
     $app->plugin(Router => sub {
         my $r = shift;
         $r->route(qr{^/session_cookie/2})->to(sub {
-            my $req     = $Marquee::CONTEXT->tx->req;
-            my $res     = $Marquee::CONTEXT->tx->res;
-            my $session = $Marquee::CONTEXT->cookie('session');
+            my $req     = Marquee->c->tx->req;
+            my $res     = Marquee->c->tx->res;
+            my $session = Marquee->c->cookie('session');
             my $value   = $session ? $session : 'missing';
             $res->body("Session is $value!");
             $res->code(200);
         });
         $r->route(qr{^/session_cookie})->to(sub {
-            my $res = $Marquee::CONTEXT->tx->res;
+            my $res = Marquee->c->tx->res;
             $res->body('Cookie set!');
             $res->code(200);
-            $Marquee::CONTEXT->cookie('session', '23', {path  => '/session_cookie'});
+            Marquee->c->cookie('session', '23', {path  => '/session_cookie'});
         });
     });
 
@@ -126,18 +126,18 @@ use Mojo::Date;
     $app->plugin(Router => sub {
         my $r = shift;
         $r->route(qr{^/session_cookie/2})->to(sub {
-            my $req     = $Marquee::CONTEXT->tx->req;
-            my $res     = $Marquee::CONTEXT->tx->res;
-            my $session = $Marquee::CONTEXT->signed_cookie('session');
+            my $req     = Marquee->c->tx->req;
+            my $res     = Marquee->c->tx->res;
+            my $session = Marquee->c->signed_cookie('session');
             my $value   = $session ? $session : 'missing';
             $res->body("Session is $value!");
             $res->code(200);
         });
         $r->route(qr{^/session_cookie})->to(sub {
-            my $res = $Marquee::CONTEXT->tx->res;
+            my $res = Marquee->c->tx->res;
             $res->body('Cookie set!');
             $res->code(200);
-            $Marquee::CONTEXT->signed_cookie('session', '23', {path  => '/session_cookie'});
+            Marquee->c->signed_cookie('session', '23', {path  => '/session_cookie'});
         });
     });
 
@@ -174,24 +174,24 @@ use Mojo::Date;
     $app->plugin(Router => sub {
         my $r = shift;
         $r->route(qr{^/session_cookie/2})->to(sub {
-            my $req     = $Marquee::CONTEXT->tx->req;
-            my $res     = $Marquee::CONTEXT->tx->res;
-            my $session = $Marquee::CONTEXT->session;
+            my $req     = Marquee->c->tx->req;
+            my $res     = Marquee->c->tx->res;
+            my $session = Marquee->c->session;
             my $value   = $session->{test} || 'missing';
             $res->body("Session is $value!");
             $res->code(200);
         });
         $r->route(qr{^/session_cookie/3})->to(sub {
-            my $res = $Marquee::CONTEXT->tx->res;
+            my $res = Marquee->c->tx->res;
             $res->body('Session deleted!');
             $res->code(200);
-            $Marquee::CONTEXT->session(undef);
+            Marquee->c->session(undef);
         });
         $r->route(qr{^/session_cookie})->to(sub {
-            my $res = $Marquee::CONTEXT->tx->res;
+            my $res = Marquee->c->tx->res;
             $res->body('Session set!');
             $res->code(200);
-            $Marquee::CONTEXT->session({test => 'session test'});
+            Marquee->c->session({test => 'session test'});
         });
     });
 

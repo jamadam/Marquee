@@ -23,7 +23,7 @@ use Mojo::Util qw/encode md5_sum/;
         
         $index ||= 0;
         
-        my $route = $Marquee::CONTEXT->stash->{'mrqe.template_path'};
+        my $route = Marquee->c->stash->{'mrqe.template_path'};
         
         while ($index-- > 0) {
             $route = $route->[1] || return;
@@ -52,7 +52,7 @@ use Mojo::Util qw/encode md5_sum/;
     sub render_traceable {
         my ($self, $path, $cb) = @_;
         
-        my $stash = $Marquee::CONTEXT->stash;
+        my $stash = Marquee->c->stash;
         
         local $stash->{'mrqe.template_path'} =
                                         [$path, $stash->{'mrqe.template_path'}];

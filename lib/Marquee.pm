@@ -75,6 +75,13 @@ our $VERSION = '0.06';
         $self->ssi_handlers->{$name} = $handler;
         return $self;
     }
+
+    ### --
+    ### Shortcut for context
+    ### --
+    sub c {
+        return $_[1] ? $CONTEXT = $_[1] : $CONTEXT;
+    }
     
     ### --
     ### Accessor for localized context

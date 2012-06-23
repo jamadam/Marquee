@@ -22,16 +22,16 @@ use Mojo::Date;
     $app->hook(around_static => my $hook1 = sub {
         my ($next, @args) = @_;
         $next->(@args);
-        my $org = $Marquee::CONTEXT->tx->res->body;
-        $Marquee::CONTEXT->tx->res->body($org.'mod');
+        my $org = Marquee->c->tx->res->body;
+        Marquee->c->tx->res->body($org.'mod');
         return $app;
     });
     
     $app->hook(around_static => my $hook2 = sub {
         my ($next, @args) = @_;
         $next->(@args);
-        my $org = $Marquee::CONTEXT->tx->res->body;
-        $Marquee::CONTEXT->tx->res->body($org.'mod2');
+        my $org = Marquee->c->tx->res->body;
+        Marquee->c->tx->res->body($org.'mod2');
         return $app;
     });
     
@@ -53,8 +53,8 @@ use Mojo::Date;
     $app->hook(around_static => sub {
         my ($next, @args) = @_;
         $next->(@args);
-        my $org = $Marquee::CONTEXT->tx->res->body;
-        $Marquee::CONTEXT->tx->res->body($org.'mod');
+        my $org = Marquee->c->tx->res->body;
+        Marquee->c->tx->res->body($org.'mod');
         return $app;
     });
 
@@ -69,8 +69,8 @@ use Mojo::Date;
     $app->hook(around_static => sub {
         my ($next, @args) = @_;
         $next->(@args);
-        my $org = $Marquee::CONTEXT->tx->res->body;
-        $Marquee::CONTEXT->tx->res->body($org.'mod2');
+        my $org = Marquee->c->tx->res->body;
+        Marquee->c->tx->res->body($org.'mod2');
         return $app;
     });
     

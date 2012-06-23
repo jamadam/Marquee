@@ -147,7 +147,7 @@ use Mojo::Date;
         });
         
         $auth->route(qr{^/index\.html})->to(sub {
-            $Marquee::CONTEXT->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt.ep");
+            Marquee->c->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt.ep");
             is $_[0], undef;
         });
     });

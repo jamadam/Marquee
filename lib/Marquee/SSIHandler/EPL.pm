@@ -29,7 +29,7 @@ use Mojo::Template;
     sub render {
         my ($self, $path) = @_;
         
-        my $context = $Marquee::CONTEXT;
+        my $context = Marquee->c;
         
         my $mt = $self->cache($path);
         

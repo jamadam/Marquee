@@ -17,21 +17,21 @@ use Mojo::Date;
     
     $app = MyApp->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     
     $app->hook(around_static => my $hook1 = sub {
         my ($next, @args) = @_;
         $next->(@args);
-        my $org = $MSHS::CONTEXT->tx->res->body;
-        $MSHS::CONTEXT->tx->res->body($org.'mod');
+        my $org = $Marquee::CONTEXT->tx->res->body;
+        $Marquee::CONTEXT->tx->res->body($org.'mod');
         return $app;
     });
     
     $app->hook(around_static => my $hook2 = sub {
         my ($next, @args) = @_;
         $next->(@args);
-        my $org = $MSHS::CONTEXT->tx->res->body;
-        $MSHS::CONTEXT->tx->res->body($org.'mod2');
+        my $org = $Marquee::CONTEXT->tx->res->body;
+        $Marquee::CONTEXT->tx->res->body($org.'mod2');
         return $app;
     });
     
@@ -48,13 +48,13 @@ use Mojo::Date;
     
     $app = MyApp2->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     
     $app->hook(around_static => sub {
         my ($next, @args) = @_;
         $next->(@args);
-        my $org = $MSHS::CONTEXT->tx->res->body;
-        $MSHS::CONTEXT->tx->res->body($org.'mod');
+        my $org = $Marquee::CONTEXT->tx->res->body;
+        $Marquee::CONTEXT->tx->res->body($org.'mod');
         return $app;
     });
 
@@ -69,8 +69,8 @@ use Mojo::Date;
     $app->hook(around_static => sub {
         my ($next, @args) = @_;
         $next->(@args);
-        my $org = $MSHS::CONTEXT->tx->res->body;
-        $MSHS::CONTEXT->tx->res->body($org.'mod2');
+        my $org = $Marquee::CONTEXT->tx->res->body;
+        $Marquee::CONTEXT->tx->res->body($org.'mod2');
         return $app;
     });
     
@@ -92,13 +92,13 @@ use Mojo::Date;
         ->status_is(404);
 
 package MyApp;
-use Mojo::Base 'MojoSimpleHTTPServer';
+use Mojo::Base 'Marquee';
 
     sub serve_static {
         shift->SUPER::serve_static(@_);
     }
 
 package MyApp2;
-use Mojo::Base 'MojoSimpleHTTPServer';
+use Mojo::Base 'Marquee';
     
 __END__

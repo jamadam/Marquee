@@ -17,12 +17,12 @@ use Mojo::Date;
     
     {
         package MyApp;
-        use Mojo::Base 'MojoSimpleHTTPServer';
+        use Mojo::Base 'Marquee';
     }
     
     $app = MyApp->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     
     $app->plugin(Router => sub {
         my $r = shift;
@@ -106,7 +106,7 @@ use Mojo::Date;
     
     $app = MyApp->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     
     $app->plugin(Router => sub {
         my $r = shift;
@@ -135,9 +135,9 @@ use Mojo::Date;
     
     ### Basic Auth
     
-    $app = MojoSimpleHTTPServer->new;
+    $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     
     $app->plugin(Router => sub {
         my $r = shift;
@@ -147,7 +147,7 @@ use Mojo::Date;
         });
         
         $auth->route(qr{^/index\.html})->to(sub {
-            MSHS->context->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt.ep");
+            $Marquee::CONTEXT->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt.ep");
             is $_[0], undef;
         });
     });

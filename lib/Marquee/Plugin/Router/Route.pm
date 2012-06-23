@@ -1,4 +1,4 @@
-package MojoSimpleHTTPServer::Plugin::Router::Route;
+package Marquee::Plugin::Router::Route;
 use strict;
 use warnings;
 use Mojo::Base -base;
@@ -66,11 +66,11 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
+Marquee::Plugin::Router - Router [EXPERIMENTAL]
 
 =head1 SYNOPSIS
     
-    my $r = MojoSimpleHTTPServer::Plugin::Router::Route->new;
+    my $r = Marquee::Plugin::Router::Route->new;
     $r->route(qr{^/index\.html})->to(sub {
         ### DO SOMETHING
     });
@@ -135,6 +135,6 @@ Filters route by HTTP method.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer::Plugin::Router>, L<MojoSimpleHTTPServer>, L<Mojolicious>
+L<Marquee::Plugin::Router>, L<Marquee>, L<Mojolicious>
 
 =cut

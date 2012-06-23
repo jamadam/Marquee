@@ -4,11 +4,11 @@ use warnings;
 use utf8;
 use FindBin;
 use lib '../lib';
-use MojoSimpleHTTPServer;
+use Marquee;
 
-    my $app = MojoSimpleHTTPServer->new;
+    my $app = Marquee->new;
     $app->document_root("./");
-    $app->log_file("$FindBin::Bin/../log/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/../log/Marquee.log");
     $app->default_file('index.html');
     $app->auto_index(1);
 	$app->start;

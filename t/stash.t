@@ -7,11 +7,11 @@ use File::Spec;
 use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
 use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
 use Test::More;
-use MojoSimpleHTTPServer::Stash;
+use Marquee::Stash;
 
     use Test::More tests => 12;
 
-    my $stash = MojoSimpleHTTPServer::Stash->new(a => 'b', c => 'd');
+    my $stash = Marquee::Stash->new(a => 'b', c => 'd');
     is_deeply $stash->get(), {a => 'b', c => 'd'};
     
     $stash->set(e => 'f');

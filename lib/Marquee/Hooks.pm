@@ -1,4 +1,4 @@
-package MojoSimpleHTTPServer::Hooks;
+package Marquee::Hooks;
 use strict;
 use warnings;
 use Mojo::Base 'Mojo::EventEmitter';
@@ -23,13 +23,13 @@ use Mojo::Base 'Mojo::EventEmitter';
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Hooks - Hooks manager
+Marquee::Hooks - Hooks manager
 
 =head1 SYNOPSIS
 
-    use MojoSimpleHTTPServer::Hooks;
+    use Marquee::Hooks;
     
-    my $hook = MojoSimpleHTTPServer::Hooks->new;
+    my $hook = Marquee::Hooks->new;
     
     my $out = '';
     
@@ -50,11 +50,11 @@ MojoSimpleHTTPServer::Hooks - Hooks manager
 
 =head1 DESCRIPTION
 
-L<MojoSimpleHTTPServer::Hooks> is the Hook manager of L<MojoSimpleHTTPServer>.
+L<Marquee::Hooks> is the Hook manager of L<Marquee>.
 
 =head1 METHODS
 
-L<MojoSimpleHTTPServer::Hooks> inherits all methods from L<Mojo::EventEmitter> and
+L<Marquee::Hooks> inherits all methods from L<Mojo::EventEmitter> and
 implements the following new ones.
 
 =head2 C<emit_chain>
@@ -66,6 +66,6 @@ Emit events as chained hooks.
 
 =head1 SEE ALSO
 
-L<Mojo::EventEmitter>, L<MojoSimpleHTTPServer>, L<Mojolicious>
+L<Mojo::EventEmitter>, L<Marquee>, L<Mojolicious>
 
 =cut

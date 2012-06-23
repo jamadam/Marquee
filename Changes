@@ -1,4 +1,4 @@
-Revision history for MojoSimpleHTTPServer
+Revision history for Marquee
 
 0.06 2012/06/20
   - Improved iter function to accept blessed obj in array.

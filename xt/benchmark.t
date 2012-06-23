@@ -7,23 +7,23 @@ use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 
 use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
 use Test::More;
 use Data::Dumper;
-use MojoSimpleHTTPServer::SSIHandler::EPL;
-use MojoSimpleHTTPServer::SSIHandler::EP;
+use Marquee::SSIHandler::EPL;
+use Marquee::SSIHandler::EP;
 use Benchmark qw( timethese cmpthese countit);
 use Mojo::Template;
-use MojoSimpleHTTPServer;
-use MojoSimpleHTTPServer::Context;
-use MojoSimpleHTTPServer::Stash;
+use Marquee;
+use Marquee::Context;
+use Marquee::Stash;
 use Mojo::Transaction::HTTP;
 
     no strict 'refs';
-    *{'MojoSimpleHTTPServer::SSIHandler::EPL::render_nocache'} = \&epl_render_nocache;
-    *{'MojoSimpleHTTPServer::SSIHandler::EP::render_nocache'} = \&ep_render_nocache;
+    *{'Marquee::SSIHandler::EPL::render_nocache'} = \&epl_render_nocache;
+    *{'Marquee::SSIHandler::EP::render_nocache'} = \&ep_render_nocache;
     
     my $file = "$FindBin::Bin/benchmark.epl";
     
     {
-        my $renderer = MojoSimpleHTTPServer::SSIHandler::EPL->new;
+        my $renderer = Marquee::SSIHandler::EPL->new;
         
         my $a = countit(1, sub{
             $renderer->render_nocache($file);
@@ -37,11 +37,11 @@ use Mojo::Transaction::HTTP;
     }
     
     {
-        my $app = MojoSimpleHTTPServer->new;
+        my $app = Marquee->new;
         my $tx  = Mojo::Transaction::HTTP->new;
-        local $MSHS::CONTEXT = MojoSimpleHTTPServer::Context->new(app => $app, tx => $tx);
-        $MSHS::CONTEXT->stash(MojoSimpleHTTPServer::Stash->new);
-        my $renderer = MojoSimpleHTTPServer::SSIHandler::EP->new;
+        local $Marquee::CONTEXT = Marquee::Context->new(app => $app, tx => $tx);
+        $Marquee::CONTEXT->stash(Marquee::Stash->new);
+        my $renderer = Marquee::SSIHandler::EP->new;
         
         my $a = countit(1, sub{
             $renderer->render_nocache($file);
@@ -60,7 +60,7 @@ use Mojo::Transaction::HTTP;
     sub epl_render_nocache {
         my ($self, $path) = @_;
         
-        my $context = $MSHS::CONTEXT;
+        my $context = $Marquee::CONTEXT;
         my $mt = Mojo::Template->new;
         my $output = $mt->render_file($path, $self, $context);
         return ref $output ? die $output : $output;
@@ -69,7 +69,7 @@ use Mojo::Transaction::HTTP;
     sub ep_render_nocache {
         my ($self, $path) = @_;
         
-        my $context = $MSHS::CONTEXT;
+        my $context = $Marquee::CONTEXT;
         
         my $mt = Mojo::Template->new();
         $mt->auto_escape(1);

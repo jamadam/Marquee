@@ -1,4 +1,4 @@
-package MojoSimpleHTTPServer::Plugin::PODViewer;
+package Marquee::Plugin::PODViewer;
 use Mojo::Asset::File;
 use Mojo::ByteStream 'b';
 use Mojo::DOM;
@@ -7,7 +7,7 @@ use Pod::Simple::HTML;
 use Pod::Simple::Search;
 use Mojo::DOM;
 use Mojo::Util qw'url_unescape encode decode';
-use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
+use Mojo::Base 'Marquee::Plugin';
     
     __PACKAGE__->attr('paths');
     __PACKAGE__->attr('no_see_also');
@@ -17,7 +17,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     sub register {
         my ($self, $app, $conf) = @_;
         
-        push(@{$app->roots}, __PACKAGE__->MojoSimpleHTTPServer::asset());
+        push(@{$app->roots}, __PACKAGE__->Marquee::asset());
         
         $self->paths([map { $_, "$_/pods" } @INC]);
         $self->no_see_also($conf->{no_see_also} || 0);
@@ -34,7 +34,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
     sub serve_pod {
         my ($self, $source) = @_;
         
-        my $context = $MSHS::CONTEXT;
+        my $context = $Marquee::CONTEXT;
         my $tx      = $context->tx;
         my $app     = $context->app;
         
@@ -80,7 +80,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
             $title = shift->text
         });
         
-        $MSHS::CONTEXT->stash->set(
+        $Marquee::CONTEXT->stash->set(
             title       => $title,
             parts       => \@parts,
             static_dir  => 'static',
@@ -93,7 +93,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
         $tx->res->body(
             encode('UTF-8',
                 $app->ssi_handlers->{ep}->render_traceable(
-                    __PACKAGE__->MojoSimpleHTTPServer::asset('perldoc.html.ep')
+                    __PACKAGE__->Marquee::asset('perldoc.html.ep')
                 )
             )
         );
@@ -106,7 +106,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
         
         $module =~ s!/!\:\:!g;
         
-        my $context = $MSHS::CONTEXT;
+        my $context = $Marquee::CONTEXT;
         my $tx      = $context->tx;
         my $app     = $context->app;
         my $path    = Pod::Simple::Search->new->find($module, @{$self->paths});
@@ -161,7 +161,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Plugin::PODRenderer - POD renderer plugin
+Marquee::Plugin::PODRenderer - POD renderer plugin
 
 =head1 SYNOPSIS
 
@@ -185,6 +185,6 @@ This is a plugin for POD Veiwer server.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer>, L<Mojolicious>
+L<Marquee>, L<Mojolicious>
 
 =cut

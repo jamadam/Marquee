@@ -9,15 +9,15 @@ use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 
 use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
 use Test::More;
 use Test::Mojo::DOM;
-use MojoSimpleHTTPServer;
+use Marquee;
 use Mojo::Date;
-use MojoSimpleHTTPServer::SSIHandler::EP;
+use Marquee::SSIHandler::EP;
 
     use Test::More tests => 64;
     
     ### add_function
     
-    my $ep = MojoSimpleHTTPServer::SSIHandler::EP->new;
+    my $ep = Marquee::SSIHandler::EP->new;
     eval {
         $ep->add_function(myfunc => sub {});
     };
@@ -49,9 +49,9 @@ use MojoSimpleHTTPServer::SSIHandler::EP;
     my $app;
     my $t;
     
-    $app = MojoSimpleHTTPServer->new;
+    $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     $app->default_file('index.html');
     
     $t = Test::Mojo->new($app);
@@ -106,9 +106,9 @@ use MojoSimpleHTTPServer::SSIHandler::EP;
         ->text_is('test1', 1)
         ->text_is('test2', 0);
 
-    $app = MojoSimpleHTTPServer->new;
+    $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     $app->stash->set('namespace_test' => 'global stash content');
     $t = Test::Mojo::DOM->new($app);
     

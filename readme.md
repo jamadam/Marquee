@@ -1,14 +1,14 @@
-MojoSimpleHTTPServer beta
+Marquee beta
 ---------------
 
 ## SYNOPSIS
     
-    mojo SimpleHTTPServer [--document_root path] [--dafault_file name]
+    mojo Marquee [--document_root path] [--dafault_file name]
         [--auto_index] ..
 
 ## DESCRIPTION
 
-SimpleHTTPServer is a simple HTTP server with server-side include.
+Marquee is a simple HTTP server with server-side include.
 The distribution is consist of object oriented Perl API and command line API.
 
 ## INSTALLATION
@@ -22,11 +22,11 @@ To install this module, run the following commands:
 
 ## Perl API
 
-MojoSimpleHTTPServer class is based on Mojo. You can run your app in Mojo way
+Marquee class is based on Mojo. You can run your app in Mojo way
 
-    use MojoSimpleHTTPServer;
+    use Marquee;
     
-    my $app = MojoSimpleHTTPServer->new;
+    my $app = Marquee->new;
     $app->document_root($path);
     $app->default_file('index.html');
     
@@ -41,7 +41,7 @@ On command line..
 
 ## COMMAND LINE API
 
-    mojo SimpleHTTPServer [OPTIONS]
+    mojo Marquee [OPTIONS]
 
 These options are available:
   
@@ -67,32 +67,32 @@ These options are available:
 
 ### EXAMPLE1
 
-    $ mojo SimpleHTTPServer
+    $ mojo Marquee
     [Mon Oct 17 23:18:35 2011] [info] Server listening (http://*:3000)
     Server available at http://127.0.0.1:3000.
 
 ### EXAMPLE2(specify port number)
 
-    $ mojo SimpleHTTPServer --listen http://*:3001
+    $ mojo Marquee --listen http://*:3001
 
 ### EXAMPLE3(specify document root)
 
-    $ mojo SimpleHTTPServer --document_root ./public
+    $ mojo Marquee --document_root ./public
 
 ### EXAMPLE4(specify default file name)
 
-    $ mojo SimpleHTTPServer --default_file index.html
+    $ mojo Marquee --default_file index.html
 
 ### EXAMPLE4(activate auto index)
 
-    $ mojo SimpleHTTPServer --auto_index
+    $ mojo Marquee --auto_index
 
-![Site list](/jamadam/MojoSimpleHTTPServer/raw/master/screenshot/autoindex.png "Auto Index")
+![Site list](/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
 
 ## REPOSITORY
 
-[https://github.com/jamadam/MojoSimpleHTTPServer]
-[https://github.com/jamadam/MojoSimpleHTTPServer]:https://github.com/jamadam/MojoSimpleHTTPServer
+[https://github.com/jamadam/Marquee]
+[https://github.com/jamadam/Marquee]:https://github.com/jamadam/Marquee
 
 ## CREDIT
 

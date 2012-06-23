@@ -9,7 +9,7 @@ use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 
 use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
 use Test::More;
 use Test::Mojo::DOM;
-use MojoSimpleHTTPServer;
+use Marquee;
 use Mojo::Date;
     
     use Test::More tests => 54;
@@ -19,9 +19,9 @@ use Mojo::Date;
     
     ### auto index tests
     
-    $app = MojoSimpleHTTPServer->new;
+    $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html_index");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     $app->default_file('index.html');
     $app->plugin('AutoIndex');
     $t = Test::Mojo::DOM->new($app);
@@ -45,9 +45,9 @@ use Mojo::Date;
                     ->attr_is('href', 'some_dir/')
                     ->has_class('dir');
                 $t->at('td:nth-child(2)')
-                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_timestamp($file));
+                    ->text_is(Marquee::Plugin::AutoIndex::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_size($file));
+                    ->text_is(Marquee::Plugin::AutoIndex::_file_size($file));
             }
             
             {
@@ -58,9 +58,9 @@ use Mojo::Date;
                     ->attr_is('href', 'image.png')
                     ->has_class('image');
                 $t->at('td:nth-child(2)')
-                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_timestamp($file));
+                    ->text_is(Marquee::Plugin::AutoIndex::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_size($file));
+                    ->text_is(Marquee::Plugin::AutoIndex::_file_size($file));
             }
             
             {
@@ -71,9 +71,9 @@ use Mojo::Date;
                     ->attr_is('href', '日本語.html')
                     ->has_class('text');
                 $t->at('td:nth-child(2)')
-                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_timestamp($file));
+                    ->text_is(Marquee::Plugin::AutoIndex::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_size($file));
+                    ->text_is(Marquee::Plugin::AutoIndex::_file_size($file));
             }
         })
         ->content_like(qr{test3.html})
@@ -93,9 +93,9 @@ use Mojo::Date;
                     ->attr_is('href', '../')
                     ->has_class('dir');
                 $t->at('td:nth-child(2)')
-                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_timestamp($file));
+                    ->text_is(Marquee::Plugin::AutoIndex::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_size($file));
+                    ->text_is(Marquee::Plugin::AutoIndex::_file_size($file));
             }
             {
                 my $t = $t->at('tbody tr:nth-child(2)');
@@ -105,9 +105,9 @@ use Mojo::Date;
                     ->attr_is('href', 'test.html')
                     ->has_class('text');
                 $t->at('td:nth-child(2)')
-                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_timestamp($file));
+                    ->text_is(Marquee::Plugin::AutoIndex::_file_timestamp($file));
                 $t->at('td:nth-child(3)')
-                    ->text_is(MojoSimpleHTTPServer::Plugin::AutoIndex::_file_size($file));
+                    ->text_is(Marquee::Plugin::AutoIndex::_file_size($file));
             }
         });
     

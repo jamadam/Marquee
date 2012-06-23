@@ -9,18 +9,18 @@ use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 
 use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
 use Test::More;
 use Test::Mojo::DOM;
-use MojoSimpleHTTPServer;
+use Marquee;
 use Mojo::Date;
     
     use Test::More tests => 124;
     
     {
         use Mojo::Transaction::HTTP;
-        my $app = MojoSimpleHTTPServer->new;
+        my $app = Marquee->new;
         my $tx = Mojo::Transaction::HTTP->new;
         $app->document_root("$FindBin::Bin/public_html");
         $app->_init;
-        local $MSHS::CONTEXT = MojoSimpleHTTPServer::Context->new(app => $app, tx => $tx);
+        local $Marquee::CONTEXT = Marquee::Context->new(app => $app, tx => $tx);
         is $app->search_template('index.html'), "$FindBin::Bin/public_html/index.html.ep";
         is $app->search_template('./index.html'), "$FindBin::Bin/public_html/index.html.ep";
         is $app->search_template("$FindBin::Bin/public_html/index.html"), "$FindBin::Bin/public_html/index.html.ep";
@@ -28,9 +28,9 @@ use Mojo::Date;
 
     my $app;
     my $t;
-    $app = MojoSimpleHTTPServer->new;
+    $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     $app->default_file('index.html');
 
     $t = Test::Mojo->new($app);
@@ -136,18 +136,18 @@ use Mojo::Date;
     
     ### adding template handler tests
     
-    $app = MojoSimpleHTTPServer->new;
+    $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     
     {
         package _TestHandler;
-        use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler';
+        use Mojo::Base 'Marquee::SSIHandler';
         sub render {return $_[1]}
     }
     {
         package _Test2Handler;
-        use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler';
+        use Mojo::Base 'Marquee::SSIHandler';
         sub render {return 'rendered'}
     }
     
@@ -193,10 +193,10 @@ use Mojo::Date;
     ### path base
     
     {
-        local $ENV{'MSHS_BASE_PATH'} = '/base/';
-        $app = MojoSimpleHTTPServer->new;
+        local $ENV{'MARQUEE_BASE_PATH'} = '/base/';
+        $app = Marquee->new;
         $app->document_root("$FindBin::Bin/public_html");
-        $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+        $app->log_file("$FindBin::Bin/Marquee.log");
         $app->default_file('index.html');
         
         $t = Test::Mojo->new($app);
@@ -210,9 +210,9 @@ use Mojo::Date;
     {
         local $ENV{'MOJO_HOME'} = "$FindBin::Bin/public_html";
         local $ENV{'DOCUMENT_ROOT'} = "$FindBin::Bin";
-        $app = MojoSimpleHTTPServer->new;
+        $app = Marquee->new;
         is $app->home, "$FindBin::Bin/public_html";
-        is $ENV{'MSHS_BASE_PATH'}, "/public_html";
+        is $ENV{'MARQUEE_BASE_PATH'}, "/public_html";
     }
 
 __END__

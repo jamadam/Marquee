@@ -17,7 +17,7 @@ use Mojo::Date;
     
     $app = MyApp->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     $app->stash->set(model => $app->model);
     
     $t = Test::Mojo->new($app);
@@ -30,7 +30,7 @@ use Mojo::Date;
         ->text_is('test1', 'FOO');
 
 package MyApp;
-use Mojo::Base 'MojoSimpleHTTPServer';
+use Mojo::Base 'Marquee';
     
     INIT {
         __PACKAGE__->attr(model => sub {MyApp::Model->new});

@@ -37,8 +37,7 @@ Plugins
 plugins
 WAF
 HTTP
-MojoSimpleHTTPServer
-SimpleHTTPServer
+Marquee
 app
 backend
 inited
@@ -57,5 +56,5 @@ Traceably
 ErrorDocument
 JSON
 HTTPS
-mshs
+mrqe
 funcs

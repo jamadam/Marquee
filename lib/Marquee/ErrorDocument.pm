@@ -1,4 +1,4 @@
-package MojoSimpleHTTPServer::ErrorDocument;
+package Marquee::ErrorDocument;
 use strict;
 use warnings;
 use Mojo::Base -base;
@@ -14,7 +14,7 @@ use Mojo::Util qw'encode';
     my $type = Mojolicious::Types->new->type('html');
     
     __PACKAGE__->attr('template', sub {
-        MojoSimpleHTTPServer->asset('error_document.html.ep');
+        Marquee->asset('error_document.html.ep');
     });
     
     __PACKAGE__->attr('status_template' => sub {{}});
@@ -27,7 +27,7 @@ use Mojo::Util qw'encode';
         
         $message ||= $messages{$code};
         
-        my $context     = $MSHS::CONTEXT;
+        my $context     = $Marquee::CONTEXT;
         my $tx          = $context->tx;
         my $stash       = $context->stash;
         my $template    = ($self->status_template)->{$code} || $self->template;
@@ -42,7 +42,7 @@ use Mojo::Util qw'encode';
                 message     =>
                     ref $message ? $message : Mojo::Exception->new($message),
             );
-            $template = MojoSimpleHTTPServer->asset('debug_screen.html.ep');
+            $template = Marquee->asset('debug_screen.html.ep');
         } else {
             $stash->set(
                 static_dir  => 'static',
@@ -62,16 +62,16 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::ErrorDocument - ErrorDocument
+Marquee::ErrorDocument - ErrorDocument
 
 =head1 SYNOPSIS
 
-    my $error_doc = MojoSimpleHTTPServer::ErrorDocument->new;
+    my $error_doc = Marquee::ErrorDocument->new;
     $error_doc->render(404, 'File not found');
 
 =head1 DESCRIPTION
 
-L<MojoSimpleHTTPServer::ErrorDocument> represents error document.
+L<Marquee::ErrorDocument> represents error document.
 
 =head1 ATTRIBUTES
 
@@ -93,6 +93,6 @@ Serves error document.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer>, L<Mojolicious>
+L<Marquee>, L<Mojolicious>
 
 =cut

@@ -1,4 +1,4 @@
-package MojoSimpleHTTPServer::Cache;
+package Marquee::Cache;
 use strict;
 use warnings;
 use Mojo::Base -base;
@@ -58,13 +58,13 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Cache - Cache
+Marquee::Cache - Cache
 
 =head1 SYNOPSIS
 
-    use MojoSimpleHTTPServer::Cache;
+    use Marquee::Cache;
     
-    $cache = MojoSimpleHTTPServer::Cache->new;
+    $cache = Marquee::Cache->new;
     $cache->max_keys(2);
     $cache->set(foo => 'bar');
     $cache->get('foo');
@@ -79,7 +79,7 @@ Simple cache manager with expire feature.
 
 =head1 METHODS
 
-=head2 MojoSimpleHTTPServer::Cache->new
+=head2 Marquee::Cache->new
 
 =head2 $instance->get($name)
 
@@ -99,6 +99,6 @@ Fixes mismatches between the cache table and stack table.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer>, L<Mojolicious>
+L<Marquee>, L<Mojolicious>
 
 =cut

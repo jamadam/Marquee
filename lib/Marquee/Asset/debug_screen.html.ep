@@ -128,8 +128,8 @@
 			<div id="infos">
 				<table>
 					%= $kv->(Perl => "$^V ($^O)")
-					% my $version  = $MojoSimpleHTTPServer::VERSION;
-					%= $kv->('MSHS' => "$version")
+					% my $version  = $Marquee::VERSION;
+					%= $kv->('Marquee' => "$version")
 					%= $kv->(Home => app->home)
 					%= $kv->(Include => dumper \@INC)
 					%= $kv->(PID => $$)

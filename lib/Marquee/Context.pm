@@ -1,4 +1,4 @@
-package MojoSimpleHTTPServer::Context;
+package Marquee::Context;
 use strict;
 use warnings;
 use Mojo::Base -base;
@@ -32,7 +32,7 @@ use Mojo::Util qw{hmac_md5_sum secure_compare b64_decode b64_encode};
     ### ---
     ### Session name
     ### ---
-    __PACKAGE__->attr(session_name => 'mshs');
+    __PACKAGE__->attr(session_name => 'mrqe');
     
     ### ---
     ### Transaction
@@ -156,11 +156,11 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Context - Context
+Marquee::Context - Context
 
 =head1 SYNOPSIS
 
-    my $context = MojoSimpleHTTPServer::Context->new(app => $app, tx => $tx);
+    my $context = Marquee::Context->new(app => $app, tx => $tx);
     my $app             = $context->app;
     my $tx              = $context->tx;
     my $session         = $context->session;
@@ -170,14 +170,14 @@ MojoSimpleHTTPServer::Context - Context
 
 =head1 DESCRIPTION
 
-L<MojoSimpleHTTPServer::Context> class represents a per request context. This
+L<Marquee::Context> class represents a per request context. This
 also has ability to manage session and signed cookies.
 
 =head1 ATTRIBUTES
 
 =head2 app
 
-L<MojoSimpleHTTPServer> instance.
+L<Marquee> instance.
 
     my $app = $context->app;
 
@@ -207,7 +207,7 @@ The expiration timeout gets refreshed for every request
 
 =head2 session_name
 
-Name of the signed cookie used to store session data, defaults to 'mshs'.
+Name of the signed cookie used to store session data, defaults to 'mrqe'.
 
     my $name = $context->session_name;
     $context->session_name('session');
@@ -230,7 +230,7 @@ L<Mojo::Transaction> instance.
 
 Constructor.
 
-    my $context = MojoSimpleHTTPServer::Context->new;
+    my $context = Marquee::Context->new;
 
 =head2 $instance->cookie
 
@@ -256,6 +256,6 @@ Cookies failing signature verification will be automatically discarded.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer>, L<Mojolicious>
+L<Marquee>, L<Mojolicious>
 
 =cut

@@ -5,11 +5,11 @@ use warnings;
 
 use Test::More tests => 32;
 
-use_ok 'MojoSimpleHTTPServer::Cache';
+use_ok 'Marquee::Cache';
 
 my $cache;
 
-$cache = MojoSimpleHTTPServer::Cache->new;
+$cache = Marquee::Cache->new;
 $cache->max_keys(2);
 $cache->set(foo => 'bar');
 is $cache->get('foo'), 'bar', 'right result';
@@ -26,7 +26,7 @@ is $cache->get('bar'),  undef,  'no result';
 is $cache->get('baz'),  'yada', 'right result';
 is $cache->get('yada'), 23,     'right result';
 
-$cache = MojoSimpleHTTPServer::Cache->new;
+$cache = Marquee::Cache->new;
 $cache->max_keys(3);
 $cache->set(foo => 'bar');
 is $cache->get('foo'), 'bar', 'right result';
@@ -43,12 +43,12 @@ is $cache->get('bar'),  'baz',  'right result';
 is $cache->get('baz'),  'yada', 'right result';
 is $cache->get('yada'), 23,     'right result';
 
-$cache = MojoSimpleHTTPServer::Cache->new;
+$cache = Marquee::Cache->new;
 $cache->max_keys(10000);
 $cache->set(foo => 'bar', sub{1});
 is $cache->get('foo'), undef, 'has expired';
 
-$cache = MojoSimpleHTTPServer::Cache->new;
+$cache = Marquee::Cache->new;
 $cache->max_keys(10000);
 $cache->set(foo => 'bar', sub{
     my $ts = shift;
@@ -57,12 +57,12 @@ $cache->set(foo => 'bar', sub{
 sleep(1);
 is $cache->get('foo'), undef, 'has expired';
 
-$cache = MojoSimpleHTTPServer::Cache->new();
+$cache = Marquee::Cache->new();
 is eval {$cache->get('a')} ,undef, 'non exist key';
 
 # rewriting doesn't increase stack
 
-$cache = MojoSimpleHTTPServer::Cache->new();
+$cache = Marquee::Cache->new();
 $cache->set(a => 'b');
 $cache->set(a => 'c');
 is keys %{$cache->{1}}, 1;

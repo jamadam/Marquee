@@ -6,11 +6,11 @@ use FindBin;
 use File::Basename 'dirname';
 use File::Spec;
 use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
-use MojoSimpleHTTPServer;
+use Marquee;
 
-    my $app = MojoSimpleHTTPServer->new;
+    my $app = Marquee->new;
     $app->document_root("./");
-    $app->log_file("$FindBin::Bin/../log/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/../log/Marquee.log");
     $app->default_file('index.html');
     $app->plugin('AutoIndex');
 	$app->start;

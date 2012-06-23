@@ -1,4 +1,4 @@
-package MojoSimpleHTTPServer::Stash;
+package Marquee::Stash;
 use strict;
 use warnings;
 use Mojo::Base -base;
@@ -34,13 +34,13 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Stash - stash
+Marquee::Stash - stash
 
 =head1 SYNOPSIS
 
-    use MojoSimpleHTTPServer::Stash;
+    use Marquee::Stash;
     
-    my $stash = MojoSimpleHTTPServer::Stash->new(a => 'b', c => 'd');
+    my $stash = Marquee::Stash->new(a => 'b', c => 'd');
     is_deeply $stash->set(), {a => 'b', c => 'd'};
     
     $stash->set(e => 'f');
@@ -60,9 +60,9 @@ ref.
 
 =head1 METHODS
 
-=head2 MojoSimpleHTTPServer::Stash->new(%key_value)
+=head2 Marquee::Stash->new(%key_value)
 
-    my $stash = MojoSimpleHTTPServer::Stash->new(key => 'val', key2 => 'val2');
+    my $stash = Marquee::Stash->new(key => 'val', key2 => 'val2');
 
 =head2 $instance->get($name)
 
@@ -86,6 +86,6 @@ Clone stash with given hash or hash reference merged.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer>, L<Mojolicious>
+L<Marquee>, L<Mojolicious>
 
 =cut

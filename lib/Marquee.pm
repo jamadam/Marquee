@@ -1,4 +1,4 @@
-package MojoSimpleHTTPServer;
+package Marquee;
 use strict;
 use warnings;
 use Mojo::Base 'Mojo';
@@ -12,41 +12,25 @@ use Mojo::URL;
 use Mojo::Util qw'encode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
-use MojoSimpleHTTPServer::Hooks;
-use MojoSimpleHTTPServer::Context;
-use MojoSimpleHTTPServer::SSIHandler::EP;
-use MojoSimpleHTTPServer::SSIHandler::EPL;
-use MojoSimpleHTTPServer::Stash;
-use MojoSimpleHTTPServer::ErrorDocument;
+use Marquee::Hooks;
+use Marquee::Context;
+use Marquee::SSIHandler::EP;
+use Marquee::SSIHandler::EPL;
+use Marquee::Stash;
+use Marquee::ErrorDocument;
+our $VERSION = '0.06';
     
-    {
-        package MSHS;
-        use strict;
-        use warnings;
-        
-            our $CONTEXT;
-            
-            ### --
-            ### Accessor for localized context
-            ### --
-            sub context {
-                return $_[1] ? $CONTEXT = $_[1] : $CONTEXT;
-            }
-    }
-
-    our $VERSION = '0.06';
+    our $CONTEXT;
 
     __PACKAGE__->attr('document_root');
     __PACKAGE__->attr('default_file');
-    __PACKAGE__->attr(error_document => sub {
-        MojoSimpleHTTPServer::ErrorDocument->new;
-    });
+    __PACKAGE__->attr(error_document => sub {Marquee::ErrorDocument->new});
     __PACKAGE__->attr('log_file');
-    __PACKAGE__->attr(hooks => sub {MojoSimpleHTTPServer::Hooks->new});
+    __PACKAGE__->attr(hooks => sub {Marquee::Hooks->new});
     __PACKAGE__->attr(roots => sub {[]});
     __PACKAGE__->attr(secret => sub {md5_hex($^T. $$. rand(1000000))});
     __PACKAGE__->attr(ssi_handlers => sub {{}});
-    __PACKAGE__->attr(stash => sub {MojoSimpleHTTPServer::Stash->new});
+    __PACKAGE__->attr(stash => sub {Marquee::Stash->new});
     __PACKAGE__->attr(types => sub { Mojolicious::Types->new });
     __PACKAGE__->attr('under_development' => 0);
     __PACKAGE__->attr('x_powered_by' => 'Simple HTTP Server with Mojo(Perl)');
@@ -60,24 +44,24 @@ use MojoSimpleHTTPServer::ErrorDocument;
         ### hook points
         $self->hook(around_dispatch => sub {
             shift;
-            $MSHS::CONTEXT->app->dispatch;
+            $CONTEXT->app->dispatch;
         });
         $self->hook(around_static => sub {
             shift;
-            $MSHS::CONTEXT->app->serve_static(@_);
+            $CONTEXT->app->serve_static(@_);
         });
         $self->hook(around_dynamic => sub {
             shift;
-            $MSHS::CONTEXT->app->serve_dynamic(@_);
+            $CONTEXT->app->serve_dynamic(@_);
         });
         
-        $self->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
-        $self->add_handler(epl => MojoSimpleHTTPServer::SSIHandler::EPL->new);
+        $self->add_handler(ep => Marquee::SSIHandler::EP->new);
+        $self->add_handler(epl => Marquee::SSIHandler::EPL->new);
         
         # base path for CGI environment
-        if ($ENV{DOCUMENT_ROOT} && ! defined $ENV{MSHS_BASE_PATH}) {
-            $ENV{MSHS_BASE_PATH} = $self->home->to_string;
-            $ENV{MSHS_BASE_PATH} =~ s{^$ENV{DOCUMENT_ROOT}}{};
+        if ($ENV{DOCUMENT_ROOT} && ! defined $ENV{MARQUEE_BASE_PATH}) {
+            $ENV{MARQUEE_BASE_PATH} = $self->home->to_string;
+            $ENV{MARQUEE_BASE_PATH} =~ s{^$ENV{DOCUMENT_ROOT}}{};
         }
         
         return $self;
@@ -96,7 +80,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
     ### Accessor for localized context
     ### --
     sub context {
-        MSHS::context(@_);
+        return $_[1] ? $CONTEXT = $_[1] : $CONTEXT;
     }
     
     ### --
@@ -105,7 +89,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
     sub dispatch {
         my ($self) = @_;
         
-        my $tx = $MSHS::CONTEXT->tx;
+        my $tx = $CONTEXT->tx;
         my $res = $tx->res;
         my $path = $tx->req->url->path->clone->canonicalize;
         
@@ -148,8 +132,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
     sub handler {
         my ($self, $tx) = @_;
         
-        local $MSHS::CONTEXT =
-                    MojoSimpleHTTPServer::Context->new(app => $self, tx => $tx);
+        local $CONTEXT = Marquee::Context->new(app => $self, tx => $tx);
         
         $self->_init;
         
@@ -209,7 +192,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
     sub plugin {
         my ($self, $name, $args) = @_;
         
-        my $prefix = 'MojoSimpleHTTPServer::Plugin';
+        my $prefix = 'Marquee::Plugin';
         if ($prefix) {
             unless ($name =~ s/^\+// || $name =~ /^$prefix/) {
                 $name = "$prefix\::$name";
@@ -274,7 +257,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
     sub serve_redirect {
         my ($self, $uri) = @_;
         
-        my $tx = $MSHS::CONTEXT->tx;
+        my $tx = $CONTEXT->tx;
         $tx->res->code(301);
         $tx->res->headers->location(_to_abs($self, $uri)->to_string);
         return $self;
@@ -289,7 +272,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
         my $asset = Mojo::Asset::File->new(path => $path);
         my $modified = (stat $path)[9];
         
-        my $tx = $MSHS::CONTEXT->tx;
+        my $tx = $CONTEXT->tx;
         
         # If modified since
         my $req_headers = $tx->req->headers;
@@ -323,7 +306,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
         my $ret = $self->render_ssi($path);
         
         if (defined $ret) {
-            my $tx = $MSHS::CONTEXT->tx;
+            my $tx = $CONTEXT->tx;
             $tx->res->body(encode('UTF-8', $ret));
             $tx->res->code(200);
             if (my $type = $self->path_to_type($path)) {
@@ -405,7 +388,7 @@ use MojoSimpleHTTPServer::ErrorDocument;
         $url = Mojo::URL->new($url);
         
         if (! $url->scheme) {
-            my $tx = $MSHS::CONTEXT->tx;
+            my $tx = $CONTEXT->tx;
             my $base = $tx->req->url->clone;
             $base->path($url->path);
             $url = $base;
@@ -420,7 +403,7 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer - Simple HTTP server with Server-side include
+Marquee - Simple HTTP server with Server-side include
 
 =head1 SYNOPSIS
     
@@ -432,16 +415,16 @@ MojoSimpleHTTPServer - Simple HTTP server with Server-side include
     use File::Spec;
     use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
     
-    use MojoSimpleHTTPServer;
+    use Marquee;
     
-    my $app = MojoSimpleHTTPServer->new;
+    my $app = Marquee->new;
     $app->document_root($app->home->rel_dir('public_html'));
     $app->start;
 
 =head1 DESCRIPTION
 
-L<MojoSimpleHTTPServer> is a simple web server base class. The module also is a
-backend of C<mojo SimpleHTTPServer>, a command line tool.
+L<Marquee> is a simple web server base class. The module also is a
+backend of C<mojo Marquee>, a command line tool.
 This is built on mojo modules in L<Mojolicious> distribution. 
 
 =head1 ATTRIBUTES
@@ -462,21 +445,21 @@ Specify a default file name and activate auto fill.
 =head2 error_document
 
 Error document renderer instance. Defaults to
-L<MojoSimpleHTTPServer::ErrorDocument>
+L<Marquee::ErrorDocument>
 
-    $app->error_document(MojoSimpleHTTPServer::ErrorDocument->new);
+    $app->error_document(Marquee::ErrorDocument->new);
 
 =head2 log_file
 
 Specify a log file path.
 
-    $app->document_root($app->home->rel_dir('log/mshs.log'));
+    $app->document_root($app->home->rel_dir('log/myapp.log'));
 
 =head2 hooks
 
-A L<MojoSimpleHTTPServer::Hooks> instance.
+A L<Marquee::Hooks> instance.
 
-    $app->hooks(MojoSimpleHTTPServer::Hooks->new);
+    $app->hooks(Marquee::Hooks->new);
 
 =head2 roots
 
@@ -496,15 +479,15 @@ string.
 
 An hash ref that contains Server side include handlers.
 
-    $app->ssi_handlers->{ep} = MojoSimpleHTTPServer::SSIHandler::EP->new;
+    $app->ssi_handlers->{ep} = Marquee::SSIHandler::EP->new;
 
 You can append SSI association by C<add_handler> method instead of doing above.
 
 =head2 stash
 
-An L<MojoSimpleHTTPServer::Stash> instance.
+An L<Marquee::Stash> instance.
 
-    $app->stash(MojoSimpleHTTPServer::Stash->new);
+    $app->stash(Marquee::Stash->new);
     my $stash = $app->stash;
 
 =head2 types
@@ -528,43 +511,43 @@ Set X-POWERED-BY response header.
 
 =head1 METHODS
 
-=head2 MojoSimpleHTTPServer->new;
+=head2 Marquee->new;
 
 Constructor.
 
-    my $app = MojoSimpleHTTPServer->new;
+    my $app = Marquee->new;
 
 =head2 $instance->add_handler(name => $code_ref);
 
 Adds C<ssi_handlers> entry.
 
-    $instance->add_handler(ep => MojoSimpleHTTPServer::SSIHandler::EP->new);
+    $instance->add_handler(ep => Marquee::SSIHandler::EP->new);
 
-=head2 MojoSimpleHTTPServer->asset($filename);
+=head2 Marquee->asset($filename);
 
 Returns bundled asset path for given file name.
 
-    my $asset = MojoSimpleHTTPServer->asset('path/to/common.css');
+    my $asset = Marquee->asset('path/to/common.css');
     
-    say $asset # /path/to/lib/MojoSimpleHTTPServer/Asset/path/to/common.css
+    say $asset # /path/to/lib/Marquee/Asset/path/to/common.css
     
-    my $asset = MojoSimpleHTTPServer->asset();
+    my $asset = Marquee->asset();
     
-    say $asset # /path/to/lib/MojoSimpleHTTPServer/Asset
+    say $asset # /path/to/lib/Marquee/Asset
 
 In other packages
 
-    my $asset = SomePackage->MojoSimpleHTTPServer::asset('path/to/common.css');
+    my $asset = SomePackage->Marquee::asset('path/to/common.css');
     
     say $asset # /path/to/lib/SomePackage/Asset/path/to/common.css
     
-    my $asset = SomePackage->MojoSimpleHTTPServer::asset();
+    my $asset = SomePackage->Marquee::asset();
     
     say $asset # /path/to/lib/SomePackage/Asset
 
 =head2 $instance->context()
 
-Returns current context. This refers to localized C<$MSHS::CONTEXT>.
+Returns current context. This refers to localized C<$Marquee::CONTEXT>.
 
     my $context = $app->context;
 

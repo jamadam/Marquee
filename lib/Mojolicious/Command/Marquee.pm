@@ -1,18 +1,18 @@
-package Mojolicious::Command::SimpleHTTPServer;
+package Mojolicious::Command::Marquee;
 use strict;
 use warnings;
 use Mojo::Base 'Mojolicious::Commands';
 
 use Getopt::Long 'GetOptions';
 use Mojo::Server::Daemon;
-use MojoSimpleHTTPServer;
+use Marquee;
 
   has description => <<'EOF';
-Start SimpleHTTPServer.
+Start Marquee.
 EOF
 
   has usage => <<"EOF";
-usage: $0 SimpleHTTPServer [OPTIONS]
+usage: $0 Marquee [OPTIONS]
 
 These options are available:
   
@@ -42,10 +42,10 @@ EOF
 #  Why do they call it that?
 #  Cause it has no pigment."
 sub run {
-  $ENV{MOJO_APP} ||= 'MojoSimpleHTTPServer';
+  $ENV{MOJO_APP} ||= 'Marquee';
   my $self   = shift;
   
-  my $app = MojoSimpleHTTPServer->new;
+  my $app = Marquee->new;
   my $daemon = Mojo::Server::Daemon->new;
   $daemon->app($app);
 
@@ -80,13 +80,13 @@ __END__
 
 =head1 NAME
 
-Mojolicious::Command::SimpleHTTPServer - SimpleHTTPServer command
+Mojolicious::Command::Marquee - Marquee command
 
 =head1 SYNOPSIS
 
-  use Mojolicious::Command::SimpleHTTPServer;
+  use Mojolicious::Command::Marquee;
 
-  my $app = Mojolicious::Command::SimpleHTTPServer->new;
+  my $app = Mojolicious::Command::Marquee->new;
   $app->run(@ARGV);
 
 =head1 DESCRIPTION
@@ -97,6 +97,6 @@ Mojolicious::Command::SimpleHTTPServer - SimpleHTTPServer command
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer>
+L<Marquee>
 
 =cut

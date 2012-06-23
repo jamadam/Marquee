@@ -9,7 +9,7 @@ use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 
 use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
-use MojoSimpleHTTPServer;
+use Marquee;
 use Mojo::Util qw/encode md5_sum/;
 
     use Test::More tests => 26;
@@ -18,9 +18,9 @@ use Mojo::Util qw/encode md5_sum/;
     my $t;
     
     {
-        $app = MojoSimpleHTTPServer->new;
+        $app = Marquee->new;
         $app->document_root("$FindBin::Bin/public_html");
-        $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+        $app->log_file("$FindBin::Bin/Marquee.log");
         $t = Test::Mojo->new($app);
         
         $t->get_ok('/cache.html')
@@ -37,9 +37,9 @@ use Mojo::Util qw/encode md5_sum/;
     }
     
     {
-        $app = MojoSimpleHTTPServer->new;
+        $app = Marquee->new;
         $app->document_root("$FindBin::Bin/public_html");
-        $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+        $app->log_file("$FindBin::Bin/Marquee.log");
         $t = Test::Mojo->new($app);
         
         $t->get_ok('/cache3.html')

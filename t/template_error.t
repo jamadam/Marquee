@@ -9,16 +9,16 @@ use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 
 use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
-use MojoSimpleHTTPServer;
+use Marquee;
 
     use Test::More tests => 53;
 
     my $app;
     my $t;
 
-    $app = MojoSimpleHTTPServer->new;
+    $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     $t = Test::Mojo::DOM->new($app);
     
     $t->get_ok('/not_good.html')
@@ -72,7 +72,7 @@ use MojoSimpleHTTPServer;
             
             $t->at('#more tr:nth-child(1) td.key')->content_xml_is('Perl:');
             $t->at('#more tr:nth-child(1) td.value pre')->content_xml_like(qr'^v\d+\.\d+');
-            $t->at('#more tr:nth-child(2) td.key')->content_xml_is('MSHS:');
+            $t->at('#more tr:nth-child(2) td.key')->content_xml_is('Marquee:');
             $t->at('#more tr:nth-child(2) td.value pre')->content_xml_like(qr'^\d+\.\d+');
             
             ### others

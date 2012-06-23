@@ -1,12 +1,10 @@
-package MojoSimpleHTTPServer::Plugin::Router;
+package Marquee::Plugin::Router;
 use strict;
 use warnings;
-use MojoSimpleHTTPServer::Plugin::Router::Route;
-use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
+use Marquee::Plugin::Router::Route;
+use Mojo::Base 'Marquee::Plugin';
     
-    __PACKAGE__->attr('route', sub {
-        MojoSimpleHTTPServer::Plugin::Router::Route->new;
-    });
+    __PACKAGE__->attr('route', sub {Marquee::Plugin::Router::Route->new});
     
     ### --
     ### Register the plugin into app
@@ -19,7 +17,7 @@ use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
         $app->hook(around_dispatch => sub {
             my ($next, @args) = @_;
             
-            my $tx      = $MSHS::CONTEXT->tx;
+            my $tx      = $Marquee::CONTEXT->tx;
             my $path    = $tx->req->url->path->clone->leading_slash(1)->to_string;
             my @elems   = @{$self->route->elems};
             
@@ -44,7 +42,7 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
+Marquee::Plugin::Router - Router [EXPERIMENTAL]
 
 =head1 SYNOPSIS
     
@@ -74,7 +72,7 @@ MojoSimpleHTTPServer::Plugin::Router - Router [EXPERIMENTAL]
 
 =head2 route
 
-L<MojoSimpleHTTPServer::Plugin::Router::Route> instance.
+L<Marquee::Plugin::Router::Route> instance.
 
 =head1 METHODS
 
@@ -82,7 +80,7 @@ L<MojoSimpleHTTPServer::Plugin::Router::Route> instance.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer::Plugin::Router::Route>, L<MojoSimpleHTTPServer>,
+L<Marquee::Plugin::Router::Route>, L<Marquee>,
 L<Mojolicious>
 
 =cut

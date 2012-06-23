@@ -1,12 +1,12 @@
-package MojoSimpleHTTPServer::SSIHandler::EPL;
+package Marquee::SSIHandler::EPL;
 use strict;
 use warnings;
-use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler';
-use MojoSimpleHTTPServer::Cache;
+use Mojo::Base 'Marquee::SSIHandler';
+use Marquee::Cache;
 use Mojo::Util qw/encode md5_sum/;
 use Mojo::Template;
 
-    __PACKAGE__->attr('template_cache' => sub {MojoSimpleHTTPServer::Cache->new});
+    __PACKAGE__->attr('template_cache' => sub {Marquee::Cache->new});
     
     ### --
     ### Accessor to template cache
@@ -29,7 +29,7 @@ use Mojo::Template;
     sub render {
         my ($self, $path) = @_;
         
-        my $context = $MSHS::CONTEXT;
+        my $context = $Marquee::CONTEXT;
         
         my $mt = $self->cache($path);
         
@@ -55,11 +55,11 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::SSIHandler::EPL - EPL template handler
+Marquee::SSIHandler::EPL - EPL template handler
 
 =head1 SYNOPSIS
 
-    my $epl = MojoSimpleHTTPServer::SSIHandler::EPL->new;
+    my $epl = Marquee::SSIHandler::EPL->new;
     $epl->render('/path/to/template.html.ep');
 
 =head1 DESCRIPTION
@@ -68,8 +68,8 @@ EPL handler.
 
 =head1 ATTRIBUTES
 
-L<MojoSimpleHTTPServer::SSIHandler::EPL> inherits all attributes from
-L<MojoSimpleHTTPServer::SSIHandler> and implements the following new ones.
+L<Marquee::SSIHandler::EPL> inherits all attributes from
+L<Marquee::SSIHandler> and implements the following new ones.
 
 =head2 template_cache
 
@@ -77,8 +77,8 @@ L<MojoSimpleHTTPServer::SSIHandler> and implements the following new ones.
 
 =head1 METHODS
 
-L<MojoSimpleHTTPServer::SSIHandler::EPL> inherits all methods from
-L<MojoSimpleHTTPServer::SSIHandler> and implements the following new ones.
+L<Marquee::SSIHandler::EPL> inherits all methods from
+L<Marquee::SSIHandler> and implements the following new ones.
 
 =head2 $instance->cache($path, $mt)
 
@@ -94,6 +94,6 @@ L<Mojo::Exception>.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer::SSIHandler>, L<MojoSimpleHTTPServer>, L<Mojolicious>
+L<Marquee::SSIHandler>, L<Marquee>, L<Mojolicious>
 
 =cut

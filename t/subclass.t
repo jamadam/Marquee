@@ -17,7 +17,7 @@ use Mojo::Date;
     
     $app = SubClass->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     $app->default_file('index.html');
     $t = Test::Mojo->new($app);
     
@@ -29,7 +29,7 @@ use Mojo::Date;
 
     $app = SubClass2->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     
     $t = Test::Mojo->new($app);
 
@@ -39,16 +39,16 @@ use Mojo::Date;
         ->content_is("overridden");
 
 package SubClass;
-use Mojo::Base 'MojoSimpleHTTPServer';
+use Mojo::Base 'Marquee';
 use Test::More;
     
     sub dispatch {
         shift->SUPER::dispatch(@_);
-        is(MojoSimpleHTTPServer->context, SubClass->context, 'right namespace');
+        is(Marquee->context, SubClass->context, 'right namespace');
     }
 
 package SubClass2;
-use Mojo::Base qw{MojoSimpleHTTPServer};
+use Mojo::Base qw{Marquee};
 
 sub dispatch {
     my ($self) = @_;

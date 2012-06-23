@@ -1,7 +1,7 @@
-package MojoSimpleHTTPServer::SSIHandler::EP;
+package Marquee::SSIHandler::EP;
 use strict;
 use warnings;
-use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler::EPL';
+use Mojo::Base 'Marquee::SSIHandler::EPL';
 use File::Basename 'dirname';
 use Mojo::ByteStream;
 use Mojo::Template;
@@ -54,7 +54,7 @@ use Carp;
     sub render {
         my ($self, $path) = @_;
         
-        my $context = $MSHS::CONTEXT;
+        my $context = $Marquee::CONTEXT;
         
         my $mt = $self->cache($path);
         
@@ -104,17 +104,17 @@ use Carp;
         
         $self->funcs->{app} = sub {
             shift;
-            return $MSHS::CONTEXT->app;
+            return $Marquee::CONTEXT->app;
         };
         
         $self->funcs->{param} = sub {
             shift;
-            return $MSHS::CONTEXT->tx->req->param($_[0]);
+            return $Marquee::CONTEXT->tx->req->param($_[0]);
         };
         
         $self->funcs->{stash} = sub {
             shift;
-            my $stash = $MSHS::CONTEXT->stash;
+            my $stash = $Marquee::CONTEXT->stash;
             if ($_[0] && $_[1]) {
                 return $stash->set(@_);
             } elsif (! $_[0]) {
@@ -140,7 +140,7 @@ use Carp;
         $self->funcs->{include} = sub {
             my ($self, $path, @args) = @_;
             
-            my $c = $MSHS::CONTEXT;
+            my $c = $Marquee::CONTEXT;
             local $c->{stash} = $c->{stash}->clone;
             $c->{stash}->set(@args);
             return
@@ -175,7 +175,7 @@ use Carp;
         $self->funcs->{override} = sub {
             my ($self, $name, $value) = @_;
             my $path = $self->current_template;
-            $MSHS::CONTEXT->stash->set(_ph_name($name) => sub {
+            $Marquee::CONTEXT->stash->set(_ph_name($name) => sub {
                 return $self->render_traceable($path, $value);
             });
             return;
@@ -187,14 +187,14 @@ use Carp;
         
         $self->funcs->{placeholder} = sub {
             my ($self, $name, $defalut) = @_;
-            my $block = $MSHS::CONTEXT->stash->{_ph_name($name)} || $defalut;
+            my $block = $Marquee::CONTEXT->stash->{_ph_name($name)} || $defalut;
             return $block->() || '';
         };
         
         $self->funcs->{extends} = sub {
             my ($self, $path, $block) = @_;
             
-            my $c = $MSHS::CONTEXT;
+            my $c = $Marquee::CONTEXT;
             
             local $c->{stash} = $c->{stash}->clone;
             
@@ -213,7 +213,7 @@ use Carp;
     sub url_for {
         my ($self, $path) = @_;
         $path =~ s{^\.*/}{};
-        my $abs = Mojo::Path->new($ENV{'MSHS_BASE_PATH'});
+        my $abs = Mojo::Path->new($ENV{'MARQUEE_BASE_PATH'});
         $abs->trailing_slash(1);
         $abs->merge($path);
         $abs->leading_slash(1);
@@ -224,7 +224,7 @@ use Carp;
     ### Generate safe name for placeholder
     ### --
     sub _ph_name {
-        return "MSHS.SSIHandler.EP.". shift;
+        return "mrqe.SSIHandler.EP.". shift;
     }
     
     ### --
@@ -234,7 +234,7 @@ use Carp;
         my ($self, $path) = @_;
         
         if ($path =~ qr{^/(.+)}) {
-            return File::Spec->catfile($MSHS::CONTEXT->app->document_root, $1);
+            return File::Spec->catfile($Marquee::CONTEXT->app->document_root, $1);
         }
         
         return dirname($self->current_template). '/'. $path;
@@ -246,11 +246,11 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::SSIHandler::EP - EP template handler
+Marquee::SSIHandler::EP - EP template handler
 
 =head1 SYNOPSIS
 
-    my $ep = MojoSimpleHTTPServer::SSIHandler::EP->new;
+    my $ep = Marquee::SSIHandler::EP->new;
     $ep->render('/path/to/template.html.ep');
 
 =head1 DESCRIPTION
@@ -259,8 +259,8 @@ EP handler. EP is a EPL.
 
 =head1 ATTRIBUTES
 
-L<MojoSimpleHTTPServer::SSIHandler::EP> inherits all attributes from
-L<MojoSimpleHTTPServer::SSIHandler::EPL> and implements the following new ones.
+L<Marquee::SSIHandler::EP> inherits all attributes from
+L<Marquee::SSIHandler::EPL> and implements the following new ones.
 
 =head2 funcs
 
@@ -379,8 +379,8 @@ Generate a portable URL.
 
 =head1 METHODS
 
-L<MojoSimpleHTTPServer::SSIHandler::EP> inherits all methods from
-L<MojoSimpleHTTPServer::SSIHandler::EPL> and implements the following new ones.
+L<Marquee::SSIHandler::EP> inherits all methods from
+L<Marquee::SSIHandler::EPL> and implements the following new ones.
 
 =head2 $instance->init
 
@@ -392,7 +392,7 @@ This method automatically called by constructor.
 
 Constructor.
 
-    my $ep = MojoSimpleHTTPServer::SSIHandler::EP->new;
+    my $ep = Marquee::SSIHandler::EP->new;
 
 =head2 $instance->add_function(name => sub {...})
 
@@ -414,6 +414,6 @@ Mojo::Exception.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer::SSIHandler>, L<MojoSimpleHTTPServer>, L<Mojolicious>
+L<Marquee::SSIHandler>, L<Marquee>, L<Mojolicious>
 
 =cut

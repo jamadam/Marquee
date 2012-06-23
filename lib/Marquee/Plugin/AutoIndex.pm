@@ -1,7 +1,7 @@
-package MojoSimpleHTTPServer::Plugin::AutoIndex;
+package Marquee::Plugin::AutoIndex;
 use strict;
 use warnings;
-use Mojo::Base 'MojoSimpleHTTPServer::Plugin';
+use Mojo::Base 'Marquee::Plugin';
 use Mojo::Util qw'url_unescape encode decode';
     
     ### --
@@ -21,14 +21,14 @@ use Mojo::Util qw'url_unescape encode decode';
             }
         }
         
-        push(@{$app->roots}, __PACKAGE__->MojoSimpleHTTPServer::asset());
+        push(@{$app->roots}, __PACKAGE__->Marquee::asset());
         
         $app->hook(around_dispatch => sub {
             my ($next, @args) = @_;
             
             $next->();
             
-            my $context = $MSHS::CONTEXT;
+            my $context = $Marquee::CONTEXT;
             
             if (! $context->tx->res->code) {
                 my $app = $context->app;
@@ -49,7 +49,7 @@ use Mojo::Util qw'url_unescape encode decode';
     sub _serve_index {
         my ($self, $path) = @_;
         
-        my $context = $MSHS::CONTEXT;
+        my $context = $Marquee::CONTEXT;
         my $app = $context->app;
         
         $path = decode('UTF-8', url_unescape($path));
@@ -99,8 +99,8 @@ use Mojo::Util qw'url_unescape encode decode';
         
         $tx->res->body(
             encode('UTF-8',
-                MojoSimpleHTTPServer::SSIHandler::EP->new->render_traceable(
-                __PACKAGE__->MojoSimpleHTTPServer::asset('auto_index.html.ep')
+                Marquee::SSIHandler::EP->new->render_traceable(
+                __PACKAGE__->Marquee::asset('auto_index.html.ep')
                 )
             )
         );
@@ -311,7 +311,7 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::Plugin::AutoIndex - Auto index
+Marquee::Plugin::AutoIndex - Auto index
 
 =head1 SYNOPSIS
 
@@ -333,6 +333,6 @@ Returns common MIME types.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer>, L<Mojolicious>
+L<Marquee>, L<Mojolicious>
 
 =cut

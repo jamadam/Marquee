@@ -2,13 +2,13 @@ use strict;
 use warnings;
 use Test::Memory::Cycle;
 use Test::More;
-use MojoSimpleHTTPServer;
+use Marquee;
 use Test::Mojo;
 
 use Test::More tests => 6;
 
 {
-    my $app = MojoSimpleHTTPServer->new;
+    my $app = Marquee->new;
     $app->document_root('./');
     $app->plugin('AutoIndex');
     my $t = Test::Mojo->new($app);
@@ -37,6 +37,6 @@ use Test::More tests => 6;
 }
 
 package MyApp;
-use Mojo::Base 'MojoSimpleHTTPServer';
+use Mojo::Base 'Marquee';
 
 __END__

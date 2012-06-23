@@ -1,4 +1,4 @@
-package MojoSimpleHTTPServer::SSIHandler;
+package Marquee::SSIHandler;
 use strict;
 use warnings;
 use Mojo::Base -base;
@@ -23,7 +23,7 @@ use Mojo::Util qw/encode md5_sum/;
         
         $index ||= 0;
         
-        my $route = $MSHS::CONTEXT->stash->{'mshs.template_path'};
+        my $route = $Marquee::CONTEXT->stash->{'mrqe.template_path'};
         
         while ($index-- > 0) {
             $route = $route->[1] || return;
@@ -52,10 +52,10 @@ use Mojo::Util qw/encode md5_sum/;
     sub render_traceable {
         my ($self, $path, $cb) = @_;
         
-        my $stash = $MSHS::CONTEXT->stash;
+        my $stash = $Marquee::CONTEXT->stash;
         
-        local $stash->{'mshs.template_path'} =
-                                        [$path, $stash->{'mshs.template_path'}];
+        local $stash->{'mrqe.template_path'} =
+                                        [$path, $stash->{'mrqe.template_path'}];
         
         return $cb ? $cb->() : $self->render($path);
     }
@@ -66,12 +66,12 @@ __END__
 
 =head1 NAME
 
-MojoSimpleHTTPServer::SSIHandler - SSI handler base class
+Marquee::SSIHandler - SSI handler base class
 
 =head1 SYNOPSIS
 
-    package MojoSimpleHTTPServer::SSIHandler::EPL;
-    use Mojo::Base 'MojoSimpleHTTPServer::SSIHandler';
+    package Marquee::SSIHandler::EPL;
+    use Mojo::Base 'Marquee::SSIHandler';
     
     sub render {
         my ($self, $path) = @_;
@@ -92,16 +92,16 @@ class is MUST implement C<render> method.
 
 =head1 METHODS
 
-=head2 MojoSimpleHTTPServer::SSIHandler->new;
+=head2 Marquee::SSIHandler->new;
 
 Constructor.
 
-=head2 MojoSimpleHTTPServer::SSIHandler->current_template;
+=head2 Marquee::SSIHandler->current_template;
 
 Detects current template recursively.
 
-    my $current_template = MojoSimpleHTTPServer::SSIHandler->current_template;
-    my $parent_template = MojoSimpleHTTPServer::SSIHandler->current_template(1);
+    my $current_template = Marquee::SSIHandler->current_template;
+    my $parent_template = Marquee::SSIHandler->current_template(1);
 
 =head2 $instance->init;
 
@@ -125,7 +125,7 @@ Traceably renders templates by stacking template names recursively.
 
 =head1 SEE ALSO
 
-L<MojoSimpleHTTPServer::SSIHandler::EPL>,
-L<MojoSimpleHTTPServer::SSIHandler::EP>, L<MojoSimpleHTTPServer>, L<Mojolicious>
+L<Marquee::SSIHandler::EPL>,
+L<Marquee::SSIHandler::EP>, L<Marquee>, L<Mojolicious>
 
 =cut

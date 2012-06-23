@@ -9,7 +9,7 @@ use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 
 use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
 use Test::More;
 use Test::Mojo::DOM;
-use MojoSimpleHTTPServer;
+use Marquee;
 use Mojo::Date;
     
     use Test::More tests => 70;
@@ -17,23 +17,23 @@ use Mojo::Date;
     my $app;
     my $t;
     my $t2;
-    $app = MojoSimpleHTTPServer->new;
+    $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     $app->default_file('index.html');
 
     $app->plugin(Router => sub {
         my $r = shift;
         $r->route(qr{^/session_cookie/2})->to(sub {
-            my $req     = $MSHS::CONTEXT->tx->req;
-            my $res     = $MSHS::CONTEXT->tx->res;
+            my $req     = $Marquee::CONTEXT->tx->req;
+            my $res     = $Marquee::CONTEXT->tx->res;
             my $session = $req->cookie('session');
             my $value   = $session ? $session->value : 'missing';
             $res->body("Session is $value!");
             $res->code(200);
         });
         $r->route(qr{^/session_cookie})->to(sub {
-            my $res = $MSHS::CONTEXT->tx->res;
+            my $res = $Marquee::CONTEXT->tx->res;
             $res->body('Cookie set!');
             $res->code(200);
             $res->cookies(
@@ -70,26 +70,26 @@ use Mojo::Date;
     
     ### cookie by context methods
     
-    $app = MojoSimpleHTTPServer->new;
+    $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     $app->default_file('index.html');
 
     $app->plugin(Router => sub {
         my $r = shift;
         $r->route(qr{^/session_cookie/2})->to(sub {
-            my $req     = $MSHS::CONTEXT->tx->req;
-            my $res     = $MSHS::CONTEXT->tx->res;
-            my $session = $MSHS::CONTEXT->cookie('session');
+            my $req     = $Marquee::CONTEXT->tx->req;
+            my $res     = $Marquee::CONTEXT->tx->res;
+            my $session = $Marquee::CONTEXT->cookie('session');
             my $value   = $session ? $session : 'missing';
             $res->body("Session is $value!");
             $res->code(200);
         });
         $r->route(qr{^/session_cookie})->to(sub {
-            my $res = $MSHS::CONTEXT->tx->res;
+            my $res = $Marquee::CONTEXT->tx->res;
             $res->body('Cookie set!');
             $res->code(200);
-            $MSHS::CONTEXT->cookie('session', '23', {path  => '/session_cookie'});
+            $Marquee::CONTEXT->cookie('session', '23', {path  => '/session_cookie'});
         });
     });
 
@@ -117,27 +117,27 @@ use Mojo::Date;
     
     ### signed cookie by context methods
     
-    $app = MojoSimpleHTTPServer->new;
+    $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     $app->default_file('index.html');
     $app->secret('aaaaaaaaaaaaaa');
     
     $app->plugin(Router => sub {
         my $r = shift;
         $r->route(qr{^/session_cookie/2})->to(sub {
-            my $req     = $MSHS::CONTEXT->tx->req;
-            my $res     = $MSHS::CONTEXT->tx->res;
-            my $session = $MSHS::CONTEXT->signed_cookie('session');
+            my $req     = $Marquee::CONTEXT->tx->req;
+            my $res     = $Marquee::CONTEXT->tx->res;
+            my $session = $Marquee::CONTEXT->signed_cookie('session');
             my $value   = $session ? $session : 'missing';
             $res->body("Session is $value!");
             $res->code(200);
         });
         $r->route(qr{^/session_cookie})->to(sub {
-            my $res = $MSHS::CONTEXT->tx->res;
+            my $res = $Marquee::CONTEXT->tx->res;
             $res->body('Cookie set!');
             $res->code(200);
-            $MSHS::CONTEXT->signed_cookie('session', '23', {path  => '/session_cookie'});
+            $Marquee::CONTEXT->signed_cookie('session', '23', {path  => '/session_cookie'});
         });
     });
 
@@ -165,33 +165,33 @@ use Mojo::Date;
     
     ### session data
     
-    $app = MojoSimpleHTTPServer->new;
+    $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/MojoSimpleHTTPServer.log");
+    $app->log_file("$FindBin::Bin/Marquee.log");
     $app->default_file('index.html');
     $app->secret('aaaaaaaaaaaaaa');
     
     $app->plugin(Router => sub {
         my $r = shift;
         $r->route(qr{^/session_cookie/2})->to(sub {
-            my $req     = $MSHS::CONTEXT->tx->req;
-            my $res     = $MSHS::CONTEXT->tx->res;
-            my $session = $MSHS::CONTEXT->session;
+            my $req     = $Marquee::CONTEXT->tx->req;
+            my $res     = $Marquee::CONTEXT->tx->res;
+            my $session = $Marquee::CONTEXT->session;
             my $value   = $session->{test} || 'missing';
             $res->body("Session is $value!");
             $res->code(200);
         });
         $r->route(qr{^/session_cookie/3})->to(sub {
-            my $res = $MSHS::CONTEXT->tx->res;
+            my $res = $Marquee::CONTEXT->tx->res;
             $res->body('Session deleted!');
             $res->code(200);
-            $MSHS::CONTEXT->session(undef);
+            $Marquee::CONTEXT->session(undef);
         });
         $r->route(qr{^/session_cookie})->to(sub {
-            my $res = $MSHS::CONTEXT->tx->res;
+            my $res = $Marquee::CONTEXT->tx->res;
             $res->body('Session set!');
             $res->code(200);
-            $MSHS::CONTEXT->session({test => 'session test'});
+            $Marquee::CONTEXT->session({test => 'session test'});
         });
     });
 
@@ -201,7 +201,7 @@ use Mojo::Date;
     # GET /session_cookie
     $t->get_ok('/session_cookie')
         ->status_is(200)
-        ->header_like('Set-Cookie', qr{^mshs=eyJ0ZXN0Ijoic2Vzc2lvbiB0ZXN0In0---9a77f38057310a620345c9c300fc2ea1;})
+        ->header_like('Set-Cookie', qr{^mrqe=eyJ0ZXN0Ijoic2Vzc2lvbiB0ZXN0In0---9a77f38057310a620345c9c300fc2ea1;})
         ->content_is('Session set!');
     
     # GET /session_cookie/2
@@ -224,11 +224,11 @@ use Mojo::Date;
 
     $t->get_ok('/session_cookie')
         ->status_is(200)
-        ->header_like('Set-Cookie', qr{^mshs=eyJ0ZXN0Ijoic2Vzc2lvbiB0ZXN0In0---9a77f38057310a620345c9c300fc2ea1;})
+        ->header_like('Set-Cookie', qr{^mrqe=eyJ0ZXN0Ijoic2Vzc2lvbiB0ZXN0In0---9a77f38057310a620345c9c300fc2ea1;})
         ->content_is('Session set!');
     
     $t->get_ok('/session_cookie/3')->status_is(200)
-        ->header_is('Set-Cookie', 'mshs=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/; HttpOnly')
+        ->header_is('Set-Cookie', 'mrqe=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/; HttpOnly')
         ->content_is('Session deleted!');
     
     $t->get_ok('/session_cookie/2')->status_is(200)

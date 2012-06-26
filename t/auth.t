@@ -21,10 +21,10 @@ use Marquee;
     $app->log_file("$FindBin::Bin/Marquee.log");
     
     $app->plugin(Auth => [
-        qr{^/auth\.html} => 'Secret Area' => sub {
+        qr{^/auth\.html} => 'Secret Area2' => sub {
             $_[0] eq 'user' && $_[1] eq 'pass';
         },
-        qr{^/auth2\.html} => 'Secret Area' => sub {
+        qr{^/auth2\.html} => sub {
             $_[0] eq 'user2' && $_[1] eq 'pass2';
         },
     ]);
@@ -37,11 +37,11 @@ use Marquee;
     
     $t->get_ok('/auth.html')
         ->status_is(401)
-        ->header_is('www-authenticate', 'Basic realm=Secret Area');
+        ->header_is('www-authenticate', 'Basic realm=Secret Area2');
     
     $t->get_ok('/auth.html', {Authorization => "Basic dXNlcjpwYXNzMg=="})
         ->status_is(401)
-        ->header_is('www-authenticate', 'Basic realm=Secret Area');
+        ->header_is('www-authenticate', 'Basic realm=Secret Area2');
     
     $t->get_ok('/auth.html', {Authorization => "Basic dXNlcjpwYXNz"})
         ->status_is(200)

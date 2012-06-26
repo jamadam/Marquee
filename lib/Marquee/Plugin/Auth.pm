@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use Mojo::Base 'Marquee::Plugin';
     
+    __PACKAGE__->attr(realm => 'Secret Area');
+    
     ### --
     ### Register the plugin into app
     ### --
@@ -18,10 +20,8 @@ use Mojo::Base 'Marquee::Plugin';
             my @entries = @$entries;
             while (@entries) {
                 my $regex   = shift @entries;
-                my $realm   = shift @entries if (! ref $entries[0]);
+                my $realm   = ! ref $entries[0] ? shift @entries : $self->realm;
                 my $cb      = shift @entries;
-                
-                $realm ||= 'Secret Area';
                 
                 if ($path =~ $regex) {
                     my $auth = $tx->req->url->to_abs->userinfo || ':';
@@ -62,11 +62,22 @@ Marquee::Plugin::Auth - Basic Authentication
 
 =head1 DESCRIPTION
 
+This plugin wraps the whole dispacher and requires basic authentication for
+specific path.
+
 =head1 ATTRIBUTES
+
+=head2 realm
+
+Default value of realm which appears to responce header. Each entry can override
+it with second option.
 
 =head1 METHODS
 
 =head2 $instance->register($app, $path_entries)
+
+Register the plugin with path entries. $path_entries must be a list of
+regex, realm, auth callback groups. realm is optional.
 
 =head1 SEE ALSO
 

@@ -5,23 +5,6 @@ use Mojo::Base -base;
     
     __PACKAGE__->attr('elems', sub {[]});
     
-    sub basic_auth {
-        my ($self, $realm, $cb) = @_;
-        
-        my $bridge = $self->bridge(sub {
-            my $tx = shift;
-            my $auth = $tx->req->url->to_abs->userinfo || ':';
-            if (! $cb->(split(/:/, $auth), 2)) {
-                $tx->res->headers->www_authenticate("Basic realm=$realm");
-                $tx->res->code(401);
-                return;
-            }
-            return 1;
-        });
-        
-        return $bridge;
-    }
-    
     sub bridge {
         my ($self, $cb) = @_;
         my $r = __PACKAGE__->new(bridge => $cb);
@@ -97,17 +80,6 @@ Marquee::Plugin::Router - Router [EXPERIMENTAL]
 =head1 DESCRIPTION
 
 =head1 METHODS
-
-=head2 $instance->basic_auth($realm => sub {...})
-
-[EXPERIMENTAL] Basic Authentication
-    
-    $app->plugin(Router => sub {
-        my $r = shift;
-        my $bridge = $r->basic_auth('Secret Area' => sub {
-            $_[0] eq 'user' && $_[1] eq 'pass'
-        });
-    });
 
 =head2 $instance->bridge(sub {...})
 

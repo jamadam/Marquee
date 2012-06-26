@@ -10,7 +10,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
     
-    use Test::More tests => 55;
+    use Test::More tests => 45;
 
     my $app;
     my $t;
@@ -132,38 +132,5 @@ use Mojo::Date;
         ->header_is('Content-Type', 'text/plain')
         ->header_is('Content-Length', 20)
         ->content_is('static <%= time() %>');
-    
-    ### Basic Auth
-    
-    $app = Marquee->new;
-    $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/Marquee.log");
-    
-    $app->plugin(Router => sub {
-        my $r = shift;
-        
-        my $auth = $r->basic_auth('Secret Area' => sub {
-            $_[0] eq 'user' && $_[1] eq 'pass';
-        });
-        
-        $auth->route(qr{^/index\.html})->to(sub {
-            Marquee->c->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt.ep");
-            is $_[0], undef;
-        });
-    });
-    
-    $t = Test::Mojo->new($app);
-    
-    $t->get_ok('/index.html')
-        ->status_is(401)
-        ->header_is('www-authenticate', 'Basic realm=Secret Area');
-    
-    $t->get_ok('/index.html', {Authorization => "Basic dXNlcjpwYXNzMg=="})
-        ->status_is(401)
-        ->header_is('www-authenticate', 'Basic realm=Secret Area');
-    
-    $t->get_ok('/index.html', {Authorization => "Basic dXNlcjpwYXNz"})
-        ->status_is(200)
-        ->content_is('dynamicdynamic');
 
 __END__

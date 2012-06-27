@@ -54,7 +54,7 @@ use Carp;
     sub render {
         my ($self, $path) = @_;
         
-        my $context = Marquee->c;
+        my $c = Marquee->c;
         
         my $mt = $self->cache($path);
         
@@ -75,7 +75,7 @@ use Carp;
             }
             
             $prepend .= 'use strict;';
-            for my $var (keys %{$context->stash}) {
+            for my $var (keys %{$c->stash}) {
                 if ($var =~ /^\w+$/) {
                     $prepend .= " my \$$var = stash '$var';";
                 }
@@ -88,9 +88,9 @@ use Carp;
         my $output;
         
         if ($mt->compiled) {
-            $output = $mt->interpret($self, $context);
+            $output = $mt->interpret($self, $c);
         } else {
-            $output = $mt->render_file($path, $self, $context);
+            $output = $mt->render_file($path, $self, $c);
         }
         
         return ref $output ? die $output : $output;

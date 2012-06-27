@@ -36,9 +36,9 @@ use Mojo::Base 'Marquee::Plugin';
     sub serve_pod {
         my ($self, $source) = @_;
         
-        my $context = Marquee->c;
-        my $tx      = $context->tx;
-        my $app     = $context->app;
+        my $c   = Marquee->c;
+        my $tx  = $c->tx;
+        my $app = $c->app;
         
         my $html = _pod_to_html($source);
         
@@ -108,9 +108,9 @@ use Mojo::Base 'Marquee::Plugin';
         
         $module =~ s!/!\:\:!g;
         
-        my $context = Marquee->c;
-        my $tx      = $context->tx;
-        my $app     = $context->app;
+        my $c       = Marquee->c;
+        my $tx      = $c->tx;
+        my $app     = $c->app;
         my $path    = Pod::Simple::Search->new->find($module, @{$self->paths});
         
         if (! $path || ! -r $path) {

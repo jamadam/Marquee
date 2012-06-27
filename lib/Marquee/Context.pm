@@ -93,6 +93,13 @@ use Mojo::Util qw{hmac_md5_sum secure_compare b64_decode b64_encode};
     ### ---
     ### Set or Get signed cookie
     ### ---
+    sub served {
+        return defined shift->tx->res->code;
+    }
+    
+    ### ---
+    ### Set or Get signed cookie
+    ### ---
     sub signed_cookie {
         my ($self, $name, $value, $opt) = @_;
       
@@ -243,6 +250,14 @@ Access request cookie values and create new response cookies.
 
     # Create response cookie with domain
     $c->cookie(name => 'sebastian', {domain => 'mojolicio.us'});
+
+=head2 $instance->served
+
+Check if the response code has already been set and returns boolean.
+
+    if (! $c->served) {
+        ...
+    }
 
 =head2 $instance->signed_cookie
 

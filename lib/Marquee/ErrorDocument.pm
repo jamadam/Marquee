@@ -27,13 +27,13 @@ use Mojo::Util qw'encode';
         
         $message ||= $messages{$code};
         
-        my $context     = Marquee->c;
-        my $tx          = $context->tx;
-        my $stash       = $context->stash;
+        my $c           = Marquee->c;
+        my $tx          = $c->tx;
+        my $stash       = $c->stash;
         my $template    = ($self->status_template)->{$code} || $self->template;
-        my $ep          = $context->app->ssi_handlers->{ep};
+        my $ep          = $c->app->ssi_handlers->{ep};
         
-        if ($context->app->under_development) {
+        if ($c->app->under_development) {
             my $snapshot = $stash->clone;
             $ep->add_function(snapshot => sub {$snapshot});
             $stash->set(

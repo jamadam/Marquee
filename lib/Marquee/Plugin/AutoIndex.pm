@@ -28,11 +28,11 @@ use Mojo::Util qw'url_unescape encode decode';
             
             $next->();
             
-            my $context = Marquee->c;
+            my $c = Marquee->c;
             
-            if (! $context->tx->res->code) {
-                my $app = $context->app;
-                my $path = $context->tx->req->url->path->clone->canonicalize;
+            if (! $c->served) {
+                my $app = $c->app;
+                my $path = $c->tx->req->url->path->clone->canonicalize;
                 if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
                     return;
                 }
@@ -49,8 +49,8 @@ use Mojo::Util qw'url_unescape encode decode';
     sub _serve_index {
         my ($self, $path) = @_;
         
-        my $context = Marquee->c;
-        my $app = $context->app;
+        my $c = Marquee->c;
+        my $app = $c->app;
         
         $path = decode('UTF-8', url_unescape($path));
         my $dir = File::Spec->catdir($app->document_root, $path);
@@ -90,8 +90,8 @@ use Mojo::Util qw'url_unescape encode decode';
             $a->{name} cmp $b->{name}
         } @dset;
         
-        my $tx = $context->tx;
-        $context->stash->set(
+        my $tx = $c->tx;
+        $c->stash->set(
             dir         => $path,
             dataset     => \@dset,
             static_dir  => 'static'

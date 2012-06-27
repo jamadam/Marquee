@@ -97,21 +97,20 @@ our $VERSION = '0.06';
         my ($self) = @_;
         
         my $tx = $CONTEXT->tx;
-        my $res = $tx->res;
         my $path = $tx->req->url->path->clone->canonicalize;
         
         if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
             return;
         }
         
-        if (! $res->code) {
+        if (! $CONTEXT->served) {
             if ($path =~ /$self->{_handler_re}/) {
                 $self->error_document->serve(403);
                 return;
             }
         }
         
-        if (! $res->code) {
+        if (! $CONTEXT->served) {
             my $path = _auto_fill_filename($path->clone, $self->default_file);
             $path->leading_slash(0);
             $path = "$path";
@@ -123,7 +122,7 @@ our $VERSION = '0.06';
             }
         }
         
-        if (! $res->code) {
+        if (! $CONTEXT->served) {
             if (! $path->trailing_slash && scalar @{$path->parts}
                                                 && $self->is_directory($path)) {
                 my $uri = $tx->req->url->clone->path(
@@ -154,7 +153,7 @@ our $VERSION = '0.06';
             $self->error_document->serve(500, $@);
         }
         
-        if (! $tx->res->code) {
+        if (! $CONTEXT->served) {
             $self->error_document->serve(404);
             $self->log->fatal($tx->req->url->path. qq{ Not found});
         }

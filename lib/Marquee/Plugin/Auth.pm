@@ -14,8 +14,9 @@ use Mojo::Base 'Marquee::Plugin';
         $app->hook(around_dispatch => sub {
             my ($next, @args) = @_;
             
-            my $tx  = Marquee->c->tx;
-            my $path= $tx->req->url->path->clone->leading_slash(1)->to_string;
+            my $c    = Marquee->c;
+            my $tx   = $c->tx;
+            my $path = $tx->req->url->path->clone->leading_slash(1)->to_string;
             
             my @entries = @$entries;
             while (@entries) {
@@ -33,7 +34,7 @@ use Mojo::Base 'Marquee::Plugin';
                 }
             }
             
-            if (! $tx->res->code) {
+            if (! $c->served) {
                 $next->(@args);
             }
         });

@@ -29,7 +29,7 @@ use Mojo::Template;
     sub render {
         my ($self, $path) = @_;
         
-        my $context = Marquee->c;
+        my $c = Marquee->c;
         
         my $mt = $self->cache($path);
         
@@ -41,9 +41,9 @@ use Mojo::Template;
         my $output;
         
         if ($mt->compiled) {
-            $output = $mt->interpret($self, $context);
+            $output = $mt->interpret($self, $c);
         } else {
-            $output = $mt->render_file($path, $self, $context);
+            $output = $mt->render_file($path, $self, $c);
         }
         
         return ref $output ? die $output : $output;

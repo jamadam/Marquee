@@ -36,11 +36,64 @@ use Mojo::Util qw'url_unescape encode decode';
                 if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
                     return;
                 }
-                if (-d File::Spec->catdir($app->document_root, $path)) {
+                my $mode = $c->tx->req->param('mode');
+                if ($mode && $mode eq 'tree') {
+                    $self->_serve_tree($path);
+                } elsif (-d File::Spec->catdir($app->document_root, $path)) {
                     $self->_serve_index($path);
                 }
             }
         });
+    }
+    
+    ### ---
+    ### Server directory tree
+    ### ---
+    sub _serve_tree {
+        my ($self, $path) = @_;
+        
+        my $c   = Marquee->c;
+        my $tx  = Marquee->c->tx;
+        my $app = Marquee->c->app;
+        my $maxdepth = 3;
+        
+        $c->stash->set(
+            dir         => $path,
+            static_dir  => 'static'
+        );
+        
+        $tx->res->body(
+            encode('UTF-8',
+                Marquee::SSIHandler::EP->new->add_function(filelist => sub {
+                    my ($self, $cpath) = @_;
+                    
+                    $cpath ||= $path;
+                    $cpath =~ s{/$}{};
+                    $cpath = decode('UTF-8', url_unescape($cpath));
+                    my $fixed_path =
+                            File::Spec->catfile($app->document_root, $cpath);
+                    opendir(my $dh, $fixed_path);
+                    my @files =
+                        map {
+                            my $name = $_;
+                            $name =~ s{(\.\w+)$app->{_handler_re}}{$1};
+                            [
+                                -d File::Spec->catfile($fixed_path, $name),
+                                File::Spec->catfile($cpath, $name),
+                            ]
+                        } sort {$a cmp $b} grep {$_ !~ qr/^\./} readdir($dh);
+                    closedir($dh);
+                    return \@files;
+                })->render_traceable(
+                __PACKAGE__->Marquee::asset('auto_index_tree.html.ep')
+                )
+            )
+        );
+        
+        $tx->res->code(200);
+        $tx->res->headers->content_type($app->types->type('html'));
+        
+        return $app;
     }
     
     ### ---

@@ -19,7 +19,7 @@ use Test::More;
   sub dom {
     my ($self, $index) = @_;
     if (defined $index) {
-      return $self->{dom}->[$index];
+      return $self->{dom}->[$index] || Mojo::DOM->new;
     }
     return $self->{dom};
   }
@@ -171,7 +171,8 @@ use Test::More;
   sub has_class {
     my ($self, $name, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    my $len = scalar grep {$_ eq $name} (split(/\s/, $self->dom(0)->attrs('class')));
+    my @classes = split(/\s/, $self->dom(0)->attrs('class') || '');
+    my $len = scalar grep {$_ eq $name} (@classes);
     Test::More::ok($len, $desc || qq/has class "$name"/);
     return $self;
   }
@@ -179,7 +180,8 @@ use Test::More;
   sub has_class_not {
     my ($self, $name, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    my $len = scalar grep {$_ eq $name} (split(/\s/, $self->dom(0)->attrs('class')));
+    my @classes = split(/\s/, $self->dom(0)->attrs('class') || '');
+    my $len = scalar grep {$_ eq $name} (@classes);
     Test::More::ok(! $len, $desc || qq/has class "$name"/);
     return $self;
   }

@@ -36,8 +36,8 @@
 					%	return '';
 					% }
 					% if ($name->{type} eq 'dir') {
-						<li class="dir"><a class="dir" href="<%= $name->{name} %>?mode=tree"><%= basename $name->{name} %></a></li>
-						% if ($depth < $tree_depth) {
+						<li class="dir"><a class="dir" href="<%= $name->{name} %>/?mode=tree"><%= basename $name->{name} %></a></li>
+						% if ($depth < $tree_depth && $name->{name} !~ qr/\.\./) {
 							% $depth++;
 							<li><%= $dir_block->($name->{name}) %></li>
 							% $depth--;

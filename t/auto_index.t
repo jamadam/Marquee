@@ -12,7 +12,7 @@ use Test::Mojo::DOM;
 use Marquee;
 use Mojo::Date;
     
-    use Test::More tests => 54;
+    use Test::More tests => 97;
 
     my $app;
     my $t;
@@ -130,6 +130,88 @@ use Mojo::Date;
         ->status_is(404)
         ->element_exists_not('body#debugScreen');
     $t->get_ok('/some_dir/.%2f/')
+        ->status_is(200)
+        ->content_like(qr{test.html});
+
+    $t->get_ok('/?mode=tree')
+        ->status_is(200)
+        ->dom_inspector(sub {
+            my $t = shift;
+            $t->at('title')
+                ->text_is('Index of /');
+            
+            {
+                my $t = $t->at('#wrapper > ul li:nth-child(1)');
+                my $file = "$FindBin::Bin/public_html_index/some_dir";
+                $t->has_class('dir');
+                $t->at('a')
+                    ->text_is('some_dir')
+                    ->attr_is('href', '/some_dir/?mode=tree')
+                    ->has_class('dir');
+            }
+            
+            {
+                my $t = $t->at('#wrapper > ul li:nth-child(2)');
+                my $file = "$FindBin::Bin/public_html_index/image.png";
+                $t->has_class_not('dir');
+                $t->at('a')
+                    ->text_is('test.html')
+                    ->attr_is('href', '/some_dir/test.html');
+            }
+            
+            {
+                my $t = $t->at('#wrapper > ul li:nth-child(12)');
+                my $file = "$FindBin::Bin/public_html_index/日本語.html";
+                $t->at('a')
+                    ->text_is('日本語.html')
+                    ->attr_is('href', '/日本語.html');
+            }
+        })
+        ->content_like(qr{test3.html})
+        ->content_unlike(qr{test3.html.ep})
+        ->content_like(qr{test4.html.pub});
+    
+    $t->get_ok('/some_dir/?mode=tree')
+        ->status_is(200)
+        ->dom_inspector(sub {
+            my $t = shift;
+            
+            {
+                my $t = $t->at('#wrapper > ul li:nth-child(1)');
+                my $file = "$FindBin::Bin/public_html_index/";
+                $t->at('a')
+                    ->text_is('..')
+                    ->attr_is('href', '/some_dir/../?mode=tree')
+                    ->has_class('dir');
+            }
+            {
+                my $t = $t->at('#wrapper > ul li:nth-child(2)');
+                my $file = "$FindBin::Bin/public_html_index/test.html";
+                $t->at('a')
+                    ->text_is('test.html')
+                    ->attr_is('href', '/some_dir/test.html');
+            }
+        });
+    
+    $t->get_ok('/some_dir2/?mode=tree')
+        ->status_is(200)
+        ->content_is(q{index file exists});
+    $t->get_ok('/some_dir3/file_list.css?mode=tree')
+        ->status_is(200)
+        ->content_is(q{file_list.css});
+    $t->get_ok('/static/site_file_list.css?mode=tree')
+        ->status_is(200)
+        ->content_like(qr{\@charset "UTF\-8"});
+    $t->get_ok('/some_dir/not_exists.html?mode=tree')
+        ->status_is(404)
+        ->element_exists_not('body#debugScreen');
+    $t->get_ok('/..%2f?mode=tree')
+        ->status_is(404)
+        ->element_exists_not('body#debugScreen');
+    $t->get_ok('/some_dir/..%2f..%2f?mode=tree')
+        ->status_is(404)
+        ->element_exists_not('body#debugScreen');
+    $t->get_ok('/some_dir/.%2f/?mode=tree')
         ->status_is(200)
         ->content_like(qr{test.html});
     

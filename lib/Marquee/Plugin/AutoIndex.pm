@@ -39,11 +39,13 @@ use File::Basename 'basename';
                 if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
                     return;
                 }
-                my $mode = $c->tx->req->param('mode');
-                if ($mode && $mode eq 'tree') {
-                    $self->serve_tree($path);
-                } elsif (-d File::Spec->catdir($app->document_root, $path)) {
-                    $self->serve_index($path);
+                if (-d File::Spec->catdir($app->document_root, $path)) {
+                    my $mode = $c->tx->req->param('mode');
+                    if ($mode && $mode eq 'tree') {
+                        $self->serve_tree($path);
+                    } else {
+                        $self->serve_index($path);
+                    }
                 }
             }
         });

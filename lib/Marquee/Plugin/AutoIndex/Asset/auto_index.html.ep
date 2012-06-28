@@ -34,9 +34,10 @@
                 </tr>
             </thead>
             <tbody>
+			% use File::Basename 'basename';
 			% for my $data (@$dataset) {
 				<tr>
-					<td><a class="<%= $data->{type} %>" href="<%= $data->{name} %>"><%= $data->{name} %></a></td>
+					<td><a class="<%= $data->{type} %>" href="<%= basename $data->{name} %><%= $data->{type} eq 'dir' ? '/' : ''%>"><%= basename $data->{name} %></a></td>
 					<td><%= $data->{timestamp} %></td>
 					<td><%= $data->{size} %></td>
 				</tr>

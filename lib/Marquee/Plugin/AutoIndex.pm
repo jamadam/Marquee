@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use Mojo::Base 'Marquee::Plugin';
 use Mojo::Util qw'url_unescape encode decode';
+use File::Basename 'basename';
     
     ### --
     ### Register the plugin into app
@@ -62,38 +63,65 @@ use Mojo::Util qw'url_unescape encode decode';
             static_dir  => 'static'
         );
         
+        my $ep = Marquee::SSIHandler::EP->new;
+        $ep->add_function(filelist => sub {
+            return $self->_file_list($_[1], $path);
+        });
+        
         $tx->res->body(
-            encode('UTF-8',
-                Marquee::SSIHandler::EP->new->add_function(filelist => sub {
-                    my ($self, $cpath) = @_;
-                    
-                    $cpath ||= $path;
-                    $cpath =~ s{/$}{};
-                    $cpath = decode('UTF-8', url_unescape($cpath));
-                    my $fixed_path =
-                            File::Spec->catfile($app->document_root, $cpath);
-                    opendir(my $dh, $fixed_path);
-                    my @files =
-                        map {
-                            my $name = $_;
-                            $name =~ s{(\.\w+)$app->{_handler_re}}{$1};
-                            [
-                                -d File::Spec->catfile($fixed_path, $name),
-                                File::Spec->catfile($cpath, $name),
-                            ]
-                        } sort {$a cmp $b} grep {$_ !~ qr/^\./} readdir($dh);
-                    closedir($dh);
-                    return \@files;
-                })->render_traceable(
+            encode('UTF-8', $ep->render_traceable(
                 __PACKAGE__->Marquee::asset('auto_index_tree.html.ep')
-                )
-            )
+            ))
         );
         
         $tx->res->code(200);
         $tx->res->headers->content_type($app->types->type('html'));
         
         return $app;
+    }
+    
+    ### ---
+    ### File list
+    ### ---
+    sub _file_list {
+        my ($self, $cpath, $path) = @_;
+        my $app = Marquee->c->app;
+        
+        $cpath ||= $path;
+        $cpath =~ s{/$}{};
+        $cpath = decode('UTF-8', url_unescape($cpath));
+        my $fixed_path = File::Spec->catfile($app->document_root, $cpath);
+        opendir(my $dh, $fixed_path);
+        
+        my @files = grep {
+            $_ !~ qr{^\.$} && ($path eq '/' ? $_ !~ qr{^\.\.$} : 1)
+        } readdir($dh);
+        
+        @files = map {
+            my $name = decode('UTF-8', url_unescape($_));
+            my $pub_name = $name;
+            $pub_name =~ s{(\.\w+)$app->{_handler_re}}{$1};
+            my $real_abs = File::Spec->catfile($fixed_path, $name);
+            {
+                type        => -d $real_abs
+                    ? 'dir'
+                    : (($app->path_to_type($pub_name) || 'text') =~ /^(\w+)/)[0],
+                name        => File::Spec->catfile($cpath, $pub_name),
+                name_abs    => $real_abs,
+                timestamp   => _file_timestamp($real_abs),
+                size        => _file_size($real_abs),
+            }
+        } @files;
+        
+        @files = sort {
+            ($a->{type} ne 'dir') <=> ($b->{type} ne 'dir')
+            ||
+            basename($a->{name}) cmp basename($b->{name})
+        } @files;
+        
+        closedir($dh);
+        
+        return \@files;
     }
     
     ### ---
@@ -104,49 +132,11 @@ use Mojo::Util qw'url_unescape encode decode';
         
         my $c = Marquee->c;
         my $app = $c->app;
-        
-        $path = decode('UTF-8', url_unescape($path));
-        my $dir = File::Spec->catdir($app->document_root, $path);
-        
-        opendir(my $DIR, $dir);
-        my @file = readdir($DIR);
-        closedir $DIR;
-        
-        my @dset = ();
-        for my $file (@file) {
-            $file = url_unescape(decode('UTF-8', $file));
-            if ($file =~ qr{^\.$} || $file =~ qr{^\.\.$} && $path eq '/') {
-                next;
-            }
-            my $fpath = File::Spec->catfile($dir, $file);
-            my $name;
-            my $type;
-            if (-f $fpath) {
-                $name = $file;
-                $name =~ s{(\.\w+)$app->{_handler_re}}{$1};
-                $type = (($app->path_to_type($name) || 'text') =~ /^(\w+)/)[0];
-            } else {
-                $name = $file. '/';
-                $type = 'dir';
-            }
-            push(@dset, {
-                name        => $name,
-                type        => $type,
-                timestamp   => _file_timestamp($fpath),
-                size        => _file_size($fpath),
-            });
-        }
-        
-        @dset = sort {
-            ($a->{type} ne 'dir') <=> ($b->{type} ne 'dir')
-            ||
-            $a->{name} cmp $b->{name}
-        } @dset;
-        
         my $tx = $c->tx;
+        
         $c->stash->set(
-            dir         => $path,
-            dataset     => \@dset,
+            dir         => decode('UTF-8', url_unescape($path)),
+            dataset     => $self->_file_list('', $path),
             static_dir  => 'static'
         );
         

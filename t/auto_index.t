@@ -41,7 +41,7 @@ use Mojo::Date;
                 my $t = $t->at('tbody tr:nth-child(1)');
                 my $file = "$FindBin::Bin/public_html_index/some_dir";
                 $t->at('a')
-                    ->text_is('some_dir/')
+                    ->text_is('some_dir')
                     ->attr_is('href', 'some_dir/')
                     ->has_class('dir');
                 $t->at('td:nth-child(2)')
@@ -89,7 +89,7 @@ use Mojo::Date;
                 my $t = $t->at('tbody tr:nth-child(1)');
                 my $file = "$FindBin::Bin/public_html_index/";
                 $t->at('a')
-                    ->text_is('../')
+                    ->text_is('..')
                     ->attr_is('href', '../')
                     ->has_class('dir');
                 $t->at('td:nth-child(2)')

@@ -33,19 +33,22 @@
 		% my $dir_block;
 		% $dir_block = begin
 			<ul>
-			<%= iter filelist(shift) => begin %>
+				<%= iter filelist(shift) => begin %>
 					% my $name = shift;
-					% if ($name->[0]) {
-						<li class="dir"><a class="dir" href="<%= $name->[1] %>?mode=tree"><%= basename $name->[1] %></a></li>
+					% if ($depth != 0 && $name->{name} =~ qr/\.\./) {
+					%	return '';
+					% }
+					% if ($name->{type} eq 'dir') {
+						<li class="dir"><a class="dir" href="<%= $name->{name} %>?mode=tree"><%= basename $name->{name} %></a></li>
 						% if ($depth < $max_depth) {
 							% $depth++;
-							<li><%= $dir_block->($name->[1]) %></li>
+							<li><%= $dir_block->($name->{name}) %></li>
 							% $depth--;
 						% }
 					%} else {
-						<li class="file"><a href="<%= $name->[1] %>"><%= basename $name->[1] %></a></li>
+						<li class="file <%= $name->{type} %>"><a href="<%= $name->{name} %>"><%= basename $name->{name} %></a></li>
 					%}
-			<% end %>
+				<% end %>
 			</ul>
 		% end
 		<%= $dir_block->() %>

@@ -12,8 +12,13 @@
 		padding-left:28px;
 	}
 		#wrapper li a {
+			display: block;
 			text-decoration: none;
 		}
+			#wrapper li a:hover {
+				background-color:#ffa;
+				cursor: pointer;
+			}
 		#wrapper li.dir,
 		#wrapper li.file {
 			display:block;

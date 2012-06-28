@@ -5,6 +5,8 @@ use Mojo::Base 'Marquee::Plugin';
 use Mojo::Util qw'url_unescape encode decode';
 use File::Basename 'basename';
     
+    __PACKAGE__->attr(tree_depth => 4);
+    
     ### --
     ### Register the plugin into app
     ### --
@@ -60,7 +62,8 @@ use File::Basename 'basename';
         
         $c->stash->set(
             dir         => $path,
-            static_dir  => 'static'
+            static_dir  => 'static',
+            tree_depth  => $self->tree_depth,
         );
         
         my $ep = Marquee::SSIHandler::EP->new;

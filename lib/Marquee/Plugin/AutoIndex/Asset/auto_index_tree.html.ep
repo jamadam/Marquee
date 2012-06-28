@@ -6,7 +6,7 @@
 		my $c 			= shift;
 		my $dir 		= $c->stash->{dir};
 		my $static_dir 	= $c->stash->{static_dir};
-		my $dataset 	= $c->stash->{dataset};
+		my $tree_depth	= $c->stash->{tree_depth};
 	%>
     <title>Index of <%= $dir %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -25,9 +25,7 @@
         Index of <code><%= $dir %></code>
     </h1>
     <div id="wrapper">
-		
 		% use File::Basename 'basename';
-		% my $max_depth = 3;
 		% my $depth = 0;
 		% my $file_block;
 		% my $dir_block;
@@ -40,7 +38,7 @@
 					% }
 					% if ($name->{type} eq 'dir') {
 						<li class="dir"><a class="dir" href="<%= $name->{name} %>?mode=tree"><%= basename $name->{name} %></a></li>
-						% if ($depth < $max_depth) {
+						% if ($depth < $tree_depth) {
 							% $depth++;
 							<li><%= $dir_block->($name->{name}) %></li>
 							% $depth--;

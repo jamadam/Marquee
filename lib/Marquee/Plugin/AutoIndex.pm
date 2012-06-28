@@ -5,6 +5,7 @@ use Mojo::Base 'Marquee::Plugin';
 use Mojo::Util qw'url_unescape encode decode';
 use File::Basename 'basename';
     
+    __PACKAGE__->attr(max_per_dir => 50);
     __PACKAGE__->attr(tree_depth => 4);
     
     ### --
@@ -154,6 +155,10 @@ use File::Basename 'basename';
         } @files;
         
         closedir($dh);
+        
+        if (@files > $self->max_per_dir) {
+            splice(@files, $self->max_per_dir);
+        }
         
         return \@files;
     }
@@ -375,6 +380,16 @@ On your browser following forms of URL are available.
 This is a plugin for auto index. When app attribute default_file is undefined
 or the file is not found, the directory access causes the auto index to be
 served.
+
+=head1 ATTRIBUTES
+
+=head2 max_per_dir
+
+Max file amount to display in each directory.
+
+=head2 tree_depth
+
+Max depth for directory recursion.
 
 =head1 METHODS
 

@@ -63,14 +63,14 @@ Marquee::Plugin::Auth - Basic Authentication
 
 =head1 DESCRIPTION
 
-This plugin wraps the whole dispacher and requires basic authentication for
+This plugin wraps the whole dispatcher and requires basic authentication for
 specific path.
 
 =head1 ATTRIBUTES
 
 =head2 realm
 
-Default value of realm which appears to responce header. Each entry can override
+Default value of realm which appears to response header. Each entry can override
 it with second option.
 
 =head1 METHODS

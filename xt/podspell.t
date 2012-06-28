@@ -60,3 +60,4 @@ HTTPS
 mrqe
 funcs
 passphrase
+auth

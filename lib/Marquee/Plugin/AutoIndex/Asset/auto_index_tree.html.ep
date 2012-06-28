@@ -27,7 +27,6 @@
     <div id="wrapper">
 		% use File::Basename 'basename';
 		% my $depth = 0;
-		% my $file_block;
 		% my $dir_block;
 		% $dir_block = begin
 			<ul>

@@ -83,11 +83,13 @@ These options are available:
 
     $ mojo marquee --default_file index.html
 
-### EXAMPLE4(activate auto index)
+### EXAMPLE4(activate auto index & auto tree)
 
     $ mojo marquee --auto_index
 
 ![Site list](/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
+
+![Site list](/jamadam/Marquee/raw/master/screenshot/autoindextree.png "Auto Index")
 
 ## REPOSITORY
 

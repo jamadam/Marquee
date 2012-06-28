@@ -16,7 +16,7 @@ use File::Basename 'basename';
         ### Add mime types
         {
             my $types = $app->types;
-            my %catalog = mime_types();
+            my %catalog = _mime_types();
             while (my ($ext, $mime) = (each %catalog)) {
                 if (! $types->type($ext)) {
                     $types->type($ext => $mime);
@@ -41,9 +41,9 @@ use File::Basename 'basename';
                 }
                 my $mode = $c->tx->req->param('mode');
                 if ($mode && $mode eq 'tree') {
-                    $self->_serve_tree($path);
+                    $self->serve_tree($path);
                 } elsif (-d File::Spec->catdir($app->document_root, $path)) {
-                    $self->_serve_index($path);
+                    $self->serve_index($path);
                 }
             }
         });
@@ -52,7 +52,7 @@ use File::Basename 'basename';
     ### ---
     ### Server directory tree
     ### ---
-    sub _serve_tree {
+    sub serve_tree {
         my ($self, $path) = @_;
         
         my $c   = Marquee->c;
@@ -68,7 +68,7 @@ use File::Basename 'basename';
         
         my $ep = Marquee::SSIHandler::EP->new;
         $ep->add_function(filelist => sub {
-            return $self->_file_list($_[1], $path);
+            return _file_list($self, $_[1], $path);
         });
         
         $tx->res->body(
@@ -77,6 +77,35 @@ use File::Basename 'basename';
             ))
         );
         
+        $tx->res->code(200);
+        $tx->res->headers->content_type($app->types->type('html'));
+        
+        return $app;
+    }
+    
+    ### ---
+    ### Render file list
+    ### ---
+    sub serve_index {
+        my ($self, $path) = @_;
+        
+        my $c = Marquee->c;
+        my $app = $c->app;
+        my $tx = $c->tx;
+        
+        $c->stash->set(
+            dir         => decode('UTF-8', url_unescape($path)),
+            dataset     => _file_list($self, '', $path),
+            static_dir  => 'static'
+        );
+        
+        $tx->res->body(
+            encode('UTF-8',
+                Marquee::SSIHandler::EP->new->render_traceable(
+                __PACKAGE__->Marquee::asset('auto_index.html.ep')
+                )
+            )
+        );
         $tx->res->code(200);
         $tx->res->headers->content_type($app->types->type('html'));
         
@@ -128,35 +157,6 @@ use File::Basename 'basename';
     }
     
     ### ---
-    ### Render file list
-    ### ---
-    sub _serve_index {
-        my ($self, $path) = @_;
-        
-        my $c = Marquee->c;
-        my $app = $c->app;
-        my $tx = $c->tx;
-        
-        $c->stash->set(
-            dir         => decode('UTF-8', url_unescape($path)),
-            dataset     => $self->_file_list('', $path),
-            static_dir  => 'static'
-        );
-        
-        $tx->res->body(
-            encode('UTF-8',
-                Marquee::SSIHandler::EP->new->render_traceable(
-                __PACKAGE__->Marquee::asset('auto_index.html.ep')
-                )
-            )
-        );
-        $tx->res->code(200);
-        $tx->res->headers->content_type($app->types->type('html'));
-        
-        return $app;
-    }
-    
-    ### ---
     ### Get file utime
     ### ---
     sub _file_timestamp {
@@ -179,7 +179,7 @@ use File::Basename 'basename';
     ### ---
     ### Mime type catalog
     ### ---
-    sub mime_types {
+    sub _mime_types {
         return (
             "3gp"     => "video/3gpp",
             "a"       => "application/octet-stream",
@@ -363,6 +363,11 @@ Marquee::Plugin::AutoIndex - Auto index
 
     $app->plugin('AutoIndex');
 
+On your browser following forms of URL are available.
+
+    http://localhost:3000/path/to/directory/
+    http://localhost:3000/path/to/directory/?mode=tree
+
 =head1 DESCRIPTION
 
 This is a plugin for auto index. When app attribute default_file is undefined
@@ -373,9 +378,13 @@ served.
 
 =head2 $instance->register($app, $hash_ref)
 
-=head2 $instance->mime_types()
+=head2 $instance->serve_index
 
-Returns common MIME types.
+Serves auto directory index.
+
+=head2 $instance->serve_tree
+
+Serves auto directory tree.
 
 =head1 SEE ALSO
 

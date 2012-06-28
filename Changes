@@ -1,6 +1,7 @@
 Revision history for Marquee
 
 0.06 2012/06/23
+  - Added tree mode to auto index.
   - Renamed distribution from MojoSimpleHTTPServer to Marquee.
   - Improved iter function to accept blessed obj in array.
   - Removed basic auth from router in favor of Auth plugin.

@@ -5,7 +5,7 @@
 	padding-bottom: 0 !important;
 	border-left:3px solid #ddd;
 }
-	#wrapper li:last-child ul {
+	#wrapper li:last-child > ul {
 		border:0;
 	}
 	#wrapper li {

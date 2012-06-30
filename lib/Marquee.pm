@@ -60,8 +60,10 @@ our $VERSION = '0.06';
         
         # base path for CGI environment
         if ($ENV{DOCUMENT_ROOT} && ! defined $ENV{MARQUEE_BASE_PATH}) {
-            $ENV{MARQUEE_BASE_PATH} = $self->home->to_string;
-            $ENV{MARQUEE_BASE_PATH} =~ s{^$ENV{DOCUMENT_ROOT}}{};
+            my $tmp = $self->home->to_string;
+            if ($tmp =~ s{^$ENV{DOCUMENT_ROOT}}{}) {
+                $ENV{MARQUEE_BASE_PATH} = $tmp;
+            }
         }
         
         return $self;

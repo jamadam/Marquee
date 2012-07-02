@@ -267,7 +267,7 @@ our $VERSION = '0.06';
         
         my $tx = $CONTEXT->tx;
         $tx->res->code(301);
-        $tx->res->headers->location(_to_abs($self, $uri)->to_string);
+        $tx->res->headers->location($self->to_abs($uri)->to_string);
         return $self;
     }
     
@@ -390,7 +390,7 @@ our $VERSION = '0.06';
     ### --
     ### generate absolute uri
     ### --
-    sub _to_abs {
+    sub to_abs {
         my ($self, $url) = @_;
         
         $url = Mojo::URL->new($url);
@@ -398,8 +398,8 @@ our $VERSION = '0.06';
         if (! $url->scheme) {
             my $tx = $CONTEXT->tx;
             my $base = $tx->req->url->clone;
-            $base->path($url->path);
-            $url = $base;
+            $base->userinfo(undef);
+            $url->base($base);
         }
         
         return $url->to_abs;

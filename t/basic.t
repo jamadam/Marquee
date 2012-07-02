@@ -11,11 +11,34 @@ use Test::More;
 use Test::Mojo::DOM;
 use Marquee;
 use Mojo::Date;
+use Mojo::Transaction::HTTP;
+use Mojo::URL;
     
-    use Test::More tests => 124;
+    use Test::More tests => 136;
     
     {
-        use Mojo::Transaction::HTTP;
+        my $app = Marquee->new;
+        my $tx = Mojo::Transaction::HTTP->new;
+        $app->document_root("$FindBin::Bin/public_html");
+        $app->_init;
+        local $Marquee::CONTEXT = Marquee::Context->new(app => $app, tx => $tx);
+        $tx->req->url(Mojo::URL->new('http://localhost/path/'));
+        is $app->to_abs('http://example.com/foo/?a=b'), 'http://example.com/foo/?a=b';
+        is $app->to_abs('/foo/'), 'http://localhost/foo/';
+        is $app->to_abs('foo/'), 'http://localhost/path/foo/';
+        is $app->to_abs('./foo/'), 'http://localhost/path/foo/';
+        is $app->to_abs('../foo/'), 'http://localhost/foo/';
+        is $app->to_abs('foo/?a=b'), 'http://localhost/path/foo/?a=b';
+        $tx->req->url(Mojo::URL->new('http://user:pass@localhost/path/'));
+        is $app->to_abs('http://example.com/foo/?a=b'), 'http://example.com/foo/?a=b';
+        is $app->to_abs('/foo/'), 'http://localhost/foo/';
+        is $app->to_abs('foo/'), 'http://localhost/path/foo/';
+        is $app->to_abs('./foo/'), 'http://localhost/path/foo/';
+        is $app->to_abs('../foo/'), 'http://localhost/foo/';
+        is $app->to_abs('foo/?a=b'), 'http://localhost/path/foo/?a=b';
+    }
+    
+    {
         my $app = Marquee->new;
         my $tx = Mojo::Transaction::HTTP->new;
         $app->document_root("$FindBin::Bin/public_html");

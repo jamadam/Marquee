@@ -139,7 +139,7 @@ use Test::More;
   sub has_attr {
     my ($self, $name, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::ok defined $self->dom(0)->attrs($name),
+    Test::More::ok $self->dom(0)->attrs($name),
                                             $desc || qq/has attribute "$name"/;
     return $self;
   }
@@ -147,7 +147,7 @@ use Test::More;
   sub has_attr_not {
     my ($self, $name, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::ok ! defined $self->dom(0)->attrs($name),
+    Test::More::ok ! $self->dom(0)->attrs($name),
                                         $desc || qq/has attribute "$name" not/;
     return $self;
   }

@@ -5,60 +5,60 @@ use Mojo::Base -base;
 use Mojo::Cache;
 use Mojo::Util qw/encode md5_sum/;
 
-    ### --
-    ### Constructor
-    ### --
-    sub new {
-        my $class = shift;
-        my $self = $class->SUPER::new(@_);
-        $self->init;
-        return $self;
+### --
+### Constructor
+### --
+sub new {
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+    $self->init;
+    return $self;
+}
+
+### --
+### Get current template name recursively
+### --
+sub current_template {
+    my ($self, $index) = @_;
+    
+    $index ||= 0;
+    
+    my $route = Marquee->c->stash->{'mrqe.template_path'};
+    
+    while ($index-- > 0) {
+        $route = $route->[1] || return;
     }
     
-    ### --
-    ### Get current template name recursively
-    ### --
-    sub current_template {
-        my ($self, $index) = @_;
-        
-        $index ||= 0;
-        
-        my $route = Marquee->c->stash->{'mrqe.template_path'};
-        
-        while ($index-- > 0) {
-            $route = $route->[1] || return;
-        }
-        
-        return $route->[0];
-    }
+    return $route->[0];
+}
+
+### --
+### initialize
+### --
+sub init {
+    ### Can override by sub classes
+}
+
+### --
+### render
+### --
+sub render {
+    die "Class ". (ref $_[0]) . " must implements render method";
+}
+
+### --
+### traceably render
+### --
+sub render_traceable {
+    my ($self, $path, $cb) = @_;
     
-    ### --
-    ### initialize
-    ### --
-    sub init {
-        ### Can override by sub classes
-    }
+    my $stash = Marquee->c->stash;
     
-    ### --
-    ### render
-    ### --
-    sub render {
-        die "Class ". (ref $_[0]) . " must implements render method";
-    }
+    local $stash->{'mrqe.template_path'} =
+                                    [$path, $stash->{'mrqe.template_path'}];
     
-    ### --
-    ### traceably render
-    ### --
-    sub render_traceable {
-        my ($self, $path, $cb) = @_;
-        
-        my $stash = Marquee->c->stash;
-        
-        local $stash->{'mrqe.template_path'} =
-                                        [$path, $stash->{'mrqe.template_path'}];
-        
-        return $cb ? $cb->() : $self->render($path);
-    }
+    return $cb ? $cb->() : $self->render($path);
+}
 
 1;
 

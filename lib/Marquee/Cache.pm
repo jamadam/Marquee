@@ -2,55 +2,55 @@ package Marquee::Cache;
 use strict;
 use warnings;
 use Mojo::Base -base;
-    
-    __PACKAGE__->attr('max_keys');
-    
-    my $ATTR_CACHE      = 1;
-    my $ATTR_STACK      = 2;
-    
-    sub get {
-        if (my $cache = $_[0]->{$ATTR_CACHE}->{$_[1]}) {
-            if ($cache->[2]) {
-                for my $code (@{$cache->[2]}) {
-                    if ($code->($cache->[1])) {
-                        delete $_[0]->{$ATTR_CACHE}->{$_[1]};
-                        $_[0]->vacuum;
-                        return;
-                    }
+
+__PACKAGE__->attr('max_keys');
+
+my $ATTR_CACHE      = 1;
+my $ATTR_STACK      = 2;
+
+sub get {
+    if (my $cache = $_[0]->{$ATTR_CACHE}->{$_[1]}) {
+        if ($cache->[2]) {
+            for my $code (@{$cache->[2]}) {
+                if ($code->($cache->[1])) {
+                    delete $_[0]->{$ATTR_CACHE}->{$_[1]};
+                    $_[0]->vacuum;
+                    return;
                 }
             }
-            $cache->[0];
         }
+        $cache->[0];
+    }
+}
+
+sub vacuum {
+    @{$_[0]->{$ATTR_STACK}} =
+                grep {$_[0]->{$ATTR_CACHE}->{$_}} @{$_[0]->{$ATTR_STACK}};
+}
+
+sub set {
+    my ($self, $key, $value, $expire) = @_;
+    
+    my $max_keys    = $self->max_keys || 100;
+    my $cache       = $self->{$ATTR_CACHE} ||= {};
+    my $stack       = $self->{$ATTR_STACK} ||= [];
+    
+    while (@$stack >= $max_keys) {
+        delete $cache->{shift @$stack};
     }
     
-    sub vacuum {
-        @{$_[0]->{$ATTR_STACK}} =
-                    grep {$_[0]->{$ATTR_CACHE}->{$_}} @{$_[0]->{$ATTR_STACK}};
+    if (delete $cache->{$key}) {
+        $self->vacuum;
     }
     
-    sub set {
-        my ($self, $key, $value, $expire) = @_;
-        
-        my $max_keys    = $self->max_keys || 100;
-        my $cache       = $self->{$ATTR_CACHE} ||= {};
-        my $stack       = $self->{$ATTR_STACK} ||= [];
-        
-        while (@$stack >= $max_keys) {
-            delete $cache->{shift @$stack};
-        }
-        
-        if (delete $cache->{$key}) {
-            $self->vacuum;
-        }
-        
-        push @$stack, $key;
-        
-        $cache->{$key} = [
-            $value,
-            time,
-            (ref $expire eq 'CODE') ? [$expire] : $expire
-        ];
-    }
+    push @$stack, $key;
+    
+    $cache->{$key} = [
+        $value,
+        time,
+        (ref $expire eq 'CODE') ? [$expire] : $expire
+    ];
+}
 
 1;
 

@@ -3,9 +3,9 @@ use strict;
 use warnings;
 use Mojo::Base -base;
 
-    sub register {
-        die "Class ". (ref $_[0]) . " must implements register method";
-    }
+sub register {
+    die "Class ". (ref $_[0]) . " must implements register method";
+}
 
 1;
 

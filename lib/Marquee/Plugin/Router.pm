@@ -3,39 +3,39 @@ use strict;
 use warnings;
 use Marquee::Plugin::Router::Route;
 use Mojo::Base 'Marquee::Plugin';
+
+__PACKAGE__->attr('route', sub {Marquee::Plugin::Router::Route->new});
+
+### --
+### Register the plugin into app
+### --
+sub register {
+    my ($self, $app, $routes) = @_;
     
-    __PACKAGE__->attr('route', sub {Marquee::Plugin::Router::Route->new});
+    $routes->($self->route);
     
-    ### --
-    ### Register the plugin into app
-    ### --
-    sub register {
-        my ($self, $app, $routes) = @_;
+    $app->hook(around_dispatch => sub {
+        my ($next, @args) = @_;
         
-        $routes->($self->route);
+        my $c       = Marquee->c;
+        my $tx      = $c->tx;
+        my $path    = $tx->req->url->path->clone->leading_slash(1)->to_string;
+        my @elems   = @{$self->route->elems};
         
-        $app->hook(around_dispatch => sub {
-            my ($next, @args) = @_;
-            
-            my $c       = Marquee->c;
-            my $tx      = $c->tx;
-            my $path    = $tx->req->url->path->clone->leading_slash(1)->to_string;
-            my @elems   = @{$self->route->elems};
-            
-            while (@elems) {
-                my ($regex, $cond, $cb) = splice(@elems, 0,3);
-                map {$_->($tx) || next} @$cond;
-                if (my @captures = ($path =~ $regex)) {
-                    $cb->(defined $1 ? @captures : ());
-                    last;
-                }
+        while (@elems) {
+            my ($regex, $cond, $cb) = splice(@elems, 0,3);
+            map {$_->($tx) || next} @$cond;
+            if (my @captures = ($path =~ $regex)) {
+                $cb->(defined $1 ? @captures : ());
+                last;
             }
-            
-            if (! $c->served) {
-                $next->(@args);
-            }
-        });
-    }
+        }
+        
+        if (! $c->served) {
+            $next->(@args);
+        }
+    });
+}
 
 1;
 

@@ -2,43 +2,43 @@ package Marquee::Plugin::Auth;
 use strict;
 use warnings;
 use Mojo::Base 'Marquee::Plugin';
+
+__PACKAGE__->attr(realm => 'Secret Area');
+
+### --
+### Register the plugin into app
+### --
+sub register {
+    my ($self, $app, $entries) = @_;
     
-    __PACKAGE__->attr(realm => 'Secret Area');
-    
-    ### --
-    ### Register the plugin into app
-    ### --
-    sub register {
-        my ($self, $app, $entries) = @_;
+    $app->hook(around_dispatch => sub {
+        my ($next, @args) = @_;
         
-        $app->hook(around_dispatch => sub {
-            my ($next, @args) = @_;
+        my $c    = Marquee->c;
+        my $tx   = $c->tx;
+        my $path = $tx->req->url->path->clone->leading_slash(1)->to_string;
+        
+        my @entries = @$entries;
+        while (@entries) {
+            my $regex   = shift @entries;
+            my $realm   = ! ref $entries[0] ? shift @entries : $self->realm;
+            my $cb      = shift @entries;
             
-            my $c    = Marquee->c;
-            my $tx   = $c->tx;
-            my $path = $tx->req->url->path->clone->leading_slash(1)->to_string;
-            
-            my @entries = @$entries;
-            while (@entries) {
-                my $regex   = shift @entries;
-                my $realm   = ! ref $entries[0] ? shift @entries : $self->realm;
-                my $cb      = shift @entries;
-                
-                if ($path =~ $regex) {
-                    my $auth = $tx->req->url->to_abs->userinfo || ':';
-                    if (! $cb->(split(/:/, $auth), 2)) {
-                        $tx->res->headers->www_authenticate("Basic realm=$realm");
-                        $tx->res->code(401);
-                        return;
-                    }
+            if ($path =~ $regex) {
+                my $auth = $tx->req->url->to_abs->userinfo || ':';
+                if (! $cb->(split(/:/, $auth), 2)) {
+                    $tx->res->headers->www_authenticate("Basic realm=$realm");
+                    $tx->res->code(401);
+                    return;
                 }
             }
-            
-            if (! $c->served) {
-                $next->(@args);
-            }
-        });
-    }
+        }
+        
+        if (! $c->served) {
+            $next->(@args);
+        }
+    });
+}
 
 1;
 

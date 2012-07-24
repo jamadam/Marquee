@@ -11,52 +11,52 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use Marquee;
 
-    use Test::More tests => 21;
+use Test::More tests => 21;
 
-    my $app;
-    my $t;
-    
-    $app = Marquee->new;
-    $app->document_root("$FindBin::Bin/public_html");
-    $app->log_file("$FindBin::Bin/Marquee.log");
-    
-    $app->plugin(Auth => [
-        qr{^/auth\.html} => 'Secret Area2' => sub {
-            $_[0] eq 'user' && $_[1] eq 'pass';
-        },
-        qr{^/auth2\.html} => sub {
-            $_[0] eq 'user2' && $_[1] eq 'pass2';
-        },
-    ]);
-    
-    $t = Test::Mojo->new($app);
-    
-    $t->get_ok('/index.txt')
-        ->status_is(200)
-        ->content_is("static <%= time() %>");
-    
-    $t->get_ok('/auth.html')
-        ->status_is(401)
-        ->header_is('www-authenticate', 'Basic realm=Secret Area2');
-    
-    $t->get_ok('/auth.html', {Authorization => "Basic dXNlcjpwYXNzMg=="})
-        ->status_is(401)
-        ->header_is('www-authenticate', 'Basic realm=Secret Area2');
-    
-    $t->get_ok('/auth.html', {Authorization => "Basic dXNlcjpwYXNz"})
-        ->status_is(200)
-        ->content_is("auth.html.ep dynamic\n");
-    
-    $t->get_ok('/auth2.html')
-        ->status_is(401)
-        ->header_is('www-authenticate', 'Basic realm=Secret Area');
-    
-    $t->get_ok('/auth2.html', {Authorization => "Basic dXNlcjpwYXNz"})
-        ->status_is(401)
-        ->header_is('www-authenticate', 'Basic realm=Secret Area');
-    
-    $t->get_ok('/auth2.html', {Authorization => "Basic dXNlcjI6cGFzczI="})
-        ->status_is(200)
-        ->content_is("auth2.html");
+my $app;
+my $t;
+
+$app = Marquee->new;
+$app->document_root("$FindBin::Bin/public_html");
+$app->log_file("$FindBin::Bin/Marquee.log");
+
+$app->plugin(Auth => [
+    qr{^/auth\.html} => 'Secret Area2' => sub {
+        $_[0] eq 'user' && $_[1] eq 'pass';
+    },
+    qr{^/auth2\.html} => sub {
+        $_[0] eq 'user2' && $_[1] eq 'pass2';
+    },
+]);
+
+$t = Test::Mojo->new($app);
+
+$t->get_ok('/index.txt')
+    ->status_is(200)
+    ->content_is("static <%= time() %>");
+
+$t->get_ok('/auth.html')
+    ->status_is(401)
+    ->header_is('www-authenticate', 'Basic realm=Secret Area2');
+
+$t->get_ok('/auth.html', {Authorization => "Basic dXNlcjpwYXNzMg=="})
+    ->status_is(401)
+    ->header_is('www-authenticate', 'Basic realm=Secret Area2');
+
+$t->get_ok('/auth.html', {Authorization => "Basic dXNlcjpwYXNz"})
+    ->status_is(200)
+    ->content_is("auth.html.ep dynamic\n");
+
+$t->get_ok('/auth2.html')
+    ->status_is(401)
+    ->header_is('www-authenticate', 'Basic realm=Secret Area');
+
+$t->get_ok('/auth2.html', {Authorization => "Basic dXNlcjpwYXNz"})
+    ->status_is(401)
+    ->header_is('www-authenticate', 'Basic realm=Secret Area');
+
+$t->get_ok('/auth2.html', {Authorization => "Basic dXNlcjI6cGFzczI="})
+    ->status_is(200)
+    ->content_is("auth2.html");
 
 __END__

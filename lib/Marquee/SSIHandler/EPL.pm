@@ -6,48 +6,48 @@ use Marquee::Cache;
 use Mojo::Util qw/encode md5_sum/;
 use Mojo::Template;
 
-    __PACKAGE__->attr('template_cache' => sub {Marquee::Cache->new});
-    
-    ### --
-    ### Accessor to template cache
-    ### --
-    sub cache {
-        my ($self, $path, $mt, $expire) = @_;
-        
-        my $cache = $self->template_cache;
-        my $key = md5_sum(encode('UTF-8', $path));
-        if ($mt) {
-            $cache->set($key, $mt, $expire);
-        } else {
-            $cache->get($key);
-        }
-    }
+__PACKAGE__->attr('template_cache' => sub {Marquee::Cache->new});
 
-    ### --
-    ### EPL handler
-    ### --
-    sub render {
-        my ($self, $path) = @_;
-        
-        my $c = Marquee->c;
-        
-        my $mt = $self->cache($path);
-        
-        if (! $mt) {
-            $mt = Mojo::Template->new;
-            $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
-        }
-        
-        my $output;
-        
-        if ($mt->compiled) {
-            $output = $mt->interpret($self, $c);
-        } else {
-            $output = $mt->render_file($path, $self, $c);
-        }
-        
-        return ref $output ? die $output : $output;
+### --
+### Accessor to template cache
+### --
+sub cache {
+    my ($self, $path, $mt, $expire) = @_;
+    
+    my $cache = $self->template_cache;
+    my $key = md5_sum(encode('UTF-8', $path));
+    if ($mt) {
+        $cache->set($key, $mt, $expire);
+    } else {
+        $cache->get($key);
     }
+}
+
+### --
+### EPL handler
+### --
+sub render {
+    my ($self, $path) = @_;
+    
+    my $c = Marquee->c;
+    
+    my $mt = $self->cache($path);
+    
+    if (! $mt) {
+        $mt = Mojo::Template->new;
+        $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
+    }
+    
+    my $output;
+    
+    if ($mt->compiled) {
+        $output = $mt->interpret($self, $c);
+    } else {
+        $output = $mt->render_file($path, $self, $c);
+    }
+    
+    return ref $output ? die $output : $output;
+}
 
 1;
 

@@ -2,31 +2,31 @@ package Marquee::Stash;
 use strict;
 use warnings;
 use Mojo::Base -base;
-    
-    sub get {
-        my $self = shift;
-        if (! $_[0]) {
-            return $self;
-        }
-        
-        return $self->{$_[0]};
+
+sub get {
+    my $self = shift;
+    if (! $_[0]) {
+        return $self;
     }
     
-    sub set {
-        my $self = shift;
-        my $values = ref $_[0] ? $_[0] : {@_};
-        for my $key (keys %$values) {
-            $self->{$key} = $values->{$key};
-        }
+    return $self->{$_[0]};
+}
+
+sub set {
+    my $self = shift;
+    my $values = ref $_[0] ? $_[0] : {@_};
+    for my $key (keys %$values) {
+        $self->{$key} = $values->{$key};
     }
-    
-    ### --
-    ### Clone
-    ### --
-    sub clone {
-        my $self = shift;
-        (ref $self)->new(%{$self}, @_);
-    }
+}
+
+### --
+### Clone
+### --
+sub clone {
+    my $self = shift;
+    (ref $self)->new(%{$self}, @_);
+}
 
 1;
 

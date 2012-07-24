@@ -19,391 +19,391 @@ use Marquee::SSIHandler::EPL;
 use Marquee::Stash;
 use Marquee::ErrorDocument;
 our $VERSION = '0.06';
-    
-    our $CONTEXT;
 
-    __PACKAGE__->attr('document_root');
-    __PACKAGE__->attr('default_file');
-    __PACKAGE__->attr(error_document => sub {Marquee::ErrorDocument->new});
-    __PACKAGE__->attr('log_file');
-    __PACKAGE__->attr(hooks => sub {Marquee::Hooks->new});
-    __PACKAGE__->attr(roots => sub {[]});
-    __PACKAGE__->attr(secret => sub {md5_hex($^T. $$. rand(1000000))});
-    __PACKAGE__->attr(ssi_handlers => sub {{}});
-    __PACKAGE__->attr(stash => sub {Marquee::Stash->new});
-    __PACKAGE__->attr(types => sub { Mojolicious::Types->new });
-    __PACKAGE__->attr('under_development' => 0);
-    __PACKAGE__->attr('x_powered_by' => 'Marquee(Perl)');
+our $CONTEXT;
+
+__PACKAGE__->attr('document_root');
+__PACKAGE__->attr('default_file');
+__PACKAGE__->attr(error_document => sub {Marquee::ErrorDocument->new});
+__PACKAGE__->attr('log_file');
+__PACKAGE__->attr(hooks => sub {Marquee::Hooks->new});
+__PACKAGE__->attr(roots => sub {[]});
+__PACKAGE__->attr(secret => sub {md5_hex($^T. $$. rand(1000000))});
+__PACKAGE__->attr(ssi_handlers => sub {{}});
+__PACKAGE__->attr(stash => sub {Marquee::Stash->new});
+__PACKAGE__->attr(types => sub { Mojolicious::Types->new });
+__PACKAGE__->attr('under_development' => 0);
+__PACKAGE__->attr('x_powered_by' => 'Marquee(Perl)');
+
+### --
+### Constructor
+### --
+sub new {
+    my $self = shift->SUPER::new(@_);
     
-    ### --
-    ### Constructor
-    ### --
-    sub new {
-        my $self = shift->SUPER::new(@_);
-        
-        ### hook points
-        $self->hook(around_dispatch => sub {
-            shift;
-            $CONTEXT->app->dispatch;
-        });
-        $self->hook(around_static => sub {
-            shift;
-            $CONTEXT->app->serve_static(@_);
-        });
-        $self->hook(around_dynamic => sub {
-            shift;
-            $CONTEXT->app->serve_dynamic(@_);
-        });
-        
-        $self->add_handler(ep => Marquee::SSIHandler::EP->new);
-        $self->add_handler(epl => Marquee::SSIHandler::EPL->new);
-        
-        # base path for CGI environment
-        if ($ENV{DOCUMENT_ROOT} && ! defined $ENV{MARQUEE_BASE_PATH}) {
-            my $tmp = $self->home->to_string;
-            if ($tmp =~ s{^$ENV{DOCUMENT_ROOT}}{}) {
-                $ENV{MARQUEE_BASE_PATH} = $tmp;
-            }
+    ### hook points
+    $self->hook(around_dispatch => sub {
+        shift;
+        $CONTEXT->app->dispatch;
+    });
+    $self->hook(around_static => sub {
+        shift;
+        $CONTEXT->app->serve_static(@_);
+    });
+    $self->hook(around_dynamic => sub {
+        shift;
+        $CONTEXT->app->serve_dynamic(@_);
+    });
+    
+    $self->add_handler(ep => Marquee::SSIHandler::EP->new);
+    $self->add_handler(epl => Marquee::SSIHandler::EPL->new);
+    
+    # base path for CGI environment
+    if ($ENV{DOCUMENT_ROOT} && ! defined $ENV{MARQUEE_BASE_PATH}) {
+        my $tmp = $self->home->to_string;
+        if ($tmp =~ s{^$ENV{DOCUMENT_ROOT}}{}) {
+            $ENV{MARQUEE_BASE_PATH} = $tmp;
         }
-        
-        return $self;
     }
     
-    ### --
-    ### Add SSI handler
-    ### --
-    sub add_handler {
-        my ($self, $name, $handler) = @_;
-        $self->ssi_handlers->{$name} = $handler;
-        return $self;
-    }
+    return $self;
+}
 
-    ### --
-    ### Shortcut for context
-    ### --
-    sub c {
-        return $_[1] ? $CONTEXT = $_[1] : $CONTEXT;
+### --
+### Add SSI handler
+### --
+sub add_handler {
+    my ($self, $name, $handler) = @_;
+    $self->ssi_handlers->{$name} = $handler;
+    return $self;
+}
+
+### --
+### Shortcut for context
+### --
+sub c {
+    return $_[1] ? $CONTEXT = $_[1] : $CONTEXT;
+}
+
+### --
+### Accessor for localized context
+### --
+sub context {
+    return $_[1] ? $CONTEXT = $_[1] : $CONTEXT;
+}
+
+### --
+### dispatch
+### --
+sub dispatch {
+    my ($self) = @_;
+    
+    my $tx = $CONTEXT->tx;
+    my $path = $tx->req->url->path->clone->canonicalize;
+    
+    if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
+        return;
     }
     
-    ### --
-    ### Accessor for localized context
-    ### --
-    sub context {
-        return $_[1] ? $CONTEXT = $_[1] : $CONTEXT;
-    }
-    
-    ### --
-    ### dispatch
-    ### --
-    sub dispatch {
-        my ($self) = @_;
-        
-        my $tx = $CONTEXT->tx;
-        my $path = $tx->req->url->path->clone->canonicalize;
-        
-        if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
+    if (! $CONTEXT->served) {
+        if ($path =~ /$self->{_handler_re}/) {
+            $self->error_document->serve(403);
             return;
         }
+    }
+    
+    if (! $CONTEXT->served) {
+        my $path = _auto_fill_filename($path->clone, $self->default_file);
+        $path->leading_slash(0);
+        $path = "$path";
         
-        if (! $CONTEXT->served) {
-            if ($path =~ /$self->{_handler_re}/) {
-                $self->error_document->serve(403);
-                return;
-            }
-        }
-        
-        if (! $CONTEXT->served) {
-            my $path = _auto_fill_filename($path->clone, $self->default_file);
-            $path->leading_slash(0);
-            $path = "$path";
-            
-            if (my $try1 = $self->search_static($path)) {
-                $self->hooks->emit_chain('around_static', $try1);
-            } elsif (my $try2 = $self->search_template($path)) {
-                $self->hooks->emit_chain('around_dynamic', $try2);
-            }
-        }
-        
-        if (! $CONTEXT->served) {
-            if (! $path->trailing_slash && scalar @{$path->parts}
-                                                && $self->is_directory($path)) {
-                my $uri = $tx->req->url->clone->path(
-                                    $path->clone->trailing_slash(1))->to_abs;
-                $self->serve_redirect($uri);
-            }
+        if (my $try1 = $self->search_static($path)) {
+            $self->hooks->emit_chain('around_static', $try1);
+        } elsif (my $try2 = $self->search_template($path)) {
+            $self->hooks->emit_chain('around_dynamic', $try2);
         }
     }
     
-    ### --
-    ### handler
-    ### --
-    sub handler {
-        my ($self, $tx) = @_;
-        
-        local $CONTEXT = Marquee::Context->new(app => $self, tx => $tx);
-        
-        $self->_init;
-        
-        $tx->res->headers->header('X-Powered-By' => $self->x_powered_by);
+    if (! $CONTEXT->served) {
+        if (! $path->trailing_slash && scalar @{$path->parts}
+                                            && $self->is_directory($path)) {
+            my $uri = $tx->req->url->clone->path(
+                                $path->clone->trailing_slash(1))->to_abs;
+            $self->serve_redirect($uri);
+        }
+    }
+}
 
-        eval {
-            $self->hooks->emit_chain('around_dispatch');
-        };
-        
-        if ($@) {
-            $self->log->fatal("Processing request failed: $@");
-            $self->error_document->serve(500, $@);
-        }
-        
-        if (! $CONTEXT->served) {
-            $self->error_document->serve(404);
-            $self->log->fatal($tx->req->url->path. qq{ Not found});
-        }
-        
-        $tx->resume;
+### --
+### handler
+### --
+sub handler {
+    my ($self, $tx) = @_;
+    
+    local $CONTEXT = Marquee::Context->new(app => $self, tx => $tx);
+    
+    $self->_init;
+    
+    $tx->res->headers->header('X-Powered-By' => $self->x_powered_by);
+
+    eval {
+        $self->hooks->emit_chain('around_dispatch');
+    };
+    
+    if ($@) {
+        $self->log->fatal("Processing request failed: $@");
+        $self->error_document->serve(500, $@);
     }
     
-    ### --
-    ### Add hook
-    ### --
-    sub hook {
-        shift->hooks->on(@_);
+    if (! $CONTEXT->served) {
+        $self->error_document->serve(404);
+        $self->log->fatal($tx->req->url->path. qq{ Not found});
     }
     
-    ### --
-    ### Check if the path is a directory or not
-    ### --
-    sub is_directory {
-        my ($self, $path) = @_;
-        
-        for my $root (@{$self->roots}) {
-            my $path = File::Spec->catdir($root, $path);
-            if (-d $path) {
-                return 1;
-            }
+    $tx->resume;
+}
+
+### --
+### Add hook
+### --
+sub hook {
+    shift->hooks->on(@_);
+}
+
+### --
+### Check if the path is a directory or not
+### --
+sub is_directory {
+    my ($self, $path) = @_;
+    
+    for my $root (@{$self->roots}) {
+        my $path = File::Spec->catdir($root, $path);
+        if (-d $path) {
+            return 1;
         }
     }
+}
+
+### --
+### detect mimt type out of path name
+### --
+sub path_to_type {
+    my ($self, $path) = @_;
+    if (my $ext = ($path =~ qr{\.(\w+)(?:\.\w+)?$})[0]) {
+        return $self->types->type($ext);
+    }
+}
+
+### --
+### Register plugin
+### --
+sub plugin {
+    my ($self, $name, $args) = @_;
     
-    ### --
-    ### detect mimt type out of path name
-    ### --
-    sub path_to_type {
-        my ($self, $path) = @_;
-        if (my $ext = ($path =~ qr{\.(\w+)(?:\.\w+)?$})[0]) {
-            return $self->types->type($ext);
+    my $prefix = 'Marquee::Plugin';
+    if ($prefix) {
+        unless ($name =~ s/^\+// || $name =~ /^$prefix/) {
+            $name = "$prefix\::$name";
         }
     }
-    
-    ### --
-    ### Register plugin
-    ### --
-    sub plugin {
-        my ($self, $name, $args) = @_;
-        
-        my $prefix = 'Marquee::Plugin';
-        if ($prefix) {
-            unless ($name =~ s/^\+// || $name =~ /^$prefix/) {
-                $name = "$prefix\::$name";
-            }
-        }
-        if (! $name->can('register')) {
-            my $file = $name;
-            $file =~ s!::!/!g;
-            require "$file.pm"; ## no critic
-        }
-        my $plug = $name->new;
-        $plug->register($self, $args);
-        return $plug;
+    if (! $name->can('register')) {
+        my $file = $name;
+        $file =~ s!::!/!g;
+        require "$file.pm"; ## no critic
     }
+    my $plug = $name->new;
+    $plug->register($self, $args);
+    return $plug;
+}
+
+### --
+### detect and render
+### --
+sub render_ssi {
+    my ($self, $path) = @_;
+    my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
+    if (my $handler = $self->ssi_handlers->{$ext}) {
+        return $handler->render_traceable($path);
+    } else {
+        die "SSI handler not detected for $path";
+    }
+}
+
+### --
+### search static file
+### --
+sub search_static {
+    my ($self, $path) = @_;
     
-    ### --
-    ### detect and render
-    ### --
-    sub render_ssi {
-        my ($self, $path) = @_;
-        my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
-        if (my $handler = $self->ssi_handlers->{$ext}) {
-            return $handler->render_traceable($path);
-        } else {
-            die "SSI handler not detected for $path";
+    for my $root (($path =~ qr{^/}) ? undef : @{$self->roots}) {
+        my $path = File::Spec->catdir($root, $path);
+        if (-f $path) {
+            return $path;
         }
     }
+}
+
+### --
+### search template
+### --
+sub search_template {
+    my ($self, $path) = @_;
     
-    ### --
-    ### search static file
-    ### --
-    sub search_static {
-        my ($self, $path) = @_;
-        
-        for my $root (($path =~ qr{^/}) ? undef : @{$self->roots}) {
-            my $path = File::Spec->catdir($root, $path);
+    for my $root (($path =~ qr{^/}) ? undef : @{$self->roots}) {
+        for my $ext (keys %{$self->ssi_handlers}) {
+            my $path = File::Spec->catdir($root, "$path.$ext");
             if (-f $path) {
                 return $path;
             }
         }
     }
+}
+
+### --
+### serve redirect
+### --
+sub serve_redirect {
+    my ($self, $uri) = @_;
     
-    ### --
-    ### search template
-    ### --
-    sub search_template {
-        my ($self, $path) = @_;
-        
-        for my $root (($path =~ qr{^/}) ? undef : @{$self->roots}) {
-            for my $ext (keys %{$self->ssi_handlers}) {
-                my $path = File::Spec->catdir($root, "$path.$ext");
-                if (-f $path) {
-                    return $path;
-                }
-            }
+    my $tx = $CONTEXT->tx;
+    $tx->res->code(301);
+    $tx->res->headers->location($self->to_abs($uri)->to_string);
+    return $self;
+}
+
+### --
+### serve static content
+### --
+sub serve_static {
+    my ($self, $path) = @_;
+    
+    my $asset = Mojo::Asset::File->new(path => $path);
+    my $modified = (stat $path)[9];
+    
+    my $tx = $CONTEXT->tx;
+    
+    # If modified since
+    my $req_headers = $tx->req->headers;
+    my $res_headers = $tx->res->headers;
+    if (my $date = $req_headers->if_modified_since) {
+        my $since = Mojo::Date->new($date)->epoch;
+        if (defined $since && $since == $modified) {
+            $res_headers->remove('Content-Type')
+                ->remove('Content-Length')
+                ->remove('Content-Disposition');
+            return $tx->res->code(304);
         }
     }
     
-    ### --
-    ### serve redirect
-    ### --
-    sub serve_redirect {
-        my ($self, $uri) = @_;
-        
-        my $tx = $CONTEXT->tx;
-        $tx->res->code(301);
-        $tx->res->headers->location($self->to_abs($uri)->to_string);
-        return $self;
+    $tx->res->content->asset($asset);
+    $tx->res->code(200);
+    $res_headers->last_modified(Mojo::Date->new($modified));
+    if (my $type = $self->path_to_type($path)) {
+        $tx->res->headers->content_type($type);
     }
     
-    ### --
-    ### serve static content
-    ### --
-    sub serve_static {
-        my ($self, $path) = @_;
-        
-        my $asset = Mojo::Asset::File->new(path => $path);
-        my $modified = (stat $path)[9];
-        
+    return $self;
+}
+
+### --
+### serve dynamic content
+### --
+sub serve_dynamic {
+    my ($self, $path) = @_;
+    
+    my $ret = $self->render_ssi($path);
+    
+    if (defined $ret) {
         my $tx = $CONTEXT->tx;
-        
-        # If modified since
-        my $req_headers = $tx->req->headers;
-        my $res_headers = $tx->res->headers;
-        if (my $date = $req_headers->if_modified_since) {
-            my $since = Mojo::Date->new($date)->epoch;
-            if (defined $since && $since == $modified) {
-                $res_headers->remove('Content-Type')
-                    ->remove('Content-Length')
-                    ->remove('Content-Disposition');
-                return $tx->res->code(304);
-            }
-        }
-        
-        $tx->res->content->asset($asset);
+        $tx->res->body(encode('UTF-8', $ret));
         $tx->res->code(200);
-        $res_headers->last_modified(Mojo::Date->new($modified));
         if (my $type = $self->path_to_type($path)) {
             $tx->res->headers->content_type($type);
         }
-        
-        return $self;
     }
     
-    ### --
-    ### serve dynamic content
-    ### --
-    sub serve_dynamic {
-        my ($self, $path) = @_;
-        
-        my $ret = $self->render_ssi($path);
-        
-        if (defined $ret) {
-            my $tx = $CONTEXT->tx;
-            $tx->res->body(encode('UTF-8', $ret));
-            $tx->res->code(200);
-            if (my $type = $self->path_to_type($path)) {
-                $tx->res->headers->content_type($type);
-            }
-        }
-        
-        return $self;
-    }
-    
-    ### --
-    ### start app
-    ### --
-    sub start {
-        my $self = $ENV{MOJO_APP} = shift;
-        $self->_init;
-        Mojolicious::Commands->start;
-    }
-    
-    ### --
-    ### auto fill files
-    ### --
-    sub _auto_fill_filename {
-        my ($path, $default) = @_;
-        if ($default) {
-            if ($path->trailing_slash || ! @{$path->parts}) {
-                push(@{$path->parts}, $default);
-                $path->trailing_slash(0);
-            }
-        }
-        return $path;
-    }
+    return $self;
+}
 
-    ### ---
-    ### Asset directory
-    ### ---
-    sub asset {
-        my $class = shift;
-        my $pm = $class. '.pm';
-        $pm =~ s{::}{/}g;
-        my @seed = (substr($INC{$pm}, 0, -3), 'Asset');
-        if ($_[0]) {
-            return File::Spec->catdir(@seed, $_[0]);
-        }
-        return File::Spec->catdir(@seed);
-    }
-    
-    ### --
-    ### init
-    ### --
-    sub _init {
-        my $self = shift;
-        
-        if ($self->{_inited}) {
-            return;
-        }
-        $self->{_inited} = 1;
-        
-        if (! -d $self->document_root) {
-            die 'document_root is not a directory';
-        }
-        
-        unshift(@{$self->roots}, $self->document_root, __PACKAGE__->asset());
+### --
+### start app
+### --
+sub start {
+    my $self = $ENV{MOJO_APP} = shift;
+    $self->_init;
+    Mojolicious::Commands->start;
+}
 
-        $self->{_handler_re} =
-                    '\.(?:'. join('|', keys %{$self->ssi_handlers}). ')$';
-        
-        if ($self->log_file) {
-            $self->log->path($self->log_file);
+### --
+### auto fill files
+### --
+sub _auto_fill_filename {
+    my ($path, $default) = @_;
+    if ($default) {
+        if ($path->trailing_slash || ! @{$path->parts}) {
+            push(@{$path->parts}, $default);
+            $path->trailing_slash(0);
         }
+    }
+    return $path;
+}
+
+### ---
+### Asset directory
+### ---
+sub asset {
+    my $class = shift;
+    my $pm = $class. '.pm';
+    $pm =~ s{::}{/}g;
+    my @seed = (substr($INC{$pm}, 0, -3), 'Asset');
+    if ($_[0]) {
+        return File::Spec->catdir(@seed, $_[0]);
+    }
+    return File::Spec->catdir(@seed);
+}
+
+### --
+### init
+### --
+sub _init {
+    my $self = shift;
+    
+    if ($self->{_inited}) {
+        return;
+    }
+    $self->{_inited} = 1;
+    
+    if (! -d $self->document_root) {
+        die 'document_root is not a directory';
     }
     
-    ### --
-    ### generate absolute uri
-    ### --
-    sub to_abs {
-        my ($self, $url) = @_;
-        
-        $url = Mojo::URL->new($url);
-        
-        if (! $url->scheme) {
-            my $tx = $CONTEXT->tx;
-            my $base = $tx->req->url->clone;
-            $base->userinfo(undef);
-            $url->base($base);
-        }
-        
-        return $url->to_abs;
+    unshift(@{$self->roots}, $self->document_root, __PACKAGE__->asset());
+
+    $self->{_handler_re} =
+                '\.(?:'. join('|', keys %{$self->ssi_handlers}). ')$';
+    
+    if ($self->log_file) {
+        $self->log->path($self->log_file);
     }
+}
+
+### --
+### generate absolute uri
+### --
+sub to_abs {
+    my ($self, $url) = @_;
+    
+    $url = Mojo::URL->new($url);
+    
+    if (! $url->scheme) {
+        my $tx = $CONTEXT->tx;
+        my $base = $tx->req->url->clone;
+        $base->userinfo(undef);
+        $url->base($base);
+    }
+    
+    return $url->to_abs;
+}
 
 1;
 

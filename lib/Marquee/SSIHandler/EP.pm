@@ -7,238 +7,238 @@ use Mojo::ByteStream;
 use Mojo::Template;
 use Mojo::Path;
 use Carp;
+
+### --
+### Function definitions for inside template
+### --
+__PACKAGE__->attr(funcs => sub {{}});
+
+### --
+### Check if the name exists as a subroutine
+### --
+sub _func_exists {
+    if ($_[0] =~ /\W/) {
+        croak "Function name must be consitsts of [a-bA-B0-9]";
+    }
+    no warnings;
+    my $package = __PACKAGE__. "::_SandBox";
+    eval "{package $package; $_[0]()}"; ## no critic
+    if ($@ !~ /Undefined subroutine/) {
+        return 1;
+    }
+    no strict 'refs';
+    %{$package.'::'} = ();
+    return;
+};
+
+### --
+### Add function
+### --
+sub add_function {
+    my ($self, $name, $cb) = @_;
     
-    ### --
-    ### Function definitions for inside template
-    ### --
-    __PACKAGE__->attr(funcs => sub {{}});
+    if ($name =~ /\W/) {
+        croak "Function name must be consitsts of [a-bA-B0-9]";
+    }
+    if (_func_exists($name)) {
+        croak qq{Can't modify built-in function $name};
+    }
     
-    ### --
-    ### Check if the name exists as a subroutine
-    ### --
-    sub _func_exists {
-        if ($_[0] =~ /\W/) {
-            croak "Function name must be consitsts of [a-bA-B0-9]";
+    $self->funcs->{$name} = $cb;
+    return $self;
+}
+
+### --
+### ep handler
+### --
+sub render {
+    my ($self, $path) = @_;
+    
+    my $c = Marquee->c;
+    
+    my $mt = $self->cache($path);
+    
+    if (! $mt) {
+        $mt = Mojo::Template->new();
+        $mt->auto_escape(1);
+        
+        # Be a bit more relaxed for helpers
+        my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
+
+        # Helpers
+        $prepend .= 'my $_H = shift; my $_F = $_H->funcs;';
+        for my $name (sort keys %{$self->funcs}) {
+            if ($name =~ /^\w+$/) {
+                $prepend .=
+                "sub $name; *$name = sub {\$_F->{$name}->(\$_H, \@_)};";
+            }
         }
-        no warnings;
-        my $package = __PACKAGE__. "::_SandBox";
-        eval "{package $package; $_[0]()}"; ## no critic
-        if ($@ !~ /Undefined subroutine/) {
-            return 1;
+        
+        $prepend .= 'use strict;';
+        for my $var (keys %{$c->stash}) {
+            if ($var =~ /^\w+$/) {
+                $prepend .= " my \$$var = stash '$var';";
+            }
         }
-        no strict 'refs';
-        %{$package.'::'} = ();
+        $mt->prepend($prepend);
+        
+        $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
+    }
+    
+    my $output;
+    
+    if ($mt->compiled) {
+        $output = $mt->interpret($self, $c);
+    } else {
+        $output = $mt->render_file($path, $self, $c);
+    }
+    
+    return ref $output ? die $output : $output;
+}
+
+### --
+### load preset
+### --
+sub init {
+    my ($self) = @_;
+    
+    $self->funcs->{app} = sub {
+        shift;
+        return Marquee->c->app;
+    };
+    
+    $self->funcs->{param} = sub {
+        shift;
+        return Marquee->c->tx->req->param($_[0]);
+    };
+    
+    $self->funcs->{stash} = sub {
+        shift;
+        my $stash = Marquee->c->stash;
+        if ($_[0] && $_[1]) {
+            return $stash->set(@_);
+        } elsif (! $_[0]) {
+            return $stash;
+        } else {
+            return $stash->{$_[0]};
+        }
+    };
+    
+    $self->funcs->{current_template} = sub {
+        return shift->current_template(@_);
+    };
+    
+    $self->funcs->{dumper} = sub {
+        shift;
+        return Data::Dumper->new([@_])->Indent(1)->Terse(1)->Dump;
+    };
+    
+    $self->funcs->{to_abs} = sub {
+        return shift->_to_abs(@_);
+    };
+    
+    $self->funcs->{include} = sub {
+        my ($self, $path, @args) = @_;
+        
+        my $c = Marquee->c;
+        local $c->{stash} = $c->{stash}->clone;
+        $c->{stash}->set(@args);
+        return
+            Mojo::ByteStream->new($c->app->render_ssi($self->_to_abs($path)));
+    };
+    
+    $self->funcs->{iter} = sub {
+        my $self    = shift;
+        my $block   = pop;
+        
+        my $ret = '';
+        
+        if (ref $_[0] eq 'ARRAY') {
+            my $idx = 0;
+            for my $elem (@{$_[0]}) {
+                $ret .= $block->($elem, $idx++);
+            }
+        } elsif (ref $_[0] eq 'HASH') {
+            for my $key (keys %{$_[0]}) {
+                $ret .= $block->($key, $_[0]->{$key});
+            }
+        } else {
+            my $idx = 0;
+            for my $elem (@_) {
+                $ret .= $block->($elem, $idx++);
+            }
+        }
+        
+        return Mojo::ByteStream->new($ret);
+    };
+    
+    $self->funcs->{override} = sub {
+        my ($self, $name, $value) = @_;
+        my $path = $self->current_template;
+        Marquee->c->stash->set(_ph_name($name) => sub {
+            return $self->render_traceable($path, $value);
+        });
         return;
     };
     
-    ### --
-    ### Add function
-    ### --
-    sub add_function {
-        my ($self, $name, $cb) = @_;
-        
-        if ($name =~ /\W/) {
-            croak "Function name must be consitsts of [a-bA-B0-9]";
-        }
-        if (_func_exists($name)) {
-            croak qq{Can't modify built-in function $name};
-        }
-        
-        $self->funcs->{$name} = $cb;
-        return $self;
-    }
+    $self->funcs->{url_for} = sub {
+        return shift->url_for(@_);
+    };
     
-    ### --
-    ### ep handler
-    ### --
-    sub render {
-        my ($self, $path) = @_;
+    $self->funcs->{placeholder} = sub {
+        my ($self, $name, $defalut) = @_;
+        my $block = Marquee->c->stash->{_ph_name($name)} || $defalut;
+        return $block->() || '';
+    };
+    
+    $self->funcs->{extends} = sub {
+        my ($self, $path, $block) = @_;
         
         my $c = Marquee->c;
         
-        my $mt = $self->cache($path);
+        local $c->{stash} = $c->{stash}->clone;
         
-        if (! $mt) {
-            $mt = Mojo::Template->new();
-            $mt->auto_escape(1);
-            
-            # Be a bit more relaxed for helpers
-            my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
+        $block->();
+        
+        return
+            Mojo::ByteStream->new($c->app->render_ssi($self->_to_abs($path)));
+    };
     
-            # Helpers
-            $prepend .= 'my $_H = shift; my $_F = $_H->funcs;';
-            for my $name (sort keys %{$self->funcs}) {
-                if ($name =~ /^\w+$/) {
-                    $prepend .=
-                    "sub $name; *$name = sub {\$_F->{$name}->(\$_H, \@_)};";
-                }
-            }
-            
-            $prepend .= 'use strict;';
-            for my $var (keys %{$c->stash}) {
-                if ($var =~ /^\w+$/) {
-                    $prepend .= " my \$$var = stash '$var';";
-                }
-            }
-            $mt->prepend($prepend);
-            
-            $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
-        }
-        
-        my $output;
-        
-        if ($mt->compiled) {
-            $output = $mt->interpret($self, $c);
-        } else {
-            $output = $mt->render_file($path, $self, $c);
-        }
-        
-        return ref $output ? die $output : $output;
+    return $self;
+}
+
+### --
+### Generate portable URL
+### --
+sub url_for {
+    my ($self, $path) = @_;
+    $path =~ s{^\.*/}{};
+    my $abs = Mojo::Path->new($ENV{'MARQUEE_BASE_PATH'});
+    $abs->trailing_slash(1);
+    $abs->merge($path);
+    $abs->leading_slash(1);
+    return $abs;
+}
+
+### --
+### Generate safe name for placeholder
+### --
+sub _ph_name {
+    return "mrqe.SSIHandler.EP.". shift;
+}
+
+### --
+### abs
+### --
+sub _to_abs {
+    my ($self, $path) = @_;
+    
+    if ($path =~ qr{^/(.+)}) {
+        return File::Spec->catfile(Marquee->c->app->document_root, $1);
     }
     
-    ### --
-    ### load preset
-    ### --
-    sub init {
-        my ($self) = @_;
-        
-        $self->funcs->{app} = sub {
-            shift;
-            return Marquee->c->app;
-        };
-        
-        $self->funcs->{param} = sub {
-            shift;
-            return Marquee->c->tx->req->param($_[0]);
-        };
-        
-        $self->funcs->{stash} = sub {
-            shift;
-            my $stash = Marquee->c->stash;
-            if ($_[0] && $_[1]) {
-                return $stash->set(@_);
-            } elsif (! $_[0]) {
-                return $stash;
-            } else {
-                return $stash->{$_[0]};
-            }
-        };
-        
-        $self->funcs->{current_template} = sub {
-            return shift->current_template(@_);
-        };
-        
-        $self->funcs->{dumper} = sub {
-            shift;
-            return Data::Dumper->new([@_])->Indent(1)->Terse(1)->Dump;
-        };
-        
-        $self->funcs->{to_abs} = sub {
-            return shift->_to_abs(@_);
-        };
-        
-        $self->funcs->{include} = sub {
-            my ($self, $path, @args) = @_;
-            
-            my $c = Marquee->c;
-            local $c->{stash} = $c->{stash}->clone;
-            $c->{stash}->set(@args);
-            return
-                Mojo::ByteStream->new($c->app->render_ssi($self->_to_abs($path)));
-        };
-        
-        $self->funcs->{iter} = sub {
-            my $self    = shift;
-            my $block   = pop;
-            
-            my $ret = '';
-            
-            if (ref $_[0] eq 'ARRAY') {
-                my $idx = 0;
-                for my $elem (@{$_[0]}) {
-                    $ret .= $block->($elem, $idx++);
-                }
-            } elsif (ref $_[0] eq 'HASH') {
-                for my $key (keys %{$_[0]}) {
-                    $ret .= $block->($key, $_[0]->{$key});
-                }
-            } else {
-                my $idx = 0;
-                for my $elem (@_) {
-                    $ret .= $block->($elem, $idx++);
-                }
-            }
-            
-            return Mojo::ByteStream->new($ret);
-        };
-        
-        $self->funcs->{override} = sub {
-            my ($self, $name, $value) = @_;
-            my $path = $self->current_template;
-            Marquee->c->stash->set(_ph_name($name) => sub {
-                return $self->render_traceable($path, $value);
-            });
-            return;
-        };
-        
-        $self->funcs->{url_for} = sub {
-            return shift->url_for(@_);
-        };
-        
-        $self->funcs->{placeholder} = sub {
-            my ($self, $name, $defalut) = @_;
-            my $block = Marquee->c->stash->{_ph_name($name)} || $defalut;
-            return $block->() || '';
-        };
-        
-        $self->funcs->{extends} = sub {
-            my ($self, $path, $block) = @_;
-            
-            my $c = Marquee->c;
-            
-            local $c->{stash} = $c->{stash}->clone;
-            
-            $block->();
-            
-            return
-                Mojo::ByteStream->new($c->app->render_ssi($self->_to_abs($path)));
-        };
-        
-        return $self;
-    }
-    
-    ### --
-    ### Generate portable URL
-    ### --
-    sub url_for {
-        my ($self, $path) = @_;
-        $path =~ s{^\.*/}{};
-        my $abs = Mojo::Path->new($ENV{'MARQUEE_BASE_PATH'});
-        $abs->trailing_slash(1);
-        $abs->merge($path);
-        $abs->leading_slash(1);
-        return $abs;
-    }
-    
-    ### --
-    ### Generate safe name for placeholder
-    ### --
-    sub _ph_name {
-        return "mrqe.SSIHandler.EP.". shift;
-    }
-    
-    ### --
-    ### abs
-    ### --
-    sub _to_abs {
-        my ($self, $path) = @_;
-        
-        if ($path =~ qr{^/(.+)}) {
-            return File::Spec->catfile(Marquee->c->app->document_root, $1);
-        }
-        
-        return dirname($self->current_template). '/'. $path;
-    }
+    return dirname($self->current_template). '/'. $path;
+}
 
 1;
 

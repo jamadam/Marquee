@@ -4,57 +4,54 @@ use warnings;
 use Mojo::Base -base;
 use Mojo::Cache;
 use Mojo::Util qw'encode';
+
+my %messages = (
+    404 => 'File Not Found',
+    500 => 'Internal Server Error',
+    403 => 'Forbidden',
+);
+
+my $type = Mojolicious::Types->new->type('html');
+
+__PACKAGE__->attr('template', sub {Marquee->asset('error_document.html.ep')});
+__PACKAGE__->attr('status_template' => sub {{}});
+
+### --
+### Serve error document
+### --
+sub serve {
+    my ($self, $code, $message) = @_;
     
-    my %messages = (
-        404 => 'File Not Found',
-        500 => 'Internal Server Error',
-        403 => 'Forbidden',
-    );
+    $message ||= $messages{$code};
     
-    my $type = Mojolicious::Types->new->type('html');
+    my $c           = Marquee->c;
+    my $tx          = $c->tx;
+    my $stash       = $c->stash;
+    my $template    = ($self->status_template)->{$code} || $self->template;
+    my $ep          = $c->app->ssi_handlers->{ep};
     
-    __PACKAGE__->attr('template', sub {
-        Marquee->asset('error_document.html.ep');
-    });
-    
-    __PACKAGE__->attr('status_template' => sub {{}});
-    
-    ### --
-    ### Serve error document
-    ### --
-    sub serve {
-        my ($self, $code, $message) = @_;
-        
-        $message ||= $messages{$code};
-        
-        my $c           = Marquee->c;
-        my $tx          = $c->tx;
-        my $stash       = $c->stash;
-        my $template    = ($self->status_template)->{$code} || $self->template;
-        my $ep          = $c->app->ssi_handlers->{ep};
-        
-        if ($c->app->under_development) {
-            my $snapshot = $stash->clone;
-            $ep->add_function(snapshot => sub {$snapshot});
-            $stash->set(
-                static_dir  => 'static',
-                code        => $code,
-                message     =>
-                    ref $message ? $message : Mojo::Exception->new($message),
-            );
-            $template = Marquee->asset('debug_screen.html.ep');
-        } else {
-            $stash->set(
-                static_dir  => 'static',
-                code        => $code,
-            );
-            $stash->set(message => ref $message ? $messages{$code} : $message);
-        }
-        
-        $tx->res->code($code);
-        $tx->res->body(encode('UTF-8', $ep->render_traceable($template)));
-        $tx->res->headers->content_type($type);
+    if ($c->app->under_development) {
+        my $snapshot = $stash->clone;
+        $ep->add_function(snapshot => sub {$snapshot});
+        $stash->set(
+            static_dir  => 'static',
+            code        => $code,
+            message     =>
+                ref $message ? $message : Mojo::Exception->new($message),
+        );
+        $template = Marquee->asset('debug_screen.html.ep');
+    } else {
+        $stash->set(
+            static_dir  => 'static',
+            code        => $code,
+        );
+        $stash->set(message => ref $message ? $messages{$code} : $message);
     }
+    
+    $tx->res->code($code);
+    $tx->res->body(encode('UTF-8', $ep->render_traceable($template)));
+    $tx->res->headers->content_type($type);
+}
 
 1;
 

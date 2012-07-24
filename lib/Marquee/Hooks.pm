@@ -2,22 +2,22 @@ package Marquee::Hooks;
 use strict;
 use warnings;
 use Mojo::Base 'Mojo::EventEmitter';
+
+### --
+### Emit events as chained hooks
+### --
+sub emit_chain {
+    my ($self, $name, @args) = @_;
     
-    ### --
-    ### Emit events as chained hooks
-    ### --
-    sub emit_chain {
-        my ($self, $name, @args) = @_;
-        
-        my $wrapper;
-        for my $cb (@{$self->subscribers($name)}) {
-            my $next = $wrapper;
-            $wrapper = sub { $cb->($next, @args) };
-        }
-        $wrapper->();
-        
-        return $self;
+    my $wrapper;
+    for my $cb (@{$self->subscribers($name)}) {
+        my $next = $wrapper;
+        $wrapper = sub { $cb->($next, @args) };
     }
+    $wrapper->();
+    
+    return $self;
+}
 
 1;
 

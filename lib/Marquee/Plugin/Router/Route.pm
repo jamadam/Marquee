@@ -2,46 +2,46 @@ package Marquee::Plugin::Router::Route;
 use strict;
 use warnings;
 use Mojo::Base -base;
-    
-    __PACKAGE__->attr('elems', sub {[]});
-    
-    sub bridge {
-        my ($self, $cb) = @_;
-        my $r = __PACKAGE__->new(bridge => $cb);
-        $r->elems($self->elems);
-        return $r;
+
+__PACKAGE__->attr('elems', sub {[]});
+
+sub bridge {
+    my ($self, $cb) = @_;
+    my $r = __PACKAGE__->new(bridge => $cb);
+    $r->elems($self->elems);
+    return $r;
+}
+
+sub route {
+    my ($self, $regex) = @_;
+    my $cond = $self->{bridge} ? [$self->{bridge}] : [];
+    push(@{$self->elems}, $regex, $cond);
+    return $self;
+}
+
+sub to {
+    my ($self, $cb) = @_;
+    push(@{$self->elems}, $cb);
+    return $self;
+}
+
+sub via {
+    my ($self, @methods) = @_;
+    return $self->_add_cond(sub {
+        my $tx = shift;
+        scalar grep {uc $_ eq uc $tx->req->method} @methods;
+    });
+}
+
+sub _add_cond {
+    my ($self, $cond) = @_;
+    my @elems = @{$self->elems};
+    if (ref $elems[$#elems] ne 'ARRAY') {
+        push(@elems, []);
     }
-    
-    sub route {
-        my ($self, $regex) = @_;
-        my $cond = $self->{bridge} ? [$self->{bridge}] : [];
-        push(@{$self->elems}, $regex, $cond);
-        return $self;
-    }
-    
-    sub to {
-        my ($self, $cb) = @_;
-        push(@{$self->elems}, $cb);
-        return $self;
-    }
-    
-    sub via {
-        my ($self, @methods) = @_;
-        return $self->_add_cond(sub {
-            my $tx = shift;
-            scalar grep {uc $_ eq uc $tx->req->method} @methods;
-        });
-    }
-    
-    sub _add_cond {
-        my ($self, $cond) = @_;
-        my @elems = @{$self->elems};
-        if (ref $elems[$#elems] ne 'ARRAY') {
-            push(@elems, []);
-        }
-        unshift(@{$elems[$#elems]}, $cond);
-        return $self;
-    }
+    unshift(@{$elems[$#elems]}, $cond);
+    return $self;
+}
 
 1;
 

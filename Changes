@@ -1,6 +1,6 @@
 Revision history for Marquee
 
-0.06 2012/06/23
+0.06 2012/07/24
   - Added tree mode to auto index.
   - Renamed distribution from MojoSimpleHTTPServer to Marquee.
   - Improved iter function to accept blessed obj in array.

@@ -4,6 +4,7 @@ use warnings;
 use Mojo::Base -base;
 use Mojo::Cache;
 use Mojo::Util qw'encode';
+use Encode 'decode_utf8';
 
 my %messages = (
     404 => 'File Not Found',
@@ -23,6 +24,10 @@ sub serve {
     my ($self, $code, $message) = @_;
     
     $message ||= $messages{$code};
+
+    if (ref $message && $message->can('message')) {
+        $message->message(decode_utf8 $message->message);
+    }
     
     my $c           = Marquee->c;
     my $tx          = $c->tx;

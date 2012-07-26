@@ -596,7 +596,7 @@ Detect MIME type out of path name.
 
     my $type = $app->path_to_type('/path/to/file.css') # text/css
 
-=head2 $instance->plugin('class', @args)
+=head2 $instance->plugin($class => $params)
 
 Load a class as a plugin. The prefix 'Marquee::Plugin' is prepended unless the
 class name C<$class> begins with C<+> sign, which means the class name is

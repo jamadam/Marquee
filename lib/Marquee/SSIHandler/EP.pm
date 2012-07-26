@@ -140,11 +140,20 @@ sub init {
     $self->funcs->{include} = sub {
         my ($self, $path, @args) = @_;
         
+        my $abs_path = $self->_to_abs($path);
         my $c = Marquee->c;
-        local $c->{stash} = $c->{stash}->clone;
-        $c->{stash}->set(@args);
-        return
-            Mojo::ByteStream->new($c->app->render_ssi($self->_to_abs($path)));
+        
+        if (my $abs_path = $c->app->search_static($abs_path)) {
+            return Mojo::Asset::File->new(path => $abs_path)->slurp;
+        }
+        
+        if (my $abs_path = $c->app->search_template($abs_path)) {
+            local $c->{stash} = $c->{stash}->clone;
+            $c->{stash}->set(@args);
+            return Mojo::ByteStream->new($c->app->render_ssi($abs_path));
+        }
+        
+        die "$abs_path not found";
     };
     
     $self->funcs->{iter} = sub {
@@ -201,7 +210,7 @@ sub init {
         $block->();
         
         return
-            Mojo::ByteStream->new($c->app->render_ssi($self->_to_abs($path)));
+            Mojo::ByteStream->new($c->app->render_ssi($self->_to_abs($path. '.ep')));
     };
     
     return $self;
@@ -305,7 +314,7 @@ Base template.
 
 Extended template.
 
-    <%= extends './layout/common.html.ep' => begin %>
+    <%= extends './layout/common.html' => begin %>
         <% override 'title' => begin %>
             title
         <% end %>
@@ -339,12 +348,13 @@ Array refs and Hash refs are also accepted.
         <%= $key %> is <%= $value %>
     <% end %>
 
-=head2 include('./path/to/template.html.ep', key => value)
+=head2 include('./path/to/template.html', key => value)
 
-Include a template into current template. The path can be relative to
-current template directory or relative to document root if leading slashed.
+Include a template or a static files into current template. The path can be
+relative to current template directory or relative to document root if leading
+slashed. 
 
-    <%= include('./path/to/template.html.ep', key => value) %>
+    <%= include('./path/to/template.html', key => value) %>
 
 =head2 override($name, $block)
 

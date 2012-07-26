@@ -1,7 +1,7 @@
 <current_template1><%= current_template %></current_template1>
 <current_template2><%= current_template(1) %></current_template2>
 <layout>
-    <%= extends './layout/common.html.ep' => begin %>
+    <%= extends './layout/common.html' => begin %>
         <% override 'title' => begin %>
             タイトル
         <% end %>

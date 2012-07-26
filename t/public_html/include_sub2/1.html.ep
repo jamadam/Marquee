@@ -2,5 +2,5 @@
 <current_template><%= current_template() %></current_template>
 <parent_template><%= current_template(1) %></parent_template>
 <parent_template2><%= current_template(2) %></parent_template2>
-<test1><%= include('./2.html.ep') =%></test1>
-<test2><%= include('/include_sub.html.ep') =%></test2>
+<test1><%= include('./2.html') =%></test1>
+<test2><%= include('/include_sub.html') =%></test2>

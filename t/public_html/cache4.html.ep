@@ -1,1 +1,1 @@
-<%= include './cache4_sub.html.ep' =%>
+<%= include './cache4_sub.html' =%>

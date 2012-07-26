@@ -86,13 +86,13 @@ $t->get_ok('/include.html')
     ->text_like('current_template', qr'public_html/include.html.ep$')
     ->text_like('current_template2', qr'public_html/include.html.ep$')
     ->text_is('test1 filename', 'include_sub.html.ep')
-    ->text_like('test1 current_template', qr'public_html/./include_sub.html.ep$')
+    ->text_like('test1 current_template', qr'public_html/include_sub.html.ep$')
     ->text_is('test2 filename', '/include_sub2/1.html.ep')
-    ->text_like('test2 current_template', qr'public_html/./include_sub2/1.html.ep$')
+    ->text_like('test2 current_template', qr'public_html/include_sub2/1.html.ep$')
     ->text_like('test2 parent_template', qr'/include.html.ep$')
     ->text_is('test2 parent_template2', '')
     ->text_is('test2 test1 filename', '/include_sub2/2.html.ep')
-    ->text_like('test2 test1 current_template', qr'public_html/./include_sub2/./2.html.ep$')
+    ->text_like('test2 test1 current_template', qr'public_html/include_sub2/2.html.ep$')
     ->text_like('test2 test2 filename', qr'include_sub.html.ep$')
     ->text_is('test3 myarg', 'myarg value')
     ->text_is('test3 stash_leak', '');
@@ -123,12 +123,12 @@ $t->get_ok('/use_layout.html')
         $t->at('current_template1')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
         $t->at('current_template2')->text_is("");
         $t->at('use_layout current_template3')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
-        $t->at('use_layout current_template4')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
+        $t->at('use_layout current_template4')->text_is("$FindBin::Bin/public_html/layout/common.html.ep");
         $t->at('use_layout current_template5')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
         $t->at('use_layout current_template6')->text_is("");
-        $t->at('layout current_template1')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
-        $t->at('layout #main2 current_template2')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
-        $t->at('layout #main2 current_template3')->text_is("$FindBin::Bin/public_html/./layout/common.html.ep");
+        $t->at('layout current_template1')->text_is("$FindBin::Bin/public_html/layout/common.html.ep");
+        $t->at('layout #main2 current_template2')->text_is("$FindBin::Bin/public_html/layout/common.html.ep");
+        $t->at('layout #main2 current_template3')->text_is("$FindBin::Bin/public_html/layout/common.html.ep");
         $t->at('layout #main2 current_template4')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
         $t->at('layout #main2 current_template5')->text_is("");
         $t->at('layout #namespace_test')->text_is("global stash content");

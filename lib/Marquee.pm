@@ -235,7 +235,7 @@ sub render_ssi {
 sub search_static {
     my ($self, $path) = @_;
     
-    for my $root (($path =~ qr{^/}) ? undef : @{$self->roots}) {
+    for my $root (($path =~ qr{^/}) ? '' : @{$self->roots}) {
         my $path = File::Spec->catdir($root, $path);
         if (-f $path) {
             return $path;

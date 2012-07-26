@@ -233,11 +233,12 @@ sub _ph_name {
 sub _to_abs {
     my ($self, $path) = @_;
     
-    if ($path =~ qr{^/(.+)}) {
-        return File::Spec->catfile(Marquee->c->app->document_root, $1);
-    }
+    (my $root, $path) =
+        ($path =~ qr{^/(.+)})
+            ? (Marquee->c->app->document_root, $1)
+            : (dirname($self->current_template), $path);
     
-    return dirname($self->current_template). '/'. $path;
+    return File::Spec->canonpath(File::Spec->catfile($root, $path));
 }
 
 1;

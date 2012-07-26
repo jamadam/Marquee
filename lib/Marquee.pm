@@ -200,12 +200,10 @@ sub path_to_type {
 sub plugin {
     my ($self, $name, $args) = @_;
     
-    my $prefix = 'Marquee::Plugin';
-    if ($prefix) {
-        unless ($name =~ s/^\+// || $name =~ /^$prefix/) {
-            $name = "$prefix\::$name";
-        }
+    unless ($name =~ s/^\+//) {
+        $name = "Marquee::Plugin\::$name";
     }
+    
     if (! $name->can('register')) {
         my $file = $name;
         $file =~ s!::!/!g;
@@ -600,7 +598,12 @@ Detect MIME type out of path name.
 
 =head2 $instance->plugin('class', @args)
 
-    my $plugin = $app->plugin(PluginName => $params);
+Load a class as a plugin. The prefix 'Marquee::Plugin' is prepended unless the
+class name C<$class> begins with C<+> sign, which means the class name is
+already fully qualified.
+
+    my $plugin = $app->plugin(Plugin => $params); # Marquee::Plugin::PlugName
+    my $plugin = $app->plugin('+NameSpace::Plugin' => $params); # NameSpace::Plugin
 
 =head2 $instance->render_ssi($path)
 

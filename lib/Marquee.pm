@@ -185,7 +185,7 @@ sub is_directory {
 }
 
 ### --
-### detect mimt type out of path name
+### detect mime type out of path name
 ### --
 sub path_to_type {
     my ($self, $path) = @_;

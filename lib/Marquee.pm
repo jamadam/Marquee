@@ -646,6 +646,15 @@ Starts app
 
     $app->start();
 
+=head2 $instance->to_abs
+
+Generates absolute URI for given path along to the request URI.
+    
+    say $self->to_abs('/path/to/file.html');
+
+On request to https://example.com:3001/a/index.html
+The example above generates https://example.com:3001/path/to/file.html
+
 =head1 SEE ALSO
 
 L<Mojolicious>

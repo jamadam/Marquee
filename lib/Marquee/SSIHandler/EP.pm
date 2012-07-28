@@ -144,7 +144,9 @@ sub init {
         my $c = Marquee->c;
         
         if (my $abs_path = $c->app->search_static($abs_path)) {
-            return Mojo::Asset::File->new(path => $abs_path)->slurp;
+            return Mojo::ByteStream->new(
+                Encode::decode_utf8(
+                    Mojo::Asset::File->new(path => $abs_path)->slurp));
         }
         
         if (my $abs_path = $c->app->search_template($abs_path)) {

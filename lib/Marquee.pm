@@ -247,7 +247,7 @@ sub search_static {
 sub search_template {
     my ($self, $path) = @_;
     
-    for my $root (($path =~ qr{^/}) ? undef : @{$self->roots}) {
+    for my $root (($path =~ qr{^/}) ? '' : @{$self->roots}) {
         for my $ext (keys %{$self->ssi_handlers}) {
             my $path = File::Spec->catdir($root, "$path.$ext");
             if (-f $path) {

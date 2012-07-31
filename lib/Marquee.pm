@@ -160,6 +160,8 @@ sub handler {
         $self->log->fatal($tx->req->url->path. qq{ Not found});
     }
     
+    $CONTEXT->close;
+    
     $tx->resume;
 }
 

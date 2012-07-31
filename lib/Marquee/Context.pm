@@ -132,9 +132,9 @@ sub signed_cookie {
 }
 
 ### ---
-### DESTROY
+### close
 ### ---
-sub DESTROY {
+sub close {
     my $self = shift;
     
     my $session = $self->session;
@@ -239,6 +239,10 @@ L<Mojo::Transaction> instance.
 Constructor.
 
     my $context = Marquee::Context->new;
+
+=head2 $instance->close
+
+Close the context.
 
 =head2 $instance->cookie
 

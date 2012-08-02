@@ -12,11 +12,13 @@ use Marquee;
 use Mojo::Date;
 use Marquee::SSIHandler::EP;
 
-use Test::More tests => 64;
+use Test::More tests => 65;
 
 ### add_function
 
 my $ep = Marquee::SSIHandler::EP->new;
+$ep->app(Marquee->new);
+
 eval {
     $ep->add_function(myfunc => sub {});
 };
@@ -44,6 +46,13 @@ eval {
 
 is ref $ep->funcs->{'a b c'}, '';
 like $@, qr'Function name must be';
+
+eval {
+    $ep->add_function('redefine' => sub {});
+    $ep->add_function('redefine' => sub {});
+};
+
+is $@, '';
 
 my $app;
 my $t;

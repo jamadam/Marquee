@@ -25,7 +25,6 @@ our $CONTEXT;
 __PACKAGE__->attr('document_root');
 __PACKAGE__->attr('default_file');
 __PACKAGE__->attr(error_document => sub {Marquee::ErrorDocument->new});
-__PACKAGE__->attr('log_file');
 __PACKAGE__->attr(hooks => sub {Marquee::Hooks->new});
 __PACKAGE__->attr(roots => sub {[]});
 __PACKAGE__->attr(secret => sub {md5_hex($^T. $$. rand(1000000))});
@@ -75,6 +74,7 @@ sub new {
 sub add_handler {
     my ($self, $name, $handler) = @_;
     $self->ssi_handlers->{$name} = $handler;
+    $handler->app($self);
     return $self;
 }
 
@@ -184,6 +184,13 @@ sub is_directory {
             return 1;
         }
     }
+}
+
+### --
+### Set log file path
+### --
+sub log_file {
+    return shift->log->path(shift);
 }
 
 ### --
@@ -381,10 +388,6 @@ sub _init {
 
     $self->{_handler_re} =
                 '\.(?:'. join('|', keys %{$self->ssi_handlers}). ')$';
-    
-    if ($self->log_file) {
-        $self->log->path($self->log_file);
-    }
 }
 
 ### --
@@ -456,12 +459,6 @@ Error document renderer instance. Defaults to
 L<Marquee::ErrorDocument>
 
     $app->error_document(Marquee::ErrorDocument->new);
-
-=head2 log_file
-
-Specify a log file path.
-
-    $app->document_root($app->home->rel_dir('log/myapp.log'));
 
 =head2 hooks
 
@@ -591,6 +588,12 @@ Alias to $instance->hooks->on. This adds a callback for the hook point.
 Returns if the path is directory.
 
     $app->is_directory('/path/to/directory') # bool
+
+=head2 $instance->log_file($path)
+
+Set log file
+
+    $app->log_file('/path/to/file')
 
 =head2 $instance->path_to_type($path)
 

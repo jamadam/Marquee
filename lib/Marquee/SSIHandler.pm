@@ -5,6 +5,8 @@ use Mojo::Base -base;
 use Mojo::Cache;
 use Mojo::Util qw/encode md5_sum/;
 
+__PACKAGE__->attr('app');
+
 ### --
 ### Constructor
 ### --
@@ -89,6 +91,14 @@ Marquee::SSIHandler - SSI handler base class
 
 This is a SSI handler base class to be inherited by handler classes. The sub
 class is MUST implement C<render> method.
+
+=head1 ATTRIBUTES
+
+=head2 app
+
+Marquee app instance.
+
+    $ep->app($app);
 
 =head1 METHODS
 

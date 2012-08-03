@@ -54,8 +54,8 @@ sub new {
         $CONTEXT->app->serve_dynamic(@_);
     });
     
-    $self->add_handler(ep => Marquee::SSIHandler::EP->new);
-    $self->add_handler(epl => Marquee::SSIHandler::EPL->new);
+    $self->add_handler(ep => Marquee::SSIHandler::EP->new(log => $self->log));
+    $self->add_handler(epl => Marquee::SSIHandler::EPL->new(log => $self->log));
     
     # base path for CGI environment
     if ($ENV{DOCUMENT_ROOT} && ! defined $ENV{MARQUEE_BASE_PATH}) {
@@ -74,7 +74,6 @@ sub new {
 sub add_handler {
     my ($self, $name, $handler) = @_;
     $self->ssi_handlers->{$name} = $handler;
-    $handler->app($self);
     return $self;
 }
 

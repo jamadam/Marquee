@@ -44,7 +44,7 @@ sub add_function {
         croak qq{Can't modify built-in function $name};
     }
     if ($self->funcs->{$name}) {
-        $self->app->log->debug("Function $name will be redefined");
+        $self->log->warn("Function $name will be redefined");
     }
     $self->funcs->{$name} = $cb;
     return $self;

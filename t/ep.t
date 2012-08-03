@@ -17,7 +17,6 @@ use Test::More tests => 65;
 ### add_function
 
 my $ep = Marquee::SSIHandler::EP->new;
-$ep->app(Marquee->new);
 
 eval {
     $ep->add_function(myfunc => sub {});
@@ -47,13 +46,6 @@ eval {
 is ref $ep->funcs->{'a b c'}, '';
 like $@, qr'Function name must be';
 
-eval {
-    $ep->add_function('redefine' => sub {});
-    $ep->add_function('redefine' => sub {});
-};
-
-is $@, '';
-
 my $app;
 my $t;
 
@@ -61,6 +53,13 @@ $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
+
+eval {
+    $app->ssi_handlers->{ep}->add_function('redefine' => sub {});
+    $app->ssi_handlers->{ep}->add_function('redefine' => sub {});
+};
+
+is $@, '';
 
 $t = Test::Mojo->new($app);
 

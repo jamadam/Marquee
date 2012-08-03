@@ -1,6 +1,8 @@
 Revision history for Marquee
 
 0.07 2012/07/26
+  - Added include_as function to include a file as any SSI handlers.
+  - Added warnings for template function redefinision.
   - Added EPHelperExample plugin.
   - Added a feature that include function got capable of static files.
   - Changed EP API that include and extends functions not to accept template

@@ -12,7 +12,7 @@ use Marquee;
 use Mojo::Date;
 use Marquee::SSIHandler::EP;
 
-use Test::More tests => 65;
+use Test::More tests => 70;
 
 ### add_function
 
@@ -104,6 +104,14 @@ $t->get_ok('/include.html')
     ->text_like('test2 test2 filename', qr'include_sub.html.ep$')
     ->text_is('test3 myarg', 'myarg value')
     ->text_is('test3 stash_leak', '');
+
+# sub template inclusion with no ext
+
+$t->get_ok('/include_as.html')
+    ->status_is(200)
+    ->text_is('filename', 'include_as.html.ep')
+    ->text_is('test1 filename', 'include_as_sub.html')
+    ->text_like('test1 current_template', qr'public_html/include_as_sub.html$');
 
 ### abs
 

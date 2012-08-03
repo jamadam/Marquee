@@ -160,6 +160,22 @@ sub init {
         die "$abs_path not found";
     };
     
+    $self->funcs->{include_as} = sub {
+        my ($self, $path, $handler, @args) = @_;
+        
+        my $abs_path = $self->_to_abs($path);
+        my $c = Marquee->c;
+        
+        if (my $abs_path = $c->app->search_static($abs_path)
+                                    || $c->app->search_template($abs_path)) {
+            local $c->{stash} = $c->{stash}->clone;
+            $c->{stash}->set(@args);
+            return Mojo::ByteStream->new($c->app->render_ssi($abs_path, $handler));
+        }
+        
+        die "$abs_path not found";
+    };
+    
     $self->funcs->{iter} = sub {
         my $self    = shift;
         my $block   = pop;
@@ -359,6 +375,14 @@ relative to current template directory or relative to document root if leading
 slashed. 
 
     <%= include('./path/to/template.html', key => value) %>
+
+=head2 include_as('./path/to/template.html', $handler_ext, key => value)
+
+[EXPERIMENTAL] Include a template into current template. This function is
+similar to include but you can specify the handler the template would be parsed
+with.
+
+    <%= include_as('./path/to/template.html', 'ep', key => value) %>
 
 =head2 override($name, $block)
 

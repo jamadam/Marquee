@@ -226,8 +226,8 @@ sub plugin {
 ### detect and render
 ### --
 sub render_ssi {
-    my ($self, $path) = @_;
-    my $ext = ($path =~ qr{\.\w+\.(\w+)$})[0];
+    my ($self, $path, $handler_ext) = @_;
+    my $ext = $handler_ext || ($path =~ qr{\.\w+\.(\w+)$})[0];
     if (my $handler = $self->ssi_handlers->{$ext}) {
         return $handler->render_traceable($path);
     } else {
@@ -609,9 +609,14 @@ already fully qualified.
     my $plugin = $app->plugin(Plugin => $params); # Marquee::Plugin::PlugName
     my $plugin = $app->plugin('+NameSpace::Plugin' => $params); # NameSpace::Plugin
 
-=head2 $instance->render_ssi($path)
+=head2 $instance->render_ssi($path, $handler_ext)
+
+Render SSI and returns the result. This method auto detect the handler with
+C<$path> unless C<$handler_ext> is given.
 
     my $result = $app->render_ssi('/path/to/template.html.ep');
+    my $result = $app->render_ssi('/path/to/template.html.ep', 'ep');
+    my $result = $app->render_ssi('/path/to/template2.html', 'ep');
 
 =head2 $instance->search_static($path)
 

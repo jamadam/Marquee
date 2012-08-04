@@ -20,10 +20,9 @@ sub register {
         my $c       = Marquee->c;
         my $tx      = $c->tx;
         my $path    = $tx->req->url->path->clone->leading_slash(1)->to_string;
-        my @elems   = @{$self->route->elems};
         
-        while (@elems) {
-            my ($regex, $cond, $cb) = splice(@elems, 0,3);
+        for my $elem (@{$self->route->elems}) {
+            my ($regex, $cond, $cb) = @$elem;
             map {$_->($tx) || next} @$cond;
             if (my @captures = ($path =~ $regex)) {
                 $cb->(defined $1 ? @captures : ());

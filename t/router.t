@@ -10,7 +10,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
 
-use Test::More tests => 45;
+use Test::More tests => 59;
 
 my $app;
 my $t;
@@ -110,27 +110,71 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 
 $app->plugin(Router => sub {
     my $r = shift;
-    
     my $bridge = $r->bridge(sub {
         return 0;
     });
-    
     $bridge->route(qr{^/index\.html})->to(sub {
-        MyApp->context->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt.ep");
-        is $_[0], undef;
+        my $res = Marquee->c->tx->res;
+        $res->code(200);
+        $res->body('index.html for bridge');
+        $res->headers->content_type('text/html;charset=UTF-8');
     });
-    
     $r->route(qr{^/index\.html})->to(sub {
-        MyApp->context->app->serve_static("$FindBin::Bin/public_html/index.txt");
-        is $_[0], undef;
+        my $res = Marquee->c->tx->res;
+        $res->code(200);
+        $res->body('index.html');
+        $res->headers->content_type('text/html;charset=UTF-8');
+    });
+    my $bridge2 = $r->bridge(sub {
+        my $tx = shift;
+        return $tx->req->headers->user_agent =~ qr{iPhone};
+    });
+    $bridge2->route(qr{^/index2\.html})->to(sub {
+        my $res = Marquee->c->tx->res;
+        $res->code(200);
+        $res->body('index2.html for iPhone');
+        $res->headers->content_type('text/html;charset=UTF-8');
+    });
+    $r->route(qr{^/index2\.html})->to(sub {
+        my $res = Marquee->c->tx->res;
+        $res->code(200);
+        $res->body('index2.html');
+        $res->headers->content_type('text/html;charset=UTF-8');
+    });
+    $r->route(qr{^/index3\.html})->add_cond(sub {shift->req->headers->user_agent =~ qr{iPhone}})->to(sub {
+        my $res = Marquee->c->tx->res;
+        $res->code(200);
+        $res->body('index3.html for iPhone');
+        $res->headers->content_type('text/html;charset=UTF-8');
+    });
+    $r->route(qr{^/index3\.html})->to(sub {
+        my $res = Marquee->c->tx->res;
+        $res->code(200);
+        $res->body('index3.html');
+        $res->headers->content_type('text/html;charset=UTF-8');
     });
 });
 $t = Test::Mojo->new($app);
 
 $t->get_ok('/index.html')
     ->status_is(200)
-    ->header_is('Content-Type', 'text/plain')
-    ->header_is('Content-Length', 20)
-    ->content_is('static <%= time() %>');
+    ->header_is('Content-Length', 10)
+    ->content_is('index.html');
+$t->get_ok('/index2.html')
+    ->status_is(200)
+    ->header_is('Content-Length', 11)
+    ->content_is('index2.html');
+$t->get_ok('/index2.html', {'User-Agent' => 'iPhone'})
+    ->status_is(200)
+    ->header_is('Content-Length', 22)
+    ->content_is('index2.html for iPhone');
+$t->get_ok('/index3.html')
+    ->status_is(200)
+    ->header_is('Content-Length', 11)
+    ->content_is('index3.html');
+$t->get_ok('/index3.html', {'User-Agent' => 'iPhone'})
+    ->status_is(200)
+    ->header_is('Content-Length', 22)
+    ->content_is('index3.html for iPhone');
 
 __END__

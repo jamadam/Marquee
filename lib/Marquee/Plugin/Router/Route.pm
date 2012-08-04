@@ -5,6 +5,12 @@ use Mojo::Base -base;
 
 __PACKAGE__->attr('elems', sub {[]});
 
+sub add_cond {
+    my ($self, @conds) = @_;
+    unshift(@{$self->elems->[-1]->[1]}, @conds);
+    return $self;
+}
+
 sub bridge {
     my ($self, $cb) = @_;
     my $r = __PACKAGE__->new(bridge => $cb);
@@ -14,33 +20,25 @@ sub bridge {
 
 sub route {
     my ($self, $regex) = @_;
-    my $cond = $self->{bridge} ? [$self->{bridge}] : [];
-    push(@{$self->elems}, $regex, $cond);
+    push(@{$self->elems}, [$regex, [], undef]);
+    if ($self->{bridge}) {
+        $self->add_cond($self->{bridge});
+    }
     return $self;
 }
 
 sub to {
     my ($self, $cb) = @_;
-    push(@{$self->elems}, $cb);
+    $self->elems->[-1]->[2] = $cb;
     return $self;
 }
 
 sub via {
     my ($self, @methods) = @_;
-    return $self->_add_cond(sub {
+    return $self->add_cond(sub {
         my $tx = shift;
         scalar grep {uc $_ eq uc $tx->req->method} @methods;
     });
-}
-
-sub _add_cond {
-    my ($self, $cond) = @_;
-    my @elems = @{$self->elems};
-    if (ref $elems[$#elems] ne 'ARRAY') {
-        push(@elems, []);
-    }
-    unshift(@{$elems[$#elems]}, $cond);
-    return $self;
 }
 
 1;
@@ -104,6 +102,15 @@ Set an action to invoke when the route matches.
 Filters route by HTTP method.
 
     $r->via('GET', 'POST');
+
+=head2 $instance->add_condition(sub {})
+
+Add condition for the route entry.
+
+    $r->add_cond(sub {
+        my $tx = shift;
+        return 1; # or 0
+    });
 
 =head1 SEE ALSO
 

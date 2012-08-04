@@ -103,7 +103,7 @@ Filters route by HTTP method.
 
     $r->via('GET', 'POST');
 
-=head2 $instance->add_condition(sub {})
+=head2 $instance->add_cond(sub {})
 
 Add condition for the route entry.
 

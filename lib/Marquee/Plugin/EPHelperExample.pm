@@ -61,37 +61,19 @@ __END__
 
 =head1 NAME
 
-Marquee::Plugin::Router - Router [EXPERIMENTAL]
+Marquee::Plugin::EPHelperExample - An Example for EP helpers
 
 =head1 SYNOPSIS
-    
-    $app->plugin(Router => sub {
-        my $r = shift;
-        $r->route(qr{^/index\.html})->to(sub {
-            ### DO SOMETHING
-        });
-        $r->route(qr{^/special\.html})->to(sub {
-            ### DO SOMETHING
-        });
-        $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
-            my ($a, $b) = @_;
-            ### DO SOMETHING
-        });
-        $r->route(qr{^/rare/})->via('get')->to(sub {
-            ### DO SOMETHING
-        });
-        $r->route(qr{^/default})->to(sub {
-            ### DO SOMETHING
-        });
-    });
+
+    <%= commify($price) %>
+    <%= min(@prices) %>
+    <%= max(@prices) %>
+    <%= replace($string, '::', '/') %>
+    <%= replace($string, qr/\s/, '') %>
 
 =head1 DESCRIPTION
 
-=head1 ATTRIBUTES
-
-=head2 route
-
-L<Marquee::Plugin::Router::Route> instance.
+This is an example plugin for adding EP template functions.
 
 =head1 METHODS
 
@@ -99,7 +81,6 @@ L<Marquee::Plugin::Router::Route> instance.
 
 =head1 SEE ALSO
 
-L<Marquee::Plugin::Router::Route>, L<Marquee>,
-L<Mojolicious>
+L<Marquee::SSIHandler::EP>, L<Marquee>, L<Mojolicious>
 
 =cut

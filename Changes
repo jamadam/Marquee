@@ -1,12 +1,14 @@
 Revision history for Marquee
 
-0.07 2012/08/03
+0.07 2012/08/04
   - Added include_as function to include a file as any SSI handlers.
   - Added warnings for template function redefinision.
   - Added EPHelperExample plugin.
   - Added a feature that include function got capable of static files.
   - Changed EP API that include and extends functions not to accept template
     extentions.
+  - Added add_cond method for router plugin
+  - Fixed some PODs.
 
 0.06 2012/07/24
   - Added tree mode to auto index.

@@ -80,6 +80,24 @@ it with second option.
 Register the plugin with path entries. $path_entries must be a list of
 regex, realm, auth callback groups. realm is optional.
 
+=head2 EXAMPLE
+
+You can port apache htpasswd entries as follows.
+
+    my $htpasswd = {
+        user1 => 'znq.opIaiH.zs',
+        user2 => 'dF45lPM2wMCDA',
+    };
+    
+    $self->plugin(Auth => [
+        qr{^/admin/} => 'Secret Area' => sub {
+            my ($username, $password) = @_;
+            if (my $expect = $htpasswd->{$username}) {
+                return crypt($password, $expect) eq $expect;
+            }
+        },
+    ]);
+
 =head1 SEE ALSO
 
 L<Marquee>, L<Mojolicious>

@@ -19,7 +19,7 @@ use Test::More tests => 10;
     
     sub dispatch {
         shift->SUPER::dispatch(@_);
-        is(Marquee->context, SubClass->context, 'right namespace');
+        is(Marquee->c, SubClass->c, 'right namespace');
     }
 }
 {
@@ -29,7 +29,7 @@ use Test::More tests => 10;
     sub dispatch {
         my ($self) = @_;
         $self->SUPER::dispatch;
-        $self->context->res->body('overridden');
+        $self->c->res->body('overridden');
     }
 }
 

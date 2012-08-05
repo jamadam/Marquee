@@ -36,16 +36,16 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 $app->hook(around_static => my $hook1 = sub {
     my ($next, @args) = @_;
     $next->(@args);
-    my $org = Marquee->c->tx->res->body;
-    Marquee->c->tx->res->body($org.'mod');
+    my $org = Marquee->c->res->body;
+    Marquee->c->res->body($org.'mod');
     return $app;
 });
 
 $app->hook(around_static => my $hook2 = sub {
     my ($next, @args) = @_;
     $next->(@args);
-    my $org = Marquee->c->tx->res->body;
-    Marquee->c->tx->res->body($org.'mod2');
+    my $org = Marquee->c->res->body;
+    Marquee->c->res->body($org.'mod2');
     return $app;
 });
 
@@ -67,8 +67,8 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 $app->hook(around_static => sub {
     my ($next, @args) = @_;
     $next->(@args);
-    my $org = Marquee->c->tx->res->body;
-    Marquee->c->tx->res->body($org.'mod');
+    my $org = Marquee->c->res->body;
+    Marquee->c->res->body($org.'mod');
     return $app;
 });
 
@@ -83,8 +83,8 @@ $t->get_ok('/index.txt')
 $app->hook(around_static => sub {
     my ($next, @args) = @_;
     $next->(@args);
-    my $org = Marquee->c->tx->res->body;
-    Marquee->c->tx->res->body($org.'mod2');
+    my $org = Marquee->c->res->body;
+    Marquee->c->res->body($org.'mod2');
     return $app;
 });
 

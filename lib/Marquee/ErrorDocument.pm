@@ -28,7 +28,6 @@ sub serve {
     }
     
     my $c           = Marquee->c;
-    my $tx          = $c->tx;
     my $stash       = $c->stash;
     my $template    = ($self->status_template)->{$code} || $self->template;
     my $ep          = $c->app->ssi_handlers->{ep};
@@ -51,9 +50,9 @@ sub serve {
         $stash->set(message => ref $message ? $messages{$code} : $message);
     }
     
-    $tx->res->code($code);
-    $tx->res->body(encode('UTF-8', $ep->render_traceable($template)));
-    $tx->res->headers->content_type('text/html;charset=UTF-8');
+    $c->res->code($code);
+    $c->res->body(encode('UTF-8', $ep->render_traceable($template)));
+    $c->res->headers->content_type('text/html;charset=UTF-8');
 }
 
 1;

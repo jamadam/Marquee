@@ -111,7 +111,7 @@ sub init {
     
     $self->funcs->{param} = sub {
         shift;
-        return Marquee->c->tx->req->param($_[0]);
+        return Marquee->c->req->param($_[0]);
     };
     
     $self->funcs->{stash} = sub {

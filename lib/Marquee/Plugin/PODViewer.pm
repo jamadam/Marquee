@@ -37,7 +37,6 @@ sub serve_pod {
     my ($self, $source) = @_;
     
     my $c   = Marquee->c;
-    my $tx  = $c->tx;
     my $app = $c->app;
     
     my $html = _pod_to_html($source);
@@ -91,15 +90,15 @@ sub serve_pod {
             : undef,
     );
     
-    $tx->res->body(
+    $c->res->body(
         encode('UTF-8',
             $app->ssi_handlers->{ep}->render_traceable(
                 __PACKAGE__->Marquee::asset('perldoc.html.ep')
             )
         )
     );
-    $tx->res->code(200);
-    $tx->res->headers->content_type($app->types->type('html'));
+    $c->res->code(200);
+    $c->res->headers->content_type($app->types->type('html'));
 }
 
 sub serve_pod_by_name {

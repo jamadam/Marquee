@@ -15,8 +15,7 @@ sub register {
         my ($next, @args) = @_;
         
         my $c    = Marquee->c;
-        my $tx   = $c->tx;
-        my $path = $tx->req->url->path->clone->leading_slash(1)->to_string;
+        my $path = $c->req->url->path->clone->leading_slash(1)->to_string;
         
         my @entries = @$entries;
         while (@entries) {
@@ -25,10 +24,10 @@ sub register {
             my $cb      = shift @entries;
             
             if ($path =~ $regex) {
-                my $auth = $tx->req->url->to_abs->userinfo || ':';
+                my $auth = $c->req->url->to_abs->userinfo || ':';
                 if (! $cb->(split(/:/, $auth), 2)) {
-                    $tx->res->headers->www_authenticate("Basic realm=$realm");
-                    $tx->res->code(401);
+                    $c->res->headers->www_authenticate("Basic realm=$realm");
+                    $c->res->code(401);
                     return;
                 }
             }

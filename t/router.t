@@ -39,16 +39,16 @@ $app->plugin(Router => sub {
         is $b, 'bar';
     });
     $r->route(qr{^/rare/})->via('get')->to(sub {
-        MyApp->context->tx->res->code(200);
-        MyApp->context->tx->res->body('rare');
+        MyApp->context->res->code(200);
+        MyApp->context->res->body('rare');
     });
     $r->route(qr{^/rare2/})->via('get', 'head')->to(sub {
-        MyApp->context->tx->res->code(200);
-        MyApp->context->tx->res->body('rare');
+        MyApp->context->res->code(200);
+        MyApp->context->res->body('rare');
     });
     $r->route(qr{^/default})->to(sub {
-        MyApp->context->tx->res->code(200);
-        MyApp->context->tx->res->body('default');
+        MyApp->context->res->code(200);
+        MyApp->context->res->body('default');
     });
 });
 $t = Test::Mojo->new($app);
@@ -114,13 +114,13 @@ $app->plugin(Router => sub {
         return 0;
     });
     $bridge->route(qr{^/index\.html})->to(sub {
-        my $res = Marquee->c->tx->res;
+        my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index.html for bridge');
         $res->headers->content_type('text/html;charset=UTF-8');
     });
     $r->route(qr{^/index\.html})->to(sub {
-        my $res = Marquee->c->tx->res;
+        my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index.html');
         $res->headers->content_type('text/html;charset=UTF-8');
@@ -130,25 +130,25 @@ $app->plugin(Router => sub {
         return $tx->req->headers->user_agent =~ qr{iPhone};
     });
     $bridge2->route(qr{^/index2\.html})->to(sub {
-        my $res = Marquee->c->tx->res;
+        my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index2.html for iPhone');
         $res->headers->content_type('text/html;charset=UTF-8');
     });
     $r->route(qr{^/index2\.html})->to(sub {
-        my $res = Marquee->c->tx->res;
+        my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index2.html');
         $res->headers->content_type('text/html;charset=UTF-8');
     });
     $r->route(qr{^/index3\.html})->add_cond(sub {shift->req->headers->user_agent =~ qr{iPhone}})->to(sub {
-        my $res = Marquee->c->tx->res;
+        my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index3.html for iPhone');
         $res->headers->content_type('text/html;charset=UTF-8');
     });
     $r->route(qr{^/index3\.html})->to(sub {
-        my $res = Marquee->c->tx->res;
+        my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index3.html');
         $res->headers->content_type('text/html;charset=UTF-8');

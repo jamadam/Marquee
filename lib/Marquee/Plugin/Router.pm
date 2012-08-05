@@ -19,7 +19,7 @@ sub register {
         
         my $c       = Marquee->c;
         my $tx      = $c->tx;
-        my $path    = $tx->req->url->path->clone->leading_slash(1)->to_string;
+        my $path    = $c->req->url->path->clone->leading_slash(1)->to_string;
         
         for my $elem (@{$self->route->elems}) {
             my ($regex, $cond, $cb) = @$elem;

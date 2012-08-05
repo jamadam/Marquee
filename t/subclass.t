@@ -29,7 +29,7 @@ use Test::More tests => 10;
     sub dispatch {
         my ($self) = @_;
         $self->SUPER::dispatch;
-        $self->context->tx->res->body('overridden');
+        $self->context->res->body('overridden');
     }
 }
 

@@ -36,12 +36,12 @@ sub register {
         
         if (! $c->served) {
             my $app = $c->app;
-            my $path = $c->tx->req->url->path->clone->canonicalize;
+            my $path = $c->req->url->path->clone->canonicalize;
             if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
                 return;
             }
             if (-d File::Spec->catdir($app->document_root, $path)) {
-                my $mode = $c->tx->req->param('mode');
+                my $mode = $c->req->param('mode');
                 if ($mode && $mode eq 'tree') {
                     $self->serve_tree($path);
                 } else {
@@ -59,7 +59,6 @@ sub serve_tree {
     my ($self, $path) = @_;
     
     my $c   = Marquee->c;
-    my $tx  = Marquee->c->tx;
     my $app = Marquee->c->app;
     my $maxdepth = 3;
     
@@ -74,14 +73,14 @@ sub serve_tree {
         return _file_list($self, $_[1], $path);
     });
     
-    $tx->res->body(
+    $c->res->body(
         encode('UTF-8', $ep->render_traceable(
             __PACKAGE__->Marquee::asset('auto_index_tree.html.ep')
         ))
     );
     
-    $tx->res->code(200);
-    $tx->res->headers->content_type($app->types->type('html'));
+    $c->res->code(200);
+    $c->res->headers->content_type($app->types->type('html'));
     
     return $app;
 }
@@ -94,7 +93,6 @@ sub serve_index {
     
     my $c = Marquee->c;
     my $app = $c->app;
-    my $tx = $c->tx;
     
     $c->stash->set(
         dir         => decode('UTF-8', url_unescape($path)),
@@ -102,15 +100,15 @@ sub serve_index {
         static_dir  => 'static'
     );
     
-    $tx->res->body(
+    $c->res->body(
         encode('UTF-8',
             Marquee::SSIHandler::EP->new->render_traceable(
                 __PACKAGE__->Marquee::asset('auto_index.html.ep')
             )
         )
     );
-    $tx->res->code(200);
-    $tx->res->headers->content_type($app->types->type('html'));
+    $c->res->code(200);
+    $c->res->headers->content_type($app->types->type('html'));
     
     return $app;
 }

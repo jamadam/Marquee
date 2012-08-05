@@ -68,14 +68,28 @@ sub cookie {
             $self->app->log->error(
                                 qq{Cookie "$name" is bigger than 4096 bytes.})
         }
-        $self->tx->res->cookies(
+        $self->res->cookies(
             Mojo::Cookie::Response->new(name => $name, value => $value, %$opt));
         
         return $self;
     }
-    return map { $_->value } $self->tx->req->cookie($name) if wantarray;
-    return unless my $cookie = $self->tx->req->cookie($name);
+    return map { $_->value } $self->req->cookie($name) if wantarray;
+    return unless my $cookie = $self->req->cookie($name);
     return $cookie->value;
+}
+
+### ---
+### Alias for tx->req
+### ---
+sub req {
+    shift->{tx}->req(@_);
+}
+
+### ---
+### Alias for tx->res
+### ---
+sub res {
+    shift->{tx}->res(@_);
 }
 
 ### ---
@@ -95,7 +109,7 @@ sub stash {
 ### Set or Get signed cookie
 ### ---
 sub served {
-    return defined shift->tx->res->code;
+    return defined shift->res->code;
 }
 
 ### ---

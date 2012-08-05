@@ -108,7 +108,7 @@
 		</div>
 		<div id="request" class="box infobox spaced">
 			<table>
-				% my $req = $c->tx->req;
+				% my $req = $c->req;
 				%= $kv->(Method => $req->method)
 				% my $url = $req->url;
 				%= $kv->(URL => $url->to_string)

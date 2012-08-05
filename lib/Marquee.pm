@@ -97,8 +97,7 @@ sub context {
 sub dispatch {
     my ($self) = @_;
     
-    my $tx = $CONTEXT->tx;
-    my $path = $tx->req->url->path->clone->canonicalize;
+    my $path = $CONTEXT->req->url->path->clone->canonicalize;
     
     if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
         return;
@@ -126,7 +125,7 @@ sub dispatch {
     if (! $CONTEXT->served) {
         if (! $path->trailing_slash && scalar @{$path->parts}
                                             && $self->is_directory($path)) {
-            my $uri = $tx->req->url->clone->path(
+            my $uri = $CONTEXT->req->url->clone->path(
                                 $path->clone->trailing_slash(1))->to_abs;
             $self->serve_redirect($uri);
         }
@@ -271,9 +270,8 @@ sub search_template {
 sub serve_redirect {
     my ($self, $uri) = @_;
     
-    my $tx = $CONTEXT->tx;
-    $tx->res->code(301);
-    $tx->res->headers->location($self->to_abs($uri)->to_string);
+    $CONTEXT->res->code(301);
+    $CONTEXT->res->headers->location($self->to_abs($uri)->to_string);
     return $self;
 }
 
@@ -286,26 +284,24 @@ sub serve_static {
     my $asset = Mojo::Asset::File->new(path => $path);
     my $modified = (stat $path)[9];
     
-    my $tx = $CONTEXT->tx;
-    
     # If modified since
-    my $req_headers = $tx->req->headers;
-    my $res_headers = $tx->res->headers;
+    my $req_headers = $CONTEXT->req->headers;
+    my $res_headers = $CONTEXT->res->headers;
     if (my $date = $req_headers->if_modified_since) {
         my $since = Mojo::Date->new($date)->epoch;
         if (defined $since && $since == $modified) {
             $res_headers->remove('Content-Type')
                 ->remove('Content-Length')
                 ->remove('Content-Disposition');
-            return $tx->res->code(304);
+            return $CONTEXT->res->code(304);
         }
     }
     
-    $tx->res->content->asset($asset);
-    $tx->res->code(200);
+    $CONTEXT->res->content->asset($asset);
+    $CONTEXT->res->code(200);
     $res_headers->last_modified(Mojo::Date->new($modified));
     if (my $type = $self->path_to_type($path)) {
-        $tx->res->headers->content_type($type);
+        $CONTEXT->res->headers->content_type($type);
     }
     
     return $self;
@@ -320,11 +316,10 @@ sub serve_dynamic {
     my $ret = $self->render_ssi($path);
     
     if (defined $ret) {
-        my $tx = $CONTEXT->tx;
-        $tx->res->body(encode('UTF-8', $ret));
-        $tx->res->code(200);
+        $CONTEXT->res->body(encode('UTF-8', $ret));
+        $CONTEXT->res->code(200);
         if (my $type = $self->path_to_type($path)) {
-            $tx->res->headers->content_type($type);
+            $CONTEXT->res->headers->content_type($type);
         }
     }
     
@@ -398,8 +393,7 @@ sub to_abs {
     $url = Mojo::URL->new($url);
     
     if (! $url->scheme) {
-        my $tx = $CONTEXT->tx;
-        my $base = $tx->req->url->clone;
+        my $base = $CONTEXT->req->url->clone;
         $base->userinfo(undef);
         $url->base($base);
     }

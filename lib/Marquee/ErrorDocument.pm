@@ -12,8 +12,6 @@ my %messages = (
     403 => 'Forbidden',
 );
 
-my $type = Mojolicious::Types->new->type('html');
-
 __PACKAGE__->attr('template', sub {Marquee->asset('error_document.html.ep')});
 __PACKAGE__->attr('status_template' => sub {{}});
 
@@ -55,7 +53,7 @@ sub serve {
     
     $tx->res->code($code);
     $tx->res->body(encode('UTF-8', $ep->render_traceable($template)));
-    $tx->res->headers->content_type($type);
+    $tx->res->headers->content_type('text/html;charset=UTF-8');
 }
 
 1;

@@ -25,12 +25,17 @@ eval {
 is ref $ep->funcs->{myfunc}, 'CODE';
 is $@, '';
 
-eval {
-    $ep->add_function(time => sub {});
-};
-
-is $ep->funcs->{time}, undef;
-like $@, qr{Can't modify built-in function time};
+SKIP: {
+    if ($] < 5.016) {
+        skip('because the perl version is older than 5.016', 2);
+    }
+    eval {
+        $ep->add_function(time => sub {});
+    };
+    
+    is $ep->funcs->{time}, undef;
+    like $@, qr{Can't modify built-in function time};
+}
 
 eval {
     $ep->add_function(add_function => sub {});

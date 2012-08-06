@@ -14,24 +14,6 @@ use Carp;
 __PACKAGE__->attr(funcs => sub {{}});
 
 ### --
-### Check if the name exists as a subroutine
-### --
-sub _func_exists {
-    if ($_[0] =~ /\W/) {
-        croak "Function name must be consitsts of [a-bA-B0-9]";
-    }
-    no warnings;
-    my $package = __PACKAGE__. "::_SandBox";
-    eval "{package $package; $_[0]()}"; ## no critic
-    if ($@ !~ /Undefined subroutine/) {
-        return 1;
-    }
-    no strict 'refs';
-    %{$package.'::'} = ();
-    return;
-};
-
-### --
 ### Add function
 ### --
 sub add_function {
@@ -40,7 +22,7 @@ sub add_function {
     if ($name =~ /\W/) {
         croak "Function name must be consitsts of [a-bA-B0-9]";
     }
-    if (_func_exists($name)) {
+    if ($] >= 5.016 && defined(&{"CORE::". $name})) {
         croak qq{Can't modify built-in function $name};
     }
     if ($self->funcs->{$name}) {

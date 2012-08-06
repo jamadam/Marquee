@@ -126,8 +126,8 @@ $app->plugin(Router => sub {
         $res->headers->content_type('text/html;charset=UTF-8');
     });
     my $bridge2 = $r->bridge(sub {
-        my $tx = shift;
-        return $tx->req->headers->user_agent =~ qr{iPhone};
+        my $c = shift;
+        return $c->req->headers->user_agent =~ qr{iPhone};
     });
     $bridge2->route(qr{^/index2\.html})->to(sub {
         my $res = Marquee->c->res;

@@ -18,12 +18,11 @@ sub register {
         my ($next, @args) = @_;
         
         my $c       = Marquee->c;
-        my $tx      = $c->tx;
         my $path    = $c->req->url->path->clone->leading_slash(1)->to_string;
         
         for my $elem (@{$self->route->elems}) {
             my ($regex, $cond, $cb) = @$elem;
-            map {$_->($tx) || next} @$cond;
+            map {$_->($c) || next} @$cond;
             if (my @captures = ($path =~ $regex)) {
                 $cb->(defined $1 ? @captures : ());
                 last;

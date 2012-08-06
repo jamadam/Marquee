@@ -107,7 +107,6 @@ sub serve_pod_by_name {
     $module =~ s!/!\:\:!g;
     
     my $c       = Marquee->c;
-    my $tx      = $c->tx;
     my $app     = $c->app;
     my $path    = Pod::Simple::Search->new->find($module, @{$self->paths});
     

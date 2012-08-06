@@ -36,8 +36,8 @@ sub to {
 sub via {
     my ($self, @methods) = @_;
     return $self->add_cond(sub {
-        my $tx = shift;
-        scalar grep {uc $_ eq uc $tx->req->method} @methods;
+        my $c = shift;
+        scalar grep {uc $_ eq uc $c->req->method} @methods;
     });
 }
 
@@ -70,6 +70,7 @@ Marquee::Plugin::Router - Router [EXPERIMENTAL]
     });
     
     my $bridge = $r->bridge(sub {
+        my $context = shift;
         return 1; # or 0
     });
     
@@ -82,6 +83,7 @@ Marquee::Plugin::Router - Router [EXPERIMENTAL]
 =head2 $instance->bridge(sub {...})
 
     my $bridge = $r->bridge(sub {
+        my $context = shift;
         return $bool;
     });
 
@@ -108,7 +110,7 @@ Filters route by HTTP method.
 Add condition for the route entry.
 
     $r->add_cond(sub {
-        my $tx = shift;
+        my $context = shift;
         return 1; # or 0
     });
 

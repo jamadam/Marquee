@@ -31,7 +31,7 @@ sub vacuum {
 sub set {
     my ($self, $key, $value, $expire) = @_;
     
-    my $max_keys    = $self->max_keys || 100;
+    my $max_keys    = $self->{max_keys} || 100;
     my $cache       = $self->{$ATTR_CACHE} ||= {};
     my $stack       = $self->{$ATTR_STACK} ||= [];
     

@@ -65,7 +65,7 @@ sub cookie {
     # Response cookie
     if (defined $value) {
         if (length $value > 4096) {
-            $self->app->log->error(
+            $self->{app}->log->error(
                                 qq{Cookie "$name" is bigger than 4096 bytes.})
         }
         $self->res->cookies(
@@ -100,7 +100,7 @@ sub stash {
     if ($stash) {
         $self->{stash} = $stash;
     } else {
-        $self->{stash} ||= $self->app->stash->clone;
+        $self->{stash} ||= $self->{app}->stash->clone;
     }
     return $self->{stash};
 }
@@ -118,7 +118,7 @@ sub served {
 sub signed_cookie {
     my ($self, $name, $value, $opt) = @_;
   
-    my $secret = $self->app->secret;
+    my $secret = $self->{app}->secret;
     
     if (defined $value) {
         return $self->cookie($name,
@@ -134,11 +134,11 @@ sub signed_cookie {
             if (secure_compare($sig, hmac_md5_sum($value, $secret))) {
                 push(@results, $value);
             } else {
-                $self->app->log->debug(
+                $self->{app}->log->debug(
                     qq{Bad signed cookie "$name", possible hacking attempt.});
             }
         } else {
-            $self->app->log->debug(qq{Cookie "$name" not signed.});
+            $self->{app}->log->debug(qq{Cookie "$name" not signed.});
         }
     }
   

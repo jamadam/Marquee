@@ -12,7 +12,7 @@ use Marquee;
 use Mojo::Date;
 use Marquee::SSIHandler::EP;
 
-use Test::More tests => 70;
+use Test::More tests => 73;
 
 ### add_function
 
@@ -70,13 +70,13 @@ $t = Test::Mojo->new($app);
 
 # param
 
-$t->get_ok('/helper.html?foo=bar')
+$t->get_ok('/ep/helper.html?foo=bar')
     ->status_is(200)
     ->content_is('bar');
 
 ### iter
 
-$t->get_ok('/iter.html')
+$t->get_ok('/ep/iter.html')
     ->status_is(200)
     ->text_is('test1 .test0', '0')
     ->text_is('test1 .test1', '1')
@@ -89,34 +89,37 @@ $t->get_ok('/iter.html')
     ->text_is('test3 .testbaz', 'BAZ')
     ->text_is('test4 .test0', 'FOO')
     ->text_is('test4 .test1', 'BAR')
-    ->text_is('test4 .test2', 'BAZ');
+    ->text_is('test4 .test2', 'BAZ')
+    ->text_is('test5 .test0', '2')
+    ->text_is('test5 .test1', '3')
+    ->text_is('test5 .test2', '4');
 
 # sub template inclusion
 
-$t->get_ok('/include.html')
+$t->get_ok('/ep/include.html')
     ->status_is(200)
-    ->text_is('filename', 'include.html.ep')
-    ->text_like('current_template', qr'public_html/include.html.ep$')
-    ->text_like('current_template2', qr'public_html/include.html.ep$')
-    ->text_is('test1 filename', 'include_sub.html.ep')
-    ->text_like('test1 current_template', qr'public_html/include_sub.html.ep$')
-    ->text_is('test2 filename', '/include_sub2/1.html.ep')
-    ->text_like('test2 current_template', qr'public_html/include_sub2/1.html.ep$')
-    ->text_like('test2 parent_template', qr'/include.html.ep$')
+    ->text_is('filename', '/ep/include.html.ep')
+    ->text_like('current_template', qr'public_html/ep/include.html.ep$')
+    ->text_like('current_template2', qr'public_html/ep/include.html.ep$')
+    ->text_is('test1 filename', '/ep/include_sub.html.ep')
+    ->text_like('test1 current_template', qr'public_html/ep/include_sub.html.ep$')
+    ->text_is('test2 filename', '/ep/include_sub2/1.html.ep')
+    ->text_like('test2 current_template', qr'public_html/ep/include_sub2/1.html.ep$')
+    ->text_like('test2 parent_template', qr'/ep/include.html.ep$')
     ->text_is('test2 parent_template2', '')
-    ->text_is('test2 test1 filename', '/include_sub2/2.html.ep')
-    ->text_like('test2 test1 current_template', qr'public_html/include_sub2/2.html.ep$')
-    ->text_like('test2 test2 filename', qr'include_sub.html.ep$')
+    ->text_is('test2 test1 filename', '/ep/include_sub2/2.html.ep')
+    ->text_like('test2 test1 current_template', qr'public_html/ep/include_sub2/2.html.ep$')
+    ->text_like('test2 test2 filename', qr'/ep/include_sub.html.ep$')
     ->text_is('test3 myarg', 'myarg value')
     ->text_is('test3 stash_leak', '');
 
 # sub template inclusion with no ext
 
-$t->get_ok('/include_as.html')
+$t->get_ok('/ep/include_as.html')
     ->status_is(200)
-    ->text_is('filename', 'include_as.html.ep')
-    ->text_is('test1 filename', 'include_as_sub.html')
-    ->text_like('test1 current_template', qr'public_html/include_as_sub.html$');
+    ->text_is('filename', '/ep/include_as.html.ep')
+    ->text_is('test1 filename', '/ep/include_as_sub.html')
+    ->text_like('test1 current_template', qr'public_html/ep/include_as_sub.html$');
 
 ### abs
 
@@ -134,23 +137,23 @@ $t = Test::Mojo::DOM->new($app);
 
 ### template extension
 
-$t->get_ok('/use_layout.html')
+$t->get_ok('/ep/use_layout.html')
     ->status_is(200)
     ->dom_inspector(sub {
         my $t = shift;
         $t->at('title')->text_is('タイトル');
         $t->at('#main')->text_is('メインコンテンツdynamic');
         $t->at('#main2')->text_is('DEFAULT MAIN2');
-        $t->at('current_template1')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
+        $t->at('current_template1')->text_is("$FindBin::Bin/public_html/ep/use_layout.html.ep");
         $t->at('current_template2')->text_is("");
-        $t->at('use_layout current_template3')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
-        $t->at('use_layout current_template4')->text_is("$FindBin::Bin/public_html/layout/common.html.ep");
-        $t->at('use_layout current_template5')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
+        $t->at('use_layout current_template3')->text_is("$FindBin::Bin/public_html/ep/use_layout.html.ep");
+        $t->at('use_layout current_template4')->text_is("$FindBin::Bin/public_html/ep/layout/common.html.ep");
+        $t->at('use_layout current_template5')->text_is("$FindBin::Bin/public_html/ep/use_layout.html.ep");
         $t->at('use_layout current_template6')->text_is("");
-        $t->at('layout current_template1')->text_is("$FindBin::Bin/public_html/layout/common.html.ep");
-        $t->at('layout #main2 current_template2')->text_is("$FindBin::Bin/public_html/layout/common.html.ep");
-        $t->at('layout #main2 current_template3')->text_is("$FindBin::Bin/public_html/layout/common.html.ep");
-        $t->at('layout #main2 current_template4')->text_is("$FindBin::Bin/public_html/use_layout.html.ep");
+        $t->at('layout current_template1')->text_is("$FindBin::Bin/public_html/ep/layout/common.html.ep");
+        $t->at('layout #main2 current_template2')->text_is("$FindBin::Bin/public_html/ep/layout/common.html.ep");
+        $t->at('layout #main2 current_template3')->text_is("$FindBin::Bin/public_html/ep/layout/common.html.ep");
+        $t->at('layout #main2 current_template4')->text_is("$FindBin::Bin/public_html/ep/use_layout.html.ep");
         $t->at('layout #main2 current_template5')->text_is("");
         $t->at('layout #namespace_test')->text_is("global stash content");
     });

@@ -23,12 +23,12 @@ my $t;
     $app->log_file("$FindBin::Bin/Marquee.log");
     $t = Test::Mojo->new($app);
     
-    $t->get_ok('/cache.html')
+    $t->get_ok('/template_cache/cache.html')
         ->status_is(200);
-    $t->get_ok('/cache.html')
+    $t->get_ok('/template_cache/cache.html')
         ->status_is(200);
     
-    my $expected_key = md5_sum(encode('UTF-8', "$FindBin::Bin/public_html/cache.html.ep"));
+    my $expected_key = md5_sum(encode('UTF-8', "$FindBin::Bin/public_html/template_cache/cache.html.ep"));
     my $cache = $app->ssi_handlers->{ep}->template_cache;
     is scalar keys %{$cache->{1}}, 1, 'right cache amount';
     my $mt = $cache->get($expected_key);
@@ -42,12 +42,12 @@ my $t;
     $app->log_file("$FindBin::Bin/Marquee.log");
     $t = Test::Mojo->new($app);
     
-    $t->get_ok('/cache3.html')
+    $t->get_ok('/template_cache/cache3.html')
         ->status_is(200);
-    $t->get_ok('/cache3.html')
+    $t->get_ok('/template_cache/cache3.html')
         ->status_is(200);
     
-    my $expected_key = md5_sum(encode('UTF-8', "$FindBin::Bin/public_html/cache3.html.epl"));
+    my $expected_key = md5_sum(encode('UTF-8', "$FindBin::Bin/public_html/template_cache/cache3.html.epl"));
     my $cache = $app->ssi_handlers->{epl}->template_cache;
     is scalar keys %{$cache->{1}}, 1, 'right cache amount';
     my $mt = $cache->get($expected_key);
@@ -58,49 +58,49 @@ my $t;
 ### Detect template update
 {
     my $file;
-    open($file, "> $FindBin::Bin/public_html/cache2.html.ep");
+    open($file, "> $FindBin::Bin/public_html/template_cache/cache2.html.ep");
     print $file 'a';
     close($file);
     
-    $t->get_ok('/cache2.html')
+    $t->get_ok('/template_cache/cache2.html')
         ->status_is(200)
         ->content_is("a\n");
     
     sleep(1);
     
-    open($file, "> $FindBin::Bin/public_html/cache2.html.ep");
+    open($file, "> $FindBin::Bin/public_html/template_cache/cache2.html.ep");
     print $file 'b';
     close($file);
     
-    $t->get_ok('/cache2.html')
+    $t->get_ok('/template_cache/cache2.html')
         ->status_is(200)
         ->content_is("b\n");
     
-    unlink("$FindBin::Bin/public_html/cache2.html.ep");
+    unlink("$FindBin::Bin/public_html/template_cache/cache2.html.ep");
 }
 
 ### Detect sub template update
 {
     my $file;
-    open($file, "> $FindBin::Bin/public_html/cache4_sub.html.ep");
+    open($file, "> $FindBin::Bin/public_html/template_cache/cache4_sub.html.ep");
     print $file 'a';
     close($file);
     
-    $t->get_ok('/cache4.html')
+    $t->get_ok('/template_cache/cache4.html')
         ->status_is(200)
         ->content_is("a\n");
     
     sleep(1);
     
-    open($file, "> $FindBin::Bin/public_html/cache4_sub.html.ep");
+    open($file, "> $FindBin::Bin/public_html/template_cache/cache4_sub.html.ep");
     print $file 'b';
     close($file);
     
-    $t->get_ok('/cache4.html')
+    $t->get_ok('/template_cache/cache4.html')
         ->status_is(200)
         ->content_is("b\n");
     
-    unlink("$FindBin::Bin/public_html/cache4_sub.html.ep");
+    unlink("$FindBin::Bin/public_html/template_cache/cache4_sub.html.ep");
 }
 
 __END__

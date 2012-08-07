@@ -9,7 +9,7 @@ use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 
 use Test::More;
 use Marquee;
 
-use Test::More tests => 17;
+use Test::More tests => 18;
 
 my $app = Marquee->new;
 $app->plugin('EPHelperExample');

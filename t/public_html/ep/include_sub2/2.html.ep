@@ -1,2 +1,2 @@
-<filename>include_as_sub.html</filename>
+<filename>/ep/include_sub2/2.html.ep</filename>
 <current_template><%= current_template() %></current_template>

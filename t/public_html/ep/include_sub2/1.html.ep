@@ -1,6 +1,6 @@
-<filename>/include_sub2/1.html.ep</filename>
+<filename>/ep/include_sub2/1.html.ep</filename>
 <current_template><%= current_template() %></current_template>
 <parent_template><%= current_template(1) %></parent_template>
 <parent_template2><%= current_template(2) %></parent_template2>
 <test1><%= include('./2.html') =%></test1>
-<test2><%= include('/include_sub.html') =%></test2>
+<test2><%= include('/ep/include_sub.html') =%></test2>

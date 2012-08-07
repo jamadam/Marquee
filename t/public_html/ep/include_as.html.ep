@@ -1,2 +1,2 @@
-<filename>include_as.html.ep</filename>
+<filename>/ep/include_as.html.ep</filename>
 <test1><%= include_as('./include_as_sub.html', 'ep') =%></test1>

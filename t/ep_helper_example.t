@@ -34,3 +34,4 @@ is $app->ssi_handlers->{ep}->funcs->{max}->(undef, 3,1,2,6,5), '6';
 is $app->ssi_handlers->{ep}->funcs->{replace}->(undef, 'test test', 'es', 'zz'), 'tzzt tzzt';
 is $app->ssi_handlers->{ep}->funcs->{replace}->(undef, 'test test', '.st', ''), 'test test';
 is $app->ssi_handlers->{ep}->funcs->{replace}->(undef, 'test test', qr/.st/, ''), 't t';
+is $app->ssi_handlers->{ep}->funcs->{replace}->(undef, 'test teSt', qr/.st/i, ''), 't t';

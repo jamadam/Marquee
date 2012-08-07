@@ -13,7 +13,7 @@ use Mojo::Date;
 use Mojo::Transaction::HTTP;
 use Mojo::URL;
 
-use Test::More tests => 136;
+use Test::More tests => 142;
 
 {
     my $app = Marquee->new;
@@ -236,5 +236,53 @@ $t->get_ok('/index.unknown')
     is $app->home, "$FindBin::Bin/public_html";
     is $ENV{'MARQUEE_BASE_PATH'}, "/public_html";
 }
+
+### model
+
+{
+    package MyApp::Model;
+    use strict;
+    use warnings;
+    
+    sub new {
+        my ($class) = @_;
+        return bless {
+            foo => 'FOO',
+            bar => 'BAR',
+            baz => 'BAZ',
+        }, $class;
+    }
+    
+    sub retrieve {
+        return $_[0]->{$_[1]};
+    }
+}
+
+{
+    package MyApp;
+    use Mojo::Base 'Marquee';
+    
+    __PACKAGE__->attr(model => sub {MyApp::Model->new});
+    
+    sub new {
+        my $self = shift->SUPER::new(@_);
+        $self->stash->set(model => $self->model);
+        return $self;
+    }
+}
+
+$app = MyApp->new;
+$app->document_root("$FindBin::Bin/public_html");
+$app->log_file("$FindBin::Bin/Marquee.log");
+
+$t = Test::Mojo->new($app);
+
+$t->get_ok('/model.html')
+    ->status_is(200)
+    ->header_is('Content-Type', 'text/html;charset=UTF-8')
+    ->header_is('Content-Length', 54)
+    ->text_is('filename', 'model.html.ep')
+    ->text_is('test1', 'FOO');
+
 
 __END__

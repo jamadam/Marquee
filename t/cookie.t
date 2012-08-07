@@ -77,7 +77,6 @@ $app->default_file('index.html');
 $app->plugin(Router => sub {
     my $r = shift;
     $r->route(qr{^/session_cookie/2})->to(sub {
-        my $req     = Marquee->c->req;
         my $res     = Marquee->c->res;
         my $session = Marquee->c->cookie('session');
         my $value   = $session ? $session : 'missing';
@@ -125,7 +124,6 @@ $app->secret('aaaaaaaaaaaaaa');
 $app->plugin(Router => sub {
     my $r = shift;
     $r->route(qr{^/session_cookie/2})->to(sub {
-        my $req     = Marquee->c->req;
         my $res     = Marquee->c->res;
         my $session = Marquee->c->signed_cookie('session');
         my $value   = $session ? $session : 'missing';
@@ -173,7 +171,6 @@ $app->secret('aaaaaaaaaaaaaa');
 $app->plugin(Router => sub {
     my $r = shift;
     $r->route(qr{^/session_cookie/2})->to(sub {
-        my $req     = Marquee->c->req;
         my $res     = Marquee->c->res;
         my $session = Marquee->c->session;
         my $value   = $session->{test} || 'missing';

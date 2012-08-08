@@ -12,16 +12,6 @@ __PACKAGE__->attr(log => sub {
 });
 
 ### --
-### Constructor
-### --
-sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
-    $self->init;
-    return $self;
-}
-
-### --
 ### Get current template name recursively
 ### --
 sub current_template {
@@ -36,13 +26,6 @@ sub current_template {
     }
     
     return $route->[0];
-}
-
-### --
-### initialize
-### --
-sub init {
-    ### Can override by sub classes
 }
 
 ### --
@@ -86,10 +69,6 @@ Marquee::SSIHandler - SSI handler base class
         
         return $out;
     }
-    
-    sub init {
-        ...
-    }
 
 =head1 DESCRIPTION
 
@@ -116,10 +95,6 @@ Detects current template recursively.
 
     my $current_template = Marquee::SSIHandler->current_template;
     my $parent_template = Marquee::SSIHandler->current_template(1);
-
-=head2 $instance->init;
-
-Initializes plugin on instantiation stage.
 
 =head2 $instance->render;
 

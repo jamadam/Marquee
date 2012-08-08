@@ -14,6 +14,16 @@ use Carp;
 __PACKAGE__->attr(funcs => sub {{}});
 
 ### --
+### Constructor
+### --
+sub new {
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+    $self->_init;
+    return $self;
+}
+
+### --
 ### Add function
 ### --
 sub add_function {
@@ -80,8 +90,8 @@ sub render {
 ### --
 ### load preset
 ### --
-sub init {
-    my ($self) = @_;
+sub _init {
+    my $self = shift;
     
     $self->funcs->{app} = sub {
         shift;
@@ -399,12 +409,6 @@ Generate a portable URL.
 
 L<Marquee::SSIHandler::EP> inherits all methods from
 L<Marquee::SSIHandler::EPL> and implements the following new ones.
-
-=head2 $instance->init
-
-This method automatically called by constructor.
-
-    $ep->init;
 
 =head2 $instance->new
 

@@ -1,6 +1,6 @@
 =head1 NAME
 
-Marquee::SSIHandler::EPL - EPL template handler
+Marquee::SSIHandler::EPL - EPLテンプレートハンドラー
 
 =head1 SYNOPSIS
 
@@ -9,12 +9,12 @@ Marquee::SSIHandler::EPL - EPL template handler
 
 =head1 DESCRIPTION
 
-EPL handler.
+EPLハンドラー。
 
 =head1 ATTRIBUTES
 
-L<Marquee::SSIHandler::EPL> inherits all attributes from
-L<Marquee::SSIHandler> and implements the following new ones.
+L<Marquee::SSIHandler::EPL>は
+L<Marquee::SSIHandler>の全ての属性を継承し、下記の属性を追加で実装します。
 
 =head2 template_cache
 
@@ -22,20 +22,20 @@ L<Marquee::SSIHandler> and implements the following new ones.
 
 =head1 METHODS
 
-L<Marquee::SSIHandler::EPL> inherits all methods from
-L<Marquee::SSIHandler> and implements the following new ones.
+L<Marquee::SSIHandler::EPL>は
+L<Marquee::SSIHandler>の全てのメソッドを継承し、下記のメソッドを追加で実装します。
 
 =head2 $instance->cache($path, $mt)
 
-Get or set cache.
+キャッシュの保存/読み出しを行います。
 
     $epl->cache('/path/to/template.html.ep', $mt);
     my $mt = $epl->cache('/path/to/template.html.ep');
 
 =head2 $instance->render($path)
 
-Renders given template and returns the result. If rendering fails, die with
-L<Mojo::Exception>.
+指定のテンプレートをレンダリングし、結果を返します。レンダリングに失敗した場合、L<Mojo::Exception>を伴って
+dieします。
 
 =head1 SEE ALSO
 

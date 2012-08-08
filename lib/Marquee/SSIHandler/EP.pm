@@ -430,7 +430,7 @@ in templates...
 =head2 $instance->render($path)
 
 Renders given template and returns the result. If rendering fails, die with
-Mojo::Exception.
+L<Mojo::Exception>.
 
     $ep->render('/path/to/template.html.ep');
 

@@ -1,6 +1,6 @@
 =head1 NAME
 
-Marquee::SSIHandler::EP - EP template handler
+Marquee::SSIHandler::EP - EPテンプレートハンドラー
 
 =head1 SYNOPSIS
 
@@ -9,33 +9,32 @@ Marquee::SSIHandler::EP - EP template handler
 
 =head1 DESCRIPTION
 
-EP handler. EP is a EPL.
+EPテンプレートハンドラー. EPはEPLを継承します。
 
 =head1 ATTRIBUTES
 
-L<Marquee::SSIHandler::EP> inherits all attributes from
-L<Marquee::SSIHandler::EPL> and implements the following new ones.
+L<Marquee::SSIHandler::EP>は
+L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加で実装します。
 
 =head2 funcs
 
-A Hash ref that contains template functions.
+テンプレート関数をハッシュリファレンスに格納します。
 
     $ep->funcs->{some_func} = sub {...};
 
-You can use C<add_function> method to add a function entry instead of the code
-above.
+上記の例の代わりに、C<add_function>メソッドで関数を追加することも可能です。
 
 =head1 FUNCTIONS
 
 =head2 current_template()
 
-Returns current template path.
+現在のテンプレートパスを返します。
 
     <% my $path = current_template(); %>
 
 =head2 extends($path, $block)
 
-Base template.
+ベーステンプレート
 
     <!doctype html>
     <html>
@@ -56,7 +55,7 @@ Base template.
         </body>
     </html>
 
-Extended template.
+拡張テンプレート。
 
     <%= extends './layout/common.html' => begin %>
         <% override 'title' => begin %>
@@ -69,18 +68,16 @@ Extended template.
         <% end %>
     <% end %>
 
-Extends template.
-
 =head2 iter @array => $block
 
-Array iterator with block.
+ブロックを使用して配列を反復処理します。
 
     <%= iter @array => begin %>
         <% my ($elem, $index) = @_; %>
         No.<%= $index %> is <%= $elem %>
     <% end %>
 
-Array refs and Hash refs are also accepted.
+配列リファレンスとハッシュリファレンスに対しても使用可能です。
 
     <%= iter $array_ref => begin %>
         <% my ($elem, $index) = @_; %>
@@ -94,60 +91,58 @@ Array refs and Hash refs are also accepted.
 
 =head2 include('./path/to/template.html', key => value)
 
-Include a template or a static files into current template. The path can be
-relative to current template directory or relative to document root if leading
-slashed. 
+現在のテンプレートに任意のテンプレートか静的ファイルを挿入できます。パスは、カレントテンプレートからの相対パスを指定するか、
+スラッシュを接頭することでドキュメントルートからのパスを指定します。
 
     <%= include('./path/to/template.html', key => value) %>
 
 =head2 include_as('./path/to/template.html', $handler_ext, key => value)
 
-[EXPERIMENTAL] Include a template into current template. This function is
-similar to include but you can specify the handler the template would be parsed
-with.
+[EXPERIMENTAL]
+現在のテンプレートに任意のテンプレートを挿入します。include関数に似ていますが、テンプレートパースに使用するハンドラーを指定することができます。
 
     <%= include_as('./path/to/template.html', 'ep', key => value) %>
 
 =head2 override($name, $block)
 
-Override placeholder. See C<extends> method.
+プレースホルダーをオーバーライドします。C<extends>メソッドを参照してください。
 
 =head2 param('key')
 
-Returns request parameters for given key.
+指定のキーのリクエストパラメータを返します。
 
     <% param('key') %>
 
 =head2 placeholder($name, $default_block)
 
-Set placeholder with default block. See C<extends> method.
+デフォルトブロックを伴う、プレースホルダーを設定します。C<extends>メソッドを参照してください。
 
 =head2 stash('key')
 
-Returns stash value for given key.
+指定のキーのスタッシュ値を返します。
 
     <% stash('key') %>
 
 =head2 to_abs()
 
-Generate absolute path with given relative one
+指定の相対パスから絶対パスを生成します。
 
     <% to_abs('./path.css') %>
 
 =head2 url_for('path/to/file')
 
-Generate a portable URL.
+ポータブルURLを生成します。
 
     <% url_for('./path.css') %>
 
 =head1 METHODS
 
-L<Marquee::SSIHandler::EP> inherits all methods from
-L<Marquee::SSIHandler::EPL> and implements the following new ones.
+L<Marquee::SSIHandler::EP>は
+L<Marquee::SSIHandler::EPL>から全てのメソッドを継承し、下記のメソッドを追加で実装します。
 
 =head2 $instance->new
 
-Constructor.
+コンストラクタ。
 
     my $ep = Marquee::SSIHandler::EP->new;
 
@@ -158,14 +153,14 @@ Constructor.
         return Mojo::DOM->new($html)->all_text;
     });
 
-in templates...
+テンプレート内で。。
 
     <%= html_to_text($html) %>
 
 =head2 $instance->render($path)
 
-Renders given template and returns the result. If rendering fails, die with
-Mojo::Exception.
+指定のテンプレートをレンダリングし、結果を返します。レンダリングに失敗した場合、L<Mojo::Exception>を伴って
+dieします。
 
     $ep->render('/path/to/template.html.ep');
 

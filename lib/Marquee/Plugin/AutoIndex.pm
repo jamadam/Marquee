@@ -362,7 +362,7 @@ __END__
 
 =head1 NAME
 
-Marquee::Plugin::AutoIndex - オートインデックス
+Marquee::Plugin::AutoIndex - Auto index
 
 =head1 SYNOPSIS
 
@@ -375,18 +375,19 @@ On your browser following forms of URL are available.
 
 =head1 DESCRIPTION
 
-このプラグインはオートインデックスを可能とします。アプリのdefault_file属性が未定義か、指定のファイルが存在しないとき、
-ディレクトリへのアクセスに対してオートインデックスが返されます。
+This is a plugin for auto index. When app attribute default_file is undefined
+or the file is not found, the directory access causes the auto index to be
+served.
 
 =head1 ATTRIBUTES
 
 =head2 max_per_dir
 
-ディレクトリ内で表示可能なファイル数の上限を指定します。
+Max file amount to display in each directory.
 
 =head2 tree_depth
 
-ディレクトリの再帰処理の深度の上限を指定します。
+Max depth for directory recursion.
 
 =head1 METHODS
 

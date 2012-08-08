@@ -47,7 +47,7 @@ __END__
 
 =head1 NAME
 
-Marquee::Plugin::Router - ルーター [EXPERIMENTAL]
+Marquee::Plugin::Router - Router [EXPERIMENTAL]
 
 =head1 SYNOPSIS
     
@@ -89,25 +89,25 @@ Marquee::Plugin::Router - ルーター [EXPERIMENTAL]
 
 =head2 $instance->route($regex)
 
-リクエストURIにマッチングされる正規表現を指定します。
+Set a regex that matches to request URI.
 
     $r->route(qr{^/index\.html});
 
 =head2 $instance->to($code_ref)
 
-ルートがマッチしたときに実行されるコールバックを指定します。
+Set an action to invoke when the route matches.
 
     $r->to(sub {...});
 
 =head2 $instance->via(@http_methods)
 
-HTTPメソッドでルートをフィルターします。
+Filters route by HTTP method.
 
     $r->via('GET', 'POST');
 
 =head2 $instance->add_cond(sub {})
 
-ルートエントリーにマッチ条件を追加します。
+Add condition for the route entry.
 
     $r->add_cond(sub {
         my $context = shift;

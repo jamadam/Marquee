@@ -160,7 +160,7 @@ sub _pod_to_html {
 
 =head1 NAME
 
-Marquee::Plugin::PODRenderer - PODビュワープラグイン
+Marquee::Plugin::PODRenderer - POD renderer plugin
 
 =head1 SYNOPSIS
 
@@ -172,7 +172,7 @@ Marquee::Plugin::PODRenderer - PODビュワープラグイン
 
 =head1 DESCRIPTION
 
-このプラグインは、PODビュワーサーバーです。
+This is a plugin for POD Viewer server.
 
 =head1 METHODS
 

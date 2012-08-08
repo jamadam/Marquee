@@ -616,8 +616,8 @@ C<$path> unless C<$handler_ext> is given.
 
 Searches for static files for given path and returns the path if exists.
 
-    $app->search_static('./a.html'); # /path/to/document_root/a.css
-    $app->search_static('/path/to/a.html'); # /path/to/a.css
+    $app->search_static('./a.html'); # /path/to/document_root/a.html
+    $app->search_static('/path/to/a.html'); # /path/to/a.html
 
 =head2 $instance->search_template($path)
 

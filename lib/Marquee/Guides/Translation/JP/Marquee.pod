@@ -1,0 +1,267 @@
+=head1 NAME
+
+Marquee - サーバーサイドインクルード可能な簡易HTTPサーバー
+
+=head1 SYNOPSIS
+    
+    #!/usr/bin/env perl
+    use strict;
+    use warnings;
+    
+    use File::Basename 'dirname';
+    use File::Spec;
+    use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
+    
+    use Marquee;
+    
+    my $app = Marquee->new;
+    $app->document_root($app->home->rel_dir('public_html'));
+    $app->start;
+
+=head1 DESCRIPTION
+
+L<Marquee>は簡易ウェブサーバーのベースクラスです。本モジュールは、同梱のコマンドラインツールC<mojo Marquee>
+のバックエンドでもあります。実装には、Mojoliciousディストリビューションのモジュール群を利用しています。
+
+=head1 ATTRIBUTES
+
+=head2 document_root
+
+ドキュメントルートのディレクトリを指定します。このディレクトリは静的ファイルとテンプレートの両方を格納できます。
+
+    $app->document_root($app->home->rel_dir('public_html'));
+
+=head2 default_file
+
+デフォルトのファイル名を指定し、自動補完を有効にします。
+
+    $app->default_file('index.html');
+
+=head2 error_document
+
+エラードキュメントのレンダラーインスタンスを格納します。デフォルトはL<Marquee::ErrorDocument>です。
+
+    $app->error_document(Marquee::ErrorDocument->new);
+
+=head2 hooks
+
+L<Marquee::Hooks>インスタンスを格納します。
+
+    $app->hooks(Marquee::Hooks->new);
+
+=head2 roots
+
+静的ファイルとテンプレートを格納するパスの配列を格納します。
+
+    push(@{$app->roots}, 'path/to/additional_dir')
+
+=head2 secret
+
+署名付きクッキーなどに使用する秘密のパスフレーズを指定します。デフォルトはランダムな文字列です。
+
+    my $secret = $app->secret;
+    $app       = $app->secret('passw0rd');
+
+=head2 ssi_handlers
+
+サーバーサイドインクルードのハンドラーをハッシュリファレンスで格納します。
+
+    $app->ssi_handlers->{ep} = Marquee::SSIHandler::EP->new;
+
+上記の例の代わりに、C<add_handler>メソッドを使用してSSIの関連付けを追加することが可能です。
+
+=head2 stash
+
+L<Marquee::Stash>インスタンスを格納します。
+
+    $app->stash(Marquee::Stash->new);
+    my $stash = $app->stash;
+
+=head2 types
+
+L<Mojolicious::Type>インスタンスを格納します。
+
+    my $type = $app->types;
+    $type->type(zip => 'application/zip');
+
+=head2 under_development
+
+デバッグスクリーンを有効にします。
+
+    $app->under_development(1);
+
+=head2 x_powered_by
+
+X-POWERED-BYレスポンスヘッダーを設定します。
+
+    $app->x_powered_by('MyApp');
+
+=head1 METHODS
+
+=head2 Marquee->new;
+
+コンストラクター。
+
+    my $app = Marquee->new;
+
+=head2 $instance->add_handler(name => $code_ref);
+
+C<ssi_handlers>のエントリーを追加します。
+
+    $instance->add_handler(ep => Marquee::SSIHandler::EP->new);
+
+=head2 Marquee->asset($filename);
+
+バンドルされたアセットの中から、指定の名前のファイルのパスを返します。
+
+    my $asset = Marquee->asset('path/to/common.css');
+    
+    say $asset # /path/to/lib/Marquee/Asset/path/to/common.css
+    
+    my $asset = Marquee->asset();
+    
+    say $asset # /path/to/lib/Marquee/Asset
+
+その他のパッケージから呼び出した場合。。
+
+    my $asset = SomePackage->Marquee::asset('path/to/common.css');
+    
+    say $asset # /path/to/lib/SomePackage/Asset/path/to/common.css
+    
+    my $asset = SomePackage->Marquee::asset();
+    
+    say $asset # /path/to/lib/SomePackage/Asset
+
+=head2 $instance->c()
+
+C<context>メソッドのエイリアスです。
+
+=head2 $instance->context()
+
+現在のコンテキストを返します。これはローカライズされたC<$Marquee::CONTEXT>を参照します。
+
+    my $context = $app->context;
+
+=head2 $instance->dispatch()
+
+フロントディスパッチャーです。
+
+    $app->dispatch()
+
+=head2 $instance->handler($tx)
+
+mojoレイヤーから呼ばれるハンドラーです。
+
+    $app->handler($tx)
+
+=head2 $instance->hook($name => $cb)
+
+$instance->hooks->onのエイリアスです。フックポイントにコールバックを追加します。
+
+    $app->hook(around_dispatch => sub {
+        my ($next, @args) = @_;
+        ### pre-process
+        $next->(@args);
+        ### post-process
+    });
+
+=head2 $instance->is_directory($path)
+
+指定のパスがディレクトリかどうかの真偽値を返します。
+
+    $app->is_directory('/path/to/directory') # bool
+
+=head2 $instance->log_file($path)
+
+ログファイルを指定します。
+
+    $app->log_file('/path/to/file')
+
+=head2 $instance->path_to_type($path)
+
+パスからMIMEタイプを検出します。
+
+    my $type = $app->path_to_type('/path/to/file.css') # text/css
+
+=head2 $instance->plugin($class => $params)
+
+クラスをプラグインとしてロードします。クラス名の先頭がC<+>でなければ接頭辞「Marquee::Plugin」が付与されます。
+C<+>はクラス名が完結していることを意味します。
+
+    my $plugin = $app->plugin(Plugin => $params); # Marquee::Plugin::PlugName
+    my $plugin = $app->plugin('+NameSpace::Plugin' => $params); # NameSpace::Plugin
+
+=head2 $instance->render_ssi($path, $handler_ext)
+
+SSIをレンダリングし、結果を返します。C<$handler_ext>の指定がなければ、C<$path>からハンドラーを自動検出
+します。
+
+    my $result = $app->render_ssi('/path/to/template.html.ep');
+    my $result = $app->render_ssi('/path/to/template.html.ep', 'ep');
+    my $result = $app->render_ssi('/path/to/template2.html', 'ep');
+
+=head2 $instance->search_static($path)
+
+指定のパスの静的ファイルを検索し、存在すればパスを返します。
+
+    $app->search_static('./a.html'); # /path/to/document_root/a.html
+    $app->search_static('/path/to/a.html'); # /path/to/a.html
+
+=head2 $instance->search_template($path)
+
+指定のパスのSSIテンプレートファイルを検索し、存在すればパスを返します。
+
+    $app->search_template('./template.html'); # /path/to/document_root/template.html.ep
+    $app->search_template('/path/to/template.html'); # /path/to/template.html.ep
+
+=head2 $instance->serve_redirect($uri)
+
+指定のURIへリダイレクトするレスポンスを出力します。
+
+    $app->serve_redirect('http://example.com/');
+    $app->serve_redirect('/path/');
+
+=head2 $instance->serve_static($path)
+
+指定のパスのファイルを出力します。
+
+    $app->serve_static('/path/to/static.png');
+
+=head2 $instance->serve_dynamic($path)
+
+指定のパスの動的SSIページを出力します。
+
+    $app->serve_dynamic('/path/to/template.html.ep');
+
+=head2 $instance->start()
+
+アプリをスタートします。
+
+    $app->start();
+
+=head2 $instance->to_abs
+
+指定のパスの絶対URIを、リクエストURIに配慮して生成します。
+Generates absolute URI for given path along to the request URI.
+    
+    say $self->to_abs('/path/to/file.html');
+
+https://example.com:3001/a/index.htmlへのリクエストに対して、
+上記の例はhttps://example.com:3001/path/to/file.htmlを生成します。
+
+=head1 SEE ALSO
+
+L<Mojolicious>
+
+=head1 AUTHOR
+
+Sugama Keita, E<lt>sugama@jamadam.comE<gt>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2012 by Sugama Keita.
+
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.
+
+=cut

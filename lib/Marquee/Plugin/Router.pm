@@ -41,7 +41,7 @@ __END__
 
 =head1 NAME
 
-Marquee::Plugin::Router - Router [EXPERIMENTAL]
+Marquee::Plugin::Router - ルーター[EXPERIMENTAL]
 
 =head1 SYNOPSIS
     
@@ -71,7 +71,7 @@ Marquee::Plugin::Router - Router [EXPERIMENTAL]
 
 =head2 route
 
-L<Marquee::Plugin::Router::Route> instance.
+L<Marquee::Plugin::Router::Route>インスタンス.
 
 =head1 METHODS
 

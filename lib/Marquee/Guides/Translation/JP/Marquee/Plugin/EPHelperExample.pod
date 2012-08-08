@@ -1,0 +1,25 @@
+=head1 NAME
+
+Marquee::Plugin::EPHelperExample - An Example for EP helpers
+
+=head1 SYNOPSIS
+
+    <%= commify($price) %>
+    <%= min(@prices) %>
+    <%= max(@prices) %>
+    <%= replace($string, '::', '/') %>
+    <%= replace($string, qr/\s/, '') %>
+
+=head1 DESCRIPTION
+
+This is an example plugin for adding EP template functions.
+
+=head1 METHODS
+
+=head2 $instance->register($app, $routes)
+
+=head1 SEE ALSO
+
+L<Marquee::SSIHandler::EP>, L<Marquee>, L<Mojolicious>
+
+=cut

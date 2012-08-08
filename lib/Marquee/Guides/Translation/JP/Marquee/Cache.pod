@@ -1,0 +1,46 @@
+=head1 NAME
+
+Marquee::Cache - Cache
+
+=head1 SYNOPSIS
+
+    use Marquee::Cache;
+    
+    $cache = Marquee::Cache->new;
+    $cache->max_keys(2);
+    $cache->set(foo => 'bar');
+    $cache->get('foo');
+    $cache->set(baz => 'yada', sub {
+        my $cached_time = shift;
+        return $cached_time < (stat $file)[9];
+    });
+
+=head1 DESCRIPTION
+
+有効期限管理付き簡易キャッシュマネージャー
+
+=head1 METHODS
+
+=head2 Marquee::Cache->new
+
+=head2 $instance->get($name)
+
+指定の名前のキャッシュを返します。
+
+=head2 $instance->set($name => $data)
+
+指定の名前とデータでキャッシュを格納します。
+
+    $cache->set(key, $data);
+    $cache->set(key, $data, sub {...});
+    $cache->set(key, $data, [sub {...}, sub {...}]);
+
+=head2 $instance->vacuum()
+
+キャッシュテーブルとスタックテーブルの間のミスマッチを解消します。
+
+=head1 SEE ALSO
+
+L<Marquee>, L<Mojolicious>
+
+=cut

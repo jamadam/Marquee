@@ -1,0 +1,64 @@
+=head1 NAME
+
+Marquee::SSIHandler - SSIハンドラーベースクラス
+
+=head1 SYNOPSIS
+
+    package Marquee::SSIHandler::EPL;
+    use Mojo::Base 'Marquee::SSIHandler';
+    
+    sub render {
+        my ($self, $path) = @_;
+        
+        ...;
+        
+        return $out;
+    }
+
+=head1 DESCRIPTION
+
+本クラスは、ハンドラークラスに継承されるベースクラスです。サブクラスはC<render>を実装しなければなりません。
+
+=head1 ATTRIBUTES
+
+=head2 app
+
+Marqueeアプリインスタンスを格納します。.
+
+    $ep->app($app);
+
+=head1 METHODS
+
+=head2 Marquee::SSIHandler->new;
+
+コンストラクター。
+
+=head2 Marquee::SSIHandler->current_template;
+
+現在のテンプレートを再帰的に検出します。
+
+    my $current_template = Marquee::SSIHandler->current_template;
+    my $parent_template = Marquee::SSIHandler->current_template(1);
+
+=head2 $instance->render;
+
+テンプレートをレンダリングします。サブクラスはこのメソッドをオーバーライドしなければなりません。
+    
+    sub render {
+        my ($self, $path) = @_;
+        
+        ...;
+        
+        return $out;
+    }
+
+=head2 $instance->render_traceable;
+
+テンプレート名を再帰的にスタックすることで、トレース可能にレンダリングします。
+
+=head1 SEE ALSO
+
+L<Marquee::SSIHandler::EPL>,
+L<Marquee::SSIHandler::EP>, L<Marquee>, L<Mojolicious>
+
+=cut

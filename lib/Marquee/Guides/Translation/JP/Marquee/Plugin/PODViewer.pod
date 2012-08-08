@@ -1,0 +1,29 @@
+=head1 NAME
+
+Marquee::Plugin::PODRenderer - POD renderer plugin
+
+=head1 SYNOPSIS
+
+    $app->plugin('PODViewer');
+    
+    # on brower the following url for example will be available.
+    #
+    # http://localhost:3000/perldoc/LWP
+
+=head1 DESCRIPTION
+
+This is a plugin for POD Viewer server.
+
+=head1 METHODS
+
+=head2 $instance->register($app)
+
+=head2 $instance->serve_pod($html)
+
+=head2 $instance->serve_pod_by_name($module_name)
+
+=head1 SEE ALSO
+
+L<Marquee>, L<Mojolicious>
+
+=cut

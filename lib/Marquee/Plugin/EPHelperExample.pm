@@ -61,7 +61,7 @@ __END__
 
 =head1 NAME
 
-Marquee::Plugin::EPHelperExample - An Example for EP helpers
+Marquee::Plugin::EPHelperExample - EPヘルパーの定義例
 
 =head1 SYNOPSIS
 
@@ -73,7 +73,7 @@ Marquee::Plugin::EPHelperExample - An Example for EP helpers
 
 =head1 DESCRIPTION
 
-This is an example plugin for adding EP template functions.
+これはEPテンプレート関数を追加するサンプルプラグインです。
 
 =head1 METHODS
 

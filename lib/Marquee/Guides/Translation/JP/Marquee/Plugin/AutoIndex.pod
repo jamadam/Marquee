@@ -1,0 +1,46 @@
+=head1 NAME
+
+Marquee::Plugin::AutoIndex - Auto index
+
+=head1 SYNOPSIS
+
+    $app->plugin('AutoIndex');
+
+On your browser following forms of URL are available.
+
+    http://localhost:3000/path/to/directory/
+    http://localhost:3000/path/to/directory/?mode=tree
+
+=head1 DESCRIPTION
+
+This is a plugin for auto index. When app attribute default_file is undefined
+or the file is not found, the directory access causes the auto index to be
+served.
+
+=head1 ATTRIBUTES
+
+=head2 max_per_dir
+
+Max file amount to display in each directory.
+
+=head2 tree_depth
+
+Max depth for directory recursion.
+
+=head1 METHODS
+
+=head2 $instance->register($app, $hash_ref)
+
+=head2 $instance->serve_index
+
+Serves auto directory index.
+
+=head2 $instance->serve_tree
+
+Serves auto directory tree.
+
+=head1 SEE ALSO
+
+L<Marquee>, L<Mojolicious>
+
+=cut

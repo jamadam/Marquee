@@ -1,0 +1,22 @@
+=head1 NAME
+
+Mojolicious::Command::marquee - marquee command
+
+=head1 SYNOPSIS
+
+  use Mojolicious::Command::marquee;
+
+  my $app = Mojolicious::Command::marquee->new;
+  $app->run(@ARGV);
+
+=head1 DESCRIPTION
+
+=head1 METHODS
+
+=head2 run
+
+=head1 SEE ALSO
+
+L<marquee>
+
+=cut

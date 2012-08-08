@@ -70,7 +70,7 @@ specific path.
 =head2 realm
 
 Default value of realm which appears to response header. Each entry can override
-it with second option.
+it.
 
 =head1 METHODS
 

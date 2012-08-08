@@ -1,0 +1,47 @@
+=head1 NAME
+
+Marquee::Hooks - フックマネージャー
+
+=head1 SYNOPSIS
+
+    use Marquee::Hooks;
+    
+    my $hook = Marquee::Hooks->new;
+    
+    my $out = '';
+    
+    $hook->on(myhook => sub {
+        my ($next, $open, $close) = @_;
+        $out .= $open. 'hook1'. $close;
+    });
+    
+    $hook->on(myhook => sub {
+        my ($next, $open, $close) = @_;
+        $next->();
+        $out .= $open. 'hook2'. $close;
+    });
+    
+    $hook->emit_chain('myhook', '<', '>');
+    
+    say $out; # $out = '<hook1><hook2>'
+
+=head1 DESCRIPTION
+
+L<Marquee::Hooks>は、L<Marquee>のフックマネージャーです。
+
+=head1 METHODS
+
+L<Marquee::Hooks>はL<Mojo::EventEmitter>から全てのメソッドを継承し、下記を追加で実装します。
+
+=head2 C<emit_chain>
+
+  $plugins = $plugins->emit_chain('foo');
+  $plugins = $plugins->emit_chain(foo => 123);
+
+フックイベントを連鎖的に発行します。
+
+=head1 SEE ALSO
+
+L<Mojo::EventEmitter>, L<Marquee>, L<Mojolicious>
+
+=cut

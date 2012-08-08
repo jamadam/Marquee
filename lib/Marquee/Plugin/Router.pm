@@ -10,9 +10,9 @@ __PACKAGE__->attr('route', sub {Marquee::Plugin::Router::Route->new});
 ### Register the plugin into app
 ### --
 sub register {
-    my ($self, $app, $routes) = @_;
+    my ($self, $app, $generator) = @_;
     
-    $routes->($self->route);
+    $generator->($self->route);
     
     $app->hook(around_dispatch => sub {
         my ($next, @args) = @_;

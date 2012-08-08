@@ -51,11 +51,8 @@ sub render {
 
         # Helpers
         $prepend .= 'my $_H = shift; my $_F = $_H->funcs;';
-        for my $name (sort keys %{$self->funcs}) {
-            if ($name =~ /^\w+$/) {
-                $prepend .=
-                "sub $name; *$name = sub {\$_F->{$name}->(\$_H, \@_)};";
-            }
+        for my $name (keys %{$self->funcs}) {
+            $prepend .= "sub $name; *$name = sub {\$_F->{$name}->(\$_H, \@_)};";
         }
         
         $prepend .= 'use strict;';

@@ -26,6 +26,20 @@ L<Marquee> instance.
 
     my $app = $context->app;
 
+=head2 req
+
+C<$self->tx->req>へのエイリアスです。
+
+    my $req = $self->tx->req;
+    $self->tx->req($req);
+
+=head2 res
+
+C<$self->tx->res>へのエイリアスです。
+
+    my $res = $self->tx->req;
+    $self->tx->req($res);
+
 =head2 session
 
 持続的なデータストレージ。 暗号化クッキーの中に、JSON形式でシリアライズされ保存されます。 クッキーは一般的に4096バイトのデータに制限されることに注意してください。

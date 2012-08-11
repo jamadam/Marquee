@@ -203,6 +203,20 @@ L<Marquee> instance.
 
     my $app = $context->app;
 
+=head2 req
+
+An Alias to C<$self->tx->req>.
+
+    my $req = $self->tx->req;
+    $self->tx->req($req);
+
+=head2 res
+
+An Alias to C<$self->tx->res>.
+
+    my $res = $self->tx->req;
+    $self->tx->req($res);
+
 =head2 session
 
 Persistent data storage, stored JSON serialized in a signed cookie.

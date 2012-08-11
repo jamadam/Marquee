@@ -1,6 +1,8 @@
+=encoding utf8
+
 =head1 NAME
 
-Marquee::Plugin::Router - ƒ‹[ƒ^[ [EXPERIMENTAL]
+Marquee::Plugin::Router - ãƒ«ãƒ¼ã‚¿ãƒ¼ [EXPERIMENTAL]
 
 =head1 SYNOPSIS
     
@@ -42,25 +44,25 @@ Marquee::Plugin::Router - ƒ‹[ƒ^[ [EXPERIMENTAL]
 
 =head2 $instance->route($regex)
 
-ƒŠƒNƒGƒXƒgURI‚Éƒ}ƒbƒ`ƒ“ƒO‚³‚ê‚é³‹K•\Œ»‚ðŽw’è‚µ‚Ü‚·B
+ãƒªã‚¯ã‚¨ã‚¹ãƒˆURIã«ãƒžãƒƒãƒãƒ³ã‚°ã•ã‚Œã‚‹æ­£è¦è¡¨ç¾ã‚’æŒ‡å®šã—ã¾ã™ã€‚
 
     $r->route(qr{^/index\.html});
 
 =head2 $instance->to($code_ref)
 
-ƒ‹[ƒg‚ªƒ}ƒbƒ`‚µ‚½‚Æ‚«‚ÉŽÀs‚³‚ê‚éƒR[ƒ‹ƒoƒbƒN‚ðŽw’è‚µ‚Ü‚·B
+ãƒ«ãƒ¼ãƒˆãŒãƒžãƒƒãƒã—ãŸã¨ãã«å®Ÿè¡Œã•ã‚Œã‚‹ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’æŒ‡å®šã—ã¾ã™ã€‚
 
     $r->to(sub {...});
 
 =head2 $instance->via(@http_methods)
 
-HTTPƒƒ\ƒbƒh‚Åƒ‹[ƒg‚ðƒtƒBƒ‹ƒ^[‚µ‚Ü‚·B
+HTTPãƒ¡ã‚½ãƒƒãƒ‰ã§ãƒ«ãƒ¼ãƒˆã‚’ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ã—ã¾ã™ã€‚
 
     $r->via('GET', 'POST');
 
 =head2 $instance->add_cond(sub {})
 
-ƒ‹[ƒgƒGƒ“ƒgƒŠ[‚Éƒ}ƒbƒ`ðŒ‚ð’Ç‰Á‚µ‚Ü‚·B
+ãƒ«ãƒ¼ãƒˆã‚¨ãƒ³ãƒˆãƒªãƒ¼ã«ãƒžãƒƒãƒæ¡ä»¶ã‚’è¿½åŠ ã—ã¾ã™ã€‚
 
     $r->add_cond(sub {
         my $context = shift;

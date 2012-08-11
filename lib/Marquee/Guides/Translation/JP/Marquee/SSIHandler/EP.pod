@@ -1,6 +1,8 @@
+=encoding utf8
+
 =head1 NAME
 
-Marquee::SSIHandler::EP - EPƒeƒ“ƒvƒŒ[ƒgƒnƒ“ƒhƒ‰[
+Marquee::SSIHandler::EP - EPãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãƒãƒ³ãƒ‰ãƒ©ãƒ¼
 
 =head1 SYNOPSIS
 
@@ -9,32 +11,32 @@ Marquee::SSIHandler::EP - EPƒeƒ“ƒvƒŒ[ƒgƒnƒ“ƒhƒ‰[
 
 =head1 DESCRIPTION
 
-EPƒeƒ“ƒvƒŒ[ƒgƒnƒ“ƒhƒ‰[. EP‚ÍEPL‚ðŒp³‚µ‚Ü‚·B
+EPãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãƒãƒ³ãƒ‰ãƒ©ãƒ¼. EPã¯EPLã‚’ç¶™æ‰¿ã—ã¾ã™ã€‚
 
 =head1 ATTRIBUTES
 
-L<Marquee::SSIHandler::EP>‚Í
-L<Marquee::SSIHandler::EPL>‚©‚ç‘S‚Ä‚Ì‘®«‚ðŒp³‚µA‰º‹L‚ð’Ç‰Á‚ÅŽÀ‘•‚µ‚Ü‚·B
+L<Marquee::SSIHandler::EP>ã¯
+L<Marquee::SSIHandler::EPL>ã‹ã‚‰å…¨ã¦ã®å±žæ€§ã‚’ç¶™æ‰¿ã—ã€ä¸‹è¨˜ã‚’è¿½åŠ ã§å®Ÿè£…ã—ã¾ã™ã€‚
 
 =head2 funcs
 
-ƒeƒ“ƒvƒŒ[ƒgŠÖ”‚ðƒnƒbƒVƒ…ƒŠƒtƒ@ƒŒƒ“ƒX‚ÉŠi”[‚µ‚Ü‚·B
+ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆé–¢æ•°ã‚’ãƒãƒƒã‚·ãƒ¥ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã«æ ¼ç´ã—ã¾ã™ã€‚
 
     $ep->funcs->{some_func} = sub {...};
 
-ã‹L‚Ì—á‚Ì‘ã‚í‚è‚ÉAC<add_function>ƒƒ\ƒbƒh‚ÅŠÖ”‚ð’Ç‰Á‚·‚é‚±‚Æ‚à‰Â”\‚Å‚·B
+ä¸Šè¨˜ã®ä¾‹ã®ä»£ã‚ã‚Šã«ã€C<add_function>ãƒ¡ã‚½ãƒƒãƒ‰ã§é–¢æ•°ã‚’è¿½åŠ ã™ã‚‹ã“ã¨ã‚‚å¯èƒ½ã§ã™ã€‚
 
 =head1 FUNCTIONS
 
 =head2 current_template()
 
-Œ»Ý‚Ìƒeƒ“ƒvƒŒ[ƒgƒpƒX‚ð•Ô‚µ‚Ü‚·B
+ç¾åœ¨ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãƒ‘ã‚¹ã‚’è¿”ã—ã¾ã™ã€‚
 
     <% my $path = current_template(); %>
 
 =head2 extends($path, $block)
 
-ƒx[ƒXƒeƒ“ƒvƒŒ[ƒg
+ãƒ™ãƒ¼ã‚¹ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ
 
     <!doctype html>
     <html>
@@ -55,7 +57,7 @@ L<Marquee::SSIHandler::EPL>‚©‚ç‘S‚Ä‚Ì‘®«‚ðŒp³‚µA‰º‹L‚ð’Ç‰Á‚ÅŽÀ‘•‚µ‚Ü‚·B
         </body>
     </html>
 
-Šg’£ƒeƒ“ƒvƒŒ[ƒgB
+æ‹¡å¼µãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã€‚
 
     <%= extends './layout/common.html' => begin %>
         <% override 'title' => begin %>
@@ -70,14 +72,14 @@ L<Marquee::SSIHandler::EPL>‚©‚ç‘S‚Ä‚Ì‘®«‚ðŒp³‚µA‰º‹L‚ð’Ç‰Á‚ÅŽÀ‘•‚µ‚Ü‚·B
 
 =head2 iter @array => $block
 
-ƒuƒƒbƒN‚ðŽg—p‚µ‚Ä”z—ñ‚ð”½•œˆ—‚µ‚Ü‚·B
+ãƒ–ãƒ­ãƒƒã‚¯ã‚’ä½¿ç”¨ã—ã¦é…åˆ—ã‚’åå¾©å‡¦ç†ã—ã¾ã™ã€‚
 
     <%= iter @array => begin %>
         <% my ($elem, $index) = @_; %>
         No.<%= $index %> is <%= $elem %>
     <% end %>
 
-”z—ñƒŠƒtƒ@ƒŒƒ“ƒX‚ÆƒnƒbƒVƒ…ƒŠƒtƒ@ƒŒƒ“ƒX‚É‘Î‚µ‚Ä‚àŽg—p‰Â”\‚Å‚·B
+é…åˆ—ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã¨ãƒãƒƒã‚·ãƒ¥ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã«å¯¾ã—ã¦ã‚‚ä½¿ç”¨å¯èƒ½ã§ã™ã€‚
 
     <%= iter $array_ref => begin %>
         <% my ($elem, $index) = @_; %>
@@ -91,58 +93,58 @@ L<Marquee::SSIHandler::EPL>‚©‚ç‘S‚Ä‚Ì‘®«‚ðŒp³‚µA‰º‹L‚ð’Ç‰Á‚ÅŽÀ‘•‚µ‚Ü‚·B
 
 =head2 include('./path/to/template.html', key => value)
 
-Œ»Ý‚Ìƒeƒ“ƒvƒŒ[ƒg‚É”CˆÓ‚Ìƒeƒ“ƒvƒŒ[ƒg‚©Ã“Iƒtƒ@ƒCƒ‹‚ð‘}“ü‚Å‚«‚Ü‚·BƒpƒX‚ÍAƒJƒŒƒ“ƒgƒeƒ“ƒvƒŒ[ƒg‚©‚ç‚Ì‘Š‘ÎƒpƒX‚ðŽw’è‚·‚é‚©A
-ƒXƒ‰ƒbƒVƒ…‚ðÚ“ª‚·‚é‚±‚Æ‚ÅƒhƒLƒ…ƒƒ“ƒgƒ‹[ƒg‚©‚ç‚ÌƒpƒX‚ðŽw’è‚µ‚Ü‚·B
+ç¾åœ¨ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã«ä»»æ„ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‹é™çš„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ¿å…¥ã§ãã¾ã™ã€‚ãƒ‘ã‚¹ã¯ã€ã‚«ãƒ¬ãƒ³ãƒˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‹ã‚‰ã®ç›¸å¯¾ãƒ‘ã‚¹ã‚’æŒ‡å®šã™ã‚‹ã‹ã€
+ã‚¹ãƒ©ãƒƒã‚·ãƒ¥ã‚’æŽ¥é ­ã™ã‚‹ã“ã¨ã§ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ«ãƒ¼ãƒˆã‹ã‚‰ã®ãƒ‘ã‚¹ã‚’æŒ‡å®šã—ã¾ã™ã€‚
 
     <%= include('./path/to/template.html', key => value) %>
 
 =head2 include_as('./path/to/template.html', $handler_ext, key => value)
 
 [EXPERIMENTAL]
-Œ»Ý‚Ìƒeƒ“ƒvƒŒ[ƒg‚É”CˆÓ‚Ìƒeƒ“ƒvƒŒ[ƒg‚ð‘}“ü‚µ‚Ü‚·BincludeŠÖ”‚ÉŽ—‚Ä‚¢‚Ü‚·‚ªAƒeƒ“ƒvƒŒ[ƒgƒp[ƒX‚ÉŽg—p‚·‚éƒnƒ“ƒhƒ‰[‚ðŽw’è‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B
+ç¾åœ¨ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã«ä»»æ„ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’æŒ¿å…¥ã—ã¾ã™ã€‚includeé–¢æ•°ã«ä¼¼ã¦ã„ã¾ã™ãŒã€ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãƒ‘ãƒ¼ã‚¹ã«ä½¿ç”¨ã™ã‚‹ãƒãƒ³ãƒ‰ãƒ©ãƒ¼ã‚’æŒ‡å®šã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚
 
     <%= include_as('./path/to/template.html', 'ep', key => value) %>
 
 =head2 override($name, $block)
 
-ƒvƒŒ[ƒXƒzƒ‹ƒ_[‚ðƒI[ƒo[ƒ‰ƒCƒh‚µ‚Ü‚·BC<extends>ƒƒ\ƒbƒh‚ðŽQÆ‚µ‚Ä‚­‚¾‚³‚¢B
+ãƒ—ãƒ¬ãƒ¼ã‚¹ãƒ›ãƒ«ãƒ€ãƒ¼ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ã¾ã™ã€‚C<extends>ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
 
 =head2 param('key')
 
-Žw’è‚ÌƒL[‚ÌƒŠƒNƒGƒXƒgƒpƒ‰ƒ[ƒ^‚ð•Ô‚µ‚Ü‚·B
+æŒ‡å®šã®ã‚­ãƒ¼ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã‚’è¿”ã—ã¾ã™ã€‚
 
     <% param('key') %>
 
 =head2 placeholder($name, $default_block)
 
-ƒfƒtƒHƒ‹ƒgƒuƒƒbƒN‚ð”º‚¤AƒvƒŒ[ƒXƒzƒ‹ƒ_[‚ðÝ’è‚µ‚Ü‚·BC<extends>ƒƒ\ƒbƒh‚ðŽQÆ‚µ‚Ä‚­‚¾‚³‚¢B
+ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ–ãƒ­ãƒƒã‚¯ã‚’ä¼´ã†ã€ãƒ—ãƒ¬ãƒ¼ã‚¹ãƒ›ãƒ«ãƒ€ãƒ¼ã‚’è¨­å®šã—ã¾ã™ã€‚C<extends>ãƒ¡ã‚½ãƒƒãƒ‰ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
 
 =head2 stash('key')
 
-Žw’è‚ÌƒL[‚ÌƒXƒ^ƒbƒVƒ…’l‚ð•Ô‚µ‚Ü‚·B
+æŒ‡å®šã®ã‚­ãƒ¼ã®ã‚¹ã‚¿ãƒƒã‚·ãƒ¥å€¤ã‚’è¿”ã—ã¾ã™ã€‚
 
     <% stash('key') %>
 
 =head2 to_abs()
 
-Žw’è‚Ì‘Š‘ÎƒpƒX‚©‚çâ‘ÎƒpƒX‚ð¶¬‚µ‚Ü‚·B
+æŒ‡å®šã®ç›¸å¯¾ãƒ‘ã‚¹ã‹ã‚‰çµ¶å¯¾ãƒ‘ã‚¹ã‚’ç”Ÿæˆã—ã¾ã™ã€‚
 
     <% to_abs('./path.css') %>
 
 =head2 url_for('path/to/file')
 
-ƒ|[ƒ^ƒuƒ‹URL‚ð¶¬‚µ‚Ü‚·B
+ãƒãƒ¼ã‚¿ãƒ–ãƒ«URLã‚’ç”Ÿæˆã—ã¾ã™ã€‚
 
     <% url_for('./path.css') %>
 
 =head1 METHODS
 
-L<Marquee::SSIHandler::EP>‚Í
-L<Marquee::SSIHandler::EPL>‚©‚ç‘S‚Ä‚Ìƒƒ\ƒbƒh‚ðŒp³‚µA‰º‹L‚Ìƒƒ\ƒbƒh‚ð’Ç‰Á‚ÅŽÀ‘•‚µ‚Ü‚·B
+L<Marquee::SSIHandler::EP>ã¯
+L<Marquee::SSIHandler::EPL>ã‹ã‚‰å…¨ã¦ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç¶™æ‰¿ã—ã€ä¸‹è¨˜ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿½åŠ ã§å®Ÿè£…ã—ã¾ã™ã€‚
 
 =head2 $instance->new
 
-ƒRƒ“ƒXƒgƒ‰ƒNƒ^B
+ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
 
     my $ep = Marquee::SSIHandler::EP->new;
 
@@ -153,14 +155,14 @@ L<Marquee::SSIHandler::EPL>‚©‚ç‘S‚Ä‚Ìƒƒ\ƒbƒh‚ðŒp³‚µA‰º‹L‚Ìƒƒ\ƒbƒh‚ð’Ç‰Á‚ÅŽÀ‘
         return Mojo::DOM->new($html)->all_text;
     });
 
-ƒeƒ“ƒvƒŒ[ƒg“à‚ÅBB
+ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆå†…ã§ã€‚ã€‚
 
     <%= html_to_text($html) %>
 
 =head2 $instance->render($path)
 
-Žw’è‚Ìƒeƒ“ƒvƒŒ[ƒg‚ðƒŒƒ“ƒ_ƒŠƒ“ƒO‚µAŒ‹‰Ê‚ð•Ô‚µ‚Ü‚·BƒŒƒ“ƒ_ƒŠƒ“ƒO‚ÉŽ¸”s‚µ‚½ê‡AL<Mojo::Exception>‚ð”º‚Á‚Ä
-die‚µ‚Ü‚·B
+æŒ‡å®šã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã—ã€çµæžœã‚’è¿”ã—ã¾ã™ã€‚ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã«å¤±æ•—ã—ãŸå ´åˆã€L<Mojo::Exception>ã‚’ä¼´ã£ã¦
+dieã—ã¾ã™ã€‚
 
     $ep->render('/path/to/template.html.ep');
 

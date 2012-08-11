@@ -1,6 +1,8 @@
+=encoding utf8
+
 =head1 NAME
 
-Marquee::Plugin::Router - ルーター[EXPERIMENTAL]
+Marquee::Plugin::Router - 繝ｫ繝ｼ繧ｿ繝ｼ[EXPERIMENTAL]
 
 =head1 SYNOPSIS
     
@@ -30,7 +32,7 @@ Marquee::Plugin::Router - ルーター[EXPERIMENTAL]
 
 =head2 route
 
-L<Marquee::Plugin::Router::Route>インスタンス.
+L<Marquee::Plugin::Router::Route>繧､繝ｳ繧ｹ繧ｿ繝ｳ繧ｹ.
 
 =head1 METHODS
 

@@ -1,6 +1,8 @@
+=encoding utf8
+
 =head1 NAME
 
-Marquee::Plugin::PODRenderer - PODƒrƒ…ƒ[ƒvƒ‰ƒOƒCƒ“
+Marquee::Plugin::PODRenderer - PODãƒ“ãƒ¥ãƒ¯ãƒ¼ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
 
 =head1 SYNOPSIS
 
@@ -12,7 +14,7 @@ Marquee::Plugin::PODRenderer - PODƒrƒ…ƒ[ƒvƒ‰ƒOƒCƒ“
 
 =head1 DESCRIPTION
 
-‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ÍAPODƒrƒ…ƒ[ƒT[ƒo[‚Å‚·B
+ã“ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¯ã€PODãƒ“ãƒ¥ãƒ¯ãƒ¼ã‚µãƒ¼ãƒãƒ¼ã§ã™ã€‚
 
 =head1 METHODS
 

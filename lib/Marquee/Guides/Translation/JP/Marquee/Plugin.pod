@@ -1,6 +1,8 @@
+=encoding utf8
+
 =head1 NAME
 
-Marquee::Plugin - ƒvƒ‰ƒOƒCƒ“ƒx[ƒXƒNƒ‰ƒX
+Marquee::Plugin - ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
 
 =head1 SYNOPSIS
 
@@ -15,7 +17,7 @@ Marquee::Plugin - ƒvƒ‰ƒOƒCƒ“ƒx[ƒXƒNƒ‰ƒX
 
 =head1 DESCRIPTION
 
-L<Marquee::Plugin>‚ÍA L<Marquee>ƒvƒ‰ƒOƒCƒ“‚Ìƒx[ƒXƒNƒ‰ƒX‚Å‚·B
+L<Marquee::Plugin>ã¯ã€ L<Marquee>ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã§ã™ã€‚
 
 =head1 METHODS
 

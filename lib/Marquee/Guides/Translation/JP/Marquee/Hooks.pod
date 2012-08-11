@@ -1,6 +1,8 @@
+=encoding utf8
+
 =head1 NAME
 
-Marquee::Hooks - ƒtƒbƒNƒ}ƒl[ƒWƒƒ[
+Marquee::Hooks - ãƒ•ãƒƒã‚¯ãƒžãƒãƒ¼ã‚¸ãƒ£ãƒ¼
 
 =head1 SYNOPSIS
 
@@ -27,18 +29,18 @@ Marquee::Hooks - ƒtƒbƒNƒ}ƒl[ƒWƒƒ[
 
 =head1 DESCRIPTION
 
-L<Marquee::Hooks>‚ÍAL<Marquee>‚ÌƒtƒbƒNƒ}ƒl[ƒWƒƒ[‚Å‚·B
+L<Marquee::Hooks>ã¯ã€L<Marquee>ã®ãƒ•ãƒƒã‚¯ãƒžãƒãƒ¼ã‚¸ãƒ£ãƒ¼ã§ã™ã€‚
 
 =head1 METHODS
 
-L<Marquee::Hooks>‚ÍL<Mojo::EventEmitter>‚©‚ç‘S‚Ä‚Ìƒƒ\ƒbƒh‚ðŒp³‚µA‰º‹L‚ð’Ç‰Á‚ÅŽÀ‘•‚µ‚Ü‚·B
+L<Marquee::Hooks>ã¯L<Mojo::EventEmitter>ã‹ã‚‰å…¨ã¦ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç¶™æ‰¿ã—ã€ä¸‹è¨˜ã‚’è¿½åŠ ã§å®Ÿè£…ã—ã¾ã™ã€‚
 
 =head2 C<emit_chain>
 
   $plugins = $plugins->emit_chain('foo');
   $plugins = $plugins->emit_chain(foo => 123);
 
-ƒtƒbƒNƒCƒxƒ“ƒg‚ð˜A½“I‚É”­s‚µ‚Ü‚·B
+ãƒ•ãƒƒã‚¯ã‚¤ãƒ™ãƒ³ãƒˆã‚’é€£éŽ–çš„ã«ç™ºè¡Œã—ã¾ã™ã€‚
 
 =head1 SEE ALSO
 

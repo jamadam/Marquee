@@ -1,3 +1,5 @@
+=encoding utf8
+
 =head1 NAME
 
 Marquee::Context - Context
@@ -14,7 +16,7 @@ Marquee::Context - Context
 
 =head1 DESCRIPTION
 
-L<Marquee::Context>ƒNƒ‰ƒX‚ÍAƒŠƒNƒGƒXƒg–ˆ‚ÌƒRƒ“ƒeƒLƒXƒg‚ð•\Û‚µ‚Ü‚·B–{ƒNƒ‰ƒX‚ÍƒZƒbƒVƒ‡ƒ“ŠÇ—‚Æ–¼•t‚«ƒNƒbƒL[‚ÌŠÇ—‚às‚¢‚Ü‚·B
+L<Marquee::Context>ã‚¯ãƒ©ã‚¹ã¯ã€ãƒªã‚¯ã‚¨ã‚¹ãƒˆæ¯Žã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’è¡¨è±¡ã—ã¾ã™ã€‚æœ¬ã‚¯ãƒ©ã‚¹ã¯ã‚»ãƒƒã‚·ãƒ§ãƒ³ç®¡ç†ã¨ç½²åä»˜ãã‚¯ãƒƒã‚­ãƒ¼ã®ç®¡ç†ã‚‚è¡Œã„ã¾ã™ã€‚
 
 =head1 ATTRIBUTES
 
@@ -26,7 +28,7 @@ L<Marquee> instance.
 
 =head2 session
 
-Ž‘±“I‚Èƒf[ƒ^ƒXƒgƒŒ[ƒWB ˆÃ†‰»ƒNƒbƒL[‚Ì’†‚ÉAJSONŒ`Ž®‚ÅƒVƒŠƒAƒ‰ƒCƒY‚³‚ê•Û‘¶‚³‚ê‚Ü‚·B ƒNƒbƒL[‚Íˆê”Ê“I‚É4096ƒoƒCƒg‚Ìƒf[ƒ^‚É§ŒÀ‚³‚ê‚é‚±‚Æ‚É’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B
+æŒç¶šçš„ãªãƒ‡ãƒ¼ã‚¿ã‚¹ãƒˆãƒ¬ãƒ¼ã‚¸ã€‚ æš—å·åŒ–ã‚¯ãƒƒã‚­ãƒ¼ã®ä¸­ã«ã€JSONå½¢å¼ã§ã‚·ãƒªã‚¢ãƒ©ã‚¤ã‚ºã•ã‚Œä¿å­˜ã•ã‚Œã¾ã™ã€‚ ã‚¯ãƒƒã‚­ãƒ¼ã¯ä¸€èˆ¬çš„ã«4096ãƒã‚¤ãƒˆã®ãƒ‡ãƒ¼ã‚¿ã«åˆ¶é™ã•ã‚Œã‚‹ã“ã¨ã«æ³¨æ„ã—ã¦ãã ã•ã„ã€‚
 
     my $session = $context->session;
     my $foo     = $session->{'foo'};
@@ -34,35 +36,35 @@ L<Marquee> instance.
 
 =head2 session_secure
 
-‘S‚Ä‚ÌƒZƒbƒVƒ‡ƒ“ƒNƒbƒL[‚ÉƒZƒLƒ…ƒAƒtƒ‰ƒO‚ðƒZƒbƒg‚·‚é‚±‚Æ‚ÅAƒuƒ‰ƒEƒU‚Ö‚Ì‘—M‚ðHTTPSƒRƒlƒNƒVƒ‡ƒ“‚ÉŒÀ’è‚µ‚Ü‚·B
+å…¨ã¦ã®ã‚»ãƒƒã‚·ãƒ§ãƒ³ã‚¯ãƒƒã‚­ãƒ¼ã«ã‚»ã‚­ãƒ¥ã‚¢ãƒ•ãƒ©ã‚°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹ã“ã¨ã§ã€ãƒ–ãƒ©ã‚¦ã‚¶ã¸ã®é€ä¿¡ã‚’HTTPSã‚³ãƒã‚¯ã‚·ãƒ§ãƒ³ã«é™å®šã—ã¾ã™ã€‚
 
     my $secure = $context->session_secure;
     $context->session_secure(1);
 
 =head2 session_expiration
 
-ƒZƒbƒVƒ‡ƒ“‚Ì—LŒøŠúŒÀ‚ðŒ»Ý‚©‚ç‚Ì•b”‚ÅŽw’è‚µ‚Ü‚·BƒfƒtƒHƒ‹ƒg‚Í3600‚Å‚·B—LŒøŠúŒÀ‚ÍƒŠƒNƒGƒXƒg–ˆ‚ÉƒŠƒtƒŒƒbƒVƒ…
-‚³‚ê‚Ü‚·B
+ã‚»ãƒƒã‚·ãƒ§ãƒ³ã®æœ‰åŠ¹æœŸé™ã‚’ç¾åœ¨ã‹ã‚‰ã®ç§’æ•°ã§æŒ‡å®šã—ã¾ã™ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯3600ã§ã™ã€‚æœ‰åŠ¹æœŸé™ã¯ãƒªã‚¯ã‚¨ã‚¹ãƒˆæ¯Žã«ãƒªãƒ•ãƒ¬ãƒƒã‚·ãƒ¥
+ã•ã‚Œã¾ã™ã€‚
 
     my $time = $context->session_expiration;
     $context->session_expiration(3600);
 
 =head2 session_name
 
-ƒZƒbƒVƒ‡ƒ“ƒf[ƒ^‚ðŠi”[‚·‚é‚½‚ß‚Ì–¼•t‚«ƒNƒbƒL[‚Ì–¼‘O‚ðŽw’è‚µ‚Ü‚·BƒfƒtƒHƒ‹ƒg‚Íumrgev‚Å‚·B
+ã‚»ãƒƒã‚·ãƒ§ãƒ³ãƒ‡ãƒ¼ã‚¿ã‚’æ ¼ç´ã™ã‚‹ãŸã‚ã®ç½²åä»˜ãã‚¯ãƒƒã‚­ãƒ¼ã®åå‰ã‚’æŒ‡å®šã—ã¾ã™ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯ã€Œmrgeã€ã§ã™ã€‚
 
     my $name = $context->session_name;
     $context->session_name('session');
 
 =head2 stash
 
-app‚©‚çŒp³‚³‚ê‚½ƒXƒ^ƒbƒVƒ…‚ðŠi”[‚µ‚Ü‚·B
+appã‹ã‚‰ç¶™æ‰¿ã•ã‚ŒãŸã‚¹ã‚¿ãƒƒã‚·ãƒ¥ã‚’æ ¼ç´ã—ã¾ã™ã€‚
 
     my $stash = $context->stash;
 
 =head2 tx
 
-L<Mojo::Transaction>ƒCƒ“ƒXƒ^ƒ“ƒXB
+L<Mojo::Transaction>ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã€‚
 
     my $tx = $context->tx;
 
@@ -70,13 +72,13 @@ L<Mojo::Transaction>ƒCƒ“ƒXƒ^ƒ“ƒXB
 
 =head2 new
 
-ƒRƒ“ƒXƒgƒ‰ƒNƒ^B
+ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã€‚
 
     my $context = Marquee::Context->new;
 
 =head2 $instance->close
 
-ƒRƒ“ƒeƒLƒXƒg‚ðƒNƒ[ƒY‚µ‚Ü‚·B
+ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’ã‚¯ãƒ­ãƒ¼ã‚ºã—ã¾ã™ã€‚
 
 =head2 $instance->cookie
 
@@ -85,14 +87,14 @@ L<Mojo::Transaction>ƒCƒ“ƒXƒ^ƒ“ƒXB
     $c         = $c->cookie(foo => 'bar');
     $c         = $c->cookie(foo => 'bar', {path => '/'});
 
-ƒŠƒNƒGƒXƒg‚ÌƒNƒbƒL[‚ÉƒAƒNƒZƒX‚µ‚½‚èAV‚µ‚¢ƒŒƒXƒ|ƒ“ƒX—pƒNƒbƒL[‚ð¶¬‚µ‚½‚è‚µ‚Ü‚·B
+ãƒªã‚¯ã‚¨ã‚¹ãƒˆã®ã‚¯ãƒƒã‚­ãƒ¼ã«ã‚¢ã‚¯ã‚»ã‚¹ã—ãŸã‚Šã€æ–°ã—ã„ãƒ¬ã‚¹ãƒãƒ³ã‚¹ç”¨ã‚¯ãƒƒã‚­ãƒ¼ã‚’ç”Ÿæˆã—ãŸã‚Šã—ã¾ã™ã€‚
 
     # Create response cookie with domain
     $c->cookie(name => 'sebastian', {domain => 'mojolicio.us'});
 
 =head2 $instance->served
 
-ƒŒƒXƒ|ƒ“ƒX‚ÌƒXƒe[ƒ^ƒXƒR[ƒh‚ª‚·‚Å‚ÉÝ’èÏ‚Ý‚©’²‚×A^‹U’l‚ð•Ô‚µ‚Ü‚·B
+ãƒ¬ã‚¹ãƒãƒ³ã‚¹ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚³ãƒ¼ãƒ‰ãŒã™ã§ã«è¨­å®šæ¸ˆã¿ã‹èª¿ã¹ã€çœŸå½å€¤ã‚’è¿”ã—ã¾ã™ã€‚
 
     if (! $c->served) {
         ...
@@ -100,7 +102,7 @@ L<Mojo::Transaction>ƒCƒ“ƒXƒ^ƒ“ƒXB
 
 =head2 $instance->signed_cookie
 
-–¼•t‚«ƒNƒbƒL[‚ÉƒAƒNƒZƒX‚µ‚½‚èAV‚µ‚¢–¼•t‚«ƒNƒbƒL[‚ð¶¬‚µ‚½‚è‚µ‚Ü‚·B–¼‚ÌŒŸØ‚ÉŽ¸”s‚µ‚½ƒNƒbƒL[‚ÍŽ©“®“I‚É”jŠü‚³‚ê‚Ü‚·B
+ç½²åä»˜ãã‚¯ãƒƒã‚­ãƒ¼ã«ã‚¢ã‚¯ã‚»ã‚¹ã—ãŸã‚Šã€æ–°ã—ã„ç½²åä»˜ãã‚¯ãƒƒã‚­ãƒ¼ã‚’ç”Ÿæˆã—ãŸã‚Šã—ã¾ã™ã€‚ç½²åã®æ¤œè¨¼ã«å¤±æ•—ã—ãŸã‚¯ãƒƒã‚­ãƒ¼ã¯è‡ªå‹•çš„ã«ç ´æ£„ã•ã‚Œã¾ã™ã€‚
 
     my $value  = $c->signed_cookie('foo');
     my @values = $c->signed_cookie('foo');

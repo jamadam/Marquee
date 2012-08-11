@@ -1,3 +1,5 @@
+=encoding utf8
+
 =head1 NAME
 
 Marquee::Stash - stash
@@ -21,7 +23,7 @@ Marquee::Stash - stash
 
 =head1 DESCRIPTION
 
-�{�N���X�́A�X�^�b�V����\�ۂ��܂��B
+本クラスは、スタッシュを表象します。
 
 =head1 METHODS
 
@@ -31,20 +33,20 @@ Marquee::Stash - stash
 
 =head2 $instance->get($name)
 
-�w��̖��O�̃X�^�b�V���l���擾���܂��B
+指定の名前のスタッシュ値を取得します。
 
     my $hash_ref = $stash->get();
     my $value    = $stash->get('key');
     
 =head2 $instance->set(%key_value)
 
-�w��̃n�b�V�����n�b�V�����t�@�����X�ɂăX�^�b�V���l��ݒ肵�܂��B
+指定のハッシュかハッシュリファレンスにてスタッシュ値を設定します。
 
     $stash->set(key => 'value');
 
 =head2 $instance->clone(%key_value)
 
-�w��̃n�b�V�����n�b�V�����t�@�����X���}�[�W���A�X�^�b�V���̃N���[���𐶐����܂��B
+指定のハッシュかハッシュリファレンスをマージしつつ、スタッシュのクローンを生成します。
 
     my $clone = $stash->clone;
     my $clone = $stash->clone(key => 'value');

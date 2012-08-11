@@ -1,3 +1,5 @@
+=encoding utf8
+
 =head1 NAME
 
 Marquee::Cache - Cache
@@ -17,7 +19,7 @@ Marquee::Cache - Cache
 
 =head1 DESCRIPTION
 
-�L�������Ǘ��t���ȈՃL���b�V���}�l�[�W���[
+有効期限管理付き簡易キャッシュマネージャー
 
 =head1 METHODS
 
@@ -25,11 +27,11 @@ Marquee::Cache - Cache
 
 =head2 $instance->get($name)
 
-�w��̖��O�̃L���b�V����Ԃ��܂��B
+指定の名前のキャッシュを返します。
 
 =head2 $instance->set($name => $data)
 
-�w��̖��O�ƃf�[�^�ŃL���b�V�����i�[���܂��B
+指定の名前とデータでキャッシュを格納します。
 
     $cache->set(key, $data);
     $cache->set(key, $data, sub {...});
@@ -37,7 +39,7 @@ Marquee::Cache - Cache
 
 =head2 $instance->vacuum()
 
-�L���b�V���e�[�u���ƃX�^�b�N�e�[�u���̊Ԃ̃~�X�}�b�`���������܂��B
+キャッシュテーブルとスタックテーブルの間のミスマッチを解消します。
 
 =head1 SEE ALSO
 

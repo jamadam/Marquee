@@ -1,6 +1,8 @@
+=encoding utf8
+
 =head1 NAME
 
-Marquee - ƒT[ƒo[ƒTƒCƒhƒCƒ“ƒNƒ‹[ƒh‰Â”\‚ÈŠÈˆÕHTTPƒT[ƒo[
+Marquee - ã‚µãƒ¼ãƒãƒ¼ã‚µã‚¤ãƒ‰ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰å¯èƒ½ãªç°¡æ˜“HTTPã‚µãƒ¼ãƒãƒ¼
 
 =head1 SYNOPSIS
     
@@ -20,79 +22,79 @@ Marquee - ƒT[ƒo[ƒTƒCƒhƒCƒ“ƒNƒ‹[ƒh‰Â”\‚ÈŠÈˆÕHTTPƒT[ƒo[
 
 =head1 DESCRIPTION
 
-L<Marquee>‚ÍŠÈˆÕƒEƒFƒuƒT[ƒo[‚Ìƒx[ƒXƒNƒ‰ƒX‚Å‚·B–{ƒ‚ƒWƒ…[ƒ‹‚ÍA“¯«‚ÌƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ƒc[ƒ‹C<mojo Marquee>
-‚ÌƒoƒbƒNƒGƒ“ƒh‚Å‚à‚ ‚è‚Ü‚·BŽÀ‘•‚É‚ÍAMojoliciousƒfƒBƒXƒgƒŠƒrƒ…[ƒVƒ‡ƒ“‚Ìƒ‚ƒWƒ…[ƒ‹ŒQ‚ð—˜—p‚µ‚Ä‚¢‚Ü‚·B
+L<Marquee>ã¯ç°¡æ˜“ã‚¦ã‚§ãƒ–ã‚µãƒ¼ãƒãƒ¼ã®ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã§ã™ã€‚æœ¬ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ã¯ã€åŒæ¢±ã®ã‚³ãƒžãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ãƒ„ãƒ¼ãƒ«C<mojo Marquee>
+ã®ãƒãƒƒã‚¯ã‚¨ãƒ³ãƒ‰ã§ã‚‚ã‚ã‚Šã¾ã™ã€‚å®Ÿè£…ã«ã¯ã€Mojoliciousãƒ‡ã‚£ã‚¹ãƒˆãƒªãƒ“ãƒ¥ãƒ¼ã‚·ãƒ§ãƒ³ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ç¾¤ã‚’åˆ©ç”¨ã—ã¦ã„ã¾ã™ã€‚
 
 =head1 ATTRIBUTES
 
 =head2 document_root
 
-ƒhƒLƒ…ƒƒ“ƒgƒ‹[ƒg‚ÌƒfƒBƒŒƒNƒgƒŠ‚ðŽw’è‚µ‚Ü‚·B‚±‚ÌƒfƒBƒŒƒNƒgƒŠ‚ÍÃ“Iƒtƒ@ƒCƒ‹‚Æƒeƒ“ƒvƒŒ[ƒg‚Ì—¼•û‚ðŠi”[‚Å‚«‚Ü‚·B
+ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ«ãƒ¼ãƒˆã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æŒ‡å®šã—ã¾ã™ã€‚ã“ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¯é™çš„ãƒ•ã‚¡ã‚¤ãƒ«ã¨ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®ä¸¡æ–¹ã‚’æ ¼ç´ã§ãã¾ã™ã€‚
 
     $app->document_root($app->home->rel_dir('public_html'));
 
 =head2 default_file
 
-ƒfƒtƒHƒ‹ƒg‚Ìƒtƒ@ƒCƒ‹–¼‚ðŽw’è‚µAŽ©“®•âŠ®‚ð—LŒø‚É‚µ‚Ü‚·B
+ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒ‡å®šã—ã€è‡ªå‹•è£œå®Œã‚’æœ‰åŠ¹ã«ã—ã¾ã™ã€‚
 
     $app->default_file('index.html');
 
 =head2 error_document
 
-ƒGƒ‰[ƒhƒLƒ…ƒƒ“ƒg‚ÌƒŒƒ“ƒ_ƒ‰[ƒCƒ“ƒXƒ^ƒ“ƒX‚ðŠi”[‚µ‚Ü‚·BƒfƒtƒHƒ‹ƒg‚ÍL<Marquee::ErrorDocument>‚Å‚·B
+ã‚¨ãƒ©ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã®ãƒ¬ãƒ³ãƒ€ãƒ©ãƒ¼ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ ¼ç´ã—ã¾ã™ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯L<Marquee::ErrorDocument>ã§ã™ã€‚
 
     $app->error_document(Marquee::ErrorDocument->new);
 
 =head2 hooks
 
-L<Marquee::Hooks>ƒCƒ“ƒXƒ^ƒ“ƒX‚ðŠi”[‚µ‚Ü‚·B
+L<Marquee::Hooks>ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ ¼ç´ã—ã¾ã™ã€‚
 
     $app->hooks(Marquee::Hooks->new);
 
 =head2 roots
 
-Ã“Iƒtƒ@ƒCƒ‹‚Æƒeƒ“ƒvƒŒ[ƒg‚ðŠi”[‚·‚éƒpƒX‚Ì”z—ñ‚ðŠi”[‚µ‚Ü‚·B
+é™çš„ãƒ•ã‚¡ã‚¤ãƒ«ã¨ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’æ ¼ç´ã™ã‚‹ãƒ‘ã‚¹ã®é…åˆ—ã‚’æ ¼ç´ã—ã¾ã™ã€‚
 
     push(@{$app->roots}, 'path/to/additional_dir')
 
 =head2 secret
 
-–¼•t‚«ƒNƒbƒL[‚È‚Ç‚ÉŽg—p‚·‚é”é–§‚ÌƒpƒXƒtƒŒ[ƒY‚ðŽw’è‚µ‚Ü‚·BƒfƒtƒHƒ‹ƒg‚Íƒ‰ƒ“ƒ_ƒ€‚È•¶Žš—ñ‚Å‚·B
+ç½²åä»˜ãã‚¯ãƒƒã‚­ãƒ¼ãªã©ã«ä½¿ç”¨ã™ã‚‹ç§˜å¯†ã®ãƒ‘ã‚¹ãƒ•ãƒ¬ãƒ¼ã‚ºã‚’æŒ‡å®šã—ã¾ã™ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯ãƒ©ãƒ³ãƒ€ãƒ ãªæ–‡å­—åˆ—ã§ã™ã€‚
 
     my $secret = $app->secret;
     $app       = $app->secret('passw0rd');
 
 =head2 ssi_handlers
 
-ƒT[ƒo[ƒTƒCƒhƒCƒ“ƒNƒ‹[ƒh‚Ìƒnƒ“ƒhƒ‰[‚ðƒnƒbƒVƒ…ƒŠƒtƒ@ƒŒƒ“ƒX‚ÅŠi”[‚µ‚Ü‚·B
+ã‚µãƒ¼ãƒãƒ¼ã‚µã‚¤ãƒ‰ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã®ãƒãƒ³ãƒ‰ãƒ©ãƒ¼ã‚’ãƒãƒƒã‚·ãƒ¥ãƒªãƒ•ã‚¡ãƒ¬ãƒ³ã‚¹ã§æ ¼ç´ã—ã¾ã™ã€‚
 
     $app->ssi_handlers->{ep} = Marquee::SSIHandler::EP->new;
 
-ã‹L‚Ì—á‚Ì‘ã‚í‚è‚ÉAC<add_handler>ƒƒ\ƒbƒh‚ðŽg—p‚µ‚ÄSSI‚ÌŠÖ˜A•t‚¯‚ð’Ç‰Á‚·‚é‚±‚Æ‚ª‰Â”\‚Å‚·B
+ä¸Šè¨˜ã®ä¾‹ã®ä»£ã‚ã‚Šã«ã€C<add_handler>ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ç”¨ã—ã¦SSIã®é–¢é€£ä»˜ã‘ã‚’è¿½åŠ ã™ã‚‹ã“ã¨ãŒå¯èƒ½ã§ã™ã€‚
 
 =head2 stash
 
-L<Marquee::Stash>ƒCƒ“ƒXƒ^ƒ“ƒX‚ðŠi”[‚µ‚Ü‚·B
+L<Marquee::Stash>ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ ¼ç´ã—ã¾ã™ã€‚
 
     $app->stash(Marquee::Stash->new);
     my $stash = $app->stash;
 
 =head2 types
 
-L<Mojolicious::Type>ƒCƒ“ƒXƒ^ƒ“ƒX‚ðŠi”[‚µ‚Ü‚·B
+L<Mojolicious::Type>ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ ¼ç´ã—ã¾ã™ã€‚
 
     my $type = $app->types;
     $type->type(zip => 'application/zip');
 
 =head2 under_development
 
-ƒfƒoƒbƒOƒXƒNƒŠ[ƒ“‚ð—LŒø‚É‚µ‚Ü‚·B
+ãƒ‡ãƒãƒƒã‚°ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚’æœ‰åŠ¹ã«ã—ã¾ã™ã€‚
 
     $app->under_development(1);
 
 =head2 x_powered_by
 
-X-POWERED-BYƒŒƒXƒ|ƒ“ƒXƒwƒbƒ_[‚ðÝ’è‚µ‚Ü‚·B
+X-POWERED-BYãƒ¬ã‚¹ãƒãƒ³ã‚¹ãƒ˜ãƒƒãƒ€ãƒ¼ã‚’è¨­å®šã—ã¾ã™ã€‚
 
     $app->x_powered_by('MyApp');
 
@@ -100,19 +102,19 @@ X-POWERED-BYƒŒƒXƒ|ƒ“ƒXƒwƒbƒ_[‚ðÝ’è‚µ‚Ü‚·B
 
 =head2 Marquee->new;
 
-ƒRƒ“ƒXƒgƒ‰ƒNƒ^[B
+ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãƒ¼ã€‚
 
     my $app = Marquee->new;
 
 =head2 $instance->add_handler(name => $code_ref);
 
-C<ssi_handlers>‚ÌƒGƒ“ƒgƒŠ[‚ð’Ç‰Á‚µ‚Ü‚·B
+C<ssi_handlers>ã®ã‚¨ãƒ³ãƒˆãƒªãƒ¼ã‚’è¿½åŠ ã—ã¾ã™ã€‚
 
     $instance->add_handler(ep => Marquee::SSIHandler::EP->new);
 
 =head2 Marquee->asset($filename);
 
-ƒoƒ“ƒhƒ‹‚³‚ê‚½ƒAƒZƒbƒg‚Ì’†‚©‚çAŽw’è‚Ì–¼‘O‚Ìƒtƒ@ƒCƒ‹‚ÌƒpƒX‚ð•Ô‚µ‚Ü‚·B
+ãƒãƒ³ãƒ‰ãƒ«ã•ã‚ŒãŸã‚¢ã‚»ãƒƒãƒˆã®ä¸­ã‹ã‚‰ã€æŒ‡å®šã®åå‰ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹ã‚’è¿”ã—ã¾ã™ã€‚
 
     my $asset = Marquee->asset('path/to/common.css');
     
@@ -122,7 +124,7 @@ C<ssi_handlers>‚ÌƒGƒ“ƒgƒŠ[‚ð’Ç‰Á‚µ‚Ü‚·B
     
     say $asset # /path/to/lib/Marquee/Asset
 
-‚»‚Ì‘¼‚ÌƒpƒbƒP[ƒW‚©‚çŒÄ‚Ño‚µ‚½ê‡BB
+ãã®ä»–ã®ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã‹ã‚‰å‘¼ã³å‡ºã—ãŸå ´åˆã€‚ã€‚
 
     my $asset = SomePackage->Marquee::asset('path/to/common.css');
     
@@ -134,29 +136,29 @@ C<ssi_handlers>‚ÌƒGƒ“ƒgƒŠ[‚ð’Ç‰Á‚µ‚Ü‚·B
 
 =head2 $instance->c()
 
-C<context>ƒƒ\ƒbƒh‚ÌƒGƒCƒŠƒAƒX‚Å‚·B
+C<context>ãƒ¡ã‚½ãƒƒãƒ‰ã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã§ã™ã€‚
 
 =head2 $instance->context()
 
-Œ»Ý‚ÌƒRƒ“ƒeƒLƒXƒg‚ð•Ô‚µ‚Ü‚·B‚±‚ê‚Íƒ[ƒJƒ‰ƒCƒY‚³‚ê‚½C<$Marquee::CONTEXT>‚ðŽQÆ‚µ‚Ü‚·B
+ç¾åœ¨ã®ã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆã‚’è¿”ã—ã¾ã™ã€‚ã“ã‚Œã¯ãƒ­ãƒ¼ã‚«ãƒ©ã‚¤ã‚ºã•ã‚ŒãŸC<$Marquee::CONTEXT>ã‚’å‚ç…§ã—ã¾ã™ã€‚
 
     my $context = $app->context;
 
 =head2 $instance->dispatch()
 
-ƒtƒƒ“ƒgƒfƒBƒXƒpƒbƒ`ƒƒ[‚Å‚·B
+ãƒ•ãƒ­ãƒ³ãƒˆãƒ‡ã‚£ã‚¹ãƒ‘ãƒƒãƒãƒ£ãƒ¼ã§ã™ã€‚
 
     $app->dispatch()
 
 =head2 $instance->handler($tx)
 
-mojoƒŒƒCƒ„[‚©‚çŒÄ‚Î‚ê‚éƒnƒ“ƒhƒ‰[‚Å‚·B
+mojoãƒ¬ã‚¤ãƒ¤ãƒ¼ã‹ã‚‰å‘¼ã°ã‚Œã‚‹ãƒãƒ³ãƒ‰ãƒ©ãƒ¼ã§ã™ã€‚
 
     $app->handler($tx)
 
 =head2 $instance->hook($name => $cb)
 
-$instance->hooks->on‚ÌƒGƒCƒŠƒAƒX‚Å‚·BƒtƒbƒNƒ|ƒCƒ“ƒg‚ÉƒR[ƒ‹ƒoƒbƒN‚ð’Ç‰Á‚µ‚Ü‚·B
+$instance->hooks->onã®ã‚¨ã‚¤ãƒªã‚¢ã‚¹ã§ã™ã€‚ãƒ•ãƒƒã‚¯ãƒã‚¤ãƒ³ãƒˆã«ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã‚’è¿½åŠ ã—ã¾ã™ã€‚
 
     $app->hook(around_dispatch => sub {
         my ($next, @args) = @_;
@@ -167,34 +169,34 @@ $instance->hooks->on‚ÌƒGƒCƒŠƒAƒX‚Å‚·BƒtƒbƒNƒ|ƒCƒ“ƒg‚ÉƒR[ƒ‹ƒoƒbƒN‚ð’Ç‰Á‚µ‚Ü‚·B
 
 =head2 $instance->is_directory($path)
 
-Žw’è‚ÌƒpƒX‚ªƒfƒBƒŒƒNƒgƒŠ‚©‚Ç‚¤‚©‚Ì^‹U’l‚ð•Ô‚µ‚Ü‚·B
+æŒ‡å®šã®ãƒ‘ã‚¹ãŒãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‹ã©ã†ã‹ã®çœŸå½å€¤ã‚’è¿”ã—ã¾ã™ã€‚
 
     $app->is_directory('/path/to/directory') # bool
 
 =head2 $instance->log_file($path)
 
-ƒƒOƒtƒ@ƒCƒ‹‚ðŽw’è‚µ‚Ü‚·B
+ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ‡å®šã—ã¾ã™ã€‚
 
     $app->log_file('/path/to/file')
 
 =head2 $instance->path_to_type($path)
 
-ƒpƒX‚©‚çMIMEƒ^ƒCƒv‚ðŒŸo‚µ‚Ü‚·B
+ãƒ‘ã‚¹ã‹ã‚‰MIMEã‚¿ã‚¤ãƒ—ã‚’æ¤œå‡ºã—ã¾ã™ã€‚
 
     my $type = $app->path_to_type('/path/to/file.css') # text/css
 
 =head2 $instance->plugin($class => $params)
 
-ƒNƒ‰ƒX‚ðƒvƒ‰ƒOƒCƒ“‚Æ‚µ‚Äƒ[ƒh‚µ‚Ü‚·BƒNƒ‰ƒX–¼‚Ìæ“ª‚ªC<+>‚Å‚È‚¯‚ê‚ÎÚ“ªŽ«uMarquee::Pluginv‚ª•t—^‚³‚ê‚Ü‚·B
-C<+>‚ÍƒNƒ‰ƒX–¼‚ªŠ®Œ‹‚µ‚Ä‚¢‚é‚±‚Æ‚ðˆÓ–¡‚µ‚Ü‚·B
+ã‚¯ãƒ©ã‚¹ã‚’ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã¨ã—ã¦ãƒ­ãƒ¼ãƒ‰ã—ã¾ã™ã€‚ã‚¯ãƒ©ã‚¹åã®å…ˆé ­ãŒC<+>ã§ãªã‘ã‚Œã°æŽ¥é ­è¾žã€ŒMarquee::Pluginã€ãŒä»˜ä¸Žã•ã‚Œã¾ã™ã€‚
+C<+>ã¯ã‚¯ãƒ©ã‚¹åãŒå®Œçµã—ã¦ã„ã‚‹ã“ã¨ã‚’æ„å‘³ã—ã¾ã™ã€‚
 
     my $plugin = $app->plugin(Plugin => $params); # Marquee::Plugin::PlugName
     my $plugin = $app->plugin('+NameSpace::Plugin' => $params); # NameSpace::Plugin
 
 =head2 $instance->render_ssi($path, $handler_ext)
 
-SSI‚ðƒŒƒ“ƒ_ƒŠƒ“ƒO‚µAŒ‹‰Ê‚ð•Ô‚µ‚Ü‚·BC<$handler_ext>‚ÌŽw’è‚ª‚È‚¯‚ê‚ÎAC<$path>‚©‚çƒnƒ“ƒhƒ‰[‚ðŽ©“®ŒŸo
-‚µ‚Ü‚·B
+SSIã‚’ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã—ã€çµæžœã‚’è¿”ã—ã¾ã™ã€‚C<$handler_ext>ã®æŒ‡å®šãŒãªã‘ã‚Œã°ã€C<$path>ã‹ã‚‰ãƒãƒ³ãƒ‰ãƒ©ãƒ¼ã‚’è‡ªå‹•æ¤œå‡º
+ã—ã¾ã™ã€‚
 
     my $result = $app->render_ssi('/path/to/template.html.ep');
     my $result = $app->render_ssi('/path/to/template.html.ep', 'ep');
@@ -202,52 +204,52 @@ SSI‚ðƒŒƒ“ƒ_ƒŠƒ“ƒO‚µAŒ‹‰Ê‚ð•Ô‚µ‚Ü‚·BC<$handler_ext>‚ÌŽw’è‚ª‚È‚¯‚ê‚ÎAC<$path>‚©
 
 =head2 $instance->search_static($path)
 
-Žw’è‚ÌƒpƒX‚ÌÃ“Iƒtƒ@ƒCƒ‹‚ðŒŸõ‚µA‘¶Ý‚·‚ê‚ÎƒpƒX‚ð•Ô‚µ‚Ü‚·B
+æŒ‡å®šã®ãƒ‘ã‚¹ã®é™çš„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œç´¢ã—ã€å­˜åœ¨ã™ã‚Œã°ãƒ‘ã‚¹ã‚’è¿”ã—ã¾ã™ã€‚
 
     $app->search_static('./a.html'); # /path/to/document_root/a.html
     $app->search_static('/path/to/a.html'); # /path/to/a.html
 
 =head2 $instance->search_template($path)
 
-Žw’è‚ÌƒpƒX‚ÌSSIƒeƒ“ƒvƒŒ[ƒgƒtƒ@ƒCƒ‹‚ðŒŸõ‚µA‘¶Ý‚·‚ê‚ÎƒpƒX‚ð•Ô‚µ‚Ü‚·B
+æŒ‡å®šã®ãƒ‘ã‚¹ã®SSIãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œç´¢ã—ã€å­˜åœ¨ã™ã‚Œã°ãƒ‘ã‚¹ã‚’è¿”ã—ã¾ã™ã€‚
 
     $app->search_template('./template.html'); # /path/to/document_root/template.html.ep
     $app->search_template('/path/to/template.html'); # /path/to/template.html.ep
 
 =head2 $instance->serve_redirect($uri)
 
-Žw’è‚ÌURI‚ÖƒŠƒ_ƒCƒŒƒNƒg‚·‚éƒŒƒXƒ|ƒ“ƒX‚ðo—Í‚µ‚Ü‚·B
+æŒ‡å®šã®URIã¸ãƒªãƒ€ã‚¤ãƒ¬ã‚¯ãƒˆã™ã‚‹ãƒ¬ã‚¹ãƒãƒ³ã‚¹ã‚’å‡ºåŠ›ã—ã¾ã™ã€‚
 
     $app->serve_redirect('http://example.com/');
     $app->serve_redirect('/path/');
 
 =head2 $instance->serve_static($path)
 
-Žw’è‚ÌƒpƒX‚Ìƒtƒ@ƒCƒ‹‚ðo—Í‚µ‚Ü‚·B
+æŒ‡å®šã®ãƒ‘ã‚¹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‡ºåŠ›ã—ã¾ã™ã€‚
 
     $app->serve_static('/path/to/static.png');
 
 =head2 $instance->serve_dynamic($path)
 
-Žw’è‚ÌƒpƒX‚Ì“®“ISSIƒy[ƒW‚ðo—Í‚µ‚Ü‚·B
+æŒ‡å®šã®ãƒ‘ã‚¹ã®å‹•çš„SSIãƒšãƒ¼ã‚¸ã‚’å‡ºåŠ›ã—ã¾ã™ã€‚
 
     $app->serve_dynamic('/path/to/template.html.ep');
 
 =head2 $instance->start()
 
-ƒAƒvƒŠ‚ðƒXƒ^[ƒg‚µ‚Ü‚·B
+ã‚¢ãƒ—ãƒªã‚’ã‚¹ã‚¿ãƒ¼ãƒˆã—ã¾ã™ã€‚
 
     $app->start();
 
 =head2 $instance->to_abs
 
-Žw’è‚ÌƒpƒX‚Ìâ‘ÎURI‚ðAƒŠƒNƒGƒXƒgURI‚É”z—¶‚µ‚Ä¶¬‚µ‚Ü‚·B
+æŒ‡å®šã®ãƒ‘ã‚¹ã®çµ¶å¯¾URIã‚’ã€ãƒªã‚¯ã‚¨ã‚¹ãƒˆURIã«é…æ…®ã—ã¦ç”Ÿæˆã—ã¾ã™ã€‚
 Generates absolute URI for given path along to the request URI.
     
     say $self->to_abs('/path/to/file.html');
 
-https://example.com:3001/a/index.html‚Ö‚ÌƒŠƒNƒGƒXƒg‚É‘Î‚µ‚ÄA
-ã‹L‚Ì—á‚Íhttps://example.com:3001/path/to/file.html‚ð¶¬‚µ‚Ü‚·B
+https://example.com:3001/a/index.htmlã¸ã®ãƒªã‚¯ã‚¨ã‚¹ãƒˆã«å¯¾ã—ã¦ã€
+ä¸Šè¨˜ã®ä¾‹ã¯https://example.com:3001/path/to/file.htmlã‚’ç”Ÿæˆã—ã¾ã™ã€‚
 
 =head1 SEE ALSO
 

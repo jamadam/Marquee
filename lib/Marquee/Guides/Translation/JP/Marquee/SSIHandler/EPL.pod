@@ -1,6 +1,8 @@
+=encoding utf8
+
 =head1 NAME
 
-Marquee::SSIHandler::EPL - EPLƒeƒ“ƒvƒŒ[ƒgƒnƒ“ƒhƒ‰[
+Marquee::SSIHandler::EPL - EPLãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãƒãƒ³ãƒ‰ãƒ©ãƒ¼
 
 =head1 SYNOPSIS
 
@@ -9,12 +11,12 @@ Marquee::SSIHandler::EPL - EPLƒeƒ“ƒvƒŒ[ƒgƒnƒ“ƒhƒ‰[
 
 =head1 DESCRIPTION
 
-EPLƒnƒ“ƒhƒ‰[B
+EPLãƒãƒ³ãƒ‰ãƒ©ãƒ¼ã€‚
 
 =head1 ATTRIBUTES
 
-L<Marquee::SSIHandler::EPL>‚Í
-L<Marquee::SSIHandler>‚Ì‘S‚Ä‚Ì‘®«‚ðŒp³‚µA‰º‹L‚Ì‘®«‚ð’Ç‰Á‚ÅŽÀ‘•‚µ‚Ü‚·B
+L<Marquee::SSIHandler::EPL>ã¯
+L<Marquee::SSIHandler>ã®å…¨ã¦ã®å±žæ€§ã‚’ç¶™æ‰¿ã—ã€ä¸‹è¨˜ã®å±žæ€§ã‚’è¿½åŠ ã§å®Ÿè£…ã—ã¾ã™ã€‚
 
 =head2 template_cache
 
@@ -22,20 +24,20 @@ L<Marquee::SSIHandler>‚Ì‘S‚Ä‚Ì‘®«‚ðŒp³‚µA‰º‹L‚Ì‘®«‚ð’Ç‰Á‚ÅŽÀ‘•‚µ‚Ü‚·B
 
 =head1 METHODS
 
-L<Marquee::SSIHandler::EPL>‚Í
-L<Marquee::SSIHandler>‚Ì‘S‚Ä‚Ìƒƒ\ƒbƒh‚ðŒp³‚µA‰º‹L‚Ìƒƒ\ƒbƒh‚ð’Ç‰Á‚ÅŽÀ‘•‚µ‚Ü‚·B
+L<Marquee::SSIHandler::EPL>ã¯
+L<Marquee::SSIHandler>ã®å…¨ã¦ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ç¶™æ‰¿ã—ã€ä¸‹è¨˜ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’è¿½åŠ ã§å®Ÿè£…ã—ã¾ã™ã€‚
 
 =head2 $instance->cache($path, $mt)
 
-ƒLƒƒƒbƒVƒ…‚Ì•Û‘¶/“Ç‚Ýo‚µ‚ðs‚¢‚Ü‚·B
+ã‚­ãƒ£ãƒƒã‚·ãƒ¥ã®ä¿å­˜/èª­ã¿å‡ºã—ã‚’è¡Œã„ã¾ã™ã€‚
 
     $epl->cache('/path/to/template.html.ep', $mt);
     my $mt = $epl->cache('/path/to/template.html.ep');
 
 =head2 $instance->render($path)
 
-Žw’è‚Ìƒeƒ“ƒvƒŒ[ƒg‚ðƒŒƒ“ƒ_ƒŠƒ“ƒO‚µAŒ‹‰Ê‚ð•Ô‚µ‚Ü‚·BƒŒƒ“ƒ_ƒŠƒ“ƒO‚ÉŽ¸”s‚µ‚½ê‡AL<Mojo::Exception>‚ð”º‚Á‚Ä
-die‚µ‚Ü‚·B
+æŒ‡å®šã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã—ã€çµæžœã‚’è¿”ã—ã¾ã™ã€‚ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã«å¤±æ•—ã—ãŸå ´åˆã€L<Mojo::Exception>ã‚’ä¼´ã£ã¦
+dieã—ã¾ã™ã€‚
 
 =head1 SEE ALSO
 

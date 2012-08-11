@@ -1,6 +1,8 @@
+=encoding utf8
+
 =head1 NAME
 
-Marquee::SSIHandler - SSIƒnƒ“ƒhƒ‰[ƒx[ƒXƒNƒ‰ƒX
+Marquee::SSIHandler - SSIãƒãƒ³ãƒ‰ãƒ©ãƒ¼ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹
 
 =head1 SYNOPSIS
 
@@ -17,13 +19,13 @@ Marquee::SSIHandler - SSIƒnƒ“ƒhƒ‰[ƒx[ƒXƒNƒ‰ƒX
 
 =head1 DESCRIPTION
 
-–{ƒNƒ‰ƒX‚ÍAƒnƒ“ƒhƒ‰[ƒNƒ‰ƒX‚ÉŒp³‚³‚ê‚éƒx[ƒXƒNƒ‰ƒX‚Å‚·BƒTƒuƒNƒ‰ƒX‚ÍC<render>‚ðŽÀ‘•‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB
+æœ¬ã‚¯ãƒ©ã‚¹ã¯ã€ãƒãƒ³ãƒ‰ãƒ©ãƒ¼ã‚¯ãƒ©ã‚¹ã«ç¶™æ‰¿ã•ã‚Œã‚‹ãƒ™ãƒ¼ã‚¹ã‚¯ãƒ©ã‚¹ã§ã™ã€‚ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã¯C<render>ã‚’å®Ÿè£…ã—ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚
 
 =head1 ATTRIBUTES
 
 =head2 app
 
-MarqueeƒAƒvƒŠƒCƒ“ƒXƒ^ƒ“ƒX‚ðŠi”[‚µ‚Ü‚·B.
+Marqueeã‚¢ãƒ—ãƒªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ ¼ç´ã—ã¾ã™ã€‚.
 
     $ep->app($app);
 
@@ -31,18 +33,18 @@ MarqueeƒAƒvƒŠƒCƒ“ƒXƒ^ƒ“ƒX‚ðŠi”[‚µ‚Ü‚·B.
 
 =head2 Marquee::SSIHandler->new;
 
-ƒRƒ“ƒXƒgƒ‰ƒNƒ^[B
+ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ãƒ¼ã€‚
 
 =head2 Marquee::SSIHandler->current_template;
 
-Œ»Ý‚Ìƒeƒ“ƒvƒŒ[ƒg‚ðÄ‹A“I‚ÉŒŸo‚µ‚Ü‚·B
+ç¾åœ¨ã®ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’å†å¸°çš„ã«æ¤œå‡ºã—ã¾ã™ã€‚
 
     my $current_template = Marquee::SSIHandler->current_template;
     my $parent_template = Marquee::SSIHandler->current_template(1);
 
 =head2 $instance->render;
 
-ƒeƒ“ƒvƒŒ[ƒg‚ðƒŒƒ“ƒ_ƒŠƒ“ƒO‚µ‚Ü‚·BƒTƒuƒNƒ‰ƒX‚Í‚±‚Ìƒƒ\ƒbƒh‚ðƒI[ƒo[ƒ‰ƒCƒh‚µ‚È‚¯‚ê‚Î‚È‚è‚Ü‚¹‚ñB
+ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã‚’ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã—ã¾ã™ã€‚ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã¯ã“ã®ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ã‚ªãƒ¼ãƒãƒ¼ãƒ©ã‚¤ãƒ‰ã—ãªã‘ã‚Œã°ãªã‚Šã¾ã›ã‚“ã€‚
     
     sub render {
         my ($self, $path) = @_;
@@ -54,7 +56,7 @@ MarqueeƒAƒvƒŠƒCƒ“ƒXƒ^ƒ“ƒX‚ðŠi”[‚µ‚Ü‚·B.
 
 =head2 $instance->render_traceable;
 
-ƒeƒ“ƒvƒŒ[ƒg–¼‚ðÄ‹A“I‚ÉƒXƒ^ƒbƒN‚·‚é‚±‚Æ‚ÅAƒgƒŒ[ƒX‰Â”\‚ÉƒŒƒ“ƒ_ƒŠƒ“ƒO‚µ‚Ü‚·B
+ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆåã‚’å†å¸°çš„ã«ã‚¹ã‚¿ãƒƒã‚¯ã™ã‚‹ã“ã¨ã§ã€ãƒˆãƒ¬ãƒ¼ã‚¹å¯èƒ½ã«ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°ã—ã¾ã™ã€‚
 
 =head1 SEE ALSO
 

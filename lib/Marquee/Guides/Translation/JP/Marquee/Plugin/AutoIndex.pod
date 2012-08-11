@@ -1,8 +1,8 @@
-__END__
+=encoding utf8
 
 =head1 NAME
 
-Marquee::Plugin::AutoIndex - �I�[�g�C���f�b�N�X
+Marquee::Plugin::AutoIndex - オートインデックス
 
 =head1 SYNOPSIS
 
@@ -15,18 +15,18 @@ On your browser following forms of URL are available.
 
 =head1 DESCRIPTION
 
-���̃v���O�C���̓I�[�g�C���f�b�N�X���\�Ƃ��܂��B�A�v����default_file����������`���A�w��̃t�@�C�������݂��Ȃ��Ƃ��A
-�f�B���N�g���ւ̃A�N�Z�X�ɑ΂��ăI�[�g�C���f�b�N�X���Ԃ���܂��B
+このプラグインはオートインデックスを可能とします。アプリのdefault_file属性が未定義か、指定のファイルが存在しないとき、
+ディレクトリへのアクセスに対してオートインデックスが返されます。
 
 =head1 ATTRIBUTES
 
 =head2 max_per_dir
 
-�f�B���N�g�����ŕ\���\�ȃt�@�C�����̏�����w�肵�܂��B
+ディレクトリ内で表示可能なファイル数の上限を指定します。
 
 =head2 tree_depth
 
-�f�B���N�g���̍ċA�����̐[�x�̏�����w�肵�܂��B
+ディレクトリの再帰処理の深度の上限を指定します。
 
 =head1 METHODS
 

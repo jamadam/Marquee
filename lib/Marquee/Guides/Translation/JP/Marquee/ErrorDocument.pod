@@ -1,6 +1,8 @@
+=encoding utf8
+
 =head1 NAME
 
-Marquee::ErrorDocument - ƒGƒ‰[ƒhƒLƒ…ƒƒ“ƒg
+Marquee::ErrorDocument - ã‚¨ãƒ©ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆ
 
 =head1 SYNOPSIS
 
@@ -9,7 +11,7 @@ Marquee::ErrorDocument - ƒGƒ‰[ƒhƒLƒ…ƒƒ“ƒg
 
 =head1 DESCRIPTION
 
-L<Marquee::ErrorDocument>‚ÍAƒGƒ‰[ƒhƒLƒ…ƒƒ“ƒg‚ð•\Û‚µ‚Ü‚·B
+L<Marquee::ErrorDocument>ã¯ã€ã‚¨ãƒ©ãƒ¼ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’è¡¨è±¡ã—ã¾ã™ã€‚
 
 =head1 ATTRIBUTES
 

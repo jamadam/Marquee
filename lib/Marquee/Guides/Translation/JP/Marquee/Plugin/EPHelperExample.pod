@@ -1,6 +1,8 @@
+=encoding utf8
+
 =head1 NAME
 
-Marquee::Plugin::EPHelperExample - EPƒwƒ‹ƒp[‚Ì’è‹`—á
+Marquee::Plugin::EPHelperExample - EPãƒ˜ãƒ«ãƒ‘ãƒ¼ã®å®šç¾©ä¾‹
 
 =head1 SYNOPSIS
 
@@ -12,7 +14,7 @@ Marquee::Plugin::EPHelperExample - EPƒwƒ‹ƒp[‚Ì’è‹`—á
 
 =head1 DESCRIPTION
 
-‚±‚ê‚ÍEPƒeƒ“ƒvƒŒ[ƒgŠÖ”‚ð’Ç‰Á‚·‚éƒTƒ“ƒvƒ‹ƒvƒ‰ƒOƒCƒ“‚Å‚·B
+ã“ã‚Œã¯EPãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆé–¢æ•°ã‚’è¿½åŠ ã™ã‚‹ã‚µãƒ³ãƒ—ãƒ«ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ã§ã™ã€‚
 
 =head1 METHODS
 

@@ -8,6 +8,8 @@ Marquee::Context - Context
 
     my $context = Marquee::Context->new(app => $app, tx => $tx);
     my $app             = $context->app;
+    my $req             = $context->req;
+    my $res             = $context->res;
     my $tx              = $context->tx;
     my $session         = $context->session;
     my $cookie          = $context->cookie('key');
@@ -30,15 +32,15 @@ L<Marquee> instance.
 
 C<$self->tx->req>へのエイリアスです。
 
-    my $req = $self->tx->req;
-    $self->tx->req($req);
+    my $req = $context->tx->req;
+    $context->tx->req($req);
 
 =head2 res
 
 C<$self->tx->res>へのエイリアスです。
 
-    my $res = $self->tx->req;
-    $self->tx->req($res);
+    my $res = $context->tx->req;
+    $context->tx->req($res);
 
 =head2 session
 
@@ -47,6 +49,10 @@ C<$self->tx->res>へのエイリアスです。
     my $session = $context->session;
     my $foo     = $session->{'foo'};
     $session->{foo} = 'bar';
+
+=head2 session_path
+
+A path for session. Defaluts to /.
 
 =head2 session_secure
 

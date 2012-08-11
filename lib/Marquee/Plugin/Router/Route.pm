@@ -78,6 +78,12 @@ Marquee::Plugin::Router - Router [EXPERIMENTAL]
 
 =head1 DESCRIPTION
 
+=head1 ATTRIBUTES
+
+=head2 elems
+
+Route entries.
+
 =head1 METHODS
 
 =head2 $instance->bridge(sub {...})

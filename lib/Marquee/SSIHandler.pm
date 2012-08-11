@@ -83,6 +83,10 @@ Marquee app instance.
 
     $ep->app($app);
 
+=head2 log
+
+C<Mojo::Log> instance. Defaults to $app->log if exists.
+
 =head1 METHODS
 
 =head2 Marquee::SSIHandler->new;

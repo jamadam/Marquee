@@ -27,7 +27,7 @@ __PACKAGE__->attr('session_path', '/');
 ### ---
 ### Session expiretion
 ### ---
-__PACKAGE__->attr(session_expiretion => 3600);
+__PACKAGE__->attr(session_expiration => 3600);
 
 ### ---
 ### Session name
@@ -157,7 +157,7 @@ sub close {
         my $value = b64_encode(Mojo::JSON->new->encode($session), '');
         $value =~ s/=/-/g;
         $self->signed_cookie($self->session_name, $value, {
-            expires     => time + $self->session_expiretion,
+            expires     => time + $self->session_expiration,
             secure      => $self->session_secure,
             httponly    => 1,
             path        => $self->session_path,
@@ -184,6 +184,8 @@ Marquee::Context - Context
 
     my $context = Marquee::Context->new(app => $app, tx => $tx);
     my $app             = $context->app;
+    my $req             = $context->req;
+    my $res             = $context->res;
     my $tx              = $context->tx;
     my $session         = $context->session;
     my $cookie          = $context->cookie('key');
@@ -205,17 +207,17 @@ L<Marquee> instance.
 
 =head2 req
 
-An Alias to C<$self->tx->req>.
+An Alias to C<$context->tx->req>.
 
-    my $req = $self->tx->req;
-    $self->tx->req($req);
+    my $req = $context->tx->req;
+    $context->tx->req($req);
 
 =head2 res
 
 An Alias to C<$self->tx->res>.
 
-    my $res = $self->tx->req;
-    $self->tx->req($res);
+    my $res = $context->tx->req;
+    $context->tx->req($res);
 
 =head2 session
 
@@ -225,6 +227,10 @@ Note that cookies are generally limited to 4096 bytes of data.
     my $session = $context->session;
     my $foo     = $session->{'foo'};
     $session->{foo} = 'bar';
+
+=head2 session_path
+
+A path for session. Defaluts to /.
 
 =head2 session_secure
 

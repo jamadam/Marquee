@@ -29,6 +29,10 @@ Marqueeアプリインスタンスを格納します。.
 
     $ep->app($app);
 
+=head2 log
+
+C<Mojo::Log>インスタンスです。デフォルトは、もし存在すれば$app->logです。
+
 =head1 METHODS
 
 =head2 Marquee::SSIHandler->new;

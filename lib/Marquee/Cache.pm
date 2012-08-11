@@ -77,6 +77,12 @@ Marquee::Cache - Cache
 
 Simple cache manager with expire feature.
 
+=head1 ATTRIBUTES
+
+=head2 max_keys
+
+Max keys per instance.
+
 =head1 METHODS
 
 =head2 Marquee::Cache->new

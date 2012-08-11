@@ -33,6 +33,12 @@ Marquee::Plugin::Router - ルーター [EXPERIMENTAL]
 
 =head1 DESCRIPTION
 
+=head1 ATTRIBUTES
+
+=head2 elems
+
+ルートのエントリーです。
+
 =head1 METHODS
 
 =head2 $instance->bridge(sub {...})

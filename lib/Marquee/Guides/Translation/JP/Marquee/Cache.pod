@@ -21,6 +21,12 @@ Marquee::Cache - Cache
 
 有効期限管理付き簡易キャッシュマネージャー
 
+=head1 ATTRIBUTES
+
+=head2 max_keys
+
+インスタンス毎のキーの上限です。
+
 =head1 METHODS
 
 =head2 Marquee::Cache->new

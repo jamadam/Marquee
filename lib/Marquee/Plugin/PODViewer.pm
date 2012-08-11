@@ -174,6 +174,16 @@ Marquee::Plugin::PODRenderer - POD renderer plugin
 
 This is a plugin for POD Viewer server.
 
+=head1 ATTRIBUTES
+
+=head2 no_see_also
+
+Disables auto detection of relative modules.
+
+=head2 paths
+
+A path to discover modules.
+
 =head1 METHODS
 
 =head2 $instance->register($app)

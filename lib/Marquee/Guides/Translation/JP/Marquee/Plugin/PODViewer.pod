@@ -16,6 +16,16 @@ Marquee::Plugin::PODRenderer - PODビュワープラグイン
 
 このプラグインは、PODビュワーサーバーです。
 
+=head1 ATTRIBUTES
+
+=head2 no_see_also
+
+関連するモジュールの自動検出を無効にします。
+
+=head2 paths
+
+モジュールを探すパスです。
+
 =head1 METHODS
 
 =head2 $instance->register($app)

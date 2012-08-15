@@ -14,7 +14,7 @@ sub get {
             for my $code (@{$cache->[2]}) {
                 if ($code->($cache->[1])) {
                     delete $_[0]->{$ATTR_CACHE}->{$_[1]};
-                    $_[0]->vacuum;
+                    $_[0]->_vacuum;
                     return;
                 }
             }
@@ -23,7 +23,7 @@ sub get {
     }
 }
 
-sub vacuum {
+sub _vacuum {
     @{$_[0]->{$ATTR_STACK}} =
                 grep {$_[0]->{$ATTR_CACHE}->{$_}} @{$_[0]->{$ATTR_STACK}};
 }
@@ -40,7 +40,7 @@ sub set {
     }
     
     if (delete $cache->{$key}) {
-        $self->vacuum;
+        $self->_vacuum;
     }
     
     push @$stack, $key;
@@ -93,15 +93,23 @@ Get cache value for given name.
 
 =head2 $instance->set($name => $data)
 
-Set cache values with given name and data.
+Set cache values with given name and data. By 3rd argument, you can set one or
+more conditions to expire the cache.
 
     $cache->set(key, $data);
     $cache->set(key, $data, sub {...});
     $cache->set(key, $data, [sub {...}, sub {...}]);
 
-=head2 $instance->vacuum()
+The coderef gets the cache timestamp in seconds since the epoch and can
+return true for expire.
 
-Fixes mismatches between the cache table and stack table.
+    my $expire = sub {
+        my $epoch = shift;
+        
+        # some tests here
+        
+        return 1; # or 0
+    });
 
 =head1 SEE ALSO
 

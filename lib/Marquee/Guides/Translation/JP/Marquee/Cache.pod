@@ -37,15 +37,21 @@ Marquee::Cache - Cache
 
 =head2 $instance->set($name => $data)
 
-指定の名前とデータでキャッシュを格納します。
+指定の名前とデータでキャッシュを格納します。第3引数にて、期限切れ条件を1つ、または複数のコードリファレンスで指定できます。
 
     $cache->set(key, $data);
     $cache->set(key, $data, sub {...});
     $cache->set(key, $data, [sub {...}, sub {...}]);
 
-=head2 $instance->vacuum()
+各期限切れ条件は、キャッシュの生成時刻をエポック秒で受け取り、期限切れのとき真を返します。
 
-キャッシュテーブルとスタックテーブルの間のミスマッチを解消します。
+    my $expire = sub {
+        my $epoch = shift;
+        
+        # some tests here
+        
+        return 1; # or 0
+    });
 
 =head1 SEE ALSO
 

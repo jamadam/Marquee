@@ -207,14 +207,14 @@ L<Marquee> instance.
 
 =head2 req
 
-An Alias to C<$context->tx->req>.
+An Alias to C<$context-E<gt>tx-E<gt>req>.
 
     my $req = $context->tx->req;
     $context->tx->req($req);
 
 =head2 res
 
-An Alias to C<$self->tx->res>.
+An Alias to C<$self-E<gt>tx-E<gt>res>.
 
     my $res = $context->tx->req;
     $context->tx->req($res);

@@ -226,6 +226,7 @@ sub plugin {
 ### --
 sub render_ssi {
     my ($self, $path, $handler_ext) = @_;
+    warn $path;
     my $ext = $handler_ext || ($path =~ qr{\.\w+\.(\w+)$})[0];
     if (my $handler = $self->ssi_handlers->{$ext}) {
         return $handler->render_traceable($path);
@@ -433,6 +434,9 @@ This is built on mojo modules in L<Mojolicious> distribution.
 
 =head1 ATTRIBUTES
 
+L<Marquee> inherits all attributes from L<Mojo> and implements the following
+new ones.
+
 =head2 document_root
 
 Specify a path to document root directory. The directory can contain both static
@@ -461,7 +465,9 @@ A L<Marquee::Hooks> instance.
 
 =head2 roots
 
-Array of paths that contains static and templates.
+Array of paths that contains static and templates. Marquee tries to find asset
+files in ascend order in the array. The array is started with C<document_root>
+copy, and followed by bundle directories for Marquee core and plugins.
 
     push(@{$app->roots}, 'path/to/additional_dir')
 
@@ -483,7 +489,8 @@ You can append SSI association by C<add_handler> method instead of doing above.
 
 =head2 stash
 
-An L<Marquee::Stash> instance.
+An L<Marquee::Stash> instance. Though Marquee's stash is localized and cloned
+per request, this also can contain persistant values for application specific.
 
     $app->stash(Marquee::Stash->new);
     my $stash = $app->stash;
@@ -508,6 +515,9 @@ Set X-POWERED-BY response header.
     $app->x_powered_by('MyApp');
 
 =head1 METHODS
+
+L<Marquee> inherits all methods from L<Mojo> and implements the following
+new ones.
 
 =head2 Marquee->new;
 
@@ -549,7 +559,8 @@ An alias for C<context> method.
 
 =head2 $instance->context()
 
-Returns current context. This refers to localized C<$Marquee::CONTEXT>.
+Returns current context. This refers to C<$Marquee::CONTEXT> localized
+per request.
 
     my $context = $app->context;
 
@@ -578,7 +589,8 @@ Alias to $instance->hooks->on. This adds a callback for the hook point.
 
 =head2 $instance->is_directory($path)
 
-Returns if the path is directory.
+Returns if the path is directory. The search is made against the directories in
+C<roots> attribute paths.
 
     $app->is_directory('/path/to/directory') # bool
 
@@ -606,26 +618,33 @@ already fully qualified.
 =head2 $instance->render_ssi($path, $handler_ext)
 
 Render SSI and returns the result. This method auto detect the handler with
-C<$path> unless C<$handler_ext> is given.
+C<$path> unless C<$handler_ext> is given. Note that the renderer extension
+is NOT to be suffixed automatically.
 
+    # render /path/to/template.html.ep by ep handler
     my $result = $app->render_ssi('/path/to/template.html.ep');
-    my $result = $app->render_ssi('/path/to/template.html.ep', 'ep');
+    
+    # render /path/to/template.html.ep by epl handler
+    my $result = $app->render_ssi('/path/to/template.html.ep', 'epl');
+    
+    # render /path/to/template.html by ep handler
     my $result = $app->render_ssi('/path/to/template2.html', 'ep');
 
 =head2 $instance->search_static($path)
 
 Searches for static files for given path and returns the path if exists.
+The search is against the directories in C<roots> attribute.
 
-    $app->search_static('./a.html'); # /path/to/document_root/a.html
-    $app->search_static('/path/to/a.html'); # /path/to/a.html
+    my $path = $app->search_static('./a.html'); # /path/to/document_root/a.html
+    my $path = $app->search_static('/path/to/a.html'); # /path/to/a.html
 
 =head2 $instance->search_template($path)
 
 Searches for SSI template for given path and returns the path with SSI
-extension if exists.
+extension if exists. The search is against the directories in C<roots> attribute.
 
-    $app->search_template('./template.html'); # /path/to/document_root/template.html.ep
-    $app->search_template('/path/to/template.html'); # /path/to/template.html.ep
+    my $path = $app->search_template('./tmpl.html'); # /path/to/document_root/tmpl.html.ep
+    my $path = $app->search_template('/path/to/tmpl.html'); # /path/to/tmpl.html.ep
 
 =head2 $instance->serve_redirect($uri)
 

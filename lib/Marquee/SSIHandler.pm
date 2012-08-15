@@ -85,7 +85,7 @@ Marquee app instance.
 
 =head2 log
 
-C<Mojo::Log> instance. Defaults to $app->log if exists.
+C<Mojo::Log> instance. Defaults to C<$app-E<gt>log> if exists.
 
 =head1 METHODS
 

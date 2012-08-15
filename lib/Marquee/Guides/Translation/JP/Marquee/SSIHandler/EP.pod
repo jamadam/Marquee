@@ -11,7 +11,7 @@ Marquee::SSIHandler::EP - EPテンプレートハンドラー
 
 =head1 DESCRIPTION
 
-EPテンプレートハンドラー. EPはEPLを継承します。
+L<Marquee::SSIHandler::EP>は、EPテンプレートハンドラーです。
 
 =head1 ATTRIBUTES
 
@@ -36,6 +36,8 @@ L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加�
 
 =head2 extends($path, $block)
 
+C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継承の仕組みを提供します。
+
 ベーステンプレート
 
     <!doctype html>
@@ -57,7 +59,7 @@ L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加�
         </body>
     </html>
 
-拡張テンプレート。
+テンプレートを拡張します。
 
     <%= extends './layout/common.html' => begin %>
         <% override 'title' => begin %>
@@ -97,6 +99,7 @@ L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加�
 スラッシュを接頭することでドキュメントルートからのパスを指定します。
 
     <%= include('./path/to/template.html', key => value) %>
+    <%= include('/path/to/template.html', key => value) %>
 
 =head2 include_as('./path/to/template.html', $handler_ext, key => value)
 
@@ -113,7 +116,7 @@ L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加�
 
 指定のキーのリクエストパラメータを返します。
 
-    <% param('key') %>
+    <%= param('key') %>
 
 =head2 placeholder($name, $default_block)
 
@@ -123,19 +126,19 @@ L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加�
 
 指定のキーのスタッシュ値を返します。
 
-    <% stash('key') %>
+    <%= stash('key') %>
 
 =head2 to_abs()
 
 指定の相対パスから絶対パスを生成します。
 
-    <% to_abs('./path.css') %>
+    <%= to_abs('./path.css') %>
 
 =head2 url_for('path/to/file')
 
 ポータブルURLを生成します。
 
-    <% url_for('./path.css') %>
+    <%= url_for('./path.css') %>
 
 =head1 METHODS
 
@@ -149,6 +152,8 @@ L<Marquee::SSIHandler::EPL>から全てのメソッドを継承し、下記の�
     my $ep = Marquee::SSIHandler::EP->new;
 
 =head2 $instance->add_function(name => sub {...})
+
+レンダラーに関数を追加します。
 
     $ep->add_function(html_to_text => sub {
         my ($ep, $html) = @_;

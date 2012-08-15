@@ -31,7 +31,7 @@ Marqueeアプリインスタンスを格納します。.
 
 =head2 log
 
-C<Mojo::Log>インスタンスです。デフォルトは、もし存在すれば$app->logです。
+C<Mojo::Log>インスタンスです。デフォルトは、もし存在すればC<$app-E<gt>log>です。
 
 =head1 METHODS
 

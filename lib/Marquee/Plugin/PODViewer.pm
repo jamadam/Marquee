@@ -34,7 +34,7 @@ sub register {
 }
 
 sub serve_pod {
-    my ($self, $source) = @_;
+    my ($self, $source, $podname) = @_;
     
     my $c   = Marquee->c;
     my $app = $c->app;
@@ -86,7 +86,7 @@ sub serve_pod {
         static_dir  => 'static',
         perldoc     => "$dom",
         see_also    => ! $self->no_see_also
-            ? _detect_see_also(($title =~ qr{(^[a-zA-Z0-9:]+)})[0])
+            ? _detect_see_also($podname || ($title =~ qr{(^[a-zA-Z0-9:]+)})[0])
             : undef,
     );
     
@@ -115,7 +115,7 @@ sub serve_pod_by_name {
     }
     
     open my $file, '<', $path;
-    return $self->serve_pod(join '', <$file>);
+    return $self->serve_pod(join('', <$file>), $module);
 }
 
 sub _detect_see_also {
@@ -130,7 +130,7 @@ sub _detect_see_also {
     }
     
     my $a = $search->limit_glob($module. '::*')->survey;
-    push(@relatives, grep {$_ =~ qr{$module\::\w+$}} keys %$a);
+    push(@relatives, grep {$_ =~ qr{^$module\::\w+$}} keys %$a);
     
     return \@relatives;
 }

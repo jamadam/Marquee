@@ -274,7 +274,7 @@ Marquee::SSIHandler::EP - EP template handler
 
 =head1 DESCRIPTION
 
-EP handler. EP is a EPL.
+L<Marquee::SSIHandler::EP> is a EP handler.
 
 =head1 ATTRIBUTES
 
@@ -300,6 +300,9 @@ Returns current template path.
 
 =head2 extends($path, $block)
 
+C<extends> function cooperates with C<placeholder> and C<override>,
+provides template inheritance mechanism.
+
 Base template.
 
     <!doctype html>
@@ -321,7 +324,7 @@ Base template.
         </body>
     </html>
 
-Extended template.
+Extends the template.
 
     <%= extends './layout/common.html' => begin %>
         <% override 'title' => begin %>
@@ -334,11 +337,9 @@ Extended template.
         <% end %>
     <% end %>
 
-Extends template.
-
 =head2 iter @array => $block
 
-Array iterator with block.
+Array iterator with a block.
 
     <%= iter @array => begin %>
         <% my ($elem, $index) = @_; %>
@@ -364,6 +365,7 @@ relative to current template directory or relative to document root if leading
 slashed. 
 
     <%= include('./path/to/template.html', key => value) %>
+    <%= include('/path/to/template.html', key => value) %>
 
 =head2 include_as('./path/to/template.html', $handler_ext, key => value)
 
@@ -381,7 +383,7 @@ Override placeholder. See C<extends> method.
 
 Returns request parameters for given key.
 
-    <% param('key') %>
+    <%= param('key') %>
 
 =head2 placeholder($name, $default_block)
 
@@ -391,19 +393,19 @@ Set placeholder with default block. See C<extends> method.
 
 Returns stash value for given key.
 
-    <% stash('key') %>
+    <%= stash('key') %>
 
 =head2 to_abs()
 
 Generate absolute path with given relative one
 
-    <% to_abs('./path.css') %>
+    <%= to_abs('./path.css') %>
 
 =head2 url_for('path/to/file')
 
 Generate a portable URL.
 
-    <% url_for('./path.css') %>
+    <%= url_for('./path.css') %>
 
 =head1 METHODS
 
@@ -417,6 +419,8 @@ Constructor.
     my $ep = Marquee::SSIHandler::EP->new;
 
 =head2 $instance->add_function(name => sub {...})
+
+Adds a function to the renderer.
 
     $ep->add_function(html_to_text => sub {
         my ($ep, $html) = @_;

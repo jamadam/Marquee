@@ -30,14 +30,14 @@ L<Marquee> instance.
 
 =head2 req
 
-C<$self->tx->req>へのエイリアスです。
+C<$context-E<gt>tx-E<gt>req>へのエイリアスです。
 
     my $req = $context->tx->req;
     $context->tx->req($req);
 
 =head2 res
 
-C<$self->tx->res>へのエイリアスです。
+C<$self-E<gt>tx-E<gt>res>へのエイリアスです。
 
     my $res = $context->tx->req;
     $context->tx->req($res);

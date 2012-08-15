@@ -23,6 +23,8 @@ Marquee::SSIHandler - SSIハンドラーベースクラス
 
 =head1 ATTRIBUTES
 
+L<Marquee::SSIHandler>は下記の属性を実装します。
+
 =head2 app
 
 Marqueeアプリインスタンスを格納します。.
@@ -34,6 +36,8 @@ Marqueeアプリインスタンスを格納します。.
 C<Mojo::Log>インスタンスです。デフォルトは、もし存在すればC<$app-E<gt>log>です。
 
 =head1 METHODS
+
+L<Marquee::SSIHandler>は下記のメソッドを実装します。
 
 =head2 Marquee::SSIHandler->new;
 

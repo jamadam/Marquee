@@ -77,6 +77,8 @@ class is MUST implement C<render> method.
 
 =head1 ATTRIBUTES
 
+L<Marquee::SSIHandler> implements the following attributes.
+
 =head2 app
 
 Marquee app instance.
@@ -88,6 +90,8 @@ Marquee app instance.
 C<Mojo::Log> instance. Defaults to C<$app-E<gt>log> if exists.
 
 =head1 METHODS
+
+L<Marquee::SSIHandler> implements the following methods.
 
 =head2 Marquee::SSIHandler->new;
 

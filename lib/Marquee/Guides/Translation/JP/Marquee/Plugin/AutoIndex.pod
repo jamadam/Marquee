@@ -25,11 +25,17 @@ L<Marquee::Plugin>の全ての属性を継承し、下記を追加で実装し�
 
 =head2 max_per_dir
 
-ディレクトリ内で表示可能なファイル数の上限を指定します。
+ディレクトリ内で表示可能なファイル数の上限を指定します。デフォルトは50です。
+
+    $plugin->max_per_dir(100);
+    my $num = $plugin->max_per_dir;
 
 =head2 tree_depth
 
-ディレクトリの再帰処理の深度の上限を指定します。
+ディレクトリの再帰処理の深度の上限を指定します。デフォルトは4です。
+
+    $plugin->tree_depth(2);
+    my $num = $plugin->tree_depth;
 
 =head1 INSTANCE METHODS
 
@@ -38,13 +44,21 @@ L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下�
 
 =head2 $instance->register($app, $hash_ref)
 
+プラグインを登録します。
+
+    $self->register($app);
+
 =head2 $instance->serve_index
 
 Serves auto directory index.
 
+    $plugin->serve_index($path);
+
 =head2 $instance->serve_tree
 
 Serves auto directory tree.
+
+    $plugin->serve_tree($path);
 
 =head1 SEE ALSO
 

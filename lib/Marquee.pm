@@ -411,7 +411,9 @@ __END__
 Marquee - Simple HTTP server with Server-side include
 
 =head1 SYNOPSIS
-    
+
+use Marquee directly.
+
     #!/usr/bin/env perl
     use strict;
     use warnings;
@@ -426,11 +428,34 @@ Marquee - Simple HTTP server with Server-side include
     $app->document_root($app->home->rel_dir('public_html'));
     $app->start;
 
+Inherited application.
+
+    package MyApp;
+    use Mojo::Base 'Marquee';
+    
+    sub new {
+        my $self = shift->SUPER::new(@_);
+		
+        $self->document_root($self->home->rel_dir('public_html'));
+        $self->log_file($self->home->rel_dir('mojo_log/Marquee.log'));
+        $self->default_file('index.html');
+        $self->under_development(1);
+        $self->secret('g3y3nheher');
+		
+        return $self;
+    }
+    
+    package main;
+    
+    MyApp->new->start;
+
 =head1 DESCRIPTION
 
-L<Marquee> is a simple web server base class. The module also is a
+L<Marquee> distribution is yet another web application framework built on mojo
+modules in L<Mojolicious> distribution. 
+
+L<Marquee> module is the base class of applications. The module also is a
 backend of C<mojo Marquee>, a command line tool.
-This is built on mojo modules in L<Mojolicious> distribution. 
 
 =head1 ATTRIBUTES
 
@@ -446,14 +471,14 @@ files and templates.
 
 =head2 default_file
 
-Specify a default file name and activate auto fill.
+Specify a default file name and activate auto fill. The auto fill will occures
+when the request path is trailing slashed.
 
     $app->default_file('index.html');
 
 =head2 error_document
 
-Error document renderer instance. Defaults to
-L<Marquee::ErrorDocument>
+Error document renderer instance. Defaults to L<Marquee::ErrorDocument>.
 
     $app->error_document(Marquee::ErrorDocument->new);
 
@@ -474,14 +499,15 @@ copy, and followed by bundle directories for Marquee core and plugins.
 =head2 secret
 
 A secret passphrase used for signed cookies and the like, defaults to random
-string. 
+string. By changing this, you can expire all signed cookies at once.
 
     my $secret = $app->secret;
     $app       = $app->secret('passw0rd');
 
 =head2 ssi_handlers
 
-An hash ref that contains Server side include handlers.
+An hash ref that contains Server side include handlers. The hash keys
+corresponds to the last extensions of templates.
 
     $app->ssi_handlers->{ep} = Marquee::SSIHandler::EP->new;
 
@@ -490,7 +516,8 @@ You can append SSI association by C<add_handler> method instead of doing above.
 =head2 stash
 
 An L<Marquee::Stash> instance. Though Marquee's stash is localized and cloned
-per request, this also can contain persistent values for application specific.
+per request, this also can contain persistent values for application specific
+and can be refered transparently from anywhere.
 
     $app->stash(Marquee::Stash->new);
     my $stash = $app->stash;
@@ -504,7 +531,7 @@ Contains L<Mojolicious::Type> instance.
 
 =head2 under_development
 
-Activate debug screen.
+Activate debug screen, defaults to undef.
 
     $app->under_development(1);
 
@@ -519,13 +546,13 @@ Set X-POWERED-BY response header.
 L<Marquee> inherits all class methods from L<Mojo> and implements the following
 new ones.
 
-=head2 Class->new;
+=head2 Class->new
 
 Constructor.
 
     my $app = Marquee->new;
 
-=head2 Class->asset($filename);
+=head2 Class->asset($filename)
 
 Returns bundled asset path for given file name.
 
@@ -552,7 +579,7 @@ In other packages
 L<Marquee> inherits all instance methods from L<Mojo> and implements the
 following new ones.
 
-=head2 $instance->add_handler(name => $code_ref);
+=head2 $instance->add_handler(name => $code_ref)
 
 Adds C<ssi_handlers> entry.
 
@@ -679,11 +706,11 @@ Starts app
 =head2 $instance->to_abs
 
 Generates absolute URI for given path along to the request URI.
-    
-    say $self->to_abs('/path/to/file.html');
 
 On request to https://example.com:3001/a/index.html
-The example above generates https://example.com:3001/path/to/file.html
+The example below generates https://example.com:3001/path/to/file.html
+    
+    say $self->to_abs('/path/to/file.html');
 
 =head1 SEE ALSO
 

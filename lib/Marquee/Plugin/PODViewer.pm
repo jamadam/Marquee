@@ -215,11 +215,17 @@ L<Marquee::Plugin> and implements the following new ones.
 
 =head2 no_see_also
 
-Disables auto detection of relative modules.
+Disables auto detection of relative modules, defaults to undef(enabled).
 
+    $self->no_see_also(1);
+    my $bool = $self->no_see_also;
+    
 =head2 paths
 
 A path to discover modules.
+
+    $plugin->paths([$path1, $path2, $path3]);
+    my $paths = $plugin->paths;
 
 =head1 INSTANCE METHODS
 
@@ -228,11 +234,28 @@ L<Marquee::Plugin> and implements the following new ones.
 
 =head2 $instance->register($app)
 
+Register the plugin.
+
+    $self->register($app);
+
 =head2 $instance->serve_index()
 
-=head2 $instance->serve_pod($html)
+Serves index of modules.
+
+    $plugin->serve_index;
+
+=head2 $instance->serve_pod($pod, $mod_name)
+
+Parse POD string and generate HTML. optional param $mod_name specifies module
+name and used for see also detection.
+
+    $plugin->serve_pod($pod, 'Path::To::Mod');
 
 =head2 $instance->serve_pod_by_name($module_name)
+
+Generate HTML by given module name.
+
+    $plugin->serve_pod_by_name('Path::To::Mod');
 
 =head1 SEE ALSO
 

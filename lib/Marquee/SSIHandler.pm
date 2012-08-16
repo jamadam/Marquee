@@ -93,11 +93,11 @@ C<Mojo::Log> instance. Defaults to C<$app-E<gt>log> if exists.
 
 L<Marquee::SSIHandler> implements the following class methods.
 
-=head2 Class->new;
+=head2 Class->new
 
 Constructor.
 
-=head2 Class->current_template;
+=head2 Class->current_template
 
 Detects current template recursively.
 
@@ -108,7 +108,7 @@ Detects current template recursively.
 
 L<Marquee::SSIHandler> implements the following instance methods.
 
-=head2 $instance->render;
+=head2 $instance->render
 
 Renders templates. The sub classes MUST override(implement) the method.
     
@@ -120,7 +120,7 @@ Renders templates. The sub classes MUST override(implement) the method.
         return $out;
     }
 
-=head2 $instance->render_traceable;
+=head2 $instance->render_traceable
 
 Traceably renders templates by stacking template names recursively.
 

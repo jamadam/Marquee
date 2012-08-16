@@ -48,21 +48,36 @@ Marquee::Plugin::Router - Router [EXPERIMENTAL]
     $app->plugin(Router => sub {
         my $r = shift;
         $r->route(qr{^/index\.html})->to(sub {
-            ### DO SOMETHING
+            my $context = Marquee->c;
+            my $req = $context->tx->req;
+            my $res = $context->tx->res;
+            $res->code(200);
+            $res->body('content');
+            $res->headers->content_type('text/html');
         });
+        
         $r->route(qr{^/special\.html})->to(sub {
-            ### DO SOMETHING
+            ...
         });
+        
         $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
             my ($a, $b) = @_;
-            ### DO SOMETHING
+            ...
         });
+        
         $r->route(qr{^/rare/})->via('get')->to(sub {
-            ### DO SOMETHING
+            ...
         });
+        
         $r->route(qr{^/default})->to(sub {
-            ### DO SOMETHING
+            ...
         });
+        
+        my $bridge = $r->bridge(sub {
+            return 1; # or 0
+        });
+        
+        $bridge->route(qr{})->to(sub {...});
     });
 
 =head1 DESCRIPTION
@@ -84,7 +99,11 @@ L<Marquee::Plugin::Router::Route> instance.
 L<Marquee::Plugin::Router> inherits all instance methods from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 $instance->register($app, $routes)
+=head2 $instance->register($app, $generator)
+
+Register the plugin.
+
+    $self->register($app, $generator);
 
 =head1 SEE ALSO
 

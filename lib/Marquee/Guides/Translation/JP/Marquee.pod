@@ -5,7 +5,9 @@
 Marquee - サーバーサイドインクルード可能な簡易HTTPサーバー
 
 =head1 SYNOPSIS
-    
+
+直接、Marqueeを使用。
+
     #!/usr/bin/env perl
     use strict;
     use warnings;
@@ -20,10 +22,34 @@ Marquee - サーバーサイドインクルード可能な簡易HTTPサーバー
     $app->document_root($app->home->rel_dir('public_html'));
     $app->start;
 
+継承したアプリケーション。
+
+    package MyApp;
+    use Mojo::Base 'Marquee';
+    
+    sub new {
+        my $self = shift->SUPER::new(@_);
+		
+        $self->document_root($self->home->rel_dir('public_html'));
+        $self->log_file($self->home->rel_dir('mojo_log/Marquee.log'));
+        $self->default_file('index.html');
+        $self->under_development(1);
+        $self->secret('g3y3nheher');
+		
+        return $self;
+    }
+    
+    package main;
+    
+    MyApp->new->start;
+
 =head1 DESCRIPTION
 
-L<Marquee>は簡易ウェブサーバーのベースクラスです。本モジュールは、同梱のコマンドラインツールC<mojo Marquee>
-のバックエンドでもあります。実装には、Mojoliciousディストリビューションのモジュール群を利用しています。
+L<Marquee>ディストリビューションは、Mojoliciousディストリビューション付属のmojoモジュール群のうえに構成された、
+もうひとつのウェブアプリケーションフレームワークです。
+
+L<Marquee>モジュールはアプリケーションのベースクラスであり、同梱のコマンドラインツール、C<mojo Marquee>の
+バックエンドでもあります。
 
 =head1 ATTRIBUTES
 
@@ -37,7 +63,7 @@ L<Marquee>はL<Mojo>から全ての属性を継承し、下記を追加で実装
 
 =head2 default_file
 
-デフォルトのファイル名を指定し、自動補完を有効にします。
+デフォルトのファイル名を指定し、自動補完を有効にします。自動補完はリクエストパスがスラッシュで終わっている場合に発生します。
 
     $app->default_file('index.html');
 
@@ -63,13 +89,14 @@ L<Marquee::Hooks>インスタンスを格納します。
 =head2 secret
 
 署名付きクッキーなどに使用する秘密のパスフレーズを指定します。デフォルトはランダムな文字列です。
+これを変更することで、署名付きクッキーを一度に期限切れにすることができます。
 
     my $secret = $app->secret;
     $app       = $app->secret('passw0rd');
 
 =head2 ssi_handlers
 
-サーバーサイドインクルードのハンドラーをハッシュリファレンスで格納します。
+サーバーサイドインクルードのハンドラーをハッシュリファレンスで格納します。ハッシュのキーはテンプレートの最後の拡張子に対応します。
 
     $app->ssi_handlers->{ep} = Marquee::SSIHandler::EP->new;
 
@@ -78,7 +105,7 @@ L<Marquee::Hooks>インスタンスを格納します。
 =head2 stash
 
 L<Marquee::Stash>インスタンスを格納します。Marqueeアプリのstashはリクエスト毎にコンテキストオブジェクトに
-ローカライズされますが、アプリ固有の値を永続的に保存できます。
+ローカライズされますが、アプリ固有の値を永続的に保存でき、どこからでも透過的に参照できます。
 
     $app->stash(Marquee::Stash->new);
     my $stash = $app->stash;
@@ -92,7 +119,7 @@ L<Mojolicious::Type>インスタンスを格納します。
 
 =head2 under_development
 
-デバッグスクリーンを有効にします。
+デバッグスクリーンを有効にします。デフォルトはundefです。
 
     $app->under_development(1);
 
@@ -106,13 +133,13 @@ X-POWERED-BYレスポンスヘッダーを設定します。
 
 L<Marquee>はL<Mojo>から全てのクラスメソッドを継承し、下記を追加で実装します。
 
-=head2 Class->new;
+=head2 Class->new
 
 コンストラクター。
 
     my $app = Marquee->new;
 
-=head2 Marquee->asset($filename);
+=head2 Marquee->asset($filename)
 
 バンドルされたアセットの中から、指定の名前のファイルのパスを返します。
 
@@ -138,7 +165,7 @@ L<Marquee>はL<Mojo>から全てのクラスメソッドを継承し、下記を
 
 L<Marquee>はL<Mojo>から全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
-=head2 $instance->add_handler(name => $code_ref);
+=head2 $instance->add_handler(name => $code_ref)
 
 C<ssi_handlers>のエントリーを追加します。
 
@@ -260,11 +287,11 @@ SSIをレンダリングし、結果を返します。C<$handler_ext>の指定�
 =head2 $instance->to_abs
 
 指定のパスの絶対URIを、リクエストURIに配慮して生成します。
-    
-    say $self->to_abs('/path/to/file.html');
 
 https://example.com:3001/a/index.htmlへのリクエストに対して、
-上記の例はhttps://example.com:3001/path/to/file.htmlを生成します。
+下記の例はhttps://example.com:3001/path/to/file.htmlを生成します。
+    
+    say $self->to_abs('/path/to/file.html');
 
 =head1 SEE ALSO
 

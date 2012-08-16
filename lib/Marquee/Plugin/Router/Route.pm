@@ -53,28 +53,31 @@ Marquee::Plugin::Router - Route generator and container [EXPERIMENTAL]
     
     my $r = Marquee::Plugin::Router::Route->new;
     $r->route(qr{^/index\.html})->to(sub {
-        ### DO SOMETHING
+        ...
     });
+    
     $r->route(qr{^/special\.html})->to(sub {
-        ### DO SOMETHING
+        ...
     });
+    
     $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
         my ($a, $b) = @_;
-        ### DO SOMETHING
+        ...
     });
+    
     $r->route(qr{^/rare/})->via('GET', 'POST')->to(sub {
-        ### DO SOMETHING
+        ...
     });
+    
     $r->route(qr{^/default})->to(sub {
-        ### DO SOMETHING
+        ...
     });
     
     my $bridge = $r->bridge(sub {
-        my $context = shift;
         return 1; # or 0
     });
     
-    $bridge->route(qr{});
+    $bridge->route(qr{})->to(sub {...});
 
 =head1 DESCRIPTION
 

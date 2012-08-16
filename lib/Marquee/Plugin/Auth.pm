@@ -73,7 +73,10 @@ L<Marquee::Plugin> and implements the following new ones.
 =head2 realm
 
 Default value of realm which appears to response header. Each entry can override
-it.
+it. Defaults to 'Secret Area'.
+
+    $plugin->realm('My secret area');
+    my $realm = $plugin->realm;
 
 =head1 INSTANCE METHODS
 
@@ -85,7 +88,9 @@ L<Marquee::Plugin> and implements the following new ones.
 Register the plugin with path entries. $path_entries must be a list of
 regex, realm, auth callback groups. realm is optional.
 
-=head2 EXAMPLE
+    $self->register($app, $path_entries);
+
+=head1 EXAMPLE
 
 You can port apache htpasswd entries as follows.
 

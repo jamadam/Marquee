@@ -65,6 +65,10 @@ Marquee::Plugin::EPHelperExample - An Example for EP helpers
 
 =head1 SYNOPSIS
 
+    $app->plugin('EPHelperExample');
+
+In templates..
+
     <%= commify($price) %>
     <%= min(@prices) %>
     <%= max(@prices) %>
@@ -80,7 +84,11 @@ This is an example plugin for adding EP template functions.
 L<Marquee::Plugin::EPHelperExample> inherits all instance methods from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 $instance->register($app, $routes)
+=head2 $instance->register($app)
+
+Register the plugin.
+
+    $self->register($app);
 
 =head1 SEE ALSO
 

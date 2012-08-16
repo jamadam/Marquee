@@ -386,26 +386,40 @@ L<Marquee::Plugin> and implements the following new ones.
 
 =head2 max_per_dir
 
-Max file amount to display in each directory.
+Max file amount to display in each directory, defaults to 50.
+
+    $plugin->max_per_dir(100);
+    my $num = $plugin->max_per_dir;
 
 =head2 tree_depth
 
-Max depth for directory recursion.
+Max depth for directory recursion, defaults to 4.
+
+    $plugin->tree_depth(2);
+    my $num = $plugin->tree_depth;
 
 =head1 INSTANCE METHODS
 
 L<Marquee::Plugin::AutoIndex> inherits all instance methods from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 $instance->register($app, $hash_ref)
+=head2 $instance->register($app)
+
+Register the plugin.
+
+    $self->register($app);
 
 =head2 $instance->serve_index
 
 Serves auto directory index.
 
+    $plugin->serve_index($path);
+
 =head2 $instance->serve_tree
 
 Serves auto directory tree.
+
+    $plugin->serve_tree($path);
 
 =head1 SEE ALSO
 

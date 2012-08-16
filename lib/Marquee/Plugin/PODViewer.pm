@@ -153,6 +153,7 @@ sub _detect_see_also {
     my $module = shift;
     
     my $search = Pod::Simple::Search->new;
+    $search->laborious(1);
     my @relatives;
     
     if (my $parent = ($module =~ qr{(.+)::\w+$})[0]) {

@@ -26,11 +26,42 @@ sub register {
     
     if (! $conf->{no_route}) {
         $app->plugin('Router' => sub {
-            shift->route(qr{^/perldoc/(.+)})->to(sub {
+            my $r = shift;
+            $r->route(qr{^/perldoc/(.+)})->to(sub {
                 $self->serve_pod_by_name(shift)
+            });
+            $r->route(qr{^/perldoc/})->to(sub {
+                $self->serve_index;
             });
         });
     }
+}
+
+sub serve_index {
+    my ($self) = @_;
+
+    my $c   = Marquee->c;
+    my $app = $c->app;
+
+    my $search = Pod::Simple::Search->new;
+    $search->laborious(1);
+    my $res = $search->limit_glob('*')->survey;
+    my @found = sort {$a cmp $b} keys %$res;
+    
+    $c->stash->set(
+        static_dir  => 'static',
+        modules     => \@found,
+    );
+    
+    $c->res->body(
+        encode('UTF-8',
+            $app->ssi_handlers->{ep}->render_traceable(
+                __PACKAGE__->Marquee::asset('perldoc_index.html.ep')
+            )
+        )
+    );
+    $c->res->code(200);
+    $c->res->headers->content_type($app->types->type('html'));
 }
 
 sub serve_pod {

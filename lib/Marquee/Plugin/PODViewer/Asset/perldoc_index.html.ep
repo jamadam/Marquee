@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<%
+		my $c 			= shift;
+		my $static_dir 	= stash('static_dir');
+	%>
+    <title><%= stash('title') %></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript" />
+	<meta http-equiv="Content-Style-Type" content="text/css" />
+	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/yui-reset.css") %>" />
+	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/yui-fonts.css") %>" />
+	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/site_main.css") %>" />
+	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/pod_viewer/site_perldoc.css") %>" />
+	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/pod_viewer/site_perldoc_index.css") %>" />
+	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/css/prettify-mojo.css") %>" />
+	<link rel="shortcut icon" href="<%= url_for("$static_dir/favicon.ico") %>" />
+    <script type="text/javascript" src="<%= url_for("$static_dir/jquery.1.7.1.js") %>"></script>
+    <script type="text/javascript" src="<%= url_for("$static_dir/js/prettify.js") %>"></script>
+    <style type="text/css">
+    </style>
+  </head>
+  <body onload="prettyPrint()">
+	<h1>
+	  <code>Index of modules</code>
+	</h1>
+    <div id="wrapper">
+	  <%= iter $modules => begin %>
+		<% my $module = shift; %>
+		<% my $path = $module; $path =~ s{::}{/}g; %>
+		<a href='./<%= $path %>'><%= $module %></a>
+	  <% end %>
+	</div>
+	<div id="footer">
+	</div>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+@charset "UTF-8";
+
+#wrapper a {
+	display: block;
+}
+#wrapper a:hover {
+	background-color:#ffa;
+	cursor: pointer;
+}

@@ -66,6 +66,11 @@ body {
 	#wrapper p {
 		margin-bottom: 20px;
 	}
+	#wrapper code {
+		padding:2px 5px;
+		margin:1px;
+		display: inline-block;
+	}
 	#wrapper > ul:first-of-type a { text-decoration: none }
 #footer {
 	padding-top: 1em;

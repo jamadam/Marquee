@@ -45,6 +45,8 @@ mojo
 tx
 ep
 epl
+EP
+EPL
 stash
 URI
 URL
@@ -61,3 +63,7 @@ mrqe
 funcs
 passphrase
 auth
+timestamp
+req
+res
+elems

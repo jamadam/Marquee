@@ -31,7 +31,7 @@ Marquee::Hooks - フックマネージャー
 
 L<Marquee::Hooks>は、L<Marquee>のフックマネージャーです。
 
-=head1 METHODS
+=head1 INSTANCE METHODS
 
 L<Marquee::Hooks>はL<Mojo::EventEmitter>から全てのメソッドを継承し、下記を追加で実装します。
 

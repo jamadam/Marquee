@@ -57,11 +57,17 @@ Marquee::Stash - stash
 
 A class represents stash.
 
-=head1 METHODS
+=head1 CLASS METHODS
 
-=head2 Marquee::Stash->new(%key_value)
+L<Marquee::Stash> implements the following class methods.
+
+=head2 Class->new(%key_value)
 
     my $stash = Marquee::Stash->new(key => 'val', key2 => 'val2');
+
+=head1 INSTANCE METHODS
+
+L<Marquee::Stash> implements the following instance methods.
 
 =head2 $instance->get($name)
 

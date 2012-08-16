@@ -18,6 +18,9 @@ Marquee::Plugin::PODRenderer - PODビュワープラグイン
 
 =head1 ATTRIBUTES
 
+L<Marquee::Plugin::PODViewer>は
+L<Marquee::Plugin>の全ての属性を継承し、下記を追加で実装します。
+
 =head2 no_see_also
 
 関連するモジュールの自動検出を無効にします。
@@ -26,9 +29,14 @@ Marquee::Plugin::PODRenderer - PODビュワープラグイン
 
 モジュールを探すパスです。
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Plugin::PODViewer>は
+L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
 =head2 $instance->register($app)
+
+=head2 $instance->serve_index()
 
 =head2 $instance->serve_pod($html)
 

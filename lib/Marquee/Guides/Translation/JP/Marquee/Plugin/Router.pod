@@ -28,13 +28,21 @@ Marquee::Plugin::Router - ルーター[EXPERIMENTAL]
 
 =head1 DESCRIPTION
 
+L<Marquee::Plugin::Router>プラグインは、各リクエストを適切なアクションにルーティングする機能を提供します。
+
 =head1 ATTRIBUTES
+
+L<Marquee::Plugin::Router>は
+L<Marquee::Plugin>の全ての属性を継承し、下記を追加で実装します。
 
 =head2 route
 
 L<Marquee::Plugin::Router::Route>インスタンス.
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Plugin::Router>は
+L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
 =head2 $instance->register($app, $routes)
 

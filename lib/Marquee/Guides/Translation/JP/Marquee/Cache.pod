@@ -23,13 +23,21 @@ Marquee::Cache - Cache
 
 =head1 ATTRIBUTES
 
+L<Marquee::Cache>は下記の属性を実装します。
+
 =head2 max_keys
 
 インスタンス毎のキーの上限です。
 
-=head1 METHODS
+=head1 CLASS METHODS
 
-=head2 Marquee::Cache->new
+L<Marquee::Cache>は下記のクラスメソッドを実装します。
+
+=head2 Class->new
+
+=head1 INSTANCE METHODS
+
+L<Marquee::Cache>は下記のインスタンスメソッドを実装します。
 
 =head2 $instance->get($name)
 

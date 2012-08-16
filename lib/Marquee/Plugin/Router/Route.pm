@@ -47,7 +47,7 @@ __END__
 
 =head1 NAME
 
-Marquee::Plugin::Router - Router [EXPERIMENTAL]
+Marquee::Plugin::Router - Route generator and container [EXPERIMENTAL]
 
 =head1 SYNOPSIS
     
@@ -78,13 +78,19 @@ Marquee::Plugin::Router - Router [EXPERIMENTAL]
 
 =head1 DESCRIPTION
 
+L<Marquee::Plugin::Router> is a class for generating and storing routes.
+
 =head1 ATTRIBUTES
+
+L<Marquee::Plugin::Router> implements the following attributes.
 
 =head2 elems
 
 Route entries.
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Plugin::Router> implements the following instance methods.
 
 =head2 $instance->bridge(sub {...})
 

@@ -35,20 +35,24 @@ Marqueeアプリインスタンスを格納します。.
 
 C<Mojo::Log>インスタンスです。デフォルトは、もし存在すればC<$app-E<gt>log>です。
 
-=head1 METHODS
+=head1 CLASS METHODS
 
-L<Marquee::SSIHandler>は下記のメソッドを実装します。
+L<Marquee::SSIHandler>は下記のクラスメソッドを実装します。
 
-=head2 Marquee::SSIHandler->new;
+=head2 Class->new;
 
 コンストラクター。
 
-=head2 Marquee::SSIHandler->current_template;
+=head2 Class->current_template;
 
 現在のテンプレートを再帰的に検出します。
 
     my $current_template = Marquee::SSIHandler->current_template;
     my $parent_template = Marquee::SSIHandler->current_template(1);
+
+=head1 INSTANCE METHODS
+
+L<Marquee::SSIHandler>は下記のインスタンスメソッドを実装します。
 
 =head2 $instance->render;
 

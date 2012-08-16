@@ -75,9 +75,9 @@ L<Marquee::SSIHandler> and implements the following new ones.
 
     my $cache = $epl->template_cache;
 
-=head1 METHODS
+=head1 INSTANCE METHODS
 
-L<Marquee::SSIHandler::EPL> inherits all methods from
+L<Marquee::SSIHandler::EPL> inherits all instance methods from
 L<Marquee::SSIHandler> and implements the following new ones.
 
 =head2 $instance->cache($path, $mt)

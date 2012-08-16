@@ -140,10 +140,10 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
 
     <%= url_for('./path.css') %>
 
-=head1 METHODS
+=head1 INSTANCE METHODS
 
 L<Marquee::SSIHandler::EP>は
-L<Marquee::SSIHandler::EPL>から全てのメソッドを継承し、下記のメソッドを追加で実装します。
+L<Marquee::SSIHandler::EPL>から全てのメソッドを継承し、下記を追加で実装します。
 
 =head2 $instance->new
 

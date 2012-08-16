@@ -407,9 +407,9 @@ Generate a portable URL.
 
     <%= url_for('./path.css') %>
 
-=head1 METHODS
+=head1 INSTANCE METHODS
 
-L<Marquee::SSIHandler::EP> inherits all methods from
+L<Marquee::SSIHandler::EP> inherits all instance methods from
 L<Marquee::SSIHandler::EPL> and implements the following new ones.
 
 =head2 $instance->new

@@ -9,6 +9,8 @@ sub register {
 
 1;
 
+__END__
+
 =head1 NAME
 
 Marquee::Plugin - Plugin base class
@@ -29,9 +31,11 @@ Marquee::Plugin - Plugin base class
 L<Marquee::Plugin> is the plugin base class
 of L<Marquee> plugins.
 
-=head1 METHODS
+=head1 CLASS METHODS
 
-=head2 Marquee::Plugin->register($app, $conf)
+L<Marquee::Plugin> implements the following class methods.
+
+=head2 Class->register($app, $conf)
 
 This must be overridden by sub classes.
 

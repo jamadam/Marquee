@@ -16,7 +16,10 @@ Marquee::Plugin::EPHelperExample - EPヘルパーの定義例
 
 これはEPテンプレート関数を追加するサンプルプラグインです。
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Plugin::EPHelperExample>は
+L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
 =head2 $instance->register($app, $routes)
 

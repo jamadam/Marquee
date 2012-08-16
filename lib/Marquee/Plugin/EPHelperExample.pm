@@ -75,7 +75,10 @@ Marquee::Plugin::EPHelperExample - An Example for EP helpers
 
 This is an example plugin for adding EP template functions.
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Plugin::EPHelperExample> inherits all instance methods from
+L<Marquee::Plugin> and implements the following new ones.
 
 =head2 $instance->register($app, $routes)
 

@@ -190,6 +190,8 @@ sub _pod_to_html {
 
 1;
 
+__END__
+
 =head1 NAME
 
 Marquee::Plugin::PODRenderer - POD renderer plugin
@@ -208,6 +210,9 @@ This is a plugin for POD Viewer server.
 
 =head1 ATTRIBUTES
 
+L<Marquee::Plugin::PODViewer> inherits all attributes from
+L<Marquee::Plugin> and implements the following new ones.
+
 =head2 no_see_also
 
 Disables auto detection of relative modules.
@@ -216,9 +221,14 @@ Disables auto detection of relative modules.
 
 A path to discover modules.
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Plugin::PODViewer> inherits all instance methods from
+L<Marquee::Plugin> and implements the following new ones.
 
 =head2 $instance->register($app)
+
+=head2 $instance->serve_index()
 
 =head2 $instance->serve_pod($html)
 

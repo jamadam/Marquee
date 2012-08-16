@@ -89,20 +89,24 @@ Marquee app instance.
 
 C<Mojo::Log> instance. Defaults to C<$app-E<gt>log> if exists.
 
-=head1 METHODS
+=head1 CLASS METHODS
 
-L<Marquee::SSIHandler> implements the following methods.
+L<Marquee::SSIHandler> implements the following class methods.
 
-=head2 Marquee::SSIHandler->new;
+=head2 Class->new;
 
 Constructor.
 
-=head2 Marquee::SSIHandler->current_template;
+=head2 Class->current_template;
 
 Detects current template recursively.
 
     my $current_template = Marquee::SSIHandler->current_template;
     my $parent_template = Marquee::SSIHandler->current_template(1);
+
+=head1 INSTANCE METHODS
+
+L<Marquee::SSIHandler> implements the following instance methods.
 
 =head2 $instance->render;
 

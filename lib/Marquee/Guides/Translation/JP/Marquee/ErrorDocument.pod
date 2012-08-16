@@ -15,6 +15,8 @@ L<Marquee::ErrorDocument>は、エラードキュメントを表象します。
 
 =head1 ATTRIBUTES
 
+L<Marquee::ErrorDocument>は下記の属性を実装します。
+
 =head2 template
 
     $error_doc->template('/path/to/template.html.ep');
@@ -23,7 +25,9 @@ L<Marquee::ErrorDocument>は、エラードキュメントを表象します。
 
     $error_doc->status_template->{404} = '/path/to/template.html.ep';
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::ErrorDocument>は下記のインスタンスメソッドを実装します。
 
 =head2 $instance->serve($status_code, $message)
 

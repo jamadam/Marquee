@@ -21,6 +21,8 @@ sub emit_chain {
 
 1;
 
+__END__
+
 =head1 NAME
 
 Marquee::Hooks - Hooks manager
@@ -52,9 +54,9 @@ Marquee::Hooks - Hooks manager
 
 L<Marquee::Hooks> is the Hook manager of L<Marquee>.
 
-=head1 METHODS
+=head1 INSTANCE METHODS
 
-L<Marquee::Hooks> inherits all methods from L<Mojo::EventEmitter> and
+L<Marquee::Hooks> inherits all instance methods from L<Mojo::EventEmitter> and
 implements the following new ones.
 
 =head2 C<emit_chain>

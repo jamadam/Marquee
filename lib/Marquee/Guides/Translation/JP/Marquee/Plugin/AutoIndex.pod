@@ -20,6 +20,9 @@ On your browser following forms of URL are available.
 
 =head1 ATTRIBUTES
 
+L<Marquee::Plugin::AutoIndex>は
+L<Marquee::Plugin>の全ての属性を継承し、下記を追加で実装します。
+
 =head2 max_per_dir
 
 ディレクトリ内で表示可能なファイル数の上限を指定します。
@@ -28,7 +31,10 @@ On your browser following forms of URL are available.
 
 ディレクトリの再帰処理の深度の上限を指定します。
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Plugin::AutoIndex>は
+L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
 =head2 $instance->register($app, $hash_ref)
 

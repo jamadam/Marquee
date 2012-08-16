@@ -13,7 +13,16 @@ Mojolicious::Command::marquee - marquee command
 
 =head1 DESCRIPTION
 
-=head1 METHODS
+=head1 ATTRIBUTES
+
+=head2 description
+
+=head2 usage
+
+=head1 INSTANCE METHODS
+
+L<Marquee::Command::marquee>は
+L<Marquee::Command>の全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
 =head2 run
 

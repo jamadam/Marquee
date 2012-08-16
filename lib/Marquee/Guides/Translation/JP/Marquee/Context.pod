@@ -22,6 +22,8 @@ L<Marquee::Context>クラスは、リクエスト毎のコンテキストを表�
 
 =head1 ATTRIBUTES
 
+L<Marquee::Context>は下記の属性を実装します。
+
 =head2 app
 
 L<Marquee> instance.
@@ -52,7 +54,7 @@ C<$self-E<gt>tx-E<gt>res>へのエイリアスです。
 
 =head2 session_path
 
-A path for session. Defaluts to /.
+A path for session. Defaults to /.
 
 =head2 session_secure
 
@@ -88,7 +90,9 @@ L<Mojo::Transaction>インスタンス。
 
     my $tx = $context->tx;
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Context>は下記のインスタンスメソッドを実装します。
 
 =head2 new
 

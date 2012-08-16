@@ -22,10 +22,10 @@ L<Marquee::SSIHandler>の全ての属性を継承し、下記の属性を追加�
 
     my $cache = $epl->template_cache;
 
-=head1 METHODS
+=head1 INSTANCE METHODS
 
 L<Marquee::SSIHandler::EPL>は
-L<Marquee::SSIHandler>の全てのメソッドを継承し、下記のメソッドを追加で実装します。
+L<Marquee::SSIHandler>の全てのメソッドを継承し、下記を追加で実装します。
 
 =head2 $instance->cache($path, $mt)
 

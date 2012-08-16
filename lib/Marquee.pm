@@ -490,7 +490,7 @@ You can append SSI association by C<add_handler> method instead of doing above.
 =head2 stash
 
 An L<Marquee::Stash> instance. Though Marquee's stash is localized and cloned
-per request, this also can contain persistant values for application specific.
+per request, this also can contain persistent values for application specific.
 
     $app->stash(Marquee::Stash->new);
     my $stash = $app->stash;
@@ -514,24 +514,18 @@ Set X-POWERED-BY response header.
 
     $app->x_powered_by('MyApp');
 
-=head1 METHODS
+=head1 CLASS METHODS
 
-L<Marquee> inherits all methods from L<Mojo> and implements the following
+L<Marquee> inherits all class methods from L<Mojo> and implements the following
 new ones.
 
-=head2 Marquee->new;
+=head2 Class->new;
 
 Constructor.
 
     my $app = Marquee->new;
 
-=head2 $instance->add_handler(name => $code_ref);
-
-Adds C<ssi_handlers> entry.
-
-    $instance->add_handler(ep => Marquee::SSIHandler::EP->new);
-
-=head2 Marquee->asset($filename);
+=head2 Class->asset($filename);
 
 Returns bundled asset path for given file name.
 
@@ -552,6 +546,17 @@ In other packages
     my $asset = SomePackage->Marquee::asset();
     
     say $asset # /path/to/lib/SomePackage/Asset
+
+=head1 INSTANCE METHODS
+
+L<Marquee> inherits all instance methods from L<Mojo> and implements the
+following new ones.
+
+=head2 $instance->add_handler(name => $code_ref);
+
+Adds C<ssi_handlers> entry.
+
+    $instance->add_handler(ep => Marquee::SSIHandler::EP->new);
 
 =head2 $instance->c()
 

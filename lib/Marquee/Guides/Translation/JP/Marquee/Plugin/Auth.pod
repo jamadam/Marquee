@@ -25,11 +25,17 @@ Marquee::Plugin::Auth - ベーシック認証
 
 =head1 ATTRIBUTES
 
+L<Marquee::Plugin::Auth>は
+L<Marquee::Plugin>の全ての属性を継承し、下記を追加で実装します。
+
 =head2 realm
 
 レスポンスヘッダに出現するrealmのデフォルト値を指定します。それぞれの認証設定はこれをオーバーライドすることができます。
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Plugin::Auth>は
+L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
 =head2 $instance->register($app, $path_entries)
 

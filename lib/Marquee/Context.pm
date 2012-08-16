@@ -199,6 +199,8 @@ also has ability to manage session and signed cookies.
 
 =head1 ATTRIBUTES
 
+L<Marquee::Context> implements the following attributes.
+
 =head2 app
 
 L<Marquee> instance.
@@ -230,7 +232,7 @@ Note that cookies are generally limited to 4096 bytes of data.
 
 =head2 session_path
 
-A path for session. Defaluts to /.
+A path for session. Defaults to /.
 
 =head2 session_secure
 
@@ -266,7 +268,9 @@ L<Mojo::Transaction> instance.
 
     my $tx = $context->tx;
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Context> implements the following instance methods.
 
 =head2 new
 

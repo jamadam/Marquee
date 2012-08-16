@@ -381,6 +381,9 @@ served.
 
 =head1 ATTRIBUTES
 
+L<Marquee::Plugin::AutoIndex> inherits all attributes from
+L<Marquee::Plugin> and implements the following new ones.
+
 =head2 max_per_dir
 
 Max file amount to display in each directory.
@@ -389,7 +392,10 @@ Max file amount to display in each directory.
 
 Max depth for directory recursion.
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Plugin::AutoIndex> inherits all instance methods from
+L<Marquee::Plugin> and implements the following new ones.
 
 =head2 $instance->register($app, $hash_ref)
 

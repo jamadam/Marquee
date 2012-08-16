@@ -67,13 +67,22 @@ Marquee::Plugin::Router - Router [EXPERIMENTAL]
 
 =head1 DESCRIPTION
 
+L<Marquee::Plugin::Router> plugin provides an ability to route requests to
+certain actions.
+
 =head1 ATTRIBUTES
+
+L<Marquee::Plugin::Router> inherits all attributes from
+L<Marquee::Plugin> and implements the following new ones.
 
 =head2 route
 
 L<Marquee::Plugin::Router::Route> instance.
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Plugin::Router> inherits all instance methods from
+L<Marquee::Plugin> and implements the following new ones.
 
 =head2 $instance->register($app, $routes)
 

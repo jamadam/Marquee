@@ -19,9 +19,11 @@ Marquee::Plugin - プラグインベースクラス
 
 L<Marquee::Plugin>は、 L<Marquee>プラグインのベースクラスです。
 
-=head1 METHODS
+=head1 CLASS METHODS
 
-=head2 Marquee::Plugin->register($app, $conf)
+L<Marquee::Plugin>は下記のクラスメソッドを実装します。
+
+=head2 Class->register($app, $conf)
 
 This must be overridden by sub classes.
 

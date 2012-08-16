@@ -102,21 +102,15 @@ X-POWERED-BYレスポンスヘッダーを設定します。
 
     $app->x_powered_by('MyApp');
 
-=head1 METHODS
+=head1 CLASS METHODS
 
-L<Marquee>はL<Mojo>から全てのメソッドを継承し、下記を追加で実装します。
+L<Marquee>はL<Mojo>から全てのクラスメソッドを継承し、下記を追加で実装します。
 
-=head2 Marquee->new;
+=head2 Class->new;
 
 コンストラクター。
 
     my $app = Marquee->new;
-
-=head2 $instance->add_handler(name => $code_ref);
-
-C<ssi_handlers>のエントリーを追加します。
-
-    $instance->add_handler(ep => Marquee::SSIHandler::EP->new);
 
 =head2 Marquee->asset($filename);
 
@@ -139,6 +133,16 @@ C<ssi_handlers>のエントリーを追加します。
     my $asset = SomePackage->Marquee::asset();
     
     say $asset # /path/to/lib/SomePackage/Asset
+
+=head1 INSTANCE METHODS
+
+L<Marquee>はL<Mojo>から全てのインスタンスメソッドを継承し、下記を追加で実装します。
+
+=head2 $instance->add_handler(name => $code_ref);
+
+C<ssi_handlers>のエントリーを追加します。
+
+    $instance->add_handler(ep => Marquee::SSIHandler::EP->new);
 
 =head2 $instance->c()
 

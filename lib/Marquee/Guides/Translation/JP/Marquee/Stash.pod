@@ -25,11 +25,17 @@ Marquee::Stash - stash
 
 本クラスは、スタッシュを表象します。
 
-=head1 METHODS
+=head1 CLASS METHODS
 
-=head2 Marquee::Stash->new(%key_value)
+L<Marquee::Stash>は下記のクラスメソッドを実装します。
+
+=head2 Class->new(%key_value)
 
     my $stash = Marquee::Stash->new(key => 'val', key2 => 'val2');
+
+=head1 INSTANCE METHODS
+
+L<Marquee::Stash>は下記のインスタンスメソッドを実装します。
 
 =head2 $instance->get($name)
 

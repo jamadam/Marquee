@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Marquee::Plugin::Router - ルーター [EXPERIMENTAL]
+Marquee::Plugin::Router::Route - ルーターの生成と格納 [EXPERIMENTAL]
 
 =head1 SYNOPSIS
     
@@ -33,13 +33,19 @@ Marquee::Plugin::Router - ルーター [EXPERIMENTAL]
 
 =head1 DESCRIPTION
 
+L<Marquee::Plugin::Router>は、ルートを生成し格納します。
+
 =head1 ATTRIBUTES
+
+L<Marquee::Plugin::Router::Route>は下記の属性を実装します。
 
 =head2 elems
 
 ルートのエントリーです。
 
-=head1 METHODS
+=head1 INSTANCE METHODS
+
+L<Marquee::Plugin::Router::Route>は下記のインスタンスメソッドを実装します。
 
 =head2 $instance->bridge(sub {...})
 

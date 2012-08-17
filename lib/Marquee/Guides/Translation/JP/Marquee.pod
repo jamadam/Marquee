@@ -139,7 +139,7 @@ L<Marquee>はL<Mojo>から全てのクラスメソッドを継承し、下記を
 
     my $app = Marquee->new;
 
-=head2 Marquee->asset($filename)
+=head2 Class->asset($filename)
 
 バンドルされたアセットの中から、指定の名前のファイルのパスを返します。
 

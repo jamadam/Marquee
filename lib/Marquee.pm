@@ -226,7 +226,6 @@ sub plugin {
 ### --
 sub render_ssi {
     my ($self, $path, $handler_ext) = @_;
-    warn $path;
     my $ext = $handler_ext || ($path =~ qr{\.\w+\.(\w+)$})[0];
     if (my $handler = $self->ssi_handlers->{$ext}) {
         return $handler->render_traceable($path);

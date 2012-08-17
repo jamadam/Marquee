@@ -99,6 +99,8 @@ L<Marquee::Cache> implements the following instance methods.
 
 Get cache value for given name.
 
+    my $data = $cache->get('foo');
+
 =head2 $instance->set($name => $data)
 
 Set cache values with given name and data. By 3rd argument, you can set one or

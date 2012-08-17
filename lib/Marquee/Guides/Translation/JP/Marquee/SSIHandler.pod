@@ -35,6 +35,9 @@ Marqueeアプリインスタンスを格納します。.
 
 C<Mojo::Log>インスタンスです。デフォルトは、もし存在すればC<$app-E<gt>log>です。
 
+    $handler->log('/path/to/handler.log');
+    $path = $handler->log;
+
 =head1 CLASS METHODS
 
 L<Marquee::SSIHandler>は下記のクラスメソッドを実装します。
@@ -42,6 +45,8 @@ L<Marquee::SSIHandler>は下記のクラスメソッドを実装します。
 =head2 Class->new
 
 コンストラクター。
+
+    my $handler = Marquee::SSIHandler->new();
 
 =head2 Class->current_template
 
@@ -66,9 +71,16 @@ L<Marquee::SSIHandler>は下記のインスタンスメソッドを実装しま�
         return $out;
     }
 
+どこかで。。
+
+    $handler->render($path);
+
 =head2 $instance->render_traceable
 
 テンプレート名を再帰的にスタックすることで、トレース可能にレンダリングします。
+
+    $handler->render_traceable($path);
+    $handler->render_traceable($path, sub {...});
 
 =head1 SEE ALSO
 

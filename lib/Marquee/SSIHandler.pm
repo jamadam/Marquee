@@ -39,6 +39,15 @@ sub render {
 ### traceably render
 ### --
 sub render_traceable {
+    my ($self, $path) = @_;
+    
+    return $self->traceable($path, sub {$self->render($path)});
+}
+
+### --
+### Make method calls traceable
+### --
+sub traceable {
     my ($self, $path, $cb) = @_;
     
     my $stash = Marquee->c->stash;
@@ -46,7 +55,7 @@ sub render_traceable {
     local $stash->{'mrqe.template_path'} =
                                     [$path, $stash->{'mrqe.template_path'}];
     
-    return $cb ? $cb->() : $self->render($path);
+    return $cb->();
 }
 
 1;
@@ -89,6 +98,9 @@ Marquee app instance.
 
 C<Mojo::Log> instance. Defaults to C<$app-E<gt>log> if exists.
 
+    $handler->log('/path/to/handler.log');
+    $path = $handler->log;
+
 =head1 CLASS METHODS
 
 L<Marquee::SSIHandler> implements the following class methods.
@@ -96,6 +108,8 @@ L<Marquee::SSIHandler> implements the following class methods.
 =head2 Class->new
 
 Constructor.
+
+    my $handler = Marquee::SSIHandler->new();
 
 =head2 Class->current_template
 
@@ -120,9 +134,21 @@ Renders templates. The sub classes MUST override(implement) the method.
         return $out;
     }
 
+‚Ç‚±‚©‚ÅBB
+
+    $handler->render($path);
+
 =head2 $instance->render_traceable
 
 Traceably renders templates by stacking template names recursively.
+
+    $handler->render_traceable($path);
+
+=head2 $instance->traceable($path, sub {...})
+
+Call a method traceably.
+
+    $handler->traceable($path, sub {...});
 
 =head1 SEE ALSO
 

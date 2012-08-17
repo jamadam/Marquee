@@ -194,7 +194,7 @@ sub _init {
         my ($self, $name, $value) = @_;
         my $path = $self->current_template;
         Marquee->c->stash->set(_ph_name($name) => sub {
-            return $self->render_traceable($path, $value);
+            $self->traceable($path, $value)
         });
         return;
     };

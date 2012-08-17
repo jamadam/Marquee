@@ -39,6 +39,8 @@ L<Marquee::SSIHandler>の全てのメソッドを継承し、下記を追加で�
 指定のテンプレートをレンダリングし、結果を返します。レンダリングに失敗した場合、L<Mojo::Exception>を伴って
 dieします。
 
+    $epl->render('/path/to/template.html.epl');
+
 =head1 SEE ALSO
 
 L<Marquee::SSIHandler>, L<Marquee>, L<Mojolicious>

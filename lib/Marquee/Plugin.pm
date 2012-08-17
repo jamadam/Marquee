@@ -35,9 +35,19 @@ of L<Marquee> plugins.
 
 L<Marquee::Plugin> implements the following class methods.
 
-=head2 Class->register($app, $conf)
+=head2 Class->register($app, @conf)
 
 This must be overridden by sub classes.
+
+    sub register {
+        my ($self, $app, @conf) = @_;
+        ...
+        return;
+    }
+
+The method should be available as follows
+
+    $plugin->register($app, ...);
 
 =head1 SEE ALSO
 

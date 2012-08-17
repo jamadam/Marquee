@@ -98,7 +98,7 @@ L<Marquee::Plugin::Router> implements the following instance methods.
 =head2 $instance->bridge(sub {...})
 
     my $bridge = $r->bridge(sub {
-        my $context = shift;
+        my $c = shift;
         return $bool;
     });
 
@@ -125,7 +125,7 @@ Filters route by HTTP method.
 Add condition for the route entry.
 
     $r->add_cond(sub {
-        my $context = shift;
+        my $c = shift;
         return 1; # or 0
     });
 

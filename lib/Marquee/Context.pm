@@ -182,15 +182,15 @@ Marquee::Context - Context
 
 =head1 SYNOPSIS
 
-    my $context = Marquee::Context->new(app => $app, tx => $tx);
-    my $app             = $context->app;
-    my $req             = $context->req;
-    my $res             = $context->res;
-    my $tx              = $context->tx;
-    my $session         = $context->session;
-    my $cookie          = $context->cookie('key');
-    my $signed_cookie   = $context->signed_cookie('key');
-    my $stash           = $context->stash;
+    my $c = Marquee::Context->new(app => $app, tx => $tx);
+    my $app             = $c->app;
+    my $req             = $c->req;
+    my $res             = $c->res;
+    my $tx              = $c->tx;
+    my $session         = $c->session;
+    my $cookie          = $c->cookie('key');
+    my $signed_cookie   = $c->signed_cookie('key');
+    my $stash           = $c->stash;
 
 =head1 DESCRIPTION
 
@@ -205,68 +205,71 @@ L<Marquee::Context> implements the following attributes.
 
 L<Marquee> instance.
 
-    my $app = $context->app;
+    my $app = $c->app;
 
 =head2 req
 
-An Alias to C<$context-E<gt>tx-E<gt>req>.
+An Alias to C<$c-E<gt>tx-E<gt>req>.
 
-    my $req = $context->tx->req;
-    $context->tx->req($req);
+    my $req = $c->tx->req;
+    $c->tx->req($req);
 
 =head2 res
 
 An Alias to C<$self-E<gt>tx-E<gt>res>.
 
-    my $res = $context->tx->req;
-    $context->tx->req($res);
+    my $res = $c->tx->req;
+    $c->tx->req($res);
 
 =head2 session
 
 Persistent data storage, stored JSON serialized in a signed cookie.
 Note that cookies are generally limited to 4096 bytes of data.
 
-    my $session = $context->session;
+    my $session = $c->session;
     my $foo     = $session->{'foo'};
     $session->{foo} = 'bar';
 
 =head2 session_path
 
-A path for session. Defaults to /.
+A path for session. Defaults to C</>.
+
+    $c->session_path('/some/path/')
+    my $path = $c->session_path
 
 =head2 session_secure
 
 Set the secure flag on all session cookies, so that browsers send them only over HTTPS connections.
 
-    my $secure = $context->session_secure;
-    $context->session_secure(1);
+    my $secure = $c->session_secure;
+    $c->session_secure(1);
 
 =head2 session_expiration
 
 Time for the session to expire in seconds from now, defaults to 3600.
 The expiration timeout gets refreshed for every request
 
-    my $time = $context->session_expiration;
-    $context->session_expiration(3600);
+    my $time = $c->session_expiration;
+    $c->session_expiration(3600);
 
 =head2 session_name
 
 Name of the signed cookie used to store session data, defaults to 'mrqe'.
 
-    my $name = $context->session_name;
-    $context->session_name('session');
+    my $name = $c->session_name;
+    $c->session_name('session');
 
 =head2 stash
 
 A stash that inherits app's one.
 
-    my $stash = $context->stash;
+    my $stash = $c->stash;
 
 =head2 tx
 
 L<Mojo::Transaction> instance.
 
-    my $tx = $context->tx;
+    my $tx = $c->tx;
 
 =head1 INSTANCE METHODS
 
@@ -276,11 +279,13 @@ L<Marquee::Context> implements the following instance methods.
 
 Constructor.
 
-    my $context = Marquee::Context->new;
+    my $c = Marquee::Context->new;
 
 =head2 $instance->close
 
 Close the context.
+
+    $c->close;
 
 =head2 $instance->cookie
 

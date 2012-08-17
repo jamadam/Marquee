@@ -593,7 +593,7 @@ An alias for C<context> method.
 Returns current context. This refers to C<$Marquee::CONTEXT> localized
 per request.
 
-    my $context = $app->context;
+    my $c = $app->context;
 
 =head2 $instance->dispatch()
 

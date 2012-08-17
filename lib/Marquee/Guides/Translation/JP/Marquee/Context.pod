@@ -6,19 +6,19 @@ Marquee::Context - Context
 
 =head1 SYNOPSIS
 
-    my $context = Marquee::Context->new(app => $app, tx => $tx);
-    my $app             = $context->app;
-    my $req             = $context->req;
-    my $res             = $context->res;
-    my $tx              = $context->tx;
-    my $session         = $context->session;
-    my $cookie          = $context->cookie('key');
-    my $signed_cookie   = $context->signed_cookie('key');
-    my $stash           = $context->stash;
+    my $c = Marquee::Context->new(app => $app, tx => $tx);
+    my $app             = $c->app;
+    my $req             = $c->req;
+    my $res             = $c->res;
+    my $tx              = $c->tx;
+    my $session         = $c->session;
+    my $cookie          = $c->cookie('key');
+    my $signed_cookie   = $c->signed_cookie('key');
+    my $stash           = $c->stash;
 
 =head1 DESCRIPTION
 
-L<Marquee::Context>クラスは、リクエスト毎のコンテキストを表象します。本クラスはセッション管理と署名付きクッキーの管理も行います。
+L<Marquee::Context>クラスは、リクエスト毎のコンテキストを表象します。本クラスはセッション管理と暗号化クッキーの管理も行います。
 
 =head1 ATTRIBUTES
 
@@ -28,67 +28,70 @@ L<Marquee::Context>は下記の属性を実装します。
 
 L<Marquee> instance.
 
-    my $app = $context->app;
+    my $app = $c->app;
 
 =head2 req
 
-C<$context-E<gt>tx-E<gt>req>へのエイリアスです。
+C<$c-E<gt>tx-E<gt>req>へのエイリアスです。
 
-    my $req = $context->tx->req;
-    $context->tx->req($req);
+    my $req = $c->tx->req;
+    $c->tx->req($req);
 
 =head2 res
 
 C<$self-E<gt>tx-E<gt>res>へのエイリアスです。
 
-    my $res = $context->tx->req;
-    $context->tx->req($res);
+    my $res = $c->tx->req;
+    $c->tx->req($res);
 
 =head2 session
 
 持続的なデータストレージ。 暗号化クッキーの中に、JSON形式でシリアライズされ保存されます。 クッキーは一般的に4096バイトのデータに制限されることに注意してください。
 
-    my $session = $context->session;
+    my $session = $c->session;
     my $foo     = $session->{'foo'};
     $session->{foo} = 'bar';
 
 =head2 session_path
 
-A path for session. Defaults to /.
+セッションに使用されるパスを指定します。デフォルトはC</>です。
+
+    $c->session_path('/some/path/')
+    my $path = $c->session_path
 
 =head2 session_secure
 
 全てのセッションクッキーにセキュアフラグをセットすることで、ブラウザへの送信をHTTPSコネクションに限定します。
 
-    my $secure = $context->session_secure;
-    $context->session_secure(1);
+    my $secure = $c->session_secure;
+    $c->session_secure(1);
 
 =head2 session_expiration
 
 セッションの有効期限を現在からの秒数で指定します。デフォルトは3600です。有効期限はリクエスト毎にリフレッシュ
 されます。
 
-    my $time = $context->session_expiration;
-    $context->session_expiration(3600);
+    my $time = $c->session_expiration;
+    $c->session_expiration(3600);
 
 =head2 session_name
 
-セッションデータを格納するための署名付きクッキーの名前を指定します。デフォルトは「mrge」です。
+セッションデータを格納するための暗号化クッキーの名前を指定します。デフォルトは「mrge」です。
 
-    my $name = $context->session_name;
-    $context->session_name('session');
+    my $name = $c->session_name;
+    $c->session_name('session');
 
 =head2 stash
 
 appから継承されたスタッシュを格納します。
 
-    my $stash = $context->stash;
+    my $stash = $c->stash;
 
 =head2 tx
 
 L<Mojo::Transaction>インスタンス。
 
-    my $tx = $context->tx;
+    my $tx = $c->tx;
 
 =head1 INSTANCE METHODS
 
@@ -98,11 +101,13 @@ L<Marquee::Context>は下記のインスタンスメソッドを実装します�
 
 コンストラクタ。
 
-    my $context = Marquee::Context->new;
+    my $c = Marquee::Context->new;
 
 =head2 $instance->close
 
 コンテキストをクローズします。
+
+    $c->close;
 
 =head2 $instance->cookie
 
@@ -126,7 +131,7 @@ L<Marquee::Context>は下記のインスタンスメソッドを実装します�
 
 =head2 $instance->signed_cookie
 
-署名付きクッキーにアクセスしたり、新しい署名付きクッキーを生成したりします。署名の検証に失敗したクッキーは自動的に破棄されます。
+暗号化クッキーにアクセスしたり、新しい暗号化クッキーを生成したりします。署名の検証に失敗したクッキーは自動的に破棄されます。
 
     my $value  = $c->signed_cookie('foo');
     my @values = $c->signed_cookie('foo');

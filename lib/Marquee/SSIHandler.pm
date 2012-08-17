@@ -138,7 +138,7 @@ Renders templates. The sub classes MUST override(implement) the method.
 
     $handler->render($path);
 
-=head2 $instance->render_traceable
+=head2 $instance->render_traceable($path)
 
 Traceably renders templates by stacking template names recursively.
 
@@ -146,7 +146,7 @@ Traceably renders templates by stacking template names recursively.
 
 =head2 $instance->traceable($path, sub {...})
 
-Call a method traceable.
+Invokes the callback traceable.
 
     $handler->traceable($path, sub {...});
 

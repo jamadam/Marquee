@@ -75,12 +75,17 @@ L<Marquee::SSIHandler>は下記のインスタンスメソッドを実装しま�
 
     $handler->render($path);
 
-=head2 $instance->render_traceable
+=head2 $instance->render_traceable($path)
 
 テンプレート名を再帰的にスタックすることで、トレース可能にレンダリングします。
 
     $handler->render_traceable($path);
-    $handler->render_traceable($path, sub {...});
+
+=head2 $instance->traceable($path, sub {...})
+
+トレース可能にコールバックを実行します。
+
+    $handler->traceable($path, sub {...});
 
 =head1 SEE ALSO
 

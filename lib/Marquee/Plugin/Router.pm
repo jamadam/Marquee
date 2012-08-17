@@ -48,9 +48,9 @@ Marquee::Plugin::Router - Router [EXPERIMENTAL]
     $app->plugin(Router => sub {
         my $r = shift;
         $r->route(qr{^/index\.html})->to(sub {
-            my $context = Marquee->c;
-            my $req = $context->tx->req;
-            my $res = $context->tx->res;
+            my $c = Marquee->c;
+            my $req = $c->tx->req;
+            my $res = $c->tx->res;
             $res->code(200);
             $res->body('content');
             $res->headers->content_type('text/html');

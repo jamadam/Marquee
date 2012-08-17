@@ -92,6 +92,8 @@ Get or set cache.
 Renders given template and returns the result. If rendering fails, die with
 L<Mojo::Exception>.
 
+    $epl->render('/path/to/template.html.epl');
+
 =head1 SEE ALSO
 
 L<Marquee::SSIHandler>, L<Marquee>, L<Mojolicious>

@@ -23,9 +23,19 @@ L<Marquee::Plugin>は、 L<Marquee>プラグインのベースクラスです。
 
 L<Marquee::Plugin>は下記のクラスメソッドを実装します。
 
-=head2 Class->register($app, $conf)
+=head2 Class->register($app, @conf)
 
-This must be overridden by sub classes.
+このメソッドはサブクラスでオーバーライドされる必要があります。
+
+    sub register {
+        my ($self, $app, @conf) = @_;
+        ...
+        return;
+    }
+
+このメソッドは下記のように利用できるべきです。
+
+    $plugin->register($app, ...);
 
 =head1 SEE ALSO
 

@@ -3,9 +3,10 @@ use strict;
 use warnings;
 use Mojo::Base 'Marquee::SSIHandler::EPL';
 use File::Basename 'dirname';
-use Mojo::ByteStream;
+use Mojo::ByteStream 'b';
 use Mojo::Template;
 use Mojo::Path;
+use Encode 'decode_utf8';
 use Carp;
 
 ### --
@@ -131,38 +132,37 @@ sub _init {
     $self->funcs->{include} = sub {
         my ($self, $path, @args) = @_;
         
-        my $abs_path = $self->_to_abs($path);
+        $path = $self->_to_abs($path);
         my $c = Marquee->c;
         
-        if (my $abs_path = $c->app->search_static($abs_path)) {
-            return Mojo::ByteStream->new(
-                Encode::decode_utf8(
-                    Mojo::Asset::File->new(path => $abs_path)->slurp));
+        if (my $path = $c->app->search_static($path)) {
+            return b(decode_utf8(Mojo::Asset::File->new(path => $path)->slurp));
         }
         
-        if (my $abs_path = $c->app->search_template($abs_path)) {
+        if (my $path = $c->app->search_template($path)) {
             local $c->{stash} = $c->{stash}->clone;
             $c->{stash}->set(@args);
-            return Mojo::ByteStream->new($c->app->render_ssi($abs_path));
+            return b($c->app->render_ssi($path));
         }
         
-        die "$abs_path not found";
+        die "$path not found";
     };
     
     $self->funcs->{include_as} = sub {
         my ($self, $path, $handler, @args) = @_;
         
-        my $abs_path = $self->_to_abs($path);
+        $path = $self->_to_abs($path);
         my $c = Marquee->c;
+        my $app = $c->app;
         
-        if (my $abs_path = $c->app->search_static($abs_path)
-                                    || $c->app->search_template($abs_path)) {
+        if (my $path = $app->search_static($path)
+                                    || $app->search_template($path)) {
             local $c->{stash} = $c->{stash}->clone;
             $c->{stash}->set(@args);
-            return Mojo::ByteStream->new($c->app->render_ssi($abs_path, $handler));
+            return b($app->render_ssi($path, $handler));
         }
         
-        die "$abs_path not found";
+        die "$path not found";
     };
     
     $self->funcs->{iter} = sub {
@@ -187,7 +187,7 @@ sub _init {
             }
         }
         
-        return Mojo::ByteStream->new($ret);
+        return b($ret);
     };
     
     $self->funcs->{override} = sub {
@@ -218,8 +218,7 @@ sub _init {
         
         $block->();
         
-        return
-            Mojo::ByteStream->new($c->app->render_ssi($self->_to_abs($path. '.ep')));
+        return b($c->app->render_ssi($self->_to_abs($path. '.ep')));
     };
     
     return $self;
@@ -251,10 +250,9 @@ sub _ph_name {
 sub _to_abs {
     my ($self, $path) = @_;
     
-    (my $root, $path) =
-        ($path =~ qr{^/(.+)})
-            ? (Marquee->c->app->document_root, $1)
-            : (dirname($self->current_template), $path);
+    (my $root, $path) = ($path =~ qr{^/(.+)})
+                                ? (Marquee->c->app->document_root, $1)
+                                : (dirname($self->current_template), $path);
     
     return File::Spec->canonpath(File::Spec->catfile($root, $path));
 }

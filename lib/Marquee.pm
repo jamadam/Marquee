@@ -177,8 +177,7 @@ sub is_directory {
     my ($self, $path) = @_;
     
     for my $root (@{$self->roots}) {
-        my $path = File::Spec->catdir($root, $path);
-        if (-d $path) {
+        if (-d File::Spec->catdir($root, $path)) {
             return 1;
         }
     }
@@ -241,8 +240,7 @@ sub search_static {
     my ($self, $path) = @_;
     
     for my $root (($path =~ qr{^/}) ? '' : @{$self->roots}) {
-        my $path = File::Spec->catdir($root, $path);
-        if (-f $path) {
+        if (-f (my $path = File::Spec->catdir($root, $path))) {
             return $path;
         }
     }
@@ -256,8 +254,7 @@ sub search_template {
     
     for my $root (($path =~ qr{^/}) ? '' : @{$self->roots}) {
         for my $ext (keys %{$self->ssi_handlers}) {
-            my $path = File::Spec->catdir($root, "$path.$ext");
-            if (-f $path) {
+            if (-f (my $path = File::Spec->catdir($root, "$path.$ext"))) {
                 return $path;
             }
         }
@@ -313,9 +310,7 @@ sub serve_static {
 sub serve_dynamic {
     my ($self, $path) = @_;
     
-    my $ret = $self->render_ssi($path);
-    
-    if (defined $ret) {
+    if (defined (my $ret = $self->render_ssi($path))) {
         $CONTEXT->res->body(encode('UTF-8', $ret));
         $CONTEXT->res->code(200);
         if (my $type = $self->path_to_type($path)) {
@@ -340,11 +335,10 @@ sub start {
 ### --
 sub _auto_fill_filename {
     my ($path, $default) = @_;
-    if ($default) {
-        if ($path->trailing_slash || ! @{$path->parts}) {
-            push(@{$path->parts}, $default);
-            $path->trailing_slash(0);
-        }
+    
+    if ($default && $path->trailing_slash || ! @{$path->parts}) {
+        push(@{$path->parts}, $default);
+        $path->trailing_slash(0);
     }
     return $path;
 }

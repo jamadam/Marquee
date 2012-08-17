@@ -470,7 +470,7 @@ files and templates.
 
 =head2 default_file
 
-Specify a default file name and activate auto fill. The auto fill will occures
+Specify a default file name and activate auto fill. The auto fill will occurs
 when the request path is trailing slashed.
 
     $app->default_file('index.html');
@@ -516,7 +516,7 @@ You can append SSI association by C<add_handler> method instead of doing above.
 
 An L<Marquee::Stash> instance. Though Marquee's stash is localized and cloned
 per request, this also can contain persistent values for application specific
-and can be refered transparently from anywhere.
+and can be referred transparently from anywhere.
 
     $app->stash(Marquee::Stash->new);
     my $stash = $app->stash;

@@ -246,8 +246,8 @@ Serves index of modules.
 
 =head2 $instance->serve_pod($pod, $mod_name)
 
-Parse POD string and generate HTML. optional param $mod_name specifies module
-name and used for see also detection.
+Parse POD string and generate HTML. optional parameter $mod_name specifies
+module name and used for see also detection.
 
     $plugin->serve_pod($pod, 'Path::To::Mod');
 

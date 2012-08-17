@@ -59,6 +59,7 @@ Traceably
 ErrorDocument
 JSON
 HTTPS
+HTML
 mrqe
 funcs
 passphrase

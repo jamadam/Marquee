@@ -36,7 +36,7 @@ sub render {
 }
 
 ### --
-### traceably render
+### traceable render
 ### --
 sub render_traceable {
     my ($self, $path) = @_;
@@ -146,7 +146,7 @@ Traceably renders templates by stacking template names recursively.
 
 =head2 $instance->traceable($path, sub {...})
 
-Call a method traceably.
+Call a method traceable.
 
     $handler->traceable($path, sub {...});
 

@@ -195,9 +195,7 @@ mojoレイヤーから呼ばれるハンドラーです。
 
 =head2 C<hook>
 
-$instance->hooks->onのエイリアスです。フックポイントにコールバックを追加します。
-
-下記のフックポイントが利用できます:
+$instance->hooks->onのエイリアスです。指定のフックポイントにコールバックを追加します。下記のフックポイントが利用できます:
 
 =over 2
 
@@ -257,7 +255,7 @@ $instance->hooks->onのエイリアスです。フックポイントにコール
 
 =head2 C<plugin>
 
-クラスをプラグインとしてロードします。クラス名の先頭がC<+>でなければ接頭辞「Marquee::Plugin」が付与されます。
+クラスをプラグインとしてロードします。クラス名の先頭がC<+>でなければ接頭辞L<Marquee::Plugin>が付与されます。
 C<+>はクラス名が完結していることを意味します。
 
     my $plugin = $app->plugin(Plugin => $params); # Marquee::Plugin::PlugName

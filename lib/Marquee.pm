@@ -603,8 +603,7 @@ Handler called by mojo layer.
 
 =head2 C<hook>
 
-Alias to $instance->hooks->on. This adds a callback for the hook point.
-
+Alias to $instance->hooks->on. This adds a callback for specified hook point.
 These hooks are currently available:
 
 =over 2
@@ -665,7 +664,7 @@ Detect MIME type out of path name.
 
 =head2 C<plugin>
 
-Load a class as a plugin. The prefix 'Marquee::Plugin' is prepended unless the
+Load a class as a plugin. The prefix L<Marquee::Plugin> is prepended unless the
 class name C<$class> begins with C<+> sign, which means the class name is
 already fully qualified.
 

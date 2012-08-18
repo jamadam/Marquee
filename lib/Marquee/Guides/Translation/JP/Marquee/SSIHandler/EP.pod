@@ -28,6 +28,8 @@ L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加�
 
 =head1 FUNCTIONS
 
+下記のテンプレート関数が自動的に利用可能です。
+
 =head2 C<current_template>
 
 現在のテンプレートパスを返します。
@@ -110,7 +112,7 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
 
 =head2 C<override>
 
-プレースホルダーをオーバーライドします。C<extends>メソッドを参照してください。
+プレースホルダーをオーバーライドします。L</extends>メソッドを参照してください。
 
 =head2 C<param>
 
@@ -120,7 +122,7 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
 
 =head2 C<placeholder>
 
-デフォルトブロックを伴う、プレースホルダーを設定します。C<extends>メソッドを参照してください。
+デフォルトブロックを伴う、プレースホルダーを設定します。L</extends>メソッドを参照してください。
 
 =head2 C<stash>
 
@@ -136,7 +138,7 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
 
 =head2 C<url_for>
 
-ポータブルURLを生成します。
+ドキュメントルートからのポータブルなURLを生成します。
 
     <%= url_for('./path.css') %>
 
@@ -170,6 +172,13 @@ L<Marquee::SSIHandler::EPL>から全てのメソッドを継承し、下記を�
 dieします。
 
     $ep->render('/path/to/template.html.ep');
+
+=head2 C<url_for>
+
+ドキュメントルートからのポータブルなURLを生成します。
+
+    <%= url_for('./b.css') %> # current is '/a/.html' then generates '/a/b.css'
+    <%= url_for('/b.css') %>  # current is '/a/.html' then generates '/b.css'
 
 =head1 SEE ALSO
 

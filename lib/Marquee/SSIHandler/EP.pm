@@ -290,6 +290,8 @@ above.
 
 =head1 FUNCTIONS
 
+Following template functions are automatically available.
+
 =head2 C<current_template>
 
 Returns current template path.
@@ -375,7 +377,7 @@ with.
 
 =head2 C<override>
 
-Override placeholder. See C<extends> method.
+Override placeholder. See L</extends> method.
 
 =head2 C<param>
 
@@ -385,7 +387,7 @@ Returns request parameters for given key.
 
 =head2 C<placeholder>
 
-Set placeholder with default block. See C<extends> method.
+Set placeholder with default block. See L</extends> method.
 
 =head2 C<stash>
 
@@ -401,9 +403,10 @@ Generate absolute path with given relative one
 
 =head2 C<url_for>
 
-Generate a portable URL.
+Generate a portable URL relative to document root.
 
-    <%= url_for('./path.css') %>
+    <%= url_for('./b.css') %> # current is '/a/.html' then generates '/a/b.css'
+    <%= url_for('/b.css') %>  # current is '/a/.html' then generates '/b.css'
 
 =head1 INSTANCE METHODS
 
@@ -435,6 +438,12 @@ Renders given template and returns the result. If rendering fails, die with
 L<Mojo::Exception>.
 
     $ep->render('/path/to/template.html.ep');
+
+=head2 C<url_for>
+
+Generate a portable URL relative to document root.
+
+    $ep->url_for('./path.css')
 
 =head1 SEE ALSO
 

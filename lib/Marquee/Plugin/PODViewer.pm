@@ -117,7 +117,7 @@ sub serve_pod {
         static_dir  => 'static',
         perldoc     => "$dom",
         see_also    => ! $self->no_see_also
-            ? _detect_see_also($podname || ($title =~ qr{(^[a-zA-Z0-9:]+)})[0])
+            ? _detect_see_also((($podname || $title) =~ qr{(^[a-zA-Z0-9:]+)})[0])
             : undef,
     );
     
@@ -151,7 +151,7 @@ sub serve_pod_by_name {
 
 sub _detect_see_also {
     my $module = shift;
-    
+    warn $module;
     my $search = Pod::Simple::Search->new;
     $search->laborious(1);
     my @relatives;

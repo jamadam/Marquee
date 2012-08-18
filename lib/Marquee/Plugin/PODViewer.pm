@@ -93,13 +93,16 @@ sub serve_pod {
     });
     
     # Rewrite headers
-    my @parts;
+    my (%anchors, @parts);
     $dom->find('h1, h2, h3')->each(sub {
         my $e = shift;
         my $anchor = my $text = $e->all_text;
         $anchor =~ s/\s+/_/g;
         $anchor = url_escape $anchor, '^A-Za-z0-9_';
         $anchor =~ s/\%//g;
+        my $org = $anchor;
+        my $i   = 1;
+        $anchor = $org . $i++ while $anchors{$anchor}++;
         push @parts, [] if $e->type eq 'h1' || !@parts;
         push @{$parts[-1]}, $text, "#$anchor";
         $e->replace_content(qq{<a name="$anchor">$text</a>});

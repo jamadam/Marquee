@@ -11,7 +11,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use Marquee;
 
-use Test::More tests => 21;
+use Test::More tests => 27;
 
 my $app;
 my $t;
@@ -22,6 +22,37 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 $app->plugin('PODViewer');
 
 $t = Test::Mojo::DOM->new($app);
+
+# basic
+
+{
+    use Mojo::Transaction::HTTP;
+    Marquee->c(Marquee::Context->new(app => Marquee->new, tx => Mojo::Transaction::HTTP->new));
+    my $pv = Marquee::Plugin::PODViewer->new;
+    $pv->serve_pod(<<EOF);
+=head1 a
+
+=head1 b
+
+=head1 c
+
+=head1 a
+
+=head1 b1
+
+=head1 b
+
+EOF
+    
+    my $t = Test::Mojo::DOM::Inspector->new(Marquee->c->res->dom);
+    
+    $t->at('ul li:nth-child(1) a')->attr_is('href', '#a');
+    $t->at('ul li:nth-child(2) a')->attr_is('href', '#b');
+    $t->at('ul li:nth-child(3) a')->attr_is('href', '#c');
+    $t->at('ul li:nth-child(4) a')->attr_is('href', '#a1');
+    $t->at('ul li:nth-child(5) a')->attr_is('href', '#b1');
+    $t->at('ul li:nth-child(6) a')->attr_is('href', '#b2');
+}
 
 # basic
 

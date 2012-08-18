@@ -145,13 +145,18 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
 =head1 INSTANCE METHODS
 
 L<Marquee::SSIHandler::EP>は
-L<Marquee::SSIHandler::EPL>から全てのメソッドを継承し、下記を追加で実装します。
+L<Marquee::SSIHandler::EPL>から全てのクラスメソッドを継承し、下記を追加で実装します。
 
 =head2 C<new>
 
 コンストラクタ。
 
     my $ep = Marquee::SSIHandler::EP->new;
+
+=head1 INSTANCE METHODS
+
+L<Marquee::SSIHandler::EP>は
+L<Marquee::SSIHandler::EPL>から全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
 =head2 C<add_function>
 

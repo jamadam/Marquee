@@ -408,9 +408,9 @@ Generate a portable URL relative to document root.
     <%= url_for('./b.css') %> # current is '/a/.html' then generates '/a/b.css'
     <%= url_for('/b.css') %>  # current is '/a/.html' then generates '/b.css'
 
-=head1 INSTANCE METHODS
+=head1 CLASS METHODS
 
-L<Marquee::SSIHandler::EP> inherits all instance methods from
+L<Marquee::SSIHandler::EP> inherits all class methods from
 L<Marquee::SSIHandler::EPL> and implements the following new ones.
 
 =head2 C<new>
@@ -418,6 +418,11 @@ L<Marquee::SSIHandler::EPL> and implements the following new ones.
 Constructor.
 
     my $ep = Marquee::SSIHandler::EP->new;
+
+=head1 INSTANCE METHODS
+
+L<Marquee::SSIHandler::EP> inherits all instance methods from
+L<Marquee::SSIHandler::EPL> and implements the following new ones.
 
 =head2 C<add_function>
 

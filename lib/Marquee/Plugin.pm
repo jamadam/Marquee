@@ -28,8 +28,32 @@ Marquee::Plugin - Plugin base class
 
 =head1 DESCRIPTION
 
-L<Marquee::Plugin> is the plugin base class
-of L<Marquee> plugins.
+L<Marquee::Plugin> is the plugin base class of L<Marquee> plugins.
+
+L<Marquee> provedes some hook points to extend the behavior of applications.
+With the hooks, you can develop reusable plugins under C<Marquee::Plugin::*>
+namespace.
+
+A plugin looks like as follows.
+
+    package Marquee::Plugin::SomePlugin;
+    use Mojo::Base 'Marquee::Plugin';
+    
+    sub register {
+        my ($self, $app, $params) = @_;
+        
+        $app->hook(around_dispatch => sub {
+            my ($next, @args) = @_;
+            
+            my $c = Marquee->c;
+            
+            if (! $c->served) {
+                $next->(@args);
+            }
+        });
+    }
+
+There is some hook points available. See L<Marquee/"hook">.
 
 =head1 CLASS METHODS
 

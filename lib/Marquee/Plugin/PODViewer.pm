@@ -151,7 +151,7 @@ sub serve_pod_by_name {
 
 sub _detect_see_also {
     my $module = shift;
-    warn $module;
+    
     my $search = Pod::Simple::Search->new;
     $search->laborious(1);
     my @relatives;

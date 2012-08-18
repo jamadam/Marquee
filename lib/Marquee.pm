@@ -605,12 +605,44 @@ Handler called by mojo layer.
 
 Alias to $instance->hooks->on. This adds a callback for the hook point.
 
+These hooks are currently available and are emitted in the listed order:
+
+=over 2
+
+=item C<around_dispatch>
+
+Wraps dispatch process.
+
     $app->hook(around_dispatch => sub {
         my ($next, @args) = @_;
         ### pre-process
         $next->(@args);
         ### post-process
     });
+
+=item C<around_static>
+
+Wraps static dispatch process.
+
+    $app->hook(around_static => sub {
+        my ($next, @args) = @_;
+        ### pre-process
+        $next->(@args);
+        ### post-process
+    });
+
+=item C<around_dynamic>
+
+Wraps dynamic dispatch process.
+
+    $app->hook(around_dynamic => sub {
+        my ($next, @args) = @_;
+        ### pre-process
+        $next->(@args);
+        ### post-process
+    });
+
+=back
 
 =head2 $instance->is_directory($path)
 

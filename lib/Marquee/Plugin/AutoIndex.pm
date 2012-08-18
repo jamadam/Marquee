@@ -384,14 +384,14 @@ served.
 L<Marquee::Plugin::AutoIndex> inherits all attributes from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 max_per_dir
+=head2 C<max_per_dir>
 
 Max file amount to display in each directory, defaults to 50.
 
     $plugin->max_per_dir(100);
     my $num = $plugin->max_per_dir;
 
-=head2 tree_depth
+=head2 C<tree_depth>
 
 Max depth for directory recursion, defaults to 4.
 

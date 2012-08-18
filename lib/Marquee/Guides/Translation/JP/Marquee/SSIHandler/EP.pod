@@ -18,7 +18,7 @@ L<Marquee::SSIHandler::EP>は、EPテンプレートハンドラーです。
 L<Marquee::SSIHandler::EP>は
 L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加で実装します。
 
-=head2 funcs
+=head2 C<funcs>
 
 テンプレート関数をハッシュリファレンスに格納します。
 
@@ -28,13 +28,13 @@ L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加�
 
 =head1 FUNCTIONS
 
-=head2 current_template()
+=head2 C<current_template>
 
 現在のテンプレートパスを返します。
 
     <% my $path = current_template(); %>
 
-=head2 extends($path, $block)
+=head2 C<extends>
 
 C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継承の仕組みを提供します。
 
@@ -72,7 +72,7 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
         <% end %>
     <% end %>
 
-=head2 iter @array => $block
+=head2 C<iter>
 
 ブロックを使用して配列を反復処理します。
 
@@ -93,7 +93,7 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
         <%= $key %> is <%= $value %>
     <% end %>
 
-=head2 include('./path/to/template.html', key => value)
+=head2 C<include>
 
 現在のテンプレートに任意のテンプレートか静的ファイルを挿入できます。パスは、カレントテンプレートからの相対パスを指定するか、
 スラッシュを接頭することでドキュメントルートからのパスを指定します。
@@ -101,40 +101,40 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
     <%= include('./path/to/template.html', key => value) %>
     <%= include('/path/to/template.html', key => value) %>
 
-=head2 include_as('./path/to/template.html', $handler_ext, key => value)
+=head2 C<include_as>
 
 [EXPERIMENTAL]
 現在のテンプレートに任意のテンプレートを挿入します。include関数に似ていますが、テンプレートパースに使用するハンドラーを指定することができます。
 
     <%= include_as('./path/to/template.html', 'ep', key => value) %>
 
-=head2 override($name, $block)
+=head2 C<override>
 
 プレースホルダーをオーバーライドします。C<extends>メソッドを参照してください。
 
-=head2 param('key')
+=head2 C<param>
 
 指定のキーのリクエストパラメータを返します。
 
     <%= param('key') %>
 
-=head2 placeholder($name, $default_block)
+=head2 C<placeholder>
 
 デフォルトブロックを伴う、プレースホルダーを設定します。C<extends>メソッドを参照してください。
 
-=head2 stash('key')
+=head2 C<stash>
 
 指定のキーのスタッシュ値を返します。
 
     <%= stash('key') %>
 
-=head2 to_abs()
+=head2 C<to_abs>
 
 指定の相対パスから絶対パスを生成します。
 
     <%= to_abs('./path.css') %>
 
-=head2 url_for('path/to/file')
+=head2 C<url_for>
 
 ポータブルURLを生成します。
 
@@ -145,13 +145,13 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
 L<Marquee::SSIHandler::EP>は
 L<Marquee::SSIHandler::EPL>から全てのメソッドを継承し、下記を追加で実装します。
 
-=head2 $instance->new
+=head2 C<new>
 
 コンストラクタ。
 
     my $ep = Marquee::SSIHandler::EP->new;
 
-=head2 $instance->add_function(name => sub {...})
+=head2 C<add_function>
 
 レンダラーに関数を追加します。
 
@@ -164,7 +164,7 @@ L<Marquee::SSIHandler::EPL>から全てのメソッドを継承し、下記を�
 
     <%= html_to_text($html) %>
 
-=head2 $instance->render($path)
+=head2 C<render>
 
 指定のテンプレートをレンダリングし、結果を返します。レンダリングに失敗した場合、L<Mojo::Exception>を伴って
 dieします。

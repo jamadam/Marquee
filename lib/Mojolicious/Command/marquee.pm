@@ -93,16 +93,16 @@ Mojolicious::Command::marquee - marquee command
 
 =head1 ATTRIBUTES
 
-=head2 description
+=head2 C<description>
 
-=head2 usage
+=head2 C<usage>
 
 =head1 INSTANCE METHODS
 
 L<Mojolicious::Command::marquee> inherits all instance methods from
 L<Mojolicious::Command> and implements the following new ones.
 
-=head2 run
+=head2 C<run>
 
 =head1 SEE ALSO
 

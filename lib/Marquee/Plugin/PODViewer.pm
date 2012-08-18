@@ -213,14 +213,14 @@ This is a plugin for POD Viewer server.
 L<Marquee::Plugin::PODViewer> inherits all attributes from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 no_see_also
+=head2 C<no_see_also>
 
 Disables auto detection of relative modules, defaults to undef(enabled).
 
     $self->no_see_also(1);
     my $bool = $self->no_see_also;
     
-=head2 paths
+=head2 C<paths>
 
 A path to discover modules.
 

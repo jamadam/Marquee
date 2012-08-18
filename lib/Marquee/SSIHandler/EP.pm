@@ -279,7 +279,7 @@ L<Marquee::SSIHandler::EP> is a EP handler.
 L<Marquee::SSIHandler::EP> inherits all attributes from
 L<Marquee::SSIHandler::EPL> and implements the following new ones.
 
-=head2 funcs
+=head2 C<funcs>
 
 A Hash ref that contains template functions.
 
@@ -290,13 +290,13 @@ above.
 
 =head1 FUNCTIONS
 
-=head2 current_template()
+=head2 C<current_template>
 
 Returns current template path.
 
     <% my $path = current_template(); %>
 
-=head2 extends($path, $block)
+=head2 C<extends>
 
 C<extends> function cooperates with C<placeholder> and C<override>,
 provides template inheritance mechanism.
@@ -335,7 +335,7 @@ Extends the template.
         <% end %>
     <% end %>
 
-=head2 iter @array => $block
+=head2 C<iter>
 
 Array iterator with a block.
 
@@ -356,7 +356,7 @@ Array refs and Hash refs are also accepted.
         <%= $key %> is <%= $value %>
     <% end %>
 
-=head2 include('./path/to/template.html', key => value)
+=head2 C<include>
 
 Include a template or a static files into current template. The path can be
 relative to current template directory or relative to document root if leading
@@ -365,7 +365,7 @@ slashed.
     <%= include('./path/to/template.html', key => value) %>
     <%= include('/path/to/template.html', key => value) %>
 
-=head2 include_as('./path/to/template.html', $handler_ext, key => value)
+=head2 C<include_as>
 
 [EXPERIMENTAL] Include a template into current template. This function is
 similar to include but you can specify the handler the template would be parsed
@@ -373,33 +373,33 @@ with.
 
     <%= include_as('./path/to/template.html', 'ep', key => value) %>
 
-=head2 override($name, $block)
+=head2 C<override>
 
 Override placeholder. See C<extends> method.
 
-=head2 param('key')
+=head2 C<param>
 
 Returns request parameters for given key.
 
     <%= param('key') %>
 
-=head2 placeholder($name, $default_block)
+=head2 C<placeholder>
 
 Set placeholder with default block. See C<extends> method.
 
-=head2 stash('key')
+=head2 C<stash>
 
 Returns stash value for given key.
 
     <%= stash('key') %>
 
-=head2 to_abs()
+=head2 C<to_abs>
 
 Generate absolute path with given relative one
 
     <%= to_abs('./path.css') %>
 
-=head2 url_for('path/to/file')
+=head2 C<url_for>
 
 Generate a portable URL.
 
@@ -410,13 +410,13 @@ Generate a portable URL.
 L<Marquee::SSIHandler::EP> inherits all instance methods from
 L<Marquee::SSIHandler::EPL> and implements the following new ones.
 
-=head2 $instance->new
+=head2 C<new>
 
 Constructor.
 
     my $ep = Marquee::SSIHandler::EP->new;
 
-=head2 $instance->add_function(name => sub {...})
+=head2 C<add_function>
 
 Adds a function to the renderer.
 
@@ -429,7 +429,7 @@ in templates...
 
     <%= html_to_text($html) %>
 
-=head2 $instance->render($path)
+=head2 C<render>
 
 Renders given template and returns the result. If rendering fails, die with
 L<Mojo::Exception>.

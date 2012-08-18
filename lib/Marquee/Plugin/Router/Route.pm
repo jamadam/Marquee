@@ -87,7 +87,7 @@ L<Marquee::Plugin::Router> is a class for generating and storing routes.
 
 L<Marquee::Plugin::Router> implements the following attributes.
 
-=head2 elems
+=head2 C<elems>
 
 Route entries.
 

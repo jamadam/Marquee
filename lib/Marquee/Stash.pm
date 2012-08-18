@@ -61,7 +61,7 @@ A class represents stash.
 
 L<Marquee::Stash> implements the following class methods.
 
-=head2 Class->new(%key_value)
+=head2 C<new>
 
     my $stash = Marquee::Stash->new(key => 'val', key2 => 'val2');
 
@@ -69,20 +69,20 @@ L<Marquee::Stash> implements the following class methods.
 
 L<Marquee::Stash> implements the following instance methods.
 
-=head2 $instance->get($name)
+=head2 C<get>
 
 Get stash value for given name.
 
     my $hash_ref = $stash->get();
     my $value    = $stash->get('key');
     
-=head2 $instance->set(%key_value)
+=head2 C<set>
 
 Set stash values with given hash or hash reference.
 
     $stash->set(key => 'value');
 
-=head2 $instance->clone(%key_value)
+=head2 C<clone>
 
 Clone stash with given hash or hash reference merged.
 

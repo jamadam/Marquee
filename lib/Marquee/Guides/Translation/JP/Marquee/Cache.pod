@@ -25,7 +25,7 @@ Marquee::Cache - Cache
 
 L<Marquee::Cache>は下記の属性を実装します。
 
-=head2 max_keys
+=head2 C<max_keys>
 
 インスタンス毎のキーの上限です。
 
@@ -33,19 +33,19 @@ L<Marquee::Cache>は下記の属性を実装します。
 
 L<Marquee::Cache>は下記のクラスメソッドを実装します。
 
-=head2 Class->new
+=head2 C<new>
 
 =head1 INSTANCE METHODS
 
 L<Marquee::Cache>は下記のインスタンスメソッドを実装します。
 
-=head2 $instance->get($name)
+=head2 C<get>
 
 指定の名前のキャッシュを返します。
 
     my $data = $cache->get('foo');
 
-=head2 $instance->set($name => $data)
+=head2 C<set>
 
 指定の名前とデータでキャッシュを格納します。第3引数にて、期限切れ条件を1つ、または複数のコードリファレンスで指定できます。
 

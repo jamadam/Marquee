@@ -55,38 +55,38 @@ L<Marquee>モジュールはアプリケーションのベースクラスであ�
 
 L<Marquee>はL<Mojo>から全ての属性を継承し、下記を追加で実装します。
 
-=head2 document_root
+=head2 C<document_root>
 
 ドキュメントルートのディレクトリを指定します。このディレクトリは静的ファイルとテンプレートの両方を格納できます。
 
     $app->document_root($app->home->rel_dir('public_html'));
 
-=head2 default_file
+=head2 C<default_file>
 
 デフォルトのファイル名を指定し、自動補完を有効にします。自動補完はリクエストパスがスラッシュで終わっている場合に発生します。
 
     $app->default_file('index.html');
 
-=head2 error_document
+=head2 C<error_document>
 
 エラードキュメントのレンダラーインスタンスを格納します。デフォルトはL<Marquee::ErrorDocument>です。
 
     $app->error_document(Marquee::ErrorDocument->new);
 
-=head2 hooks
+=head2 C<hooks>
 
 L<Marquee::Hooks>インスタンスを格納します。
 
     $app->hooks(Marquee::Hooks->new);
 
-=head2 roots
+=head2 C<roots>
 
 静的ファイルとテンプレートを格納するパスの配列を格納します。ファイルの検索は配列の先頭から順に行われます。
 先頭にはC<document_root>の値がコピーされ、Marqueeコアやプラグインのバンドル用ディレクトリが後続します。
 
     push(@{$app->roots}, 'path/to/additional_dir')
 
-=head2 secret
+=head2 C<secret>
 
 暗号化クッキーなどに使用する秘密のパスフレーズを指定します。デフォルトはランダムな文字列です。
 これを変更することで、暗号化クッキーを一度に期限切れにすることができます。
@@ -94,7 +94,7 @@ L<Marquee::Hooks>インスタンスを格納します。
     my $secret = $app->secret;
     $app       = $app->secret('passw0rd');
 
-=head2 ssi_handlers
+=head2 C<ssi_handlers>
 
 サーバーサイドインクルードのハンドラーをハッシュリファレンスで格納します。ハッシュのキーはテンプレートの最後の拡張子に対応します。
 
@@ -102,7 +102,7 @@ L<Marquee::Hooks>インスタンスを格納します。
 
 上記の例の代わりに、C<add_handler>メソッドを使用してSSIの関連付けを追加することが可能です。
 
-=head2 stash
+=head2 C<stash>
 
 L<Marquee::Stash>インスタンスを格納します。Marqueeアプリのstashはリクエスト毎にコンテキストオブジェクトに
 ローカライズされますが、アプリ固有の値を永続的に保存でき、どこからでも透過的に参照できます。
@@ -110,20 +110,20 @@ L<Marquee::Stash>インスタンスを格納します。Marqueeアプリのstash
     $app->stash(Marquee::Stash->new);
     my $stash = $app->stash;
 
-=head2 types
+=head2 C<types>
 
 L<Mojolicious::Type>インスタンスを格納します。
 
     my $type = $app->types;
     $type->type(zip => 'application/zip');
 
-=head2 under_development
+=head2 C<under_development>
 
 デバッグスクリーンを有効にします。デフォルトはundefです。
 
     $app->under_development(1);
 
-=head2 x_powered_by
+=head2 C<x_powered_by>
 
 X-POWERED-BYレスポンスヘッダーを設定します。
 
@@ -133,13 +133,13 @@ X-POWERED-BYレスポンスヘッダーを設定します。
 
 L<Marquee>はL<Mojo>から全てのクラスメソッドを継承し、下記を追加で実装します。
 
-=head2 Class->new
+=head2 C<new>
 
 コンストラクター。
 
     my $app = Marquee->new;
 
-=head2 Class->asset($filename)
+=head2 C<asset>
 
 バンドルされたアセットの中から、指定の名前のファイルのパスを返します。
 
@@ -165,35 +165,35 @@ L<Marquee>はL<Mojo>から全てのクラスメソッドを継承し、下記を
 
 L<Marquee>はL<Mojo>から全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
-=head2 $instance->add_handler(name => $code_ref)
+=head2 C<add_handler>
 
 C<ssi_handlers>のエントリーを追加します。
 
     $instance->add_handler(ep => Marquee::SSIHandler::EP->new);
 
-=head2 $instance->c()
+=head2 C<c>
 
 C<context>メソッドのエイリアスです。
 
-=head2 $instance->context()
+=head2 C<context>
 
 現在のコンテキストを返します。これは、リクエスト毎にローカライズされたL<Marquee::Context>を参照します。
 
     my $c = $app->context;
 
-=head2 $instance->dispatch()
+=head2 C<dispatch>
 
 フロントディスパッチャーです。
 
     $app->dispatch()
 
-=head2 $instance->handler($tx)
+=head2 C<handler>
 
 mojoレイヤーから呼ばれるハンドラーです。
 
     $app->handler($tx)
 
-=head2 $instance->hook($name => $cb)
+=head2 C<hook>
 
 $instance->hooks->onのエイリアスです。フックポイントにコールバックを追加します。
 
@@ -236,26 +236,26 @@ $instance->hooks->onのエイリアスです。フックポイントにコール
 
 =back
 
-=head2 $instance->is_directory($path)
+=head2 C<is_directory>
 
 指定のパスがディレクトリかどうかの真偽値を返します。ディレクトリの探索はC<roos>属性に格納されたパス群からの
 相対パスを対象に行われます。
 
     $app->is_directory('/path/to/directory') # bool
 
-=head2 $instance->log_file($path)
+=head2 C<log_file>
 
 ログファイルを指定します。
 
     $app->log_file('/path/to/file')
 
-=head2 $instance->path_to_type($path)
+=head2 C<path_to_type>
 
 パスからMIMEタイプを検出します。
 
     my $type = $app->path_to_type('/path/to/file.css') # text/css
 
-=head2 $instance->plugin($class => $params)
+=head2 C<plugin>
 
 クラスをプラグインとしてロードします。クラス名の先頭がC<+>でなければ接頭辞「Marquee::Plugin」が付与されます。
 C<+>はクラス名が完結していることを意味します。
@@ -263,7 +263,7 @@ C<+>はクラス名が完結していることを意味します。
     my $plugin = $app->plugin(Plugin => $params); # Marquee::Plugin::PlugName
     my $plugin = $app->plugin('+NameSpace::Plugin' => $params); # NameSpace::Plugin
 
-=head2 $instance->render_ssi($path, $handler_ext)
+=head2 C<render_ssi>
 
 SSIをレンダリングし、結果を返します。C<$handler_ext>の指定がなければ、C<$path>からハンドラーを自動検出
 します。レンダラーの拡張子は自動的に付与されないことに注意してください。
@@ -277,46 +277,46 @@ SSIをレンダリングし、結果を返します。C<$handler_ext>の指定�
     # /path/to/template.htmlをepハンドラーでレンダリングします
     my $result = $app->render_ssi('/path/to/template2.html', 'ep');
 
-=head2 $instance->search_static($path)
+=head2 C<search_static>
 
 指定のパスの静的ファイルを検索しますし、存在すればパスを返します。ファイルの検索はC<roots>属性のディレクトリ群を対象に行われます。
 
     my $path = $app->search_static('./a.html'); # /path/to/document_root/a.html
     my $path = $app->search_static('/path/to/a.html'); # /path/to/a.html
 
-=head2 $instance->search_template($path)
+=head2 C<search_template>
 
 指定のパスのSSIテンプレートファイルを検索し、存在すればパスを返します。ファイルの検索はC<roots>属性のディレクトリ群を対象に行われます。
 
     my $path = $app->search_template('./tmpl.html'); # /path/to/document_root/tmpl.html.ep
     my $path = $app->search_template('/path/to/tmpl.html'); # /path/to/tmpl.html.ep
 
-=head2 $instance->serve_redirect($uri)
+=head2 C<serve_redirect>
 
 指定のURIへリダイレクトするレスポンスを出力します。
 
     $app->serve_redirect('http://example.com/');
     $app->serve_redirect('/path/');
 
-=head2 $instance->serve_static($path)
+=head2 C<serve_static>
 
 指定のパスのファイルを出力します。
 
     $app->serve_static('/path/to/static.png');
 
-=head2 $instance->serve_dynamic($path)
+=head2 C<serve_dynamic>
 
 指定のパスの動的SSIページを出力します。
 
     $app->serve_dynamic('/path/to/template.html.ep');
 
-=head2 $instance->start()
+=head2 C<start>
 
 アプリをスタートします。
 
     $app->start();
 
-=head2 $instance->to_abs
+=head2 C<to_abs>
 
 指定のパスの絶対URIを、リクエストURIに配慮して生成します。
 

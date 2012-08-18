@@ -59,7 +59,7 @@ There is some hook points available. See L<Marquee/"hook">.
 
 L<Marquee::Plugin> implements the following class methods.
 
-=head2 Class->register($app, @conf)
+=head2 C<register>
 
 This must be overridden by sub classes.
 

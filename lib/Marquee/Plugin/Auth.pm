@@ -70,7 +70,7 @@ specific path.
 L<Marquee::Plugin::Auth> inherits all attributes from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 realm
+=head2 C<realm>
 
 Default value of realm which appears to response header. Each entry can override
 it. Defaults to 'Secret Area'.

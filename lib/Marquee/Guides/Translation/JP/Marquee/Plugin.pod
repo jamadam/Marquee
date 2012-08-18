@@ -47,7 +47,7 @@ L<Marquee>は、アプリケーションの挙動を拡張するために、い�
 
 L<Marquee::Plugin>は下記のクラスメソッドを実装します。
 
-=head2 Class->register($app, @conf)
+=head2 C<register>
 
 このメソッドはサブクラスでオーバーライドされる必要があります。
 

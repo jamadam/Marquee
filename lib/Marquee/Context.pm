@@ -201,27 +201,27 @@ also has ability to manage session and signed cookies.
 
 L<Marquee::Context> implements the following attributes.
 
-=head2 app
+=head2 C<app>
 
 L<Marquee> instance.
 
     my $app = $c->app;
 
-=head2 req
+=head2 C<req>
 
 An Alias to C<$c-E<gt>tx-E<gt>req>.
 
     my $req = $c->tx->req;
     $c->tx->req($req);
 
-=head2 res
+=head2 C<res>
 
 An Alias to C<$self-E<gt>tx-E<gt>res>.
 
     my $res = $c->tx->req;
     $c->tx->req($res);
 
-=head2 session
+=head2 C<session>
 
 Persistent data storage, stored JSON serialized in a signed cookie.
 Note that cookies are generally limited to 4096 bytes of data.
@@ -230,21 +230,21 @@ Note that cookies are generally limited to 4096 bytes of data.
     my $foo     = $session->{'foo'};
     $session->{foo} = 'bar';
 
-=head2 session_path
+=head2 C<session_path>
 
 A path for session. Defaults to C</>.
 
     $c->session_path('/some/path/')
     my $path = $c->session_path
 
-=head2 session_secure
+=head2 C<session_secure>
 
 Set the secure flag on all session cookies, so that browsers send them only over HTTPS connections.
 
     my $secure = $c->session_secure;
     $c->session_secure(1);
 
-=head2 session_expiration
+=head2 C<session_expiration>
 
 Time for the session to expire in seconds from now, defaults to 3600.
 The expiration timeout gets refreshed for every request
@@ -252,20 +252,20 @@ The expiration timeout gets refreshed for every request
     my $time = $c->session_expiration;
     $c->session_expiration(3600);
 
-=head2 session_name
+=head2 C<session_name>
 
 Name of the signed cookie used to store session data, defaults to 'mrqe'.
 
     my $name = $c->session_name;
     $c->session_name('session');
 
-=head2 stash
+=head2 C<stash>
 
 A stash that inherits app's one.
 
     my $stash = $c->stash;
 
-=head2 tx
+=head2 C<tx>
 
 L<Mojo::Transaction> instance.
 
@@ -275,19 +275,19 @@ L<Mojo::Transaction> instance.
 
 L<Marquee::Context> implements the following instance methods.
 
-=head2 new
+=head2 C<new>
 
 Constructor.
 
     my $c = Marquee::Context->new;
 
-=head2 $instance->close
+=head2 C<close>
 
 Close the context.
 
-    $c->close;
+    my $c2 = $c->close;
 
-=head2 $instance->cookie
+=head2 C<cookie>
 
     my $value  = $c->cookie('foo');
     my @values = $c->cookie('foo');
@@ -299,7 +299,7 @@ Access request cookie values and create new response cookies.
     # Create response cookie with domain
     $c->cookie(name => 'sebastian', {domain => 'mojolicio.us'});
 
-=head2 $instance->served
+=head2 C<served>
 
 Check if the response code has already been set and returns boolean.
 
@@ -307,7 +307,7 @@ Check if the response code has already been set and returns boolean.
         ...
     }
 
-=head2 $instance->signed_cookie
+=head2 C<signed_cookie>
 
 Access signed request cookie values and create new signed response cookies.
 Cookies failing signature verification will be automatically discarded.

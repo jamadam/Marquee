@@ -455,33 +455,33 @@ backend of C<mojo Marquee>, a command line tool.
 L<Marquee> inherits all attributes from L<Mojo> and implements the following
 new ones.
 
-=head2 document_root
+=head2 C<document_root>
 
 Specify a path to document root directory. The directory can contain both static
 files and templates.
 
     $app->document_root($app->home->rel_dir('public_html'));
 
-=head2 default_file
+=head2 C<default_file>
 
 Specify a default file name and activate auto fill. The auto fill will occurs
 when the request path is trailing slashed.
 
     $app->default_file('index.html');
 
-=head2 error_document
+=head2 C<error_document>
 
 Error document renderer instance. Defaults to L<Marquee::ErrorDocument>.
 
     $app->error_document(Marquee::ErrorDocument->new);
 
-=head2 hooks
+=head2 C<hooks>
 
 A L<Marquee::Hooks> instance.
 
     $app->hooks(Marquee::Hooks->new);
 
-=head2 roots
+=head2 C<roots>
 
 Array of paths that contains static and templates. Marquee tries to find asset
 files in ascend order in the array. The array is started with C<document_root>
@@ -489,7 +489,7 @@ copy, and followed by bundle directories for Marquee core and plugins.
 
     push(@{$app->roots}, 'path/to/additional_dir')
 
-=head2 secret
+=head2 C<secret>
 
 A secret passphrase used for signed cookies and the like, defaults to random
 string. By changing this, you can expire all signed cookies at once.
@@ -497,7 +497,7 @@ string. By changing this, you can expire all signed cookies at once.
     my $secret = $app->secret;
     $app       = $app->secret('passw0rd');
 
-=head2 ssi_handlers
+=head2 C<ssi_handlers>
 
 An hash ref that contains Server side include handlers. The hash keys
 corresponds to the last extensions of templates.
@@ -506,7 +506,7 @@ corresponds to the last extensions of templates.
 
 You can append SSI association by C<add_handler> method instead of doing above.
 
-=head2 stash
+=head2 C<stash>
 
 An L<Marquee::Stash> instance. Though Marquee's stash is localized and cloned
 per request, this also can contain persistent values for application specific
@@ -515,20 +515,20 @@ and can be referred transparently from anywhere.
     $app->stash(Marquee::Stash->new);
     my $stash = $app->stash;
 
-=head2 types
+=head2 C<types>
 
 Contains L<Mojolicious::Type> instance.
 
     my $type = $app->types;
     $type->type(zip => 'application/zip');
 
-=head2 under_development
+=head2 C<under_development>
 
 Activate debug screen, defaults to undef.
 
     $app->under_development(1);
 
-=head2 x_powered_by
+=head2 C<x_powered_by>
 
 Set X-POWERED-BY response header.
 
@@ -545,7 +545,7 @@ Constructor.
 
     my $app = Marquee->new;
 
-=head2 Class->asset($filename)
+=head2 C<asset>
 
 Returns bundled asset path for given file name.
 
@@ -572,36 +572,36 @@ In other packages
 L<Marquee> inherits all instance methods from L<Mojo> and implements the
 following new ones.
 
-=head2 $instance->add_handler(name => $code_ref)
+=head2 C<add_handler>
 
 Adds C<ssi_handlers> entry.
 
     $instance->add_handler(ep => Marquee::SSIHandler::EP->new);
 
-=head2 $instance->c()
+=head2 C<c>
 
 An alias for C<context> method.
 
-=head2 $instance->context()
+=head2 C<context>
 
 Returns current context. This refers to C<$Marquee::CONTEXT> localized
 per request.
 
     my $c = $app->context;
 
-=head2 $instance->dispatch()
+=head2 C<dispatch>
 
 Front dispatcher.
 
     $app->dispatch()
 
-=head2 $instance->handler($tx)
+=head2 C<handler>
 
 Handler called by mojo layer.
 
     $app->handler($tx)
 
-=head2 $instance->hook($name => $cb)
+=head2 C<hook>
 
 Alias to $instance->hooks->on. This adds a callback for the hook point.
 
@@ -644,26 +644,26 @@ Wraps dynamic dispatch process.
 
 =back
 
-=head2 $instance->is_directory($path)
+=head2 C<is_directory>
 
 Returns if the path is directory. The search is made against the directories in
 C<roots> attribute paths.
 
     $app->is_directory('/path/to/directory') # bool
 
-=head2 $instance->log_file($path)
+=head2 C<log_file>
 
 Set log file
 
     $app->log_file('/path/to/file')
 
-=head2 $instance->path_to_type($path)
+=head2 C<path_to_type>
 
 Detect MIME type out of path name.
 
     my $type = $app->path_to_type('/path/to/file.css') # text/css
 
-=head2 $instance->plugin($class => $params)
+=head2 C<plugin>
 
 Load a class as a plugin. The prefix 'Marquee::Plugin' is prepended unless the
 class name C<$class> begins with C<+> sign, which means the class name is
@@ -672,7 +672,7 @@ already fully qualified.
     my $plugin = $app->plugin(Plugin => $params); # Marquee::Plugin::PlugName
     my $plugin = $app->plugin('+NameSpace::Plugin' => $params); # NameSpace::Plugin
 
-=head2 $instance->render_ssi($path, $handler_ext)
+=head2 C<render_ssi>
 
 Render SSI and returns the result. This method auto detect the handler with
 C<$path> unless C<$handler_ext> is given. Note that the renderer extension
@@ -687,7 +687,7 @@ is NOT to be suffixed automatically.
     # render /path/to/template.html by ep handler
     my $result = $app->render_ssi('/path/to/template2.html', 'ep');
 
-=head2 $instance->search_static($path)
+=head2 C<search_static>
 
 Searches for static files for given path and returns the path if exists.
 The search is against the directories in C<roots> attribute.
@@ -695,7 +695,7 @@ The search is against the directories in C<roots> attribute.
     my $path = $app->search_static('./a.html'); # /path/to/document_root/a.html
     my $path = $app->search_static('/path/to/a.html'); # /path/to/a.html
 
-=head2 $instance->search_template($path)
+=head2 C<search_template>
 
 Searches for SSI template for given path and returns the path with SSI
 extension if exists. The search is against the directories in C<roots> attribute.
@@ -703,32 +703,32 @@ extension if exists. The search is against the directories in C<roots> attribute
     my $path = $app->search_template('./tmpl.html'); # /path/to/document_root/tmpl.html.ep
     my $path = $app->search_template('/path/to/tmpl.html'); # /path/to/tmpl.html.ep
 
-=head2 $instance->serve_redirect($uri)
+=head2 C<serve_redirect>
 
 Serves response that redirects to given URI.
 
     $app->serve_redirect('http://example.com/');
     $app->serve_redirect('/path/');
 
-=head2 $instance->serve_static($path)
+=head2 C<serve_static>
 
 Serves static file of given path.
 
     $app->serve_static('/path/to/static.png');
 
-=head2 $instance->serve_dynamic($path)
+=head2 C<serve_dynamic>
 
 Serves dynamic SSI page with given file path.
 
     $app->serve_dynamic('/path/to/template.html.ep');
 
-=head2 $instance->start()
+=head2 C<start>
 
 Starts app
 
     $app->start();
 
-=head2 $instance->to_abs
+=head2 C<to_abs>
 
 Generates absolute URI for given path along to the request URI.
 

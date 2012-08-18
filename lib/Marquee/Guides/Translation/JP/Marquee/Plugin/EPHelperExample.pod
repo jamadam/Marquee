@@ -25,7 +25,7 @@ In templates..
 L<Marquee::Plugin::EPHelperExample>は
 L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
-=head2 $instance->register($app)
+=head2 C<register>
 
 プラグインを登録します。
 

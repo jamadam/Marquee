@@ -81,7 +81,7 @@ Simple cache manager with expire feature.
 
 L<Marquee::Cache> implements the following attributes.
 
-=head2 max_keys
+=head2 C<max_keys>
 
 Max keys per instance.
 
@@ -89,19 +89,19 @@ Max keys per instance.
 
 L<Marquee::Cache> implements the following class methods.
 
-=head2 Class->new
+=head2 C<new>
 
 =head1 INSTANCE METHODS
 
 L<Marquee::Cache> implements the following instance methods.
 
-=head2 $instance->get($name)
+=head2 C<get>
 
 Get cache value for given name.
 
     my $data = $cache->get('foo');
 
-=head2 $instance->set($name => $data)
+=head2 C<set>
 
 Set cache values with given name and data. By 3rd argument, you can set one or
 more conditions to expire the cache.

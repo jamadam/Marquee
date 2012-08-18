@@ -50,7 +50,7 @@ L<Marquee::Plugin::Router>プラグインは、各リクエストを適切なア
 L<Marquee::Plugin::Router>は
 L<Marquee::Plugin>の全ての属性を継承し、下記を追加で実装します。
 
-=head2 route
+=head2 C<route>
 
 L<Marquee::Plugin::Router::Route>インスタンス.
 
@@ -59,7 +59,7 @@ L<Marquee::Plugin::Router::Route>インスタンス.
 L<Marquee::Plugin::Router>は
 L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
-=head2 $instance->register($app, $generator)
+=head2 C<register>
 
 プラグインを登録します。
 

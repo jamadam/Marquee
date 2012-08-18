@@ -29,7 +29,7 @@ Marquee::Stash - stash
 
 L<Marquee::Stash>は下記のクラスメソッドを実装します。
 
-=head2 Class->new(%key_value)
+=head2 C<new>
 
     my $stash = Marquee::Stash->new(key => 'val', key2 => 'val2');
 
@@ -37,20 +37,20 @@ L<Marquee::Stash>は下記のクラスメソッドを実装します。
 
 L<Marquee::Stash>は下記のインスタンスメソッドを実装します。
 
-=head2 $instance->get($name)
+=head2 C<get>
 
 指定の名前のスタッシュ値を取得します。
 
     my $hash_ref = $stash->get();
     my $value    = $stash->get('key');
     
-=head2 $instance->set(%key_value)
+=head2 C<set>
 
 指定のハッシュかハッシュリファレンスにてスタッシュ値を設定します。
 
     $stash->set(key => 'value');
 
-=head2 $instance->clone(%key_value)
+=head2 C<clone>
 
 指定のハッシュかハッシュリファレンスをマージしつつ、スタッシュのクローンを生成します。
 

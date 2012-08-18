@@ -88,13 +88,13 @@ class is MUST implement C<render> method.
 
 L<Marquee::SSIHandler> implements the following attributes.
 
-=head2 app
+=head2 C<app>
 
 Marquee app instance.
 
     $ep->app($app);
 
-=head2 log
+=head2 C<log>
 
 C<Mojo::Log> instance. Defaults to C<$app-E<gt>log> if exists.
 
@@ -105,13 +105,13 @@ C<Mojo::Log> instance. Defaults to C<$app-E<gt>log> if exists.
 
 L<Marquee::SSIHandler> implements the following class methods.
 
-=head2 Class->new
+=head2 C<new>
 
 Constructor.
 
     my $handler = Marquee::SSIHandler->new();
 
-=head2 Class->current_template
+=head2 C<current_template>
 
 Detects current template recursively.
 
@@ -122,7 +122,7 @@ Detects current template recursively.
 
 L<Marquee::SSIHandler> implements the following instance methods.
 
-=head2 $instance->render
+=head2 C<render>
 
 Renders templates. The sub classes MUST override(implement) the method.
     
@@ -138,13 +138,13 @@ Renders templates. The sub classes MUST override(implement) the method.
 
     $handler->render($path);
 
-=head2 $instance->render_traceable($path)
+=head2 C<render_traceable>
 
 Traceably renders templates by stacking template names recursively.
 
     $handler->render_traceable($path);
 
-=head2 $instance->traceable($path, sub {...})
+=head2 C<traceable>
 
 Invokes the callback traceable.
 

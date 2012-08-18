@@ -90,7 +90,7 @@ certain actions.
 L<Marquee::Plugin::Router> inherits all attributes from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 route
+=head2 C<route>
 
 L<Marquee::Plugin::Router::Route> instance.
 

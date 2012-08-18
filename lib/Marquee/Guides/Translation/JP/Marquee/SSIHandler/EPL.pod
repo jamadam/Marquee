@@ -18,7 +18,7 @@ EPLハンドラー。
 L<Marquee::SSIHandler::EPL>は
 L<Marquee::SSIHandler>の全ての属性を継承し、下記の属性を追加で実装します。
 
-=head2 template_cache
+=head2 C<template_cache>
 
     my $cache = $epl->template_cache;
 
@@ -27,14 +27,14 @@ L<Marquee::SSIHandler>の全ての属性を継承し、下記の属性を追加�
 L<Marquee::SSIHandler::EPL>は
 L<Marquee::SSIHandler>の全てのメソッドを継承し、下記を追加で実装します。
 
-=head2 $instance->cache($path, $mt)
+=head2 C<cache>
 
 キャッシュの保存/読み出しを行います。
 
     $epl->cache('/path/to/template.html.ep', $mt);
     my $mt = $epl->cache('/path/to/template.html.ep');
 
-=head2 $instance->render($path)
+=head2 C<render>
 
 指定のテンプレートをレンダリングし、結果を返します。レンダリングに失敗した場合、L<Mojo::Exception>を伴って
 dieします。

@@ -76,11 +76,11 @@ L<Marquee::ErrorDocument> represents error document.
 
 L<Marquee::ErrorDocument> implements the following attributes.
 
-=head2 template
+=head2 C<template>
 
     $error_doc->template('/path/to/template.html.ep');
 
-=head2 status_template
+=head2 C<status_template>
 
     $error_doc->status_template->{404} = '/path/to/template.html.ep';
 
@@ -88,7 +88,7 @@ L<Marquee::ErrorDocument> implements the following attributes.
 
 L<Marquee::ErrorDocument> implements the following instance methods.
 
-=head2 $instance->serve($status_code, $message)
+=head2 C<serve>
 
 Serves error document.
 

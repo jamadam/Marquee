@@ -71,7 +71,7 @@ EPL handler.
 L<Marquee::SSIHandler::EPL> inherits all attributes from
 L<Marquee::SSIHandler> and implements the following new ones.
 
-=head2 template_cache
+=head2 C<template_cache>
 
     my $cache = $epl->template_cache;
 
@@ -80,14 +80,14 @@ L<Marquee::SSIHandler> and implements the following new ones.
 L<Marquee::SSIHandler::EPL> inherits all instance methods from
 L<Marquee::SSIHandler> and implements the following new ones.
 
-=head2 $instance->cache($path, $mt)
+=head2 C<cache>
 
 Get or set cache.
 
     $epl->cache('/path/to/template.html.ep', $mt);
     my $mt = $epl->cache('/path/to/template.html.ep');
 
-=head2 $instance->render($path)
+=head2 C<render>
 
 Renders given template and returns the result. If rendering fails, die with
 L<Mojo::Exception>.

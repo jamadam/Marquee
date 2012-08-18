@@ -24,27 +24,27 @@ L<Marquee::Context>クラスは、リクエスト毎のコンテキストを表�
 
 L<Marquee::Context>は下記の属性を実装します。
 
-=head2 app
+=head2 C<app>
 
 L<Marquee> instance.
 
     my $app = $c->app;
 
-=head2 req
+=head2 C<req>
 
 C<$c-E<gt>tx-E<gt>req>へのエイリアスです。
 
     my $req = $c->tx->req;
     $c->tx->req($req);
 
-=head2 res
+=head2 C<res>
 
 C<$self-E<gt>tx-E<gt>res>へのエイリアスです。
 
     my $res = $c->tx->req;
     $c->tx->req($res);
 
-=head2 session
+=head2 C<session>
 
 持続的なデータストレージ。 暗号化クッキーの中に、JSON形式でシリアライズされ保存されます。 クッキーは一般的に4096バイトのデータに制限されることに注意してください。
 
@@ -52,21 +52,21 @@ C<$self-E<gt>tx-E<gt>res>へのエイリアスです。
     my $foo     = $session->{'foo'};
     $session->{foo} = 'bar';
 
-=head2 session_path
+=head2 C<session_path>
 
 セッションに使用されるパスを指定します。デフォルトはC</>です。
 
     $c->session_path('/some/path/')
     my $path = $c->session_path
 
-=head2 session_secure
+=head2 C<session_secure>
 
 全てのセッションクッキーにセキュアフラグをセットすることで、ブラウザへの送信をHTTPSコネクションに限定します。
 
     my $secure = $c->session_secure;
     $c->session_secure(1);
 
-=head2 session_expiration
+=head2 C<session_expiration>
 
 セッションの有効期限を現在からの秒数で指定します。デフォルトは3600です。有効期限はリクエスト毎にリフレッシュ
 されます。
@@ -74,20 +74,20 @@ C<$self-E<gt>tx-E<gt>res>へのエイリアスです。
     my $time = $c->session_expiration;
     $c->session_expiration(3600);
 
-=head2 session_name
+=head2 C<session_name>
 
 セッションデータを格納するための暗号化クッキーの名前を指定します。デフォルトは「mrge」です。
 
     my $name = $c->session_name;
     $c->session_name('session');
 
-=head2 stash
+=head2 C<stash>
 
 appから継承されたスタッシュを格納します。
 
     my $stash = $c->stash;
 
-=head2 tx
+=head2 C<tx>
 
 L<Mojo::Transaction>インスタンス。
 
@@ -97,19 +97,19 @@ L<Mojo::Transaction>インスタンス。
 
 L<Marquee::Context>は下記のインスタンスメソッドを実装します。
 
-=head2 new
+=head2 C<new>
 
 コンストラクタ。
 
     my $c = Marquee::Context->new;
 
-=head2 $instance->close
+=head2 C<close>
 
 コンテキストをクローズします。
 
     $c->close;
 
-=head2 $instance->cookie
+=head2 C<cookie>
 
     my $value  = $c->cookie('foo');
     my @values = $c->cookie('foo');
@@ -121,7 +121,7 @@ L<Marquee::Context>は下記のインスタンスメソッドを実装します�
     # Create response cookie with domain
     $c->cookie(name => 'sebastian', {domain => 'mojolicio.us'});
 
-=head2 $instance->served
+=head2 C<served>
 
 レスポンスのステータスコードがすでに設定済みか調べ、真偽値を返します。
 
@@ -129,7 +129,7 @@ L<Marquee::Context>は下記のインスタンスメソッドを実装します�
         ...
     }
 
-=head2 $instance->signed_cookie
+=head2 C<signed_cookie>
 
 暗号化クッキーにアクセスしたり、新しい暗号化クッキーを生成したりします。署名の検証に失敗したクッキーは自動的に破棄されます。
 

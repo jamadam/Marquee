@@ -28,7 +28,7 @@ Marquee::Plugin::Auth - ベーシック認証
 L<Marquee::Plugin::Auth>は
 L<Marquee::Plugin>の全ての属性を継承し、下記を追加で実装します。
 
-=head2 realm
+=head2 C<realm>
 
 レスポンスヘッダに出現するrealmのデフォルト値を指定します。それぞれの認証設定はこれをオーバーライドすることができます。デフォルトは'Secret Area'です。
 
@@ -40,7 +40,7 @@ L<Marquee::Plugin>の全ての属性を継承し、下記を追加で実装し�
 L<Marquee::Plugin::Auth>は
 L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
-=head2 $instance->register($app, $path_entries)
+=head2 C<register>
 
 パスエントリーを指定して、プラグインを登録します。$path_entriesは、正規表現とrealmとコールバックの組み合わせ
 が連続するリストでなければなりません。なお、realmはオプションです。

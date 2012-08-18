@@ -21,14 +21,14 @@ Marquee::Plugin::PODRenderer - PODビュワープラグイン
 L<Marquee::Plugin::PODViewer>は
 L<Marquee::Plugin>の全ての属性を継承し、下記を追加で実装します。
 
-=head2 no_see_also
+=head2 C<no_see_also>
 
 関連するモジュールの自動検出を無効にします。デフォルトはundef(有効)です。
 
     $self->no_see_also(1);
     my $bool = $self->no_see_also;
 
-=head2 paths
+=head2 C<paths>
 
 モジュールを探すパスです。
 
@@ -40,26 +40,26 @@ L<Marquee::Plugin>の全ての属性を継承し、下記を追加で実装し�
 L<Marquee::Plugin::PODViewer>は
 L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下記を追加で実装します。
 
-=head2 $instance->register($app)
+=head2 C<register>
 
 プラグインを登録します。
 
     $self->register($app, $path_entries);
 
-=head2 $instance->serve_index()
+=head2 C<serve_index>
 
 モジュールのインデックスを出力します。
 
     $plugin->serve_index;
 
-=head2 $instance->serve_pod($pod, $mod_name)
+=head2 C<serve_pod>
 
 文字列のPODをパースし、HTMLを生成します。省略可能な$mod_nameでモジュール名を指定すると、
 関連モジュールの検出に使用されます。
 
     $plugin->serve_pod($pod, 'Path::To::Mod');
 
-=head2 $instance->serve_pod_by_name($module_name)
+=head2 C<serve_pod_by_name>
 
 モジュール名からHTMLを生成します。
 

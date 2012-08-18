@@ -19,6 +19,30 @@ Marquee::Plugin - プラグインベースクラス
 
 L<Marquee::Plugin>は、 L<Marquee>プラグインのベースクラスです。
 
+L<Marquee>は、アプリケーションの挙動を拡張するために、いくつかのフックポイントを提供しています。
+これらのフックポイントによって、再利用可能なプラグインをC<Marquee::Plugin::*>以下の名前空間に作成することができます。
+
+プラグインは下記のようになります。
+
+    package Marquee::Plugin::SomePlugin;
+    use Mojo::Base 'Marquee::Plugin';
+    
+    sub register {
+        my ($self, $app, $params) = @_;
+        
+        $app->hook(around_dispatch => sub {
+            my ($next, @args) = @_;
+            
+            my $c = Marquee->c;
+            
+            if (! $c->served) {
+                $next->(@args);
+            }
+        });
+    }
+
+いくつかのフックポイントが用意されていますので、L<Marquee/"hook">を参照してください。
+
 =head1 CLASS METHODS
 
 L<Marquee::Plugin>は下記のクラスメソッドを実装します。

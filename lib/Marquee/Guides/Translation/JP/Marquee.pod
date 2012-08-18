@@ -197,12 +197,44 @@ mojoレイヤーから呼ばれるハンドラーです。
 
 $instance->hooks->onのエイリアスです。フックポイントにコールバックを追加します。
 
+下記のフックポイントが利用できます:
+
+=over 2
+
+=item C<around_dispatch>
+
+ディスパッチャをラップします。
+
     $app->hook(around_dispatch => sub {
         my ($next, @args) = @_;
         ### pre-process
         $next->(@args);
         ### post-process
     });
+
+=item C<around_static>
+
+静的ディスパッチャーをラップします。
+
+    $app->hook(around_static => sub {
+        my ($next, @args) = @_;
+        ### pre-process
+        $next->(@args);
+        ### post-process
+    });
+
+=item C<around_dynamic>
+
+動的ディスパッチャーをラップします。
+
+    $app->hook(around_dynamic => sub {
+        my ($next, @args) = @_;
+        ### pre-process
+        $next->(@args);
+        ### post-process
+    });
+
+=back
 
 =head2 $instance->is_directory($path)
 

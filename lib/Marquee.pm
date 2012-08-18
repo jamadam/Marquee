@@ -605,7 +605,7 @@ Handler called by mojo layer.
 
 Alias to $instance->hooks->on. This adds a callback for the hook point.
 
-These hooks are currently available and are emitted in the listed order:
+These hooks are currently available:
 
 =over 2
 

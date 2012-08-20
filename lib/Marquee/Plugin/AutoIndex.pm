@@ -403,19 +403,19 @@ Max depth for directory recursion, defaults to 4.
 L<Marquee::Plugin::AutoIndex> inherits all instance methods from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 $instance->register($app)
+=head2 register
 
 Register the plugin.
 
     $self->register($app);
 
-=head2 $instance->serve_index
+=head2 serve_index
 
 Serves auto directory index.
 
     $plugin->serve_index($path);
 
-=head2 $instance->serve_tree
+=head2 serve_tree
 
 Serves auto directory tree.
 

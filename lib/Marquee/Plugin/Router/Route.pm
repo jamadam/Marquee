@@ -95,32 +95,32 @@ Route entries.
 
 L<Marquee::Plugin::Router> implements the following instance methods.
 
-=head2 $instance->bridge(sub {...})
+=head2 bridge
 
     my $bridge = $r->bridge(sub {
         my $c = shift;
         return $bool;
     });
 
-=head2 $instance->route($regex)
+=head2 route
 
 Set a regex that matches to request URI.
 
     $r->route(qr{^/index\.html});
 
-=head2 $instance->to($code_ref)
+=head2 to
 
 Set an action to invoke when the route matches.
 
     $r->to(sub {...});
 
-=head2 $instance->via(@http_methods)
+=head2 via
 
 Filters route by HTTP method.
 
     $r->via('GET', 'POST');
 
-=head2 $instance->add_cond(sub {})
+=head2 add_cond
 
 Add condition for the route entry.
 

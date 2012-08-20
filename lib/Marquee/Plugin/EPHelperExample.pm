@@ -84,7 +84,7 @@ This is an example plugin for adding EP template functions.
 L<Marquee::Plugin::EPHelperExample> inherits all instance methods from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 $instance->register($app)
+=head2 register
 
 Register the plugin.
 

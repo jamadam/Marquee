@@ -99,7 +99,7 @@ L<Marquee::Plugin::Router::Route> instance.
 L<Marquee::Plugin::Router> inherits all instance methods from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 $instance->register($app, $generator)
+=head2 register
 
 Register the plugin.
 

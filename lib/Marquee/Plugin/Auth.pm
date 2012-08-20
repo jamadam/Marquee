@@ -83,7 +83,7 @@ it. Defaults to 'Secret Area'.
 L<Marquee::Plugin::Auth> inherits all instance methods from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 $instance->register($app, $path_entries)
+=head2 register
 
 Register the plugin with path entries. $path_entries must be a list of
 regex, realm, auth callback groups. realm is optional.

@@ -235,26 +235,26 @@ A path to discover modules.
 L<Marquee::Plugin::PODViewer> inherits all instance methods from
 L<Marquee::Plugin> and implements the following new ones.
 
-=head2 $instance->register($app)
+=head2 register
 
 Register the plugin.
 
     $self->register($app);
 
-=head2 $instance->serve_index()
+=head2 serve_index
 
 Serves index of modules.
 
     $plugin->serve_index;
 
-=head2 $instance->serve_pod($pod, $mod_name)
+=head2 serve_pod
 
 Parse POD string and generate HTML. optional parameter $mod_name specifies
 module name and used for see also detection.
 
     $plugin->serve_pod($pod, 'Path::To::Mod');
 
-=head2 $instance->serve_pod_by_name($module_name)
+=head2 serve_pod_by_name
 
 Generate HTML by given module name.
 

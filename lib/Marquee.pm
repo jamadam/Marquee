@@ -539,7 +539,7 @@ Set X-POWERED-BY response header.
 L<Marquee> inherits all class methods from L<Mojo> and implements the following
 new ones.
 
-=head2 Class->new
+=head2 new
 
 Constructor.
 

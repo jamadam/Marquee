@@ -221,6 +221,20 @@ sub _init {
         return b($c->app->render_ssi($self->_to_abs($path. '.ep')));
     };
     
+    $self->funcs->{extends_as} = sub {
+        my ($self, $path, $handler, $block) = @_;
+        
+        my $c = Marquee->c;
+        
+        local $c->{stash} = $c->{stash}->clone;
+        
+        $block->();
+        
+        return
+            Mojo::ByteStream->new(
+                        $c->app->render_ssi($self->_to_abs($path), $handler));
+    };
+    
     return $self;
 }
 
@@ -335,6 +349,16 @@ Extends the template.
                 main content<%= time %>
             </div>
         <% end %>
+    <% end %>
+
+=head2 C<extends_as>
+
+[EXPERIMENTAL] C<extends_as> inherites a tempalte and extends it.
+This function is similar to L</extends> but you can specify the handler
+the template would be parsed with.
+
+    <%= extends_as './path/to/template.html', 'ep' => begin %>
+    ...
     <% end %>
 
 =head2 C<iter>

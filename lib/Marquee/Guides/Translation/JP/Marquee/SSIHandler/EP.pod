@@ -74,6 +74,15 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
         <% end %>
     <% end %>
 
+=head2 C<extends_as>
+
+[EXPERIMENTAL] C<extends_as>はテンプレートを継承し、拡張します。
+この関数はL</extends>と似ていますが、テンプレートをパースするハンドラーを指定することができます。
+
+    <%= extends_as './path/to/template.html', 'ep' => begin %>
+    ...
+    <% end %>
+
 =head2 C<iter>
 
 ブロックを使用して配列を反復処理します。

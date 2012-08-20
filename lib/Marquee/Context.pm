@@ -271,15 +271,19 @@ L<Mojo::Transaction> instance.
 
     my $tx = $c->tx;
 
-=head1 INSTANCE METHODS
+=head1 CLASS METHODS
 
-L<Marquee::Context> implements the following instance methods.
+L<Marquee::Context> implements the following class methods.
 
 =head2 C<new>
 
 Constructor.
 
     my $c = Marquee::Context->new;
+
+=head1 INSTANCE METHODS
+
+L<Marquee::Context> implements the following instance methods.
 
 =head2 C<close>
 

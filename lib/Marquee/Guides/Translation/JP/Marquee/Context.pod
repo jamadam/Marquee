@@ -93,15 +93,19 @@ L<Mojo::Transaction>インスタンス。
 
     my $tx = $c->tx;
 
-=head1 INSTANCE METHODS
+=head1 CLASS METHODS
 
-L<Marquee::Context>は下記のインスタンスメソッドを実装します。
+L<Marquee::Context>は下記のクラスメソッドを実装します。
 
 =head2 C<new>
 
 コンストラクタ。
 
     my $c = Marquee::Context->new;
+
+=head1 INSTANCE METHODS
+
+L<Marquee::Context>は下記のインスタンスメソッドを実装します。
 
 =head2 C<close>
 

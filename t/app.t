@@ -13,7 +13,7 @@ use Mojo::Date;
 use Mojo::Transaction::HTTP;
 use Mojo::URL;
 
-use Test::More tests => 144;
+use Test::More tests => 146;
 
 {
     my $app = Marquee->new;
@@ -60,6 +60,8 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 $t = Test::Mojo->new($app);
 
 $t->get_ok('/')
+    ->status_is(404);
+$t->get_ok('/dir1/')
     ->status_is(404);
 
 # basic

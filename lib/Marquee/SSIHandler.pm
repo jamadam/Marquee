@@ -134,7 +134,7 @@ Renders templates. The sub classes MUST override(implement) the method.
         return $out;
     }
 
-Someware..
+Somewhere..
 
     $handler->render($path);
 

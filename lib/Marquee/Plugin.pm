@@ -30,7 +30,7 @@ Marquee::Plugin - Plugin base class
 
 L<Marquee::Plugin> is the plugin base class of L<Marquee> plugins.
 
-L<Marquee> provedes some hook points to extend the behavior of applications.
+L<Marquee> provides some hook points to extend the behavior of applications.
 With the hooks, you can develop reusable plugins under C<Marquee::Plugin::*>
 namespace.
 

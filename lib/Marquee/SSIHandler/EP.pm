@@ -340,7 +340,7 @@ Base template named C<layout/common.html.ep>.
 
 A template can extends C<common.html> as follows.　The path can be relative to
 current template directory or relative to document root if leading slashed.
-The handler　is auto detected so you don't need to specify the extention.
+The handler　is auto detected so you don't need to specify the extension.
 
     <%= extends './layout/common.html' => begin %>
         <% override 'title' => begin %>
@@ -355,11 +355,11 @@ The handler　is auto detected so you don't need to specify the extention.
 
 =head2 C<extends_as>
 
-[EXPERIMENTAL] C<extends_as> inherites a tempalte and extends it.
+[EXPERIMENTAL] C<extends_as> inherits a template and extends it.
 This function is similar to L</extends> but you can specify the handler
 the template would be parsed with.
 
-Note that the C<template.html> MUST NOT be name as C<tempalte.html.ep>
+Note that the C<template.html> MUST NOT be name as C<template.html.ep>
 
     <%= extends_as './path/to/template.html', 'ep' => begin %>
     ...

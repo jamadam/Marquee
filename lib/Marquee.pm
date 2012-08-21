@@ -321,13 +321,10 @@ sub serve_dynamic {
     return $self;
 }
 
-### --
-### start app
-### --
 sub start {
     my $self = $ENV{MOJO_APP} = shift;
     $self->_init;
-    Mojolicious::Commands->start;
+    Mojolicious::Commands->new(app => $self)->run(@_ ? @_ : @ARGV);
 }
 
 ### --

@@ -317,7 +317,7 @@ Returns current template path.
 C<extends> function cooperates with C<placeholder> and C<override>,
 provides template inheritance mechanism.
 
-Base template.
+Base template named C<layout/common.html.ep>.
 
     <!doctype html>
     <html>
@@ -338,7 +338,9 @@ Base template.
         </body>
     </html>
 
-Extends the template.
+A template can extends C<common.html> as follows.Å@The path can be relative to
+current template directory or relative to document root if leading slashed.
+The handlerÅ@is auto detected so you don't need to specify the extention.
 
     <%= extends './layout/common.html' => begin %>
         <% override 'title' => begin %>
@@ -356,6 +358,8 @@ Extends the template.
 [EXPERIMENTAL] C<extends_as> inherites a tempalte and extends it.
 This function is similar to L</extends> but you can specify the handler
 the template would be parsed with.
+
+Note that the C<template.html> MUST NOT be name as C<tempalte.html.ep>
 
     <%= extends_as './path/to/template.html', 'ep' => begin %>
     ...

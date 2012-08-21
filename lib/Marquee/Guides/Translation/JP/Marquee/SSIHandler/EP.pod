@@ -40,7 +40,7 @@ L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加�
 
 C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継承の仕組みを提供します。
 
-ベーステンプレート
+C<layout/common.html.ep>という名前のベーステンプレート。
 
     <!doctype html>
     <html>
@@ -61,7 +61,9 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
         </body>
     </html>
 
-テンプレートを拡張します。
+下記のようにC<common.html>を拡張できます。
+パスは、カレントテンプレートからの相対パスを指定するか、スラッシュを接頭することでドキュメントルートからのパスを指定します。
+ハンドラーは自動的に検出されますので、拡張子は必要ありません。
 
     <%= extends './layout/common.html' => begin %>
         <% override 'title' => begin %>
@@ -78,6 +80,8 @@ C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継
 
 [EXPERIMENTAL] C<extends_as>はテンプレートを継承し、拡張します。
 この関数はL</extends>と似ていますが、テンプレートをパースするハンドラーを指定することができます。
+
+C<template.html>はC<tempalte.html.ep>としない点に注意してください。
 
     <%= extends_as './path/to/template.html', 'ep' => begin %>
     ...

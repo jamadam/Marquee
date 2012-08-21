@@ -12,7 +12,7 @@ use Marquee;
 use Mojo::Date;
 use Marquee::SSIHandler::EP;
 
-use Test::More tests => 73;
+use Test::More tests => 91;
 
 ### add_function
 
@@ -159,5 +159,30 @@ $t->get_ok('/ep/use_layout.html')
     });
 
 ok ! exists $app->stash->{title};
-    
+
+### template extension(include_as)
+
+$t->get_ok('/ep/use_layout2.html')
+    ->status_is(200)
+    ->dom_inspector(sub {
+        my $t = shift;
+        $t->at('title')->text_is('タイトル');
+        $t->at('#main')->text_is('メインコンテンツdynamic');
+        $t->at('#main2')->text_is('DEFAULT MAIN2');
+        $t->at('current_template1')->text_is("$FindBin::Bin/public_html/ep/use_layout2.html.ep");
+        $t->at('current_template2')->text_is("");
+        $t->at('use_layout current_template3')->text_is("$FindBin::Bin/public_html/ep/use_layout2.html.ep");
+        $t->at('use_layout current_template4')->text_is("$FindBin::Bin/public_html/ep/layout/common2.html");
+        $t->at('use_layout current_template5')->text_is("$FindBin::Bin/public_html/ep/use_layout2.html.ep");
+        $t->at('use_layout current_template6')->text_is("");
+        $t->at('layout current_template1')->text_is("$FindBin::Bin/public_html/ep/layout/common2.html");
+        $t->at('layout #main2 current_template2')->text_is("$FindBin::Bin/public_html/ep/layout/common2.html");
+        $t->at('layout #main2 current_template3')->text_is("$FindBin::Bin/public_html/ep/layout/common2.html");
+        $t->at('layout #main2 current_template4')->text_is("$FindBin::Bin/public_html/ep/use_layout2.html.ep");
+        $t->at('layout #main2 current_template5')->text_is("");
+        $t->at('layout #namespace_test')->text_is("global stash content");
+    });
+
+ok ! exists $app->stash->{title};
+
 __END__

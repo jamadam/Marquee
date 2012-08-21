@@ -1,0 +1,18 @@
+<current_template1><%= current_template %></current_template1>
+<current_template2><%= current_template(1) %></current_template2>
+<layout>
+    <%= extends_as './layout/common2.html', 'ep' => begin %>
+        <% override 'title' => begin %>
+            タイトル
+        <% end %>
+        <% override 'main' => begin %>
+            メインコンテンツ<%= 'dynamic' %>
+            <use_layout>
+                <current_template3><%= current_template %></current_template3>
+                <current_template4><%= current_template(1) %></current_template4>
+                <current_template5><%= current_template(2) %></current_template5>
+                <current_template6><%= current_template(3) %></current_template6>
+            </use_layout>
+        <% end %>
+    <% end %>
+</layout>

@@ -333,7 +333,8 @@ sub start {
 sub _auto_fill_filename {
     my ($path, $default) = @_;
     
-    if ($default && $path->trailing_slash || ! @{$path->parts}) {
+    if ($default && ($path->trailing_slash || ! @{$path->parts})) {
+        warn 'hoge' if (!$default);
         push(@{$path->parts}, $default);
         $path->trailing_slash(0);
     }

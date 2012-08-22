@@ -48,8 +48,8 @@ Marquee - サーバーサイドインクルード可能な簡易HTTPサーバー
 L<Marquee>ディストリビューションは、Mojoliciousディストリビューション付属のmojoモジュール群のうえに構成された、
 もうひとつのウェブアプリケーションフレームワークです。
 
-L<Marquee>モジュールはアプリケーションのベースクラスであり、同梱のコマンドラインツール、C<mojo Marquee>の
-バックエンドでもあります。
+L<Marquee>モジュールはアプリケーションのベースクラスであり、同梱のコマンドラインツール、
+L<Mojolicious::Command::marquee>のバックエンドでもあります。
 
 =head1 ATTRIBUTES
 

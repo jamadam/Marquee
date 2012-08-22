@@ -86,7 +86,6 @@ sub serve_pod {
     # Rewrite code blocks for syntax highlighting
     $dom->find('pre')->each(sub {
         my $e = shift;
-        return if $e->all_text =~ /^\s*\$\s+/m;
         my $attrs = $e->attrs;
         my $class = $attrs->{class};
         $attrs->{class} = defined $class ? "$class prettyprint" : 'prettyprint';

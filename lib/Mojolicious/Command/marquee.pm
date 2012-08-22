@@ -89,6 +89,10 @@ Mojolicious::Command::marquee - marquee command
   my $app = Mojolicious::Command::marquee->new;
   $app->run(@ARGV);
 
+On commandline
+
+  $ mojo marquee [OPTIONS]
+
 =head1 DESCRIPTION
 
 =head1 ATTRIBUTES

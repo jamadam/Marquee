@@ -4,18 +4,14 @@ use warnings;
 use Mojo::Asset::File;
 use Mojo::ByteStream 'b';
 use Mojo::DOM;
-use Mojo::Util 'url_escape';
+use Mojo::Util qw'url_escape url_unescape encode decode';
+use Mojo::Base 'Marquee::Plugin';
 use Pod::Simple::HTML;
 use Pod::Simple::Search;
-use Mojo::DOM;
-use Mojo::Util qw'url_unescape encode decode';
-use Mojo::Base 'Marquee::Plugin';
 
 __PACKAGE__->attr('paths');
 __PACKAGE__->attr('no_see_also');
 
-# "This is my first visit to the Galaxy of Terror and I'd like it to be a
-#  pleasant one."
 sub register {
     my ($self, $app, $conf) = @_;
     

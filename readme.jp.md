@@ -8,12 +8,12 @@ Marquee beta
 
 ## DESCRIPTION
 
-Marquee‚ÍAƒT[ƒo[ƒTƒCƒhƒCƒ“ƒNƒ‹[ƒh‰Â”\‚ÈHTTPƒT[ƒo[‚Å‚·B
-‚±‚ÌƒfƒBƒXƒgƒŠƒrƒ…[ƒVƒ‡ƒ“‚ÍAƒIƒuƒWƒFƒNƒgwŒü‚ÌPerl API‚ÆƒRƒ}ƒ“ƒhƒ‰ƒCƒ“API‚Å\¬‚³‚ê‚Ü‚·B
+Marqueeã¯ã€ã‚µãƒ¼ãƒãƒ¼ã‚µã‚¤ãƒ‰ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰å¯èƒ½ãªHTTPã‚µãƒ¼ãƒãƒ¼ã§ã™ã€‚
+ã“ã®ãƒ‡ã‚£ã‚¹ãƒˆãƒªãƒ“ãƒ¥ãƒ¼ã‚·ãƒ§ãƒ³ã¯ã€ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆæŒ‡å‘ã®Perl APIã¨ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³APIã§æ§‹æˆã•ã‚Œã¾ã™ã€‚
 
-## ƒCƒ“ƒXƒg[ƒ‹
+## ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«
 
-‰º‹L‚ÌƒRƒ}ƒ“ƒh‚ÅƒCƒ“ƒXƒg[ƒ‹‚µ‚Ü‚·B
+ä¸‹è¨˜ã®ã‚³ãƒãƒ³ãƒ‰ã§ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã¾ã™ã€‚
 
     $ perl Makefile.PL
     $ make
@@ -22,7 +22,7 @@ Marquee‚ÍAƒT[ƒo[ƒTƒCƒhƒCƒ“ƒNƒ‹[ƒh‰Â”\‚ÈHTTPƒT[ƒo[‚Å‚·B
 
 ## Perl API
 
-MarqueeƒNƒ‰ƒX‚ÍMojo‚ğƒx[ƒX‚Æ‚µ‚Ä‚¢‚Ü‚·‚Ì‚ÅAMojo‚Ì’ñ‹Ÿ‚·‚é•û–@‚ÅƒAƒvƒŠ‚ğ“®ì‚³‚¹‚Ü‚·B
+Marqueeã‚¯ãƒ©ã‚¹ã¯Mojoã‚’ãƒ™ãƒ¼ã‚¹ã¨ã—ã¦ã„ã¾ã™ã®ã§ã€Mojoã®æä¾›ã™ã‚‹æ–¹æ³•ã§ã‚¢ãƒ—ãƒªã‚’å‹•ä½œã•ã›ã¾ã™ã€‚
 
     use Marquee;
     
@@ -34,21 +34,21 @@ MarqueeƒNƒ‰ƒX‚ÍMojo‚ğƒx[ƒX‚Æ‚µ‚Ä‚¢‚Ü‚·‚Ì‚ÅAMojo‚Ì’ñ‹Ÿ‚·‚é•û–@‚ÅƒAƒvƒŠ‚ğ“®ì‚³‚
     
     $app->start;
 
-ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚Å‰º‹L‚Ì‚æ‚¤‚É‹N“®‚µ‚Ü‚·B
+ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã§ä¸‹è¨˜ã®ã‚ˆã†ã«èµ·å‹•ã—ã¾ã™ã€‚
 
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.
 
-## ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“API
+## ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³API
 
     mojo marquee [OPTIONS]
 
-‰º‹L‚ÌƒRƒ}ƒ“ƒh‚ª—˜—p‚Å‚«‚Ü‚·:
+ä¸‹è¨˜ã®ã‚³ãƒãƒ³ãƒ‰ãŒåˆ©ç”¨ã§ãã¾ã™:
   
-    -dr, --document_root <path>  ƒhƒLƒ…ƒƒ“ƒgƒ‹[ƒg‚ÌƒpƒX‚ğ‚µ‚Ä‚¢‚Ü‚·BƒfƒtƒHƒ‹ƒg‚ÍƒJƒŒƒ“ƒg‚Å‚·B
-    -df, --default_file <name>   ƒfƒtƒHƒ‹ƒg‚Ìƒtƒ@ƒCƒ‹–¼‚ğw’è‚µA©“®•âŠ®‚ğ—LŒø‚É‚µ‚Ü‚·B
-    -ai, --auto_index            ƒI[ƒgƒCƒ“ƒfƒbƒNƒX‚ğ—LŒø‚É‚µ‚Ü‚·BƒfƒtƒHƒ‹ƒg‚Í0‚Å‚·B
-    -ud, --under_development     ƒT[ƒo[ƒTƒCƒhƒCƒ“ƒNƒ‹[ƒh‚Ì‚½‚ß‚ÌƒfƒoƒbƒOƒXƒNƒŠ[ƒ“‚ğ—LŒø‚É‚µ‚Ü‚·B
+    -dr, --document_root <path>  ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ«ãƒ¼ãƒˆã®ãƒ‘ã‚¹ã‚’ã—ã¦ã„ã¾ã™ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯ã‚«ãƒ¬ãƒ³ãƒˆã§ã™ã€‚
+    -df, --default_file <name>   ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒ‡å®šã—ã€è‡ªå‹•è£œå®Œã‚’æœ‰åŠ¹ã«ã—ã¾ã™ã€‚
+    -ai, --auto_index            ã‚ªãƒ¼ãƒˆã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’æœ‰åŠ¹ã«ã—ã¾ã™ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã¯0ã§ã™ã€‚
+    -ud, --under_development     ã‚µãƒ¼ãƒãƒ¼ã‚µã‚¤ãƒ‰ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã®ãŸã‚ã®ãƒ‡ãƒãƒƒã‚°ã‚¹ã‚¯ãƒªãƒ¼ãƒ³ã‚’æœ‰åŠ¹ã«ã—ã¾ã™ã€‚
     -b, --backlog <size>         Set listen backlog size, defaults to
                                  SOMAXCONN.
     -c, --clients <number>       Set maximum number of concurrent clients,
@@ -65,25 +65,25 @@ MarqueeƒNƒ‰ƒX‚ÍMojo‚ğƒx[ƒX‚Æ‚µ‚Ä‚¢‚Ü‚·‚Ì‚ÅAMojo‚Ì’ñ‹Ÿ‚·‚é•û–@‚ÅƒAƒvƒŠ‚ğ“®ì‚³‚
                                  connection, defaults to 25.
     -u, --user <name>            Set username for process.
 
-### g—p—á1
+### ä½¿ç”¨ä¾‹1
 
     $ mojo marquee
     [Mon Oct 17 23:18:35 2011] [info] Server listening (http://*:3000)
     Server available at http://127.0.0.1:3000.
 
-### g—p—á2(ƒ|[ƒg”Ô†‚ğw’è)
+### ä½¿ç”¨ä¾‹2(ãƒãƒ¼ãƒˆç•ªå·ã‚’æŒ‡å®š)
 
     $ mojo marquee --listen http://*:3001
 
-### g—p—á3(ƒhƒLƒ…ƒƒ“ƒgƒ‹[ƒg‚ğw’è)
+### ä½¿ç”¨ä¾‹3(ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆãƒ«ãƒ¼ãƒˆã‚’æŒ‡å®š)
 
     $ mojo marquee --document_root ./public
 
-### g—p—á4(ƒfƒtƒHƒ‹ƒgƒtƒ@ƒCƒ‹–¼‚ğw’è)
+### ä½¿ç”¨ä¾‹4(ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ•ã‚¡ã‚¤ãƒ«åã‚’æŒ‡å®š)
 
     $ mojo marquee --default_file index.html
 
-### g—p—á4(ƒI[ƒgƒCƒ“ƒfƒbƒNƒX‚ÆƒcƒŠ[•\¦‚ğ—LŒø‰»)
+### ä½¿ç”¨ä¾‹4(ã‚ªãƒ¼ãƒˆã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã¨ãƒ„ãƒªãƒ¼è¡¨ç¤ºã‚’æœ‰åŠ¹åŒ–)
 
     $ mojo marquee --auto_index
 

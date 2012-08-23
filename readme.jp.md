@@ -48,6 +48,7 @@ MarqueeクラスはMojoをベースとしていますので、Mojoの提供す�
     -dr, --document_root <path>  ドキュメントルートのパスをしています。デフォルトはカレントです。
     -df, --default_file <name>   デフォルトのファイル名を指定し、自動補完を有効にします。
     -ai, --auto_index            オートインデックスを有効にします。デフォルトは0です。
+    -dv, --doc_viewer            ドキュメントビューワーを有効にします。
     -ud, --under_development     サーバーサイドインクルードのためのデバッグスクリーンを有効にします。
     -b, --backlog <size>         Set listen backlog size, defaults to
                                  SOMAXCONN.

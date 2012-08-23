@@ -1,6 +1,15 @@
 Revision history for Marquee
 
-0.08 2012/08/04
+0.08 2012/08/23
+  - Added markdown plugin and a command line option.
+  - Added extends_as function for ep handler.
+  - Added POD translations for Japanese.
+  - Improved documentations.
+  - Improved POD viewer.
+  - Improved context class API.
+  - Changed router plugin API.
+  - Fixed a bug on default_file handling.
+  - Fixed start method to catchup mojo Commit:2111684fe5b986d00ec5e8abef405d414aa34086
 
 0.07 2012/08/04
   - Added include_as function to include a file as any SSI handlers.

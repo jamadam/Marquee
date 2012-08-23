@@ -92,7 +92,7 @@ Mojolicious::Command::marquee - marquee command
   my $app = Mojolicious::Command::marquee->new;
   $app->run(@ARGV);
 
-On commandline
+On command line
 
   $ mojo marquee [OPTIONS]
 

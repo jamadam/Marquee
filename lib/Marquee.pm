@@ -363,7 +363,7 @@ sub _init {
     }
     $self->{_inited} = 1;
     
-    if (! -d $self->document_root) {
+    if (! $self->document_root || ! -d $self->document_root) {
         die 'document_root is not a directory';
     }
     

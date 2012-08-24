@@ -11,7 +11,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use Marquee;
 
-use Test::More tests => 53;
+use Test::More tests => 56;
 
 my $app;
 my $t;
@@ -100,5 +100,20 @@ $t->get_ok('/template_error.html')
         $t->at('#context tr:nth-child(2) td.key')->text_is('2.');
         $t->at('#context tr:nth-child(2) td.value pre')->content_xml_is('&lt;test1&gt;&lt;%= $nonexist %&gt;&lt;/test1&gt;');
     });
+
+### don't leak debug message on production mode
+
+$app = Marquee->new;
+$app->document_root("$FindBin::Bin/public_html");
+$app->hook(around_dispatch => sub {
+    die 'hoge';
+});
+
+$t = Test::Mojo::DOM->new($app);
+
+$t->get_ok('/');
+$t->status_is(500);
+$t->text_is('title', '500 Internal Server Error');
+
 
 __END__

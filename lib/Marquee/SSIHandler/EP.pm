@@ -8,6 +8,7 @@ use Mojo::Template;
 use Mojo::Path;
 use Encode 'decode_utf8';
 use Carp;
+use Data::Dumper;
 
 ### --
 ### Function definitions for inside template

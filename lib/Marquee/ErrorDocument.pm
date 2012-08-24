@@ -2,9 +2,7 @@ package Marquee::ErrorDocument;
 use strict;
 use warnings;
 use Mojo::Base -base;
-use Mojo::Cache;
-use Mojo::Util qw'encode';
-use Encode 'decode_utf8';
+use Mojo::Util qw'encode decode';
 
 my %messages = (
     404 => 'File Not Found',
@@ -21,12 +19,6 @@ __PACKAGE__->attr('status_template' => sub {{}});
 sub serve {
     my ($self, $code, $message) = @_;
     
-    $message ||= $messages{$code};
-
-    if (ref $message && $message->can('message')) {
-        $message->message(decode_utf8 $message->message);
-    }
-    
     my $c           = Marquee->c;
     my $stash       = $c->stash;
     my $template    = ($self->status_template)->{$code} || $self->template;
@@ -35,20 +27,15 @@ sub serve {
     if ($c->app->under_development) {
         my $snapshot = $stash->clone;
         $ep->add_function(snapshot => sub {$snapshot});
-        $stash->set(
-            static_dir  => 'static',
-            code        => $code,
-            message     =>
-                ref $message ? $message : Mojo::Exception->new($message),
-        );
         $template = Marquee->asset('debug_screen.html.ep');
-    } else {
-        $stash->set(
-            static_dir  => 'static',
-            code        => $code,
-        );
-        $stash->set(message => ref $message ? $messages{$code} : $message);
+        $message = ref $message ? $message : Mojo::Exception->new($message);
     }
+    
+    $stash->set(
+        static_dir  => 'static',
+        code        => $code,
+        message     => $message || $messages{$code},
+    );
     
     $c->res->code($code);
     $c->res->body(encode('UTF-8', $ep->render_traceable($template)));

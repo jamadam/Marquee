@@ -2,16 +2,14 @@ package Marquee;
 use strict;
 use warnings;
 use Mojo::Base 'Mojo';
-use Data::Dumper;
 use File::Spec;
-use File::Basename 'dirname';
 use Digest::MD5 qw(md5_hex);
-use Mojo::Path;
 use Mojo::Asset::File;
 use Mojo::URL;
 use Mojo::Util qw'encode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
+use Mojo::Exception;
 use Marquee::Hooks;
 use Marquee::Context;
 use Marquee::SSIHandler::EP;
@@ -150,7 +148,7 @@ sub handler {
     
     if ($@) {
         $self->log->fatal("Processing request failed: $@");
-        $self->error_document->serve(500, $@);
+        $self->error_document->serve(500, $self->under_development && $@);
     }
     
     if (! $CONTEXT->served) {

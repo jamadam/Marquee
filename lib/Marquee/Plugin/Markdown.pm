@@ -1,10 +1,9 @@
 package Marquee::Plugin::Markdown;
 use strict;
 use warnings;
-use Mojo::Asset::File;
 use Mojo::ByteStream 'b';
 use Mojo::DOM;
-use Mojo::Util qw'url_escape url_unescape encode decode';
+use Mojo::Util qw'encode decode';
 use Mojo::Base 'Marquee::Plugin';
 use Text::Markdown 'markdown';
 use File::Find;

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Mojo::Base 'Marquee::SSIHandler';
 use Marquee::Cache;
-use Mojo::Util qw/encode md5_sum/;
+use Mojo::Util qw{encode md5_sum};
 use Mojo::Template;
 
 __PACKAGE__->attr('template_cache' => sub {Marquee::Cache->new});

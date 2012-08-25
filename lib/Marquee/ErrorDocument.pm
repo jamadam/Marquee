@@ -79,6 +79,7 @@ L<Marquee::ErrorDocument> implements the following instance methods.
 
 Serves error document.
 
+    $error_doc->serve(404);
     $error_doc->serve(404, 'File not found');
 
 =head1 SEE ALSO

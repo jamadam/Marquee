@@ -62,7 +62,7 @@ implements the following new ones.
 =head2 C<emit_chain>
 
   $plugins = $plugins->emit_chain('foo');
-  $plugins = $plugins->emit_chain(foo => 123);
+  $plugins = $plugins->emit_chain(foo => @args);
 
 Emit events as chained hooks.
 

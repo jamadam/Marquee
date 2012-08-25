@@ -88,12 +88,6 @@ class is MUST implement C<render> method.
 
 L<Marquee::SSIHandler> implements the following attributes.
 
-=head2 C<app>
-
-Marquee app instance.
-
-    $ep->app($app);
-
 =head2 C<log>
 
 C<Mojo::Log> instance. Defaults to C<$app-E<gt>log> if exists.
@@ -104,12 +98,6 @@ C<Mojo::Log> instance. Defaults to C<$app-E<gt>log> if exists.
 =head1 CLASS METHODS
 
 L<Marquee::SSIHandler> implements the following class methods.
-
-=head2 C<new>
-
-Constructor.
-
-    my $handler = Marquee::SSIHandler->new();
 
 =head2 C<current_template>
 

@@ -25,12 +25,6 @@ Marquee::SSIHandler - SSIハンドラーベースクラス
 
 L<Marquee::SSIHandler>は下記の属性を実装します。
 
-=head2 C<app>
-
-Marqueeアプリインスタンスを格納します。.
-
-    $ep->app($app);
-
 =head2 C<log>
 
 C<Mojo::Log>インスタンスです。デフォルトは、もし存在すればC<$app-E<gt>log>です。
@@ -41,12 +35,6 @@ C<Mojo::Log>インスタンスです。デフォルトは、もし存在すれ�
 =head1 CLASS METHODS
 
 L<Marquee::SSIHandler>は下記のクラスメソッドを実装します。
-
-=head2 C<new>
-
-コンストラクター。
-
-    my $handler = Marquee::SSIHandler->new();
 
 =head2 C<current_template>
 

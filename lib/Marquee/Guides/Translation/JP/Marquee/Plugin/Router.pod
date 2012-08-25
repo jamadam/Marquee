@@ -54,6 +54,9 @@ L<Marquee::Plugin>の全ての属性を継承し、下記を追加で実装し�
 
 L<Marquee::Plugin::Router::Route>インスタンス.
 
+    $router->route(Marquee::Plugin::Router::Route->new);
+    my $r = $router->route;
+
 =head1 INSTANCE METHODS
 
 L<Marquee::Plugin::Router>は

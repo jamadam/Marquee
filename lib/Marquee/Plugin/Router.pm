@@ -94,6 +94,9 @@ L<Marquee::Plugin> and implements the following new ones.
 
 L<Marquee::Plugin::Router::Route> instance.
 
+    $router->route(Marquee::Plugin::Router::Route->new);
+    my $r = $router->route;
+
 =head1 INSTANCE METHODS
 
 L<Marquee::Plugin::Router> inherits all instance methods from

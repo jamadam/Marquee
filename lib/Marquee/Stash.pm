@@ -41,7 +41,7 @@ Marquee::Stash - stash
     use Marquee::Stash;
     
     my $stash = Marquee::Stash->new(a => 'b', c => 'd');
-    is_deeply $stash->set(), {a => 'b', c => 'd'};
+    is_deeply $stash->get(), {a => 'b', c => 'd'};
     
     $stash->set(e => 'f');
     is_deeply $stash->get(), {a => 'b', c => 'd', e => 'f'};
@@ -63,7 +63,8 @@ L<Marquee::Stash> implements the following class methods.
 
 =head2 C<new>
 
-    my $stash = Marquee::Stash->new(key => 'val', key2 => 'val2');
+    my $stash = Marquee::Stash->new;
+    my $stash = Marquee::Stash->new(foo => $foo_value, bar => $bar_value);
 
 =head1 INSTANCE METHODS
 
@@ -80,14 +81,16 @@ Get stash value for given name.
 
 Set stash values with given hash or hash reference.
 
-    $stash->set(key => 'value');
+    $stash->set(foo => $foo_value, bar => $bar_value);
+    $stash->set($hash_ref);
 
 =head2 C<clone>
 
-Clone stash with given hash or hash reference merged.
+Clones stash with given hash or hash reference merged.
 
-    my $clone = $stash->clone;
-    my $clone = $stash->clone(key => 'value');
+    my $clone = $stash->clone;                      # clone
+    my $clone = $stash->clone(foo => $foo_value);   # clone and merge
+    my $clone = $stash->clone($hash_ref);           # clone and merge
 
 =head1 SEE ALSO
 

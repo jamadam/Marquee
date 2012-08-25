@@ -29,11 +29,7 @@ L<Marquee::Cache>は下記の属性を実装します。
 
 インスタンス毎のキーの上限です。
 
-=head1 CLASS METHODS
-
-L<Marquee::Cache>は下記のクラスメソッドを実装します。
-
-=head2 C<new>
+    $cache->max_key(200);
 
 =head1 INSTANCE METHODS
 

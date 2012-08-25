@@ -85,11 +85,7 @@ L<Marquee::Cache> implements the following attributes.
 
 Max keys per instance.
 
-=head1 CLASS METHODS
-
-L<Marquee::Cache> implements the following class methods.
-
-=head2 C<new>
+    $cache->max_key(200);
 
 =head1 INSTANCE METHODS
 

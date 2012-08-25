@@ -91,6 +91,8 @@ L<Marquee::Plugin::Router> implements the following attributes.
 
 Route entries.
 
+    my $elems = $r->elems;
+
 =head1 INSTANCE METHODS
 
 L<Marquee::Plugin::Router> implements the following instance methods.

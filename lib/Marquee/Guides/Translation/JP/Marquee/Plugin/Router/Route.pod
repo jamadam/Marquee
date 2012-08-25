@@ -46,6 +46,8 @@ L<Marquee::Plugin::Router::Route>は下記の属性を実装します。
 
 ルートのエントリーです。
 
+    my $elems = $r->elems;
+
 =head1 INSTANCE METHODS
 
 L<Marquee::Plugin::Router::Route>は下記のインスタンスメソッドを実装します。

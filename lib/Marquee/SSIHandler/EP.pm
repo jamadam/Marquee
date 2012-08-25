@@ -339,9 +339,9 @@ Base template named C<layout/common.html.ep>.
         </body>
     </html>
 
-A template can extends C<common.html> as follows.Å@The path can be relative to
+A template can extends C<common.html.ep> as follows. The path can be relative to
 current template directory or relative to document root if leading slashed.
-The handlerÅ@is auto detected so you don't need to specify the extension.
+The handler is auto detected so you don't need to specify the extension.
 
     <%= extends './layout/common.html' => begin %>
         <% override 'title' => begin %>

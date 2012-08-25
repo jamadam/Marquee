@@ -41,7 +41,7 @@ __END__
 
 =head1 NAME
 
-Marquee::Plugin::Router - Router [EXPERIMENTAL]
+Marquee::Plugin::Router - Router
 
 =head1 SYNOPSIS
     

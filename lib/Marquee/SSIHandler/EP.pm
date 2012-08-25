@@ -356,7 +356,7 @@ The handler is auto detected so you don't need to specify the extension.
 
 =head2 C<extends_as>
 
-[EXPERIMENTAL] C<extends_as> inherits a template and extends it.
+C<extends_as> inherits a template and extends it.
 This function is similar to L</extends> but you can specify the handler
 the template would be parsed with.
 
@@ -398,7 +398,7 @@ slashed.
 
 =head2 C<include_as>
 
-[EXPERIMENTAL] Include a template into current template. This function is
+Include a template into current template. This function is
 similar to include but you can specify the handler the template would be parsed
 with.
 

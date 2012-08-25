@@ -47,7 +47,7 @@ __END__
 
 =head1 NAME
 
-Marquee::Plugin::Router - Route generator and container [EXPERIMENTAL]
+Marquee::Plugin::Router - Route generator and container
 
 =head1 SYNOPSIS
     

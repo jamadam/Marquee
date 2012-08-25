@@ -78,7 +78,7 @@ C<layout/common.html.ep>という名前のベーステンプレート。
 
 =head2 C<extends_as>
 
-[EXPERIMENTAL] C<extends_as>はテンプレートを継承し、拡張します。
+C<extends_as>はテンプレートを継承し、拡張します。
 この関数はL</extends>と似ていますが、テンプレートをパースするハンドラーを指定することができます。
 
 C<template.html>はC<tempalte.html.ep>としない点に注意してください。
@@ -118,7 +118,6 @@ C<template.html>はC<tempalte.html.ep>としない点に注意してください
 
 =head2 C<include_as>
 
-[EXPERIMENTAL]
 現在のテンプレートに任意のテンプレートを挿入します。include関数に似ていますが、テンプレートパースに使用するハンドラーを指定することができます。
 
     <%= include_as('./path/to/template.html', 'ep', key => value) %>

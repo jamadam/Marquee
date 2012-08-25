@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Marquee::Plugin::Router::Route - ルーターの生成と格納 [EXPERIMENTAL]
+Marquee::Plugin::Router::Route - ルーターの生成と格納
 
 =head1 SYNOPSIS
     

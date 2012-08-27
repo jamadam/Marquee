@@ -1,13 +1,6 @@
 Marquee beta
 ---------------
 
-## SYNOPSIS
-    
-    mojo Marquee [--document_root path] [--dafault_file name]
-        [--auto_index] ..
-
-## DESCRIPTION
-
 Marqueeディストリビューションは、Mojoliciousディストリビューション付属のmojoモジュール群のうえに構成された、
 もうひとつのウェブアプリケーションフレームワークです。
 ダイナミックなコンテンツの開発が、デザイナーワークの延長線上に配置されることを想定してデザインされています。
@@ -116,6 +109,8 @@ MarqueeクラスはMojoをベースとしていますので、Mojoの提供す�
 MarqueeはPerlのオブジェクト指向フレームワークに加え、カレントディレクトリの内容をMojo::Daemonを使って
 ウェブページとして発行するコマンドラインAPIも提供します。これは、Apacheなどを使わずに一時的にウェブページを
 発行するのに便利です。
+
+## SYNOPSIS
 
     mojo marquee [OPTIONS]
 

@@ -1,13 +1,6 @@
 Marquee beta
 ---------------
 
-## SYNOPSIS
-    
-    mojo Marquee [--document_root path] [--dafault_file name]
-        [--auto_index] ..
-
-## DESCRIPTION
-
 Marquee distribution is yet another web application framework built on mojo
 modules in Mojolicious distribution, designed to make dynamic content
 development to be plotted at an extension of designer work.
@@ -120,6 +113,8 @@ On command line..
 In addition to Perl OOP framework, Marquee also provides command line API to
 serve current directory contents as a web pages, using Mojo::Daemon.
 This is useful for temporarily providing web pages without any Apache things.
+
+## SYNOPSIS
 
     mojo marquee [OPTIONS]
 

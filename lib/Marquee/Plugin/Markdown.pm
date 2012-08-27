@@ -119,13 +119,6 @@ Marquee::Plugin::Markdown - Markdown renderer plugin
 =head1 DESCRIPTION
 
 This is a plugin for Markdown Viewer server.
-    
-=head2 C<paths>
-
-A path to discover modules.
-
-    $plugin->paths([$path1, $path2, $path3]);
-    my $paths = $plugin->paths;
 
 =head1 INSTANCE METHODS
 
@@ -140,7 +133,7 @@ Register the plugin.
 
 =head2 serve_index
 
-Serves index of modules.
+Serves index of markdown files.
 
     $plugin->serve_index;
 

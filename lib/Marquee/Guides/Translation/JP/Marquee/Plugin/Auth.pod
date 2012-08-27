@@ -49,7 +49,7 @@ L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下�
 
 =head1 EXAMPLE
 
-You can port apache htpasswd entries as follows.
+Apacheのhtpasswdのエントリーを下記のように移植できます。
 
     my $htpasswd = {
         user1 => 'znq.opIaiH.zs',

@@ -31,7 +31,7 @@ L<Marquee::ErrorDocument>は下記のインスタンスメソッドを実装し�
 
 =head2 C<serve>
 
-Serves error document.
+エラードキュメントを出力します。
 
     $error_doc->serve(404);
     $error_doc->serve(404, 'File not found');

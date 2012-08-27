@@ -98,11 +98,27 @@ On command line
 
 =head1 DESCRIPTION
 
+L<Mojolicious::Command::marquee> starts applications with
+L<Mojo::Server::Daemon> backend.
+
 =head1 ATTRIBUTES
+
+L<Mojolicious::Command::marquee> inherits all attributes from
+L<Mojolicious::Command> and implements the following new ones.
 
 =head2 C<description>
 
+Short description of this command, used for the command list.
+
+  my $description = $marquee->description;
+  $marquee         = $marquee->description('Foo!');
+
 =head2 C<usage>
+
+Usage information for this command, used for the help screen.
+
+  my $usage = $marquee->usage;
+  $marquee  = $marquee->usage('Foo!');
 
 =head1 INSTANCE METHODS
 
@@ -111,8 +127,12 @@ L<Mojolicious::Command> and implements the following new ones.
 
 =head2 C<run>
 
+Run this command.
+
+  $marquee->run(@ARGV);
+
 =head1 SEE ALSO
 
-L<marquee>
+L<marquee>, L<Mojolicious>.
 
 =cut

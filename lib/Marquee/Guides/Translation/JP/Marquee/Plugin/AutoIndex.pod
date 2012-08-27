@@ -8,7 +8,7 @@ Marquee::Plugin::AutoIndex - オートインデックス
 
     $app->plugin('AutoIndex');
 
-On your browser following forms of URL are available.
+ブラウザにて、下記のURL書式が利用可能になります。
 
     http://localhost:3000/path/to/directory/
     http://localhost:3000/path/to/directory/?mode=tree
@@ -50,13 +50,13 @@ L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下�
 
 =head2 C<serve_index>
 
-Serves auto directory index.
+自動生成されたディレクトリインデックスを出力します。
 
     $plugin->serve_index($path);
 
 =head2 C<serve_tree>
 
-Serves auto directory tree.
+自動生成されたディレクトリツリーを出力します。
 
     $plugin->serve_tree($path);
 

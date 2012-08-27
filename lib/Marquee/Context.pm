@@ -203,7 +203,7 @@ L<Marquee::Context> implements the following attributes.
 
 =head2 C<app>
 
-L<Marquee> instance.
+L<Marquee> application instance.
 
     my $app = $c->app;
 

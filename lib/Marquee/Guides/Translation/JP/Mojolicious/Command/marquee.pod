@@ -13,11 +13,27 @@ Mojolicious::Command::marquee - marquee command
 
 =head1 DESCRIPTION
 
+L<Mojolicious::Command::marquee>は、L<Mojo::Server::Daemon>をバックエンドとして利用し、
+アプリケーションを起動します。
+
 =head1 ATTRIBUTES
+
+L<Marquee::Command::marquee>は
+L<Marquee::Command>の全ての属性を継承し、下記を追加で実装します。
 
 =head2 C<description>
 
+コマンドリストで使用される、このコマンドの短い説明です。
+
+  my $description = $marquee->description;
+  $marquee         = $marquee->description('Foo!');
+
 =head2 C<usage>
+
+ヘルプ画面で使用される、このコマンドの使用方法です。
+
+  my $usage = $marquee->usage;
+  $marquee  = $marquee->usage('Foo!');
 
 =head1 INSTANCE METHODS
 
@@ -26,8 +42,12 @@ L<Marquee::Command>の全てのインスタンスメソッドを継承し、下�
 
 =head2 C<run>
 
+このコマンドを実行します。
+
+  $marquee->run(@ARGV);
+
 =head1 SEE ALSO
 
-L<marquee>
+L<marquee>, L<Mojolicious>.
 
 =cut

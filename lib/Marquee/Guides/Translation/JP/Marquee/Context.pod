@@ -26,7 +26,7 @@ L<Marquee::Context>は下記の属性を実装します。
 
 =head2 C<app>
 
-L<Marquee> instance.
+L<Marquee>アプリケーションのインスタンスです。
 
     my $app = $c->app;
 

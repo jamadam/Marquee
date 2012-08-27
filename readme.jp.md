@@ -8,8 +8,67 @@ Marquee beta
 
 ## DESCRIPTION
 
-Marqueeは、サーバーサイドインクルード可能なHTTPサーバーです。
-このディストリビューションは、オブジェクト指向のPerl APIとコマンドラインAPIで構成されます。
+Marqueeディストリビューションは、Mojoliciousディストリビューション付属のmojoモジュール群のうえに構成された、
+もうひとつのウェブアプリケーションフレームワークです。
+ダイナミックなコンテンツの開発が、デザイナーワークの延長線上に配置されることを想定してデザインされています。
+
+### デフォルトのURLマッピング
+
+Marqueeはデフォルトで、下記のようにリクエストパスを対応するディレクトリツリーにマッピングします。
+
+このようなパスを与えると
+    
+    /news/sports/hockey.html
+
+Marqueeは下記のようなテンプレートや静的ファイルを検索します。
+
+    /news/sports/hockey.html
+    /news/sports/hockey.html.ep
+    /news/sports/hockey.html.epl
+
+epハンドラーとeplハンドラーは常に利用可能で、任意のハンドラーを追加することも簡単です。
+また、コアに付属のRouteプラグインで、正規表現によるマッピングルールのオーバーライドも可能です。
+
+### Perl風テンプレート
+
+MarqueeはMojo::Templateベースのテンプレートハンドラーを提供します。
+これにより、テンプレートは(Masonに比べ)よりPerl風でより特殊構文の少ない記述が可能になり、つまり学習コストがより少ないです。
+
+    <ul>
+        <%
+            require ./lib/NewsRelease.pm;
+            my $news = NewsRelease->new();
+            my @array = $news->fetch(5);
+        %>
+        <% for my $entry (@array) { %>
+            <li>
+                <a href="<%= $entry->{url} %>">
+                    <%= $entry->{title} %>
+                </a>
+            </li>
+        <% } %>
+    </ul>
+
+### Content-Typeの自動生成
+
+Marqueeはテンプレートの命名をname.format.handlerというスタイルに制限しているため、
+システムはContent-Typeを自動検出し、ヘッダーを暗黙的に出力することができます。この方式は(PHPに比べ)
+より合理的です。
+
+    index.html.ep
+    index.json.ep
+    index.txt.epl
+
+### インストールが容易
+
+MarqueeはPure-Perlで実装されており、また、唯一の依存先であるMojoliciousディストリビューションもPure-Perlですので、
+FTPクライアントですらデプロイ可能です。
+Mojoliciousはperl-5.10.1に依存していますが、バックポートプロジェクトであるmojo-legacyを選択すれば、
+Perl-5.8.7以降で動作させることが可能です。
+
+### Mojoツールキットが利用可能
+
+Marqueeはmojoのうえに実装されているため、多くのmojoクラスによって、HTTPリクエストや、HTTPレスポンス、DOM、JSONなどの操作が簡単に行えます。
 
 ## インストール
 

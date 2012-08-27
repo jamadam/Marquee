@@ -440,7 +440,8 @@ Inherited application.
 =head1 DESCRIPTION
 
 L<Marquee> distribution is yet another web application framework built on mojo
-modules in L<Mojolicious> distribution. 
+modules in L<Mojolicious> distribution, designed to make dynamic content
+development to be plotted at an extension of designer work.
 
 L<Marquee> module is the base class of applications. The module also is a
 backend of L<Mojolicious::Command::marquee>, a command line tool.
@@ -548,7 +549,7 @@ Constructor.
 
 =head2 C<asset>
 
-Returns bundled asset path for given file name. If the file name not speciied,
+Returns bundled asset path for given file name. If the file name not specified,
 The method returns the asset directory.
 
     my $asset = Marquee->asset('path/to/common.css');

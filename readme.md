@@ -8,8 +8,71 @@ Marquee beta
 
 ## DESCRIPTION
 
-Marquee is a simple HTTP server with server-side include.
-The distribution is consist of object oriented Perl API and command line API.
+Marquee distribution is yet another web application framework built on mojo
+modules in Mojolicious distribution, designed to make dynamic content
+development to be plotted at an extension of designer work.
+
+### Default URL mapping
+
+By default, Marquee automatically maps request paths to corresponding directory
+tree as follows.
+
+Given the request path
+    
+    /news/sports/hockey.html
+
+Marquee searches for the following templates or static files.
+
+    /news/sports/hockey.html
+    /news/sports/hockey.html.ep
+    /news/sports/hockey.html.epl
+
+ep handler and epl handler are always available and you can also add your own
+handler easily. You can also override the mapping rule with reqular expression
+with Route plugin bundled in core.
+
+### Perlish template
+
+Marquee provedes Mojo::Template based template handler which allows templates
+to be written in more Perl and less special syntax, therefore, less lerning cost
+(by comparison to Mason).
+
+    <ul>
+        <%
+            require ./lib/NewsRelease.pm;
+            my $news = NewsRelease->new();
+            my @array = $news->fetch(5);
+        %>
+        <% for my $entry (@array) { %>
+            <li>
+                <a href="<%= $entry->{url} %>">
+                    <%= $entry->{title} %>
+                </a>
+            </li>
+        <% } %>
+    </ul>
+
+### Generating Content-Type automatically
+
+Marquee restricts the name of templates as name.format.handler style so that
+the system can auto detect Content-Type and implicitly serve the header.
+This system is more resonable (by comparison to PHP).
+
+    index.html.ep
+    index.json.ep
+    index.txt.epl
+
+### Easy to install
+
+Marquee is written in pure-perl and depends on only Mojolicious distribution
+which also pure-perl, so you can even deploy them with FTP clients.
+Though Mojolicious depends on perl-5.10.1 or higher, there is still an option
+to adopt backport project mojo-legacy to run on perl-5.8.7.
+
+### Mojo toolkit is available
+
+Since Marquee is based on mojo, many mojo classes helps you on manipulating
+such as HTTP request, HTTP response, DOM, JSON.
 
 ## INSTALLATION
 

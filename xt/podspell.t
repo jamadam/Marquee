@@ -69,3 +69,6 @@ req
 res
 elems
 namespace
+commify
+min
+max

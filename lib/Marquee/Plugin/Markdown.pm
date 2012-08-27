@@ -16,7 +16,7 @@ sub register {
     if (! $conf->{no_route}) {
         $app->plugin('Router' => sub {
             my $r = shift;
-            $r->route(qr{^/markdown/(.+\.md)})->to(sub {
+            $r->route(qr{^/markdown/(.+\.md$)})->to(sub {
                 $self->serve_markdown(shift)
             });
             $r->route(qr{^/markdown/(.*/)?$})->to(sub {

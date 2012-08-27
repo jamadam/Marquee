@@ -82,7 +82,7 @@ L<Marquee::Hooks>インスタンスを格納します。
 =head2 C<roots>
 
 静的ファイルとテンプレートを格納するパスの配列を格納します。ファイルの検索は配列の先頭から順に行われます。
-先頭にはC<document_root>の値がコピーされ、Marqueeコアやプラグインのバンドル用ディレクトリが後続します。
+先頭にはL</document_root>の値がコピーされ、Marqueeコアやプラグインのバンドル用ディレクトリが後続します。
 
     push(@{$app->roots}, 'path/to/additional_dir')
 
@@ -98,9 +98,9 @@ L<Marquee::Hooks>インスタンスを格納します。
 
 サーバーサイドインクルードのハンドラーをハッシュリファレンスで格納します。ハッシュのキーはテンプレートの最後の拡張子に対応します。
 
-    $app->ssi_handlers->{ep} = Marquee::SSIHandler::EP->new;
+    $app->ssi_handlers->{myhandler} = Marquee::SSIHandler::MyHandler->new;
 
-上記の例の代わりに、C<add_handler>メソッドを使用してSSIの関連付けを追加することが可能です。
+上記の例の代わりに、L</add_handler>メソッドを使用してSSIの関連付けを追加することが可能です。
 
 =head2 C<stash>
 
@@ -129,6 +129,12 @@ X-POWERED-BYレスポンスヘッダーを設定します。
 
     $app->x_powered_by('MyApp');
 
+ヘッダーは下記のように反映されます。
+
+    Content-Type: text/html;charset=UTF-8
+    X-Powered-By: MyApp
+    Server: Mojolicious (Perl)
+
 =head1 CLASS METHODS
 
 L<Marquee>はL<Mojo>から全てのクラスメソッドを継承し、下記を追加で実装します。
@@ -141,7 +147,7 @@ L<Marquee>はL<Mojo>から全てのクラスメソッドを継承し、下記を
 
 =head2 C<asset>
 
-バンドルされたアセットの中から、指定の名前のファイルのパスを返します。
+バンドルされたアセットの中から、指定の名前のファイルのパスを返します。ファイル名が指定されない場合、アセットディレクトリが返されます。
 
     my $asset = Marquee->asset('path/to/common.css');
     
@@ -151,7 +157,8 @@ L<Marquee>はL<Mojo>から全てのクラスメソッドを継承し、下記を
     
     say $asset # /path/to/lib/Marquee/Asset
 
-その他のパッケージから呼び出した場合。。
+このメソッドは各Perlモジュールに固有の名前空間にファイルをバンドルすることを可能にします。
+下記の例は、任意のモジュールのバンドルファイルを取得します。
 
     my $asset = SomePackage->Marquee::asset('path/to/common.css');
     
@@ -167,13 +174,19 @@ L<Marquee>はL<Mojo>から全てのインスタンスメソッドを継承し、
 
 =head2 C<add_handler>
 
-C<ssi_handlers>のエントリーを追加します。
+L</ssi_handlers>のエントリーを追加します。第一引数はテンプレートの最後の拡張子に対応します。
+第二引数はL<Marquee::SSIHandler>のサブクラスのインスタンスでなければなりません。
+例としてL<Marquee::SSIHandler::EPL>を参照してください。
 
-    $instance->add_handler(ep => Marquee::SSIHandler::EP->new);
+    $app->add_handler(myhandler => Marquee::SSIHandler::MyHandler->new);
+
+下記のファイル名が利用可能になります。
+
+    template.html.myhandler
 
 =head2 C<c>
 
-C<context>メソッドのエイリアスです。
+L</context>メソッドのエイリアスです。
 
 =head2 C<context>
 
@@ -189,13 +202,13 @@ C<context>メソッドのエイリアスです。
 
 =head2 C<handler>
 
-mojoレイヤーから呼ばれるハンドラーです。
+mojoレイヤーから呼ばれるハンドラーです。このメソッドはリクエスト毎の処理の起点となり、レスポンスをC<$tx>にセットし、終了します。
 
     $app->handler($tx)
 
 =head2 C<hook>
 
-$instance->hooks->onのエイリアスです。指定のフックポイントにコールバックを追加します。下記のフックポイントが利用できます:
+$app->hooks->onのエイリアスです。指定のフックポイントにコールバックを追加します。下記のフックポイントが利用できます:
 
 =over 2
 
@@ -236,7 +249,7 @@ $instance->hooks->onのエイリアスです。指定のフックポイントに
 
 =head2 C<is_directory>
 
-指定のパスがディレクトリかどうかの真偽値を返します。ディレクトリの探索はC<roos>属性に格納されたパス群からの
+指定のパスがディレクトリかどうかの真偽値を返します。ディレクトリの探索はL</roos>属性に格納されたパス群からの
 相対パスを対象に行われます。
 
     $app->is_directory('/path/to/directory') # bool
@@ -263,8 +276,9 @@ C<+>はクラス名が完結していることを意味します。
 
 =head2 C<render_ssi>
 
-SSIをレンダリングし、結果を返します。C<$handler_ext>の指定がなければ、C<$path>からハンドラーを自動検出
-します。レンダラーの拡張子は自動的に付与されないことに注意してください。
+指定のパスのファイルをSSIとしてレンダリングし、結果を返します。
+第二引数の指定がなければ、ファイル名からハンドラーを自動検出します。
+レンダラーの拡張子は自動的に付与されないことに注意してください。
 
     # render /path/to/template.html.epをepハンドラーでレンダリングします
     my $result = $app->render_ssi('/path/to/template.html.ep');
@@ -277,14 +291,14 @@ SSIをレンダリングし、結果を返します。C<$handler_ext>の指定�
 
 =head2 C<search_static>
 
-指定のパスの静的ファイルを検索しますし、存在すればパスを返します。ファイルの検索はC<roots>属性のディレクトリ群を対象に行われます。
+指定のパスの静的ファイルを検索し、存在すればパスを返します。ファイルの検索はL</roots>属性のディレクトリ群を対象に行われます。
 
     my $path = $app->search_static('./a.html'); # /path/to/document_root/a.html
     my $path = $app->search_static('/path/to/a.html'); # /path/to/a.html
 
 =head2 C<search_template>
 
-指定のパスのSSIテンプレートファイルを検索し、存在すればパスを返します。ファイルの検索はC<roots>属性のディレクトリ群を対象に行われます。
+指定のパスのSSIテンプレートファイルを検索し、存在すればパスを返します。ファイルの検索はL</roots>属性のディレクトリ群を対象に行われます。
 
     my $path = $app->search_template('./tmpl.html'); # /path/to/document_root/tmpl.html.ep
     my $path = $app->search_template('/path/to/tmpl.html'); # /path/to/tmpl.html.ep

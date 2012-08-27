@@ -19,7 +19,7 @@ Marquee::SSIHandler - SSIハンドラーベースクラス
 
 =head1 DESCRIPTION
 
-本クラスは、ハンドラークラスに継承されるベースクラスです。サブクラスはC<render>を実装しなければなりません。
+本クラスは、ハンドラークラスに継承されるベースクラスです。サブクラスはL</render>を実装しなければなりません。
 
 =head1 ATTRIBUTES
 
@@ -27,7 +27,7 @@ L<Marquee::SSIHandler>は下記の属性を実装します。
 
 =head2 C<log>
 
-C<Mojo::Log>インスタンスです。デフォルトは、もし存在すればC<$app-E<gt>log>です。
+L<Mojo::Log>インスタンスです。デフォルトは、もし存在すればC<$app-E<gt>log>です。
 
     $handler->log('/path/to/handler.log');
     $path = $handler->log;
@@ -63,13 +63,13 @@ L<Marquee::SSIHandler>は下記のインスタンスメソッドを実装しま�
 
     $handler->render($path);
 
-=head2 render_traceable($path)
+=head2 C<render_traceable>
 
 テンプレート名を再帰的にスタックすることで、トレース可能にレンダリングします。
 
     $handler->render_traceable($path);
 
-=head2 traceable($path, sub {...})
+=head2 C<traceable>
 
 トレース可能にコールバックを実行します。
 

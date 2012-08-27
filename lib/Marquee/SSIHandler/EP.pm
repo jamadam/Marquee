@@ -300,7 +300,7 @@ A Hash ref that contains template functions.
 
     $ep->funcs->{some_func} = sub {...};
 
-You can use C<add_function> method to add a function entry instead of the code
+You can use L</add_function> method to add a function entry instead of the code
 above.
 
 =head1 FUNCTIONS
@@ -315,7 +315,7 @@ Returns current template path.
 
 =head2 C<extends>
 
-C<extends> function cooperates with C<placeholder> and C<override>,
+L</extends> function cooperates with L</placeholder> and L</override>,
 provides template inheritance mechanism.
 
 Base template named C<layout/common.html.ep>.
@@ -356,7 +356,7 @@ The handler is auto detected so you don't need to specify the extension.
 
 =head2 C<extends_as>
 
-C<extends_as> inherits a template and extends it.
+L</extends_as> inherits a template and extends it.
 This function is similar to L</extends> but you can specify the handler
 the template would be parsed with.
 

@@ -24,7 +24,7 @@ L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加�
 
     $ep->funcs->{some_func} = sub {...};
 
-上記の例の代わりに、C<add_function>メソッドで関数を追加することも可能です。
+上記の例の代わりに、L</add_function>メソッドで関数を追加することも可能です。
 
 =head1 FUNCTIONS
 
@@ -38,7 +38,7 @@ L<Marquee::SSIHandler::EPL>から全ての属性を継承し、下記を追加�
 
 =head2 C<extends>
 
-C<extends>関数はC<placeholder>とC<override>と共に、テンプレート継承の仕組みを提供します。
+L</extends>関数はL</placeholder>とL</override>と共に、テンプレート継承の仕組みを提供します。
 
 C<layout/common.html.ep>という名前のベーステンプレート。
 
@@ -78,7 +78,7 @@ C<layout/common.html.ep>という名前のベーステンプレート。
 
 =head2 C<extends_as>
 
-C<extends_as>はテンプレートを継承し、拡張します。
+L</extends_as>はテンプレートを継承し、拡張します。
 この関数はL</extends>と似ていますが、テンプレートをパースするハンドラーを指定することができます。
 
 C<template.html>はC<tempalte.html.ep>としない点に注意してください。

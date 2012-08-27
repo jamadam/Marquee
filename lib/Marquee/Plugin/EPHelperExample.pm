@@ -79,6 +79,35 @@ In templates..
 
 This is an example plugin for adding EP template functions.
 
+=head1 FUNCTIONS
+
+The following template functions are available.
+
+=head2 commify
+
+Commifies given number.
+
+    <%= commify(123456789) %> <!-- 123,456,789 -->
+
+=head2 min
+
+Finds the minimum value of array of numbers.
+
+    <%= min(1, 2, 3) %> <!-- 1 -->
+
+=head2 max
+
+Finds the maximum value of array of numbers.
+
+    <%= max(1, 2, 3) %> <!-- 3 -->
+
+=head2 replace
+
+Replaces given string or pattern in given string.
+
+    <%= replace('foo::bar', '::', '/') %> <!-- foo/bar -->
+    <%= replace('foo::::bar', qr{:+}, '/') %> <!-- foo/bar -->
+
 =head1 INSTANCE METHODS
 
 L<Marquee::Plugin::EPHelperExample> inherits all instance methods from

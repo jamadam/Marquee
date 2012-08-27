@@ -8,7 +8,7 @@ Marquee::Plugin::EPHelperExample - EPヘルパーの定義例
 
     $app->plugin('EPHelperExample');
 
-In templates..
+テンプレートにて。。
 
     <%= commify($price) %>
     <%= min(@prices) %>
@@ -20,6 +20,35 @@ In templates..
 
 これはEPテンプレート関数を追加するサンプルプラグインです。
 
+=head1 FUNCTIONS
+
+下記のテンプレート関数が自動的に利用可能です。
+
+=head2 commify
+
+指定の数値をカンマ付きの書式にします。
+
+    <%= commify(123456789) %> <!-- 123,456,789 -->
+
+=head2 min
+
+数値の配列から最小の値を見つけます。
+
+    <%= min(1, 2, 3) %> <!-- 1 -->
+
+=head2 max
+
+数値の配列から最大の値を見つけます。
+
+    <%= max(1, 2, 3) %> <!-- 3 -->
+
+=head2 replace
+
+指定の文字列中の指定の文字列かパターンを置換します。
+
+    <%= replace('foo::bar', '::', '/') %> <!-- foo/bar -->
+    <%= replace('foo::::bar', qr{:+}, '/') %> <!-- foo/bar -->
+
 =head1 INSTANCE METHODS
 
 L<Marquee::Plugin::EPHelperExample>は
@@ -29,7 +58,7 @@ L<Marquee::Plugin>の全てのインスタンスメソッドを継承し、下�
 
 プラグインを登録します。
 
-    $self->register($app, $path_entries);
+    $self->register($app);
 
 =head1 SEE ALSO
 

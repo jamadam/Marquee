@@ -82,7 +82,7 @@ Marquee::SSIHandler - SSI handler base class
 =head1 DESCRIPTION
 
 This is a SSI handler base class to be inherited by handler classes. The sub
-class is MUST implement C<render> method.
+class is MUST implement L</render> method.
 
 =head1 ATTRIBUTES
 
@@ -90,7 +90,7 @@ L<Marquee::SSIHandler> implements the following attributes.
 
 =head2 C<log>
 
-C<Mojo::Log> instance. Defaults to C<$app-E<gt>log> if exists.
+L<Mojo::Log> instance. Defaults to C<$app-E<gt>log> if exists.
 
     $handler->log('/path/to/handler.log');
     $path = $handler->log;

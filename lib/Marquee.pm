@@ -479,7 +479,7 @@ A L<Marquee::Hooks> instance.
 =head2 C<roots>
 
 Array of paths that contains static and templates. Marquee tries to find asset
-files in ascend order in the array. The array is started with C<document_root>
+files in ascend order in the array. The array is started with L</document_root>
 copy, and followed by bundle directories for Marquee core and plugins.
 
     push(@{$app->roots}, 'path/to/additional_dir')
@@ -497,9 +497,9 @@ string. By changing this, you can expire all signed cookies at once.
 An hash ref that contains Server side include handlers. The hash keys
 corresponds to the last extensions of templates.
 
-    $app->ssi_handlers->{ep} = Marquee::SSIHandler::EP->new;
+    $app->ssi_handlers->{myhandler} = Marquee::SSIHandler::MyHandler->new;
 
-You can append SSI association by C<add_handler> method instead of doing above.
+You can append SSI association by L</add_handler> instead of doing above.
 
 =head2 C<stash>
 
@@ -529,6 +529,12 @@ Set X-POWERED-BY response header.
 
     $app->x_powered_by('MyApp');
 
+The header appears as follows.
+
+    Content-Type: text/html;charset=UTF-8
+    X-Powered-By: MyApp
+    Server: Mojolicious (Perl)
+
 =head1 CLASS METHODS
 
 L<Marquee> inherits all class methods from L<Mojo> and implements the following
@@ -542,7 +548,8 @@ Constructor.
 
 =head2 C<asset>
 
-Returns bundled asset path for given file name.
+Returns bundled asset path for given file name. If the file name not speciied,
+The method returns the asset directory.
 
     my $asset = Marquee->asset('path/to/common.css');
     
@@ -552,7 +559,8 @@ Returns bundled asset path for given file name.
     
     say $asset # /path/to/lib/Marquee/Asset
 
-In other packages
+This method allows you to bundle files for perl modules in separated name spaces.
+The following is an example for getting bundle files of arbitrary module.
 
     my $asset = SomePackage->Marquee::asset('path/to/common.css');
     
@@ -569,13 +577,20 @@ following new ones.
 
 =head2 C<add_handler>
 
-Adds C<ssi_handlers> entry.
+Adds L</ssi_handlers> entry. The first argument is corresponds to the last
+extensions of templates. Second argument must be a
+L<Marquee::SSIHandler> sub class instance. See L<Marquee::SSIHandler::EPL> as an
+example.
 
-    $instance->add_handler(ep => Marquee::SSIHandler::EP->new);
+    $app->add_handler(myhandler => Marquee::SSIHandler::MyHandler->new);
+
+Following file will be available.
+
+    template.html.myhandler
 
 =head2 C<c>
 
-An alias for C<context> method.
+An alias for L</context> method.
 
 =head2 C<context>
 
@@ -592,13 +607,14 @@ Front dispatcher.
 
 =head2 C<handler>
 
-Handler called by mojo layer.
+Handler called by mojo layer. This is the base point for every request and sets
+a response to C<$tx>.
 
     $app->handler($tx)
 
 =head2 C<hook>
 
-Alias to $instance->hooks->on. This adds a callback for specified hook point.
+Alias to $app->hooks->on. This adds a callback for specified hook point.
 These hooks are currently available:
 
 =over 2
@@ -641,7 +657,7 @@ Wraps dynamic dispatch process.
 =head2 C<is_directory>
 
 Returns if the path is directory. The search is made against the directories in
-C<roots> attribute paths.
+L</roots> attribute paths.
 
     $app->is_directory('/path/to/directory') # bool
 
@@ -668,9 +684,9 @@ already fully qualified.
 
 =head2 C<render_ssi>
 
-Render SSI and returns the result. This method auto detect the handler with
-C<$path> unless C<$handler_ext> is given. Note that the renderer extension
-is NOT to be suffixed automatically.
+Render given file of path as SSI template and returns the result.
+This method auto detect the handler with the file name unless second argument is
+given. Note that the renderer extension is NOT to be suffixed automatically.
 
     # render /path/to/template.html.ep by ep handler
     my $result = $app->render_ssi('/path/to/template.html.ep');
@@ -684,7 +700,7 @@ is NOT to be suffixed automatically.
 =head2 C<search_static>
 
 Searches for static files for given path and returns the path if exists.
-The search is against the directories in C<roots> attribute.
+The search is against the directories in L</roots> attribute.
 
     my $path = $app->search_static('./a.html'); # /path/to/document_root/a.html
     my $path = $app->search_static('/path/to/a.html'); # /path/to/a.html
@@ -692,7 +708,7 @@ The search is against the directories in C<roots> attribute.
 =head2 C<search_template>
 
 Searches for SSI template for given path and returns the path with SSI
-extension if exists. The search is against the directories in C<roots> attribute.
+extension if exists. The search is against the directories in C</roots> attribute.
 
     my $path = $app->search_template('./tmpl.html'); # /path/to/document_root/tmpl.html.ep
     my $path = $app->search_template('/path/to/tmpl.html'); # /path/to/tmpl.html.ep

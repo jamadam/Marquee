@@ -12,7 +12,6 @@
 	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/yui-reset.css") %>" />
 	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/yui-fonts.css") %>" />
 	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/site_main.css") %>" />
-	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/markdown/site_markdown.css") %>" />
 	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/markdown/site_markdown_index.css") %>" />
 	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/css/prettify-mojo.css") %>" />
 	<link rel="shortcut icon" href="<%= url_for("$static_dir/favicon.ico") %>" />

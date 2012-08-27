@@ -27,9 +27,22 @@ Marquee searches for the following templates or static files.
     /news/sports/hockey.html.ep
     /news/sports/hockey.html.epl
 
-ep handler and epl handler are always available and you can also add your own
-handler easily. You can also override the mapping rule with reqular expression
-with Route plugin bundled in core.
+The hierarcky mapping is similar to typical HTTP servers such as Apache and
+Mason a perl web framework. The extensioning rule is same as Mojolicious.
+
+The second extension indecates a handler for template rendering.
+ep and epl are always available and you can also add your own　handler easily.
+You can also override the mapping rule with Route plugin bundled in core.
+
+    $app->plugin(Router => sub {
+        my $r = shift;
+        $r->route(qr{^/path1\.html})->to(sub {
+            ...
+        });
+        $r->route(qr{^/path2\.html})->to(sub {
+            ...
+        });
+    });
 
 ### Perlish template
 
@@ -65,14 +78,14 @@ This system is more resonable (by comparison to PHP).
 ### Easy to install
 
 Marquee is written in pure-perl and depends on only Mojolicious distribution
-which also pure-perl, so you can even deploy them with FTP clients.
+which is also a pure-perl, so you can even deploy them with FTP clients.
 Though Mojolicious depends on perl-5.10.1 or higher, there is still an option
 to adopt backport project mojo-legacy to run on perl-5.8.7.
 
 ### Mojo toolkit is available
 
 Since Marquee is based on mojo, many mojo classes helps you on manipulating
-such as HTTP request, HTTP response, DOM, JSON.
+such as HTTP requests, responses, DOM and JSON.
 
 ## INSTALLATION
 
@@ -103,6 +116,10 @@ On command line..
     Server available at http://127.0.0.1:3000.
 
 ## COMMAND LINE API
+
+In addition to Perl OOP framework, Marquee also provides command line API to
+serve current directory contents as a web pages, using Mojo::Daemon.
+This is useful for temporarily providing web pages without any Apache things.
 
     mojo marquee [OPTIONS]
 

@@ -26,8 +26,21 @@ Marqueeは下記のようなテンプレートや静的ファイルを検索し�
     /news/sports/hockey.html.ep
     /news/sports/hockey.html.epl
 
-epハンドラーとeplハンドラーは常に利用可能で、任意のハンドラーを追加することも簡単です。
-また、コアに付属のRouteプラグインで、正規表現によるマッピングルールのオーバーライドも可能です。
+階層のマッピングは典型的なApacheなどのHTTPサーバーによく似ており、拡張子のルールはMojoliciousと同様です。
+
+2つ目の拡張子はテンプレートをレンダリングするハンドラーを示します。
+epとeplは常に利用可能で、任意のハンドラーを追加することも簡単です。
+また、コアに付属のRouteプラグインでマッピングルールのオーバーライドも可能です。
+
+    $app->plugin(Router => sub {
+        my $r = shift;
+        $r->route(qr{^/path1\.html})->to(sub {
+            ...
+        });
+        $r->route(qr{^/path2\.html})->to(sub {
+            ...
+        });
+    });
 
 ### Perl風テンプレート
 
@@ -99,6 +112,10 @@ MarqueeクラスはMojoをベースとしていますので、Mojoの提供す�
     Server available at http://127.0.0.1:3000.
 
 ## コマンドラインAPI
+
+MarqueeはPerlのオブジェクト指向フレームワークに加え、カレントディレクトリの内容をMojo::Daemonを使って
+ウェブページとして発行するコマンドラインAPIも提供します。これは、Apacheなどを使わずに一時的にウェブページを
+発行するのに便利です。
 
     mojo marquee [OPTIONS]
 

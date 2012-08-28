@@ -29,9 +29,6 @@ body {
 			#wrapper ul ul ul li {
 				list-style-type: square;
 			}
-#wrapper a {
-	color: inherit
-}
 	#wrapper a:hover {
 		color: #2a2a2a
 	}

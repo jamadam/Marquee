@@ -10,8 +10,10 @@ or PHP.
 
 ### Default URL mapping
 
-By default, Marquee automatically maps request paths to corresponding directory
-tree as follows.
+By default, Marquee automatically maps request paths to corresponding
+file directory structure. This is similar to typical HTTP servers such as Apache
+and this is the leading motivation of this project.
+To keep the URI semantics corresponds to directory tree makes things simple.
 
 Given the request path
     
@@ -24,11 +26,9 @@ application root.
     /public_html/news/sports/hockey.html.ep
     /public_html/news/sports/hockey.html.epl
 
-The hierarcky mapping is similar to typical HTTP servers such as Apache or
-[Mason] a Perl web framework. The extensioning rule is same as [Mojolicious].
-
-The second extension indecates a handler for template rendering.
-ep and epl are always available and you can also add your own　handler easily.
+The extensioning rule is same as [Mojolicious]. The second extension indecates
+a handler for template rendering. ep and epl are always available
+and you can also add your own handler easily.
 
 You can also override the mapping rule with Route plugin bundled in core.
 
@@ -103,7 +103,7 @@ This system is more resonable (by comparison to PHP).
 ### Easy to install
 
 Marquee is written in pure-perl and depends on only [Mojolicious] distribution
-which is also a pure-perl, so you can even deploy them with FTP clients.
+which is also a pure-perl, so you can even deploy them via FTP.
 Though [Mojolicious] depends on perl-5.10.1 or higher, there is still an option
 to adopt backport project [mojo-legacy] to run on perl-5.8.7.
 

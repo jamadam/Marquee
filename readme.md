@@ -14,17 +14,19 @@ Given the request path
     
     /news/sports/hockey.html
 
-Marquee searches for the following templates or static files.
+Marquee searches for the following templates or static files under
+application root.
 
-    /news/sports/hockey.html
-    /news/sports/hockey.html.ep
-    /news/sports/hockey.html.epl
+    /public_html/news/sports/hockey.html
+    /public_html/news/sports/hockey.html.ep
+    /public_html/news/sports/hockey.html.epl
 
-The hierarcky mapping is similar to typical HTTP servers such as Apache and
-Mason a perl web framework. The extensioning rule is same as Mojolicious.
+The hierarcky mapping is similar to typical HTTP servers such as Apache or
+Mason a Perl web framework. The extensioning rule is same as Mojolicious.
 
 The second extension indecates a handler for template rendering.
 ep and epl are always available and you can also add your own　handler easily.
+
 You can also override the mapping rule with Route plugin bundled in core.
 
     $app->plugin(Router => sub {
@@ -40,8 +42,35 @@ You can also override the mapping rule with Route plugin bundled in core.
 ### Perlish template
 
 Marquee provedes Mojo::Template based template handler which allows templates
-to be written in more Perl and less special syntax, therefore, less lerning cost
-(by comparison to Mason).
+to be written in more Perl instead of template specific syntax,
+therefore, it requires less lerning cost (by comparison to Mason).
+
+Basic syntax.
+
+    <% ...; %> <!-- Perl code execution -->
+    <%= ... %> <!-- Perl code output(with html escape) -->
+    <%== ... %> <!-- Perl code output(without html escape) -->
+    
+Block syntax.
+
+    <% $block = begin %>
+        Plain html here
+        <%= ... %>
+        Plain html here
+    <% end %>
+
+Inline Perl code syntax.
+
+    % ...;
+
+Any linebreaks are allowed.
+
+    <%
+        ...;
+        ...;
+    %>
+
+Here's a practical example.
 
     <ul>
         <%
@@ -91,7 +120,7 @@ To install this module, run the following commands:
 
 ## Perl API
 
-Marquee class is based on Mojo. You can run your app in Mojo way
+Marquee class is based on Mojo. You can run your app in Mojo way.
 
     use Marquee;
     

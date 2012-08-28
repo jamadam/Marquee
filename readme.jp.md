@@ -38,7 +38,34 @@ epとeplは常に利用可能で、任意のハンドラーを追加すること
 ### Perl風テンプレート
 
 MarqueeはMojo::Templateベースのテンプレートハンドラーを提供します。
-これにより、テンプレートは(Masonに比べ)よりPerl風でより特殊構文の少ない記述が可能になり、つまり学習コストがより少ないです。
+これにより、テンプレートは(Masonに比べ)テンプレート固有の構文が少ない代わりに、よりPerl風の記述が可能になり、つまり学習コストがより少ないです。
+
+Basic syntax.
+
+    <% ...; %> <!-- Perl code execution -->
+    <%= ... %> <!-- Perl code output(with html escape) -->
+    <%== ... %> <!-- Perl code output(without html escape) -->
+    
+Block syntax.
+
+    <% $block = begin %>
+        Plain html here
+        <%= ... %>
+        Plain html here
+    <% end %>
+
+Inline Perl code syntax.
+
+    % ...;
+
+Any linebreaks are allowed.
+
+    <%
+        ...;
+        ...;
+    %>
+
+Here's a practical example.
 
     <ul>
         <%

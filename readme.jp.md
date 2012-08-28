@@ -1,9 +1,11 @@
 Marquee beta
 ---------------
 
-Marqueeディストリビューションは、Mojoliciousディストリビューション付属のmojoモジュール群のうえに構成された、
+Marqueeディストリビューションは、[Mojolicious]ディストリビューション付属のMojoツールキットのうえに構成された、
 もうひとつのウェブアプリケーションフレームワークです。
-ダイナミックなコンテンツの開発が、デザイナーワークの延長線上に配置されることを想定してデザインされています。
+ダイナミックなウェブサイトの開発が、昔ながらのデザイナーワークの延長線上に配置されることを想定してデザインされています。
+
+これはひょっとすると、[Mason]や[Markup::Perl]、[HTML::Embperl]、或いはPHPの再発明かも知れません。
 
 ### デフォルトのURLマッピング
 
@@ -19,7 +21,7 @@ Marqueeは下記のようなテンプレートや静的ファイルを検索し�
     /news/sports/hockey.html.ep
     /news/sports/hockey.html.epl
 
-階層のマッピングは典型的なApacheなどのHTTPサーバーによく似ており、拡張子のルールはMojoliciousと同様です。
+階層のマッピングは典型的なApacheなどのHTTPサーバーによく似ており、拡張子のルールは[Mojolicious]と同様です。
 
 2つ目の拡張子はテンプレートをレンダリングするハンドラーを示します。
 epとeplは常に利用可能で、任意のハンドラーを追加することも簡単です。
@@ -37,7 +39,7 @@ epとeplは常に利用可能で、任意のハンドラーを追加すること
 
 ### Perl風テンプレート
 
-MarqueeはMojo::Templateベースのテンプレートハンドラーを提供します。
+Marqueeは[Mojo::Template]ベースのテンプレートハンドラーを提供します。
 これにより、テンプレートは(Masonに比べ)テンプレート固有の構文が少ない代わりに、よりPerl風の記述が可能になり、つまり学習コストがより少ないです。
 
 Basic syntax.
@@ -94,9 +96,9 @@ Marqueeはテンプレートの命名をname.format.handlerというスタイル
 
 ### インストールが容易
 
-MarqueeはPure-Perlで実装されており、また、唯一の依存先であるMojoliciousディストリビューションもPure-Perlですので、
+MarqueeはPure-Perlで実装されており、また、唯一の依存先である[Mojolicious]ディストリビューションもPure-Perlですので、
 FTPクライアントですらデプロイ可能です。
-Mojoliciousはperl-5.10.1に依存していますが、バックポートプロジェクトであるmojo-legacyを選択すれば、
+[Mojolicious]はperl-5.10.1に依存していますが、バックポートプロジェクトである[mojo-legacy]を選択すれば、
 Perl-5.8.7以降で動作させることが可能です。
 
 ### Mojoツールキットが利用可能
@@ -133,7 +135,7 @@ MarqueeクラスはMojoをベースとしていますので、Mojoの提供す�
 
 ## コマンドラインAPI
 
-MarqueeはPerlのオブジェクト指向フレームワークに加え、カレントディレクトリの内容をMojo::Daemonを使って
+MarqueeはPerlのオブジェクト指向フレームワークに加え、カレントディレクトリの内容を[Mojo::Daemon]を使って
 ウェブページとして発行するコマンドラインAPIも提供します。これは、Apacheなどを使わずに一時的にウェブページを
 発行するのに便利です。
 
@@ -186,9 +188,9 @@ MarqueeはPerlのオブジェクト指向フレームワークに加え、カレ
 
     $ mojo marquee --auto_index
 
-![Site list](/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
+![Site list](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
 
-![Site list](/jamadam/Marquee/raw/master/screenshot/autoindextree.png "Auto Index")
+![Site list](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindextree.png "Auto Index")
 
 ## REPOSITORY
 
@@ -198,12 +200,21 @@ MarqueeはPerlのオブジェクト指向フレームワークに加え、カレ
 ## CREDIT
 
 Icons by [Yusuke Kamiyamane].
-[Yusuke Kamiyamane]:http://p.yusukekamiyamane.com/
 
 ## COPYRIGHT AND LICENSE
 
 Copyright (c) 2012 [jamadam]
-[jamadam]: http://blog2.jamadam.com/
 
 This program is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
+modify it under the [same terms as Perl itself].
+
+[Mojolicious]:http://mojolicio.us/
+[Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
+[mojo-legacy]:https://github.com/jamadam/mojo-legacy
+[Mojo::Template]:http://search.cpan.org/~sri/Mojolicious-3.35/lib/Mojo/Template.pm
+[Mojo::Daemon]:http://search.cpan.org/~sri/Mojolicious-3.35/lib/Mojo/Daemon.pm
+[same terms as Perl itself]:http://dev.perl.org/licenses/
+[Yusuke Kamiyamane]:http://p.yusukekamiyamane.com/
+[jamadam]: http://blog2.jamadam.com/
+[Markup::Perl]:http://search.cpan.org/~mmathews/Markup-Perl-0.5/lib/Markup/Perl.pm
+[HTML::Embperl]:http://search.cpan.org/~grichter/HTML-Embperl-1.3.6/Embperl.pod

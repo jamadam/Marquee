@@ -1,9 +1,12 @@
 Marquee beta
 ---------------
 
-Marquee distribution is yet another web application framework built on mojo
-modules in Mojolicious distribution, designed to make dynamic content
-development to be plotted at an extension of designer work.
+Marquee distribution is yet another web application framework built on Mojo
+toolkit in [Mojolicious] distribution, designed to make dynamic website
+development to be plotted at an extension of traditional designer work.
+
+This may possibly be a reinvention of [Mason], [Markup::Perl], [HTML::Embperl]
+or PHP.
 
 ### Default URL mapping
 
@@ -22,7 +25,7 @@ application root.
     /public_html/news/sports/hockey.html.epl
 
 The hierarcky mapping is similar to typical HTTP servers such as Apache or
-Mason a Perl web framework. The extensioning rule is same as Mojolicious.
+[Mason] a Perl web framework. The extensioning rule is same as [Mojolicious].
 
 The second extension indecates a handler for template rendering.
 ep and epl are always available and you can also add your own　handler easily.
@@ -41,9 +44,9 @@ You can also override the mapping rule with Route plugin bundled in core.
 
 ### Perlish template
 
-Marquee provedes Mojo::Template based template handler which allows templates
+Marquee provedes [Mojo::Template] based template handler which allows templates
 to be written in more Perl instead of template specific syntax,
-therefore, it requires less lerning cost (by comparison to Mason).
+therefore, it requires less lerning cost (by comparison to [Mason]).
 
 Basic syntax.
 
@@ -99,10 +102,10 @@ This system is more resonable (by comparison to PHP).
 
 ### Easy to install
 
-Marquee is written in pure-perl and depends on only Mojolicious distribution
+Marquee is written in pure-perl and depends on only [Mojolicious] distribution
 which is also a pure-perl, so you can even deploy them with FTP clients.
-Though Mojolicious depends on perl-5.10.1 or higher, there is still an option
-to adopt backport project mojo-legacy to run on perl-5.8.7.
+Though [Mojolicious] depends on perl-5.10.1 or higher, there is still an option
+to adopt backport project [mojo-legacy] to run on perl-5.8.7.
 
 ### Mojo toolkit is available
 
@@ -140,7 +143,7 @@ On command line..
 ## COMMAND LINE API
 
 In addition to Perl OOP framework, Marquee also provides command line API to
-serve current directory contents as a web pages, using Mojo::Daemon.
+serve current directory contents as a web pages, using [Mojo::Daemon].
 This is useful for temporarily providing web pages without any Apache things.
 
 ## SYNOPSIS
@@ -192,9 +195,9 @@ These options are available:
 
     $ mojo marquee --auto_index
 
-![Site list](/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
+![Site list](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
 
-![Site list](/jamadam/Marquee/raw/master/screenshot/autoindextree.png "Auto Index")
+![Site list](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindextree.png "Auto Index")
 
 ## REPOSITORY
 
@@ -204,12 +207,21 @@ These options are available:
 ## CREDIT
 
 Icons by [Yusuke Kamiyamane].
-[Yusuke Kamiyamane]:http://p.yusukekamiyamane.com/
 
 ## COPYRIGHT AND LICENSE
 
 Copyright (c) 2012 [jamadam]
-[jamadam]: http://blog2.jamadam.com/
 
 This program is free software; you can redistribute it and/or
-modify it under the same terms as Perl itself.
+modify it under the [same terms as Perl itself].
+
+[Mojolicious]:http://mojolicio.us/
+[Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
+[mojo-legacy]:https://github.com/jamadam/mojo-legacy
+[Mojo::Template]:http://search.cpan.org/~sri/Mojolicious-3.35/lib/Mojo/Template.pm
+[Mojo::Daemon]:http://search.cpan.org/~sri/Mojolicious-3.35/lib/Mojo/Daemon.pm
+[same terms as Perl itself]:http://dev.perl.org/licenses/
+[Yusuke Kamiyamane]:http://p.yusukekamiyamane.com/
+[jamadam]: http://blog2.jamadam.com/
+[Markup::Perl]:http://search.cpan.org/~mmathews/Markup-Perl-0.5/lib/Markup/Perl.pm
+[HTML::Embperl]:http://search.cpan.org/~grichter/HTML-Embperl-1.3.6/Embperl.pod

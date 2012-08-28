@@ -50,34 +50,26 @@ therefore, it requires less lerning cost (by comparison to [Mason]).
 
 Basic syntax.
 
-    <% ...; %> <!-- Perl code execution -->
-    <%= ... %> <!-- Perl code output(with html escape) -->
-    <%== ... %> <!-- Perl code output(without html escape) -->
+    <% ...; %> <!-- execute Perl code -->
+    <%= ... %> <!-- execute Perl code and output(with html escape) -->
+    <%== ... %> <!-- execute Perl code and output(without html escape) -->
+    % ...; # execute inline Perl code
+    %= ...; # execute inline Perl code code and output(with html escape)
+    %== ...; # execute inline Perl code code and output(without html escape)
     
 Block syntax.
 
-    <% $block = begin %>
+    <% my $block = begin %>
         Plain html here
         <%= ... %>
         Plain html here
     <% end %>
 
-Inline Perl code syntax.
-
-    % ...;
-
-Any linebreaks are allowed.
-
-    <%
-        ...;
-        ...;
-    %>
-
 Here's a practical example.
 
     <ul>
         <%
-            require ./lib/NewsRelease.pm;
+            require './lib/NewsRelease.pm';
             my $news = NewsRelease->new();
             my @array = $news->fetch(5);
         %>
@@ -140,10 +132,10 @@ On command line..
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.
 
-## COMMAND LINE API
+## COMMAND LINE INTERFACE
 
-In addition to Perl OOP framework, Marquee also provides command line API to
-serve current directory contents as a web pages, using [Mojo::Daemon].
+In addition to Perl OOP API, Marquee also provides command line interface
+to serve current directory contents as a web pages, using [Mojo::Daemon].
 This is useful for temporarily providing web pages without any Apache things.
 
 ## SYNOPSIS

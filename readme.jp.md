@@ -44,34 +44,26 @@ Marqueeは[Mojo::Template]ベースのテンプレートハンドラーを提供
 
 Basic syntax.
 
-    <% ...; %> <!-- Perl code execution -->
-    <%= ... %> <!-- Perl code output(with html escape) -->
-    <%== ... %> <!-- Perl code output(without html escape) -->
+    <% ...; %> <!-- execute Perl code -->
+    <%= ... %> <!-- execute Perl code and output(with html escape) -->
+    <%== ... %> <!-- execute Perl code and output(without html escape) -->
+    % ...; # execute inline Perl code
+    %= ...; # execute inline Perl code code and output(with html escape)
+    %== ...; # execute inline Perl code code and output(without html escape)
     
 Block syntax.
 
-    <% $block = begin %>
+    <% my $block = begin %>
         Plain html here
         <%= ... %>
         Plain html here
     <% end %>
 
-Inline Perl code syntax.
-
-    % ...;
-
-Any linebreaks are allowed.
-
-    <%
-        ...;
-        ...;
-    %>
-
 Here's a practical example.
 
     <ul>
         <%
-            require ./lib/NewsRelease.pm;
+            require './lib/NewsRelease.pm';
             my $news = NewsRelease->new();
             my @array = $news->fetch(5);
         %>
@@ -133,10 +125,10 @@ MarqueeクラスはMojoをベースとしていますので、Mojoの提供す�
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.
 
-## コマンドラインAPI
+## コマンドラインインターフェース
 
-MarqueeはPerlのオブジェクト指向フレームワークに加え、カレントディレクトリの内容を[Mojo::Daemon]を使って
-ウェブページとして発行するコマンドラインAPIも提供します。これは、Apacheなどを使わずに一時的にウェブページを
+MarqueeはPerlのオブジェクト指向APIに加え、カレントディレクトリの内容を[Mojo::Daemon]を使って
+ウェブページとして発行するコマンドラインインターフェースも提供します。これは、Apacheなどを使わずに一時的にウェブページを
 発行するのに便利です。
 
 ## SYNOPSIS

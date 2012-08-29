@@ -12,7 +12,7 @@
 		<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/site_file_list.css") %>" />
 		<script type="text/javascript" src="<%= url_for("$static_dir/site_file_list.js") %>"></script>
 	<% end %>
-	<%= placeholder 'h1AdditionalContent' => begin %>
+	<%= override 'h1AdditionalContent' => begin %>
         Index of <code><%= $dir %></code>
 	<% end %>
 	<% override 'mainContent' => begin %>

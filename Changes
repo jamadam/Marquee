@@ -1,6 +1,9 @@
 Revision history for Marquee
 
-0.09 2012/08/29
+0.09 2012/08/30
+  - Fixed bundling HTML to be valid.
+  - Fixed debug screen for non-505 errors.
+  - Improved documentation.
 
 0.08 2012/08/29
   - Added markdown plugin and a command line option.

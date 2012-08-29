@@ -12,6 +12,7 @@
 		<script type="text/javascript" src="<%= url_for("$static_dir/js/prettify.js") %>"></script>
 	<% end %>
 	<%= override 'h1AdditionalContent' => begin %>
+	Markdown Viewer
 	<% end %>
 	<% override 'mainContent' => begin %>
 		<h2>

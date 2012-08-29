@@ -144,9 +144,14 @@ C<template.html>はC<tempalte.html.ep>としない点に注意してください
 
 =head2 C<to_abs>
 
-指定の相対パスから絶対パスを生成します。
+指定の相対パスから、ファイルシステム上の絶対パスを生成します。前置のドットセグメントは現在のテンプレートを示し、
+前置のスラッシュはMarqueeルートを示します。
 
-    <%= to_abs('./path.css') %>
+    <%= to_abs('/path.css') %> <!-- /path/to/Marquee/path.css -->
+
+C</path/to/Marquee/html/category/index.html>にて
+
+    <%= to_abs('./path.css') %> <!-- /path/to/Marquee/html/category/path.css  -->
 
 =head2 C<url_for>
 

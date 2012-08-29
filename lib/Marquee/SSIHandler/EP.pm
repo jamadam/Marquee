@@ -293,7 +293,7 @@ sub _to_abs {
     my ($self, $path) = @_;
     
     (my $root, $path) = ($path =~ qr{^/(.+)})
-                                ? (Marquee->c->app->document_root, $1)
+                                ? (Marquee->c->app->home, $1)
                                 : (dirname($self->current_template), $path);
     
     return File::Spec->canonpath(File::Spec->catfile($root, $path));
@@ -453,9 +453,15 @@ Returns stash value for given key.
 
 =head2 C<to_abs>
 
-Generate absolute path with given relative one
+Generate absolute path for server filesystem root with given relative one.
+Leading dot-segment indicates current file and the leading slash indicates
+Marquee root.
 
-    <%= to_abs('./path.css') %>
+    <%= to_abs('/path.css') %> <!-- /path/to/Marquee/path.css -->
+
+At C</path/to/Marquee/html/category/index.html>
+
+    <%= to_abs('./path.css') %> <!-- /path/to/Marquee/html/category/path.css  -->
 
 =head2 C<url_for>
 

@@ -16,6 +16,7 @@ body {
 body {
 	font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
 	line-height: 1.5;
+	overflow-y: scroll;
 }
 	code {
 		background-color: #EEF9FF;

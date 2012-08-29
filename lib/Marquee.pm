@@ -396,7 +396,7 @@ __END__
 
 =head1 NAME
 
-Marquee - Simple HTTP server with Server-side include
+Marquee - Yet another Mojolicious based web framework
 
 =head1 SYNOPSIS
 

@@ -1,13 +1,14 @@
 Revision history for Marquee
 
-0.08 2012/08/23
+0.08 2012/08/29
   - Added markdown plugin and a command line option.
   - Added extends_as function for ep handler.
   - Added POD translations for Japanese.
   - Improved documentations.
-  - Improved POD viewer.
+  - Improved POD viewer and.
   - Improved context class API.
   - Changed router plugin API.
+  - Changed that leading slash for to_abs indidates Marquee root.
   - Fixed a bug on default_file handling.
   - Fixed start method to catchup mojo Commit:2111684fe5b986d00ec5e8abef405d414aa34086
 

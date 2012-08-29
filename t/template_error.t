@@ -11,7 +11,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use Marquee;
 
-use Test::More tests => 56;
+use Test::More tests => 79;
 
 my $app;
 my $t;
@@ -34,6 +34,44 @@ $t->get_ok('/not_good2.html')
 ### debug screen
 
 $app->under_development(1);
+
+### 404 on development mode
+
+$t->get_ok('/not_found.html')
+    ->status_is(404)
+    ->header_is('Content-Type', 'text/html;charset=UTF-8')
+    ->element_exists('body#debugScreen')
+    ->dom_inspector(sub {
+        my $t = shift;
+        $t->at('title')->text_is('Debug Screen');
+        $t->at('#showcase pre')->text_is(q{File Not Found});
+        
+        ### request
+        
+        $t->at('#request tr:nth-child(1) td.key')->content_xml_is('Method:');
+        $t->at('#request tr:nth-child(1) td.value pre')->content_xml_is('GET');
+        $t->at('#request tr:nth-child(2) td.key')->content_xml_is('URL:');
+        $t->at('#request tr:nth-child(2) td.value pre')->content_xml_is('/not_found.html');
+        $t->at('#request tr:nth-child(3) td.key')->content_xml_is('Base URL:');
+        $t->at('#request tr:nth-child(3) td.value pre')->content_xml_like(qr'^http://localhost:');
+        $t->at('#request tr:nth-child(4) td.key')->content_xml_is('Parameters:');
+        $t->at('#request tr:nth-child(4) td.value pre')->content_xml_is("{}\n");
+        $t->at('#request tr:nth-child(4) td.key')->content_xml_is('Parameters:');
+        $t->at('#request tr:nth-child(4) td.value pre')->content_xml_is("{}\n");
+        $t->at('#request tr:nth-child(5) td.key')->content_xml_is('Stash:');
+        $t->at('#request tr:nth-child(5) td.value pre')->content_xml_is("{}\n");
+        
+        ### more
+        
+        $t->at('#more tr:nth-child(1) td.key')->content_xml_is('Perl:');
+        $t->at('#more tr:nth-child(1) td.value pre')->content_xml_like(qr'^v\d+\.\d+');
+        $t->at('#more tr:nth-child(2) td.key')->content_xml_is('Marquee:');
+        $t->at('#more tr:nth-child(2) td.value pre')->content_xml_like(qr'^\d+\.\d+');
+        
+        ### others
+        
+        $t->at('#trace .value')->element_exists;
+    });
 
 $t->get_ok('/not_good.html')
     ->status_is(500)

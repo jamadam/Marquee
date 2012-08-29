@@ -4,7 +4,7 @@ use warnings;
 use Mojo::Base -base;
 use Mojo::Util qw'encode decode';
 
-my %messages = (
+my %catalog = (
     404 => 'File Not Found',
     500 => 'Internal Server Error',
     403 => 'Forbidden',
@@ -28,13 +28,15 @@ sub serve {
         my $snapshot = $stash->clone;
         $ep->add_function(snapshot => sub {$snapshot});
         $template = Marquee->asset('debug_screen.html.ep');
-        $message = ref $message ? $message : Mojo::Exception->new($message);
+        $message = ref $message
+                ? $message
+                : Mojo::Exception->new($message || $catalog{$code});
     }
     
     $stash->set(
         static_dir  => 'static',
         code        => $code,
-        message     => $message || $messages{$code},
+        message     => $message || $catalog{$code},
     );
     
     $c->res->code($code);

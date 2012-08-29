@@ -42,17 +42,19 @@
 	    <div id="showcase" class="box code">
 			<pre><%= $exception->message %></pre>
 			<div id="context">
-				<table>
-					% for my $line (@{$exception->lines_before}) {
-						%= $cv->($line->[0], $line->[1])
-					% }
-					% if (defined $exception->line->[1]) {
-						%= $cv->($exception->line->[0], $exception->line->[1], 1)
-					% }
-					% for my $line (@{$exception->lines_after}) {
-						%= $cv->($line->[0], $line->[1])
-					% }
-				</table>
+				% if (@{$exception->lines_before}) {
+					<table>
+						% for my $line (@{$exception->lines_before}) {
+							%= $cv->($line->[0], $line->[1])
+						% }
+						% if (defined $exception->line->[1]) {
+							%= $cv->($exception->line->[0], $exception->line->[1], 1)
+						% }
+						% for my $line (@{$exception->lines_after}) {
+							%= $cv->($line->[0], $line->[1])
+						% }
+					</table>
+				% }
 			</div>
 			% if (defined $exception->line->[2]) {
 				<div id="insight">
@@ -84,8 +86,8 @@
 				</script>
 			% }
 		</div>
-		<div id="trace" class="box spaced">
-			% if (@{$exception->frames}) {
+		% if (@{$exception->frames}) {
+			<div id="trace" class="box spaced">
 				<div class="infobox" id="frames">
 					<table>
 						% for my $frame (@{$exception->frames}) {
@@ -104,8 +106,8 @@
 					});
 					$('#frames').toggle();
 				</script>
-			% }
-		</div>
+			</div>
+		% }
 		<div id="request" class="box infobox spaced">
 			<table>
 				% my $req = $c->req;

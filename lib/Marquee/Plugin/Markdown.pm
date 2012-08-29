@@ -66,7 +66,7 @@ sub serve_markdown {
     
     my @parts = ();
     
-    open my $file, '<', $path or die 'cannot open';
+    open my $file, '<', $path or die "cannot open $path";
     my $html = markdown(decode('UTF-8', join('', <$file>)));
     my $dom = Mojo::DOM->new($html);
     

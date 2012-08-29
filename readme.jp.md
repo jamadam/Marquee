@@ -1,7 +1,7 @@
 Marquee beta
 ---------------
 
-Marqueeディストリビューションは、[Mojolicious]ディストリビューション付属のMojoツールキットのうえに構成された、
+[Marquee]ディストリビューションは、[Mojolicious]ディストリビューション付属のMojoツールキットのうえに構成された、
 もうひとつのウェブアプリケーションフレームワークです。
 ダイナミックなウェブサイトの開発が、昔ながらのデザイナーワークの延長線上に配置されることを想定してデザインされています。
 
@@ -9,7 +9,7 @@ Marqueeディストリビューションは、[Mojolicious]ディストリビュ
 
 ### デフォルトのURLマッピング
 
-Marqueeはデフォルトで、リクエストパスを対応するファイルとディレクトリの構造にマッピングします。
+[Marquee]はデフォルトで、リクエストパスを対応するファイルとディレクトリの構造にマッピングします。
 これはApacheなどの典型的なHTTPサーバーと同様で、このことは本プロジェクトの主要な動機です。
 URIの意味をディレクトリ構造に対応させることは物事をシンプルにします。
 
@@ -17,7 +17,7 @@ URIの意味をディレクトリ構造に対応させることは物事をシ�
     
     /news/sports/hockey.html
 
-Marqueeは下記のようなテンプレートや静的ファイルを検索します。
+[Marquee]は下記のようなテンプレートや静的ファイルを検索します。
 
     /news/sports/hockey.html
     /news/sports/hockey.html.ep
@@ -39,7 +39,7 @@ epとeplは常に利用可能で、任意のハンドラーを追加すること
 
 ### Perl風テンプレート
 
-Marqueeは[Mojo::Template]ベースのテンプレートハンドラーを提供します。
+[Marquee]は[Mojo::Template]ベースのテンプレートハンドラーを提供します。
 これにより、テンプレートは(Masonに比べ)テンプレート固有の構文が少ない代わりに、よりPerl風の記述が可能になり、つまり学習コストがより少ないです。
 
 Basic syntax.
@@ -78,7 +78,7 @@ Here's a practical example.
 
 ### Content-Typeの自動生成
 
-Marqueeはテンプレートの命名をname.format.handlerというスタイルに制限しているため、
+[Marquee]はテンプレートの命名をname.format.handlerというスタイルに制限しているため、
 システムはContent-Typeを自動検出し、ヘッダーを暗黙的に出力することができます。この方式は(PHPに比べ)
 より合理的です。
 
@@ -88,14 +88,14 @@ Marqueeはテンプレートの命名をname.format.handlerというスタイル
 
 ### インストールが容易
 
-MarqueeはPure-Perlで実装されており、また、唯一の依存先である[Mojolicious]ディストリビューションもPure-Perlですので、
+[Marquee]はPure-Perlで実装されており、また、唯一の依存先である[Mojolicious]ディストリビューションもPure-Perlですので、
 FTP経由ですらデプロイ可能です。
 [Mojolicious]はperl-5.10.1に依存していますが、バックポートプロジェクトである[mojo-legacy]を選択すれば、
 Perl-5.8.7以降で動作させることが可能です。
 
 ### Mojoツールキットが利用可能
 
-Marqueeはmojoのうえに実装されているため、多くのmojoクラスによって、HTTPリクエストや、HTTPレスポンス、DOM、JSONなどの操作が簡単に行えます。
+[Marquee]はmojoのうえに実装されているため、多くのmojoクラスによって、HTTPリクエストや、HTTPレスポンス、DOM、JSONなどの操作が簡単に行えます。
 
 ## インストール
 
@@ -108,7 +108,7 @@ Marqueeはmojoのうえに実装されているため、多くのmojoクラス�
 
 ## Perl API
 
-MarqueeクラスはMojoをベースとしていますので、Mojoの提供する方法でアプリを動作させます。
+[Marquee]クラスはMojoをベースとしていますので、Mojoの提供する方法でアプリを動作させます。
 
     use Marquee;
     
@@ -125,9 +125,14 @@ MarqueeクラスはMojoをベースとしていますので、Mojoの提供す�
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.
 
+より詳しい情報は下記のAPIドキュメントを参照してください。
+
+- [Marquee](http://marquee.jamadam.com/perldoc/Marquee) (Marquee base class)
+- [Marquee::SSIHandler::EP](http://marquee.jamadam.com/perldoc/Marquee/SSIHandler/EP) (Perlish template class)
+
 ## コマンドラインインターフェース
 
-MarqueeはPerlのオブジェクト指向APIに加え、カレントディレクトリの内容を[Mojo::Daemon]を使って
+[Marquee]はPerlのオブジェクト指向APIに加え、カレントディレクトリの内容を[Mojo::Daemon]を使って
 ウェブページとして発行するコマンドラインインターフェースも提供します。これは、Apacheなどを使わずに一時的にウェブページを
 発行するのに便利です。
 
@@ -200,6 +205,7 @@ Copyright (c) 2012 [jamadam]
 This program is free software; you can redistribute it and/or
 modify it under the [same terms as Perl itself].
 
+[Marquee]:http://marquee.jamadam.com/perldoc/Marquee
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy

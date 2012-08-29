@@ -1,7 +1,7 @@
 Marquee beta
 ---------------
 
-Marquee distribution is yet another web application framework built on Mojo
+[Marquee] distribution is yet another web application framework built on Mojo
 toolkit in [Mojolicious] distribution, designed to make dynamic website
 development to be plotted at an extension of traditional designer work.
 
@@ -10,7 +10,7 @@ or PHP.
 
 ### Default URL mapping
 
-By default, Marquee automatically maps request paths to corresponding
+By default, [Marquee] automatically maps request paths to corresponding
 file directory structure. This is similar to typical HTTP servers such as Apache
 and this is the leading motivation of this project.
 To keep the URI semantics corresponds to directory tree makes things simple.
@@ -19,7 +19,7 @@ Given the request path
     
     /news/sports/hockey.html
 
-Marquee searches for the following templates or static files under
+[Marquee] searches for the following templates or static files under
 application root.
 
     /public_html/news/sports/hockey.html
@@ -44,7 +44,7 @@ You can also override the mapping rule with Route plugin bundled in core.
 
 ### Perlish template
 
-Marquee provedes [Mojo::Template] based template handler which allows templates
+[Marquee] provedes [Mojo::Template] based template handler which allows templates
 to be written in more Perl instead of template specific syntax,
 therefore, it requires less lerning cost (by comparison to [Mason]).
 
@@ -84,7 +84,7 @@ Here's a practical example.
 
 ### Generating Content-Type automatically
 
-Marquee restricts the name of templates as name.format.handler style so that
+[Marquee] restricts the name of templates as name.format.handler style so that
 the system can auto detect Content-Type and implicitly serve the header.
 This system is more resonable (by comparison to PHP).
 
@@ -94,14 +94,14 @@ This system is more resonable (by comparison to PHP).
 
 ### Easy to install
 
-Marquee is written in pure-perl and depends on only [Mojolicious] distribution
+[Marquee] is written in pure-perl and depends on only [Mojolicious] distribution
 which is also a pure-perl, so you can even deploy them via FTP.
 Though [Mojolicious] depends on perl-5.10.1 or higher, there is still an option
 to adopt backport project [mojo-legacy] to run on perl-5.8.7.
 
 ### Mojo toolkit is available
 
-Since Marquee is based on mojo, many mojo classes helps you on manipulating
+Since [Marquee] is based on mojo, many mojo classes helps you on manipulating
 such as HTTP requests, responses, DOM and JSON.
 
 ## INSTALLATION
@@ -115,7 +115,7 @@ To install this module, run the following commands:
 
 ## Perl API
 
-Marquee class is based on Mojo. You can run your app in Mojo way.
+[Marquee] class is based on Mojo. You can run your app in Mojo way.
 
     use Marquee;
     
@@ -131,6 +131,11 @@ On command line..
 
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.
+
+For more information refer to API documentations.
+
+- [Marquee](http://marquee.jamadam.com/perldoc/Marquee) (Marquee base class)
+- [Marquee::SSIHandler::EP](http://marquee.jamadam.com/perldoc/Marquee/SSIHandler/EP) (Perlish template class)
 
 ## COMMAND LINE INTERFACE
 
@@ -207,6 +212,7 @@ Copyright (c) 2012 [jamadam]
 This program is free software; you can redistribute it and/or
 modify it under the [same terms as Perl itself].
 
+[Marquee]:http://marquee.jamadam.com/perldoc/Marquee
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy

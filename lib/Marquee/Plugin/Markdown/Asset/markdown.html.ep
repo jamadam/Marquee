@@ -10,6 +10,13 @@
 		<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/markdown/site_markdown.css") %>" />
 		<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/css/prettify-mojo.css") %>" />
 		<script type="text/javascript" src="<%= url_for("$static_dir/js/prettify.js") %>"></script>
+		<script type="text/javascript">
+		//<![CDATA[
+		$(window).load(function() {
+			prettyPrint()
+		});
+		//]]>
+		</script>
 	<% end %>
 	<%= override 'h1AdditionalContent' => begin %>
 	Markdown Viewer
@@ -18,10 +25,3 @@
 		<%== stash('markdown') %>
 	<% end %>
 <% end %>
-<script type="text/javascript">
-//<![CDATA[
-$(window).load(function() {
-	prettyPrint()
-});
-//]]>
-</script>

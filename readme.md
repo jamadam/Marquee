@@ -115,22 +115,34 @@ To install this module, run the following commands:
 
 ## Perl API
 
-[Marquee] class is based on Mojo. You can run your app in Mojo way.
+Here is a smallest Marquee application.
 
     use Marquee;
     
     my $app = Marquee->new;
-    $app->document_root($path);
-    $app->default_file('index.html');
-    
-    $app->plugin('AutoIndex');
     
     $app->start;
 
-On command line..
+You also can separate the app into own class (shown below) and
+boot script (similar to above).
+
+    package MyApp;
+    use Mojo::Base 'Marquee';
+    
+    sub new {
+        my $self = shift->SUPER::new(@_);
+        ...
+        return $self;
+    }
+
+The application can be start in Mojo way.
 
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.
+
+For productions use..
+    
+    $ hypnotoad ./myapp
 
 For more information refer to API documentations.
 

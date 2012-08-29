@@ -108,22 +108,34 @@ Perl-5.8.7以降で動作させることが可能です。
 
 ## Perl API
 
-[Marquee]クラスはMojoをベースとしていますので、Mojoの提供する方法でアプリを動作させます。
+最小のMarqueeアプリです。
 
     use Marquee;
     
     my $app = Marquee->new;
-    $app->document_root($path);
-    $app->default_file('index.html');
-    
-    $app->plugin('AutoIndex');
     
     $app->start;
 
-コマンドラインで下記のように起動します。
+アプリは下記のような独自のクラスと上記のような起動スクリプトに分けることもできます。
+
+    package MyApp;
+    use Mojo::Base 'Marquee';
+    
+    sub new {
+        my $self = shift->SUPER::new(@_);
+        ...
+        return $self;
+    }
+
+このアプリはMojoのやり方で起動できます。
+The application can be start in Mojo way.
 
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.
+
+プロダクションでは..
+    
+    $ hypnotoad ./myapp
 
 より詳しい情報は下記のAPIドキュメントを参照してください。
 

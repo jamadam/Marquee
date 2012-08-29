@@ -224,6 +224,8 @@ sub _init {
         if (my $path = $app->search_template($path)) {
             return b($app->render_ssi($path, 'ep'));
         }
+        
+        die "$path not found";
     };
     
     $self->funcs->{extends_as} = sub {
@@ -240,6 +242,8 @@ sub _init {
         if (my $path = $app->search_static($path)) {
             return b($app->render_ssi($path, $handler));
         }
+        
+        die "$path not found";
     };
     
     return $self;

@@ -27,8 +27,11 @@ $t = Test::Mojo::DOM->new($app);
 
 {
     use Mojo::Transaction::HTTP;
-    Marquee->c(Marquee::Context->new(app => Marquee->new, tx => Mojo::Transaction::HTTP->new));
+    my $app = Marquee->new;
+    $app->document_root("$FindBin::Bin/public_html");
+    Marquee->c(Marquee::Context->new(app => $app, tx => Mojo::Transaction::HTTP->new));
     my $pv = Marquee::Plugin::PODViewer->new;
+    $app->_init;
     $pv->serve_pod(<<EOF);
 =head1 a
 
@@ -45,7 +48,6 @@ $t = Test::Mojo::DOM->new($app);
 EOF
     
     my $t = Test::Mojo::DOM::Inspector->new(Marquee->c->res->dom);
-    
     $t->at('ul li:nth-child(1) a')->attr_is('href', '#a');
     $t->at('ul li:nth-child(2) a')->attr_is('href', '#b');
     $t->at('ul li:nth-child(3) a')->attr_is('href', '#c');
@@ -59,7 +61,7 @@ EOF
 $t->get_ok('/perldoc/Marquee')
     ->status_is(200)
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
-    ->text_is('title', 'Marquee - Simple HTTP server with Server-side include')
+    ->text_is('title', 'Marquee - Simple HTTP server with Server-side include - Pod viewer')
     ->text_is('a[name=COPYRIGHT_AND_LICENSE]', 'COPYRIGHT AND LICENSE');
 
 # deep namespace
@@ -67,7 +69,7 @@ $t->get_ok('/perldoc/Marquee')
 $t->get_ok('/perldoc/Marquee/SSIHandler')
     ->status_is(200)
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
-    ->text_is('title', 'Marquee::SSIHandler - SSI handler base class')
+    ->text_is('title', 'Marquee::SSIHandler - SSI handler base class - Pod viewer')
     ->element_exists('a[name=SEE_ALSO]')
     ->dom_inspector(sub {
         my $t = shift;
@@ -91,7 +93,7 @@ $t = Test::Mojo::DOM->new($app);
 $t->get_ok('/perldoc/Marquee/SSIHandler')
     ->status_is(200)
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
-    ->text_is('title', 'Marquee::SSIHandler - SSI handler base class')
+    ->text_is('title', 'Marquee::SSIHandler - SSI handler base class - Pod viewer')
     ->element_exists('a[name=SEE_ALSO]');
     
 

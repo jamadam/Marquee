@@ -1,33 +1,27 @@
-<!DOCTYPE html>
-<html>
-  <head>
-	<%
-		my $c 			= shift;
-		my $static_dir 	= stash('static_dir');
-	%>
-    <title><%= stash('title') %></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="Content-Script-Type" content="text/javascript" />
-	<meta http-equiv="Content-Style-Type" content="text/css" />
-	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/yui-reset.css") %>" />
-	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/yui-fonts.css") %>" />
-	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/site_main.css") %>" />
-	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/markdown/site_markdown.css") %>" />
-	<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/css/prettify-mojo.css") %>" />
-	<link rel="shortcut icon" href="<%= url_for("$static_dir/favicon.ico") %>" />
-    <script type="text/javascript" src="<%= url_for("$static_dir/jquery.1.7.1.js") %>"></script>
-    <script type="text/javascript" src="<%= url_for("$static_dir/js/prettify.js") %>"></script>
-    <style type="text/css">
-    </style>
-  </head>
-  <body onload="prettyPrint()">
-	<h1>
-	  <code><%= stash('title') %></code>
-	</h1>
-    <div id="wrapper">
-	  <%== stash('markdown') %>
-	</div>
-	<div id="footer">
-	</div>
-  </body>
-</html>
+<%
+	my $c 			= shift;
+	my $static_dir 	= stash('static_dir');
+=%>
+<%= extends '/base.html' => begin %>
+	<% override 'title' => begin %>
+		<title><%= stash('title') %> - Markdown viewer</title>
+	<% end %>
+	<% override 'additionalHead' => begin %>
+		<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/markdown/site_markdown.css") %>" />
+		<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/css/prettify-mojo.css") %>" />
+		<script type="text/javascript" src="<%= url_for("$static_dir/js/prettify.js") %>"></script>
+	<% end %>
+	<%= override 'h1AdditionalContent' => begin %>
+	Markdown Viewer
+	<% end %>
+	<% override 'mainContent' => begin %>
+		<%== stash('markdown') %>
+	<% end %>
+<% end %>
+<script type="text/javascript">
+//<![CDATA[
+$(window).load(function() {
+	prettyPrint()
+});
+//]]>
+</script>

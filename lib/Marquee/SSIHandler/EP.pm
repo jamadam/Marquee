@@ -133,7 +133,7 @@ sub _init {
     $self->funcs->{include} = sub {
         my ($self, $path, @args) = @_;
         
-        $path = $self->_to_abs($path);
+        $path = $self->_doc_path($path);
         my $c = Marquee->c;
         
         if (my $path = $c->app->search_static($path)) {
@@ -152,12 +152,11 @@ sub _init {
     $self->funcs->{include_as} = sub {
         my ($self, $path, $handler, @args) = @_;
         
-        $path = $self->_to_abs($path);
+        $path = $self->_doc_path($path);
         my $c = Marquee->c;
         my $app = $c->app;
         
-        if (my $path = $app->search_static($path)
-                                    || $app->search_template($path)) {
+        if (my $path = $app->search_static($path)) {
             local $c->{stash} = $c->{stash}->clone;
             $c->{stash}->set(@args);
             return b($app->render_ssi($path, $handler));
@@ -214,26 +213,33 @@ sub _init {
         my ($self, $path, $block) = @_;
         
         my $c = Marquee->c;
+        my $app = $c->app;
+        
+        $path = $self->_doc_path($path);
         
         local $c->{stash} = $c->{stash}->clone;
         
         $block->();
         
-        return b($c->app->render_ssi($self->_to_abs($path. '.ep')));
+        if (my $path = $app->search_template($path)) {
+            return b($app->render_ssi($path, 'ep'));
+        }
     };
     
     $self->funcs->{extends_as} = sub {
         my ($self, $path, $handler, $block) = @_;
-        
+
+        $path = $self->_doc_path($path);
         my $c = Marquee->c;
+        my $app = $c->app;
         
         local $c->{stash} = $c->{stash}->clone;
         
         $block->();
         
-        return
-            Mojo::ByteStream->new(
-                        $c->app->render_ssi($self->_to_abs($path), $handler));
+        if (my $path = $app->search_static($path)) {
+            return b($app->render_ssi($path, $handler));
+        }
     };
     
     return $self;
@@ -257,6 +263,23 @@ sub url_for {
 ### --
 sub _ph_name {
     return "mrqe.SSIHandler.EP.". shift;
+}
+
+### --
+### generate file path relative to document root
+### --
+sub _doc_path {
+    my ($self, $path) = @_;
+    
+    (my $root, $path) = ($path =~ qr{^/(.+)})
+                                ? (Marquee->c->app->document_root, $1)
+                                : (dirname($self->current_template), $path);
+    
+    my $abs = File::Spec->canonpath(File::Spec->catfile($root, $path));
+    for my $root (@{Marquee->c->app->roots}) {
+        last if ($abs =~ s{^$root/}{});
+    }
+    return $abs;
 }
 
 ### --

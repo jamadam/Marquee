@@ -61,7 +61,7 @@ EOF
 $t->get_ok('/perldoc/Marquee')
     ->status_is(200)
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
-    ->text_is('title', 'Marquee - Simple HTTP server with Server-side include - Pod viewer')
+    ->text_is('title', 'Marquee - Yet another Mojolicious based web framework - Pod viewer')
     ->text_is('a[name=COPYRIGHT_AND_LICENSE]', 'COPYRIGHT AND LICENSE');
 
 # deep namespace

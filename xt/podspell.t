@@ -72,3 +72,6 @@ namespace
 commify
 min
 max
+CGI
+htaccess
+Hypnotoad

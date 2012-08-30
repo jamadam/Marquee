@@ -1,0 +1,150 @@
+=head1 NAME
+
+Cookbook - Marquee cookbook
+
+=head1 OVERVIEW
+
+This document contains some recipes to develop Marquee application.
+
+=head1 CONTEXT OBJECT
+
+Marquee don't encourage taking context objects around method calls.
+You can always get a localized one via Marquee class method from anywhere
+in you application.
+For more information see also L<Marquee/context> and L<Marquee::Context>.
+
+    my $context = Marquee->c;
+
+=head1 STASH
+
+Stash is a wide scope hash for sharing data. Marquee defines two levels for
+stash scope, application level and request level. Application level stash can
+be referred from anywhere in your application. Request level stash is a
+local copy of application level stash and last during the transaction.
+Both are belong to application and accessible
+by same interface C<$app-E<gt>stash>.
+For more information see also L<Marqee/Stash> and L<Marquee::Stash>.
+
+    $app = Marquee->new;
+    $app->stash(mydata => 'my value'); # set data
+
+Inside template..
+
+    <% my $stash = Marquee->stash(); # local copy for a request %>
+
+Application level data transparently available.
+
+    <%= $stash->{mydata} %> <!-- my value -->
+
+The set data is available during the transaction.
+
+    <% $stash->set(req_data => time) %>
+
+=head1 TEMPLATING
+
+The bundled template handler for Marquee L<Marquee::SSIHandler::EP> is
+very similar to L<Mojolicious::Plugin::EPRenderer> but helper functions are
+different. See L<Marquee::SSIHandler::EP/FUNCTIONS> for detail.
+
+There is also some more differences on caching compiled templates.
+Cache for L<Marquee::SSIHandler::EP> automatically expires on the file touch
+so you don't have to restart the application to reflect the change.
+
+=head1 ROUTING
+
+Though path routing is not an outstanding issue for Marquee because of the
+concept of default mapping rule, there is a plugin L<Marquee::Plugin::Router>
+for overriding the routing.
+
+    $app->plugin(Router => sub {
+        my $r = shift;
+        $r->route(qr{^/(.+\.md)?$})->to(sub {
+            $md->serve_markdown($app->search_static(shift || 'readme.md'))
+        });
+        $r->route(qr{^/perldoc/(.+)})->to(sub {
+            $pod->serve_pod_by_name(shift);
+        });
+    });
+
+=head1 BASIC AUTHENTICATION
+
+There is a dedicated plugin L<Marquee::Plugin::Auth> for basic authentication.
+You can port apache htpasswd entries as follows.
+
+    my $htpasswd = {
+        user1 => 'znq.opIaiH.zs',
+        user2 => 'dF45lPM2wMCDA',
+    };
+    
+    $self->plugin(Auth => [
+        qr{^/admin/} => 'Secret Area' => sub {
+            my ($username, $password) = @_;
+            if (my $expect = $htpasswd->{$username}) {
+                return crypt($password, $expect) eq $expect;
+            }
+        },
+    ]);
+
+=head1 DEPLOYMENT
+
+=head2 Built-in web server
+
+    #!/usr/bin/env perl
+    use strict;
+    use warnings;
+    
+    use File::Basename 'dirname';
+    use File::Spec;
+    use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
+    use MyApp;
+    
+    MyApp->new->start;
+
+On command line..
+
+    $ ./myapp.pl daemon
+
+=head2 Hypnotoad
+
+    #!/usr/bin/env perl
+    use strict;
+    use warnings;
+    
+    use File::Basename 'dirname';
+    use File::Spec;
+    use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
+    use MyApp;
+    
+    my $app = MyApp->new;
+    $app->config(hypnotoad => {listen => ['http://*:8002']});
+    $app->start;
+
+On command line..
+
+    $ hypnotoad ./myapp.pl
+
+=head2 Apache/CGI
+
+Boot script for CGI environment should look like as follows.
+
+    #!/usr/bin/env perl
+    use strict;
+    use warnings;
+    
+    use File::Basename 'dirname';
+    use File::Spec;
+    use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
+    use MyApp;
+    
+    MyApp->new->start;
+
+htaccess should look like as follows.
+
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME}.ep -f [OR]
+    RewriteCond %{REQUEST_FILENAME}/index.html.ep -f [OR]
+    RewriteCond %{REQUEST_URI} ^/static
+    RewriteRule ^(.*)$ index.cgi/$1 [QSA]
+    RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+
+=cut

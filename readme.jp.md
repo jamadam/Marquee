@@ -141,6 +141,7 @@ The application can be start in Mojo way.
 
 - [Marquee](http://marquee.jamadam.com/perldoc/Marquee) (Marquee base class)
 - [Marquee::SSIHandler::EP](http://marquee.jamadam.com/perldoc/Marquee/SSIHandler/EP) (Perlish template class)
+- [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook) (Cookbook)
 
 ## コマンドラインインターフェース
 

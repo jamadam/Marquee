@@ -8,9 +8,9 @@ This document contains some recipes to develop Marquee application.
 
 =head1 CONTEXT OBJECT
 
-Marquee don't encourage taking context objects around method calls.
-You can always get a localized one via Marquee class method from anywhere
-in you application.
+Marquee don't encourage passing the transaction object one method to another.
+You can always get a localized context object containing transaction
+via Marquee class method from anywhere in you application.
 For more information see also L<Marquee/context> and L<Marquee::Context>.
 
     my $context = Marquee->c;

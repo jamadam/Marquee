@@ -60,10 +60,11 @@ Basic syntax.
 Block syntax.
 
     <% my $block = begin %>
-        Plain html here
-        <%= ... %>
-        Plain html here
+        <% my $arg = shift; %>
+        <%= $arg %> is given
     <% end %>
+    
+    <%= $block->('foo') %>
 
 Here's a practical example.
 

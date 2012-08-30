@@ -13,7 +13,9 @@ You can always get a localized context object containing transaction
 via Marquee class method from anywhere in you application.
 For more information see also L<Marquee/context> and L<Marquee::Context>.
 
-    my $context = Marquee->c;
+    my $context = Marquee->c; # Marquee::Context
+    my $app = $context->app;  # Marquee application
+    my $tx  = $context->tx;   # Mojo::Transaction
 
 =head1 STASH
 
@@ -26,7 +28,7 @@ by same interface C<$app-E<gt>stash>.
 For more information see also L<Marqee/Stash> and L<Marquee::Stash>.
 
     $app = Marquee->new;
-    $app->stash(mydata => 'my value'); # set data
+    $app->stash(mydata => 'app data'); # set data
 
 Inside template..
 
@@ -34,11 +36,10 @@ Inside template..
 
 Application level data transparently available.
 
-    <%= $stash->{mydata} %> <!-- my value -->
+    <% my $mydata = $stash->get('mydata'); %> <!-- app data -->
+    <% $stash->set(context_data => time); %>
 
-The set data is available during the transaction.
-
-    <% $stash->set(req_data => time) %>
+The set data will be discarded at the transaction close.
 
 =head1 TEMPLATING
 

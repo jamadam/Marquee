@@ -46,7 +46,12 @@ body {
 			left:30px;
 			font-size: 1.1em;
 			font-style: italic;
+			color:#fff;
+			text-decoration: none;
 		}
+			h1 .poweredBy:hover {
+				color:#ffa;
+			}
 	#wrapper {
 		background-color:#fff;
 		min-width:600px;

@@ -275,15 +275,16 @@ sub _ph_name {
 sub _doc_path {
     my ($self, $path) = @_;
     
-    (my $root, $path) = ($path =~ qr{^/(.+)})
-                                ? (Marquee->c->app->document_root, $1)
-                                : (dirname($self->current_template), $path);
-    
-    my $abs = File::Spec->canonpath(File::Spec->catfile($root, $path));
-    for my $root (@{Marquee->c->app->roots}) {
-        last if ($abs =~ s{^$root/}{});
+    if ($path =~ qr{^/(.+)}) {
+        return File::Spec->canonpath($1);
+    } else {
+        $path = File::Spec->catfile(dirname($self->current_template), $path);
+        $path = File::Spec->canonpath($path);
+        for my $root (@{Marquee->c->app->roots}) {
+            last if ($path =~ s{^\Q$root\E/}{});
+        }
+        return $path;
     }
-    return $abs;
 }
 
 ### --

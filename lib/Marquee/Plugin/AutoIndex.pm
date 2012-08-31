@@ -139,8 +139,7 @@ sub _file_list {
             type        => -d $real_abs
                 ? 'dir'
                 : (($app->path_to_type($pub_name) || 'text') =~ /^(\w+)/)[0],
-            name        => File::Spec->catfile($cpath, $pub_name),
-            name_abs    => $real_abs,
+            name        => "$cpath/$pub_name",
             timestamp   => _file_timestamp($real_abs),
             size        => _file_size($real_abs),
         }

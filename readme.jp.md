@@ -147,11 +147,19 @@ APIには、オートインデックス、PODビューワー、Markdownビュー
 
 ## スクリーンショット
 
-下記はMarqueeがどんな見栄えかを示したスクリーンんショットです。
+下記はMarqueeがどんな見栄えかを示したスクリーンショットです。
 
-![Site list](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
+### デバッグスクリーン
 
-![Site list](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindextree.png "Auto Index")
+![debug screen](https://github.com/jamadam/Marquee/raw/master/screenshot/debug_screen.png "Debug screen")
+
+### オートインデックス
+
+![auto index](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
+
+### オートツリー
+
+![auto tree](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindextree.png "Auto Index")
 
 ## REPOSITORY
 

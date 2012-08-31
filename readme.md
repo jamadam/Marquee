@@ -152,9 +152,17 @@ For more information, refer to following documentations.
 
 Here is some screenshots of how Marquee look like.
 
-![Site list](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
+### debug screen
 
-![Site list](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindextree.png "Auto Index")
+![debug screen](https://github.com/jamadam/Marquee/raw/master/screenshot/debug_screen.png "Debug screen")
+
+### Auto index
+
+![auto index](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
+
+### Auto tree
+
+![auto tree](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindextree.png "Auto Index")
 
 ## REPOSITORY
 

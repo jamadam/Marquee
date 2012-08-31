@@ -8,6 +8,7 @@ use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 
 use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
 use Test::More;
 use Test::Mojo::DOM;
+use Test::Path qw'path_is path_like';
 use Marquee;
 use Mojo::Date;
 use Marquee::SSIHandler::EP;
@@ -96,30 +97,30 @@ $t->get_ok('/ep/iter.html')
 
 # sub template inclusion
 
-$t->get_ok('/ep/include.html')
-    ->status_is(200)
-    ->text_is('filename', '/ep/include.html.ep')
-    ->text_like('current_template', qr'public_html/ep/include.html.ep$')
-    ->text_like('current_template2', qr'public_html/ep/include.html.ep$')
-    ->text_is('test1 filename', '/ep/include_sub.html.ep')
-    ->text_like('test1 current_template', qr'public_html/ep/include_sub.html.ep$')
-    ->text_is('test2 filename', '/ep/include_sub2/1.html.ep')
-    ->text_like('test2 current_template', qr'public_html/ep/include_sub2/1.html.ep$')
-    ->text_like('test2 parent_template', qr'/ep/include.html.ep$')
-    ->text_is('test2 parent_template2', '')
-    ->text_is('test2 test1 filename', '/ep/include_sub2/2.html.ep')
-    ->text_like('test2 test1 current_template', qr'public_html/ep/include_sub2/2.html.ep$')
-    ->text_like('test2 test2 filename', qr'/ep/include_sub.html.ep$')
-    ->text_is('test3 myarg', 'myarg value')
-    ->text_is('test3 stash_leak', '');
+$t->get_ok('/ep/include.html');
+$t->status_is(200);
+$t->text_is('filename', '/ep/include.html.ep');
+path_like $t->tx->res->dom->at('current_template')->text, qr'public_html/ep/include.html.ep$';
+path_like $t->tx->res->dom->at('current_template2')->text, qr'public_html/ep/include.html.ep$';
+$t->text_is('test1 filename', '/ep/include_sub.html.ep');
+path_like $t->tx->res->dom->at('test1 current_template')->text, qr'public_html/ep/include_sub.html.ep$';
+$t->text_is('test2 filename', '/ep/include_sub2/1.html.ep');
+path_like $t->tx->res->dom->at('test2 current_template')->text, qr'public_html/ep/include_sub2/1.html.ep$';
+path_like $t->tx->res->dom->at('test2 parent_template')->text, qr'/ep/include.html.ep$';
+$t->text_is('test2 parent_template2', '');
+$t->text_is('test2 test1 filename', '/ep/include_sub2/2.html.ep');
+path_like $t->tx->res->dom->at('test2 test1 current_template')->text, qr'public_html/ep/include_sub2/2.html.ep$';
+path_like $t->tx->res->dom->at('test2 test2 filename')->text, qr'/ep/include_sub.html.ep$';
+$t->text_is('test3 myarg', 'myarg value');
+$t->text_is('test3 stash_leak', '');
 
 # sub template inclusion with no ext
 
-$t->get_ok('/ep/include_as.html')
-    ->status_is(200)
-    ->text_is('filename', '/ep/include_as.html.ep')
-    ->text_is('test1 filename', '/ep/include_as_sub.html')
-    ->text_like('test1 current_template', qr'public_html/ep/include_as_sub.html$');
+$t->get_ok('/ep/include_as.html');
+$t->status_is(200);
+$t->text_is('filename', '/ep/include_as.html.ep');
+$t->text_is('test1 filename', '/ep/include_as_sub.html');
+path_like $t->tx->res->dom->at('test1 current_template')->text, qr'public_html/ep/include_as_sub.html$';
 
 ### abs
 
@@ -144,16 +145,17 @@ $t->get_ok('/ep/use_layout.html')
         $t->at('title')->text_is('タイトル');
         $t->at('#main')->text_is('メインコンテンツdynamic');
         $t->at('#main2')->text_is('DEFAULT MAIN2');
-        $t->at('current_template1')->text_is("$FindBin::Bin/public_html/ep/use_layout.html.ep");
+        path_is $t->at('current_template1')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout.html.ep";
         $t->at('current_template2')->text_is("");
-        $t->at('use_layout current_template3')->text_is("$FindBin::Bin/public_html/ep/use_layout.html.ep");
-        $t->at('use_layout current_template4')->text_is("$FindBin::Bin/public_html/ep/layout/common.html.ep");
-        $t->at('use_layout current_template5')->text_is("$FindBin::Bin/public_html/ep/use_layout.html.ep");
+        path_is $t->at('use_layout current_template3')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout.html.ep";
+        path_is $t->at('use_layout current_template4')->dom->[0]->text, "$FindBin::Bin/public_html/ep/layout/common.html.ep";
+        path_is $t->at('use_layout current_template5')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout.html.ep";
+        
         $t->at('use_layout current_template6')->text_is("");
-        $t->at('layout current_template1')->text_is("$FindBin::Bin/public_html/ep/layout/common.html.ep");
-        $t->at('layout #main2 current_template2')->text_is("$FindBin::Bin/public_html/ep/layout/common.html.ep");
-        $t->at('layout #main2 current_template3')->text_is("$FindBin::Bin/public_html/ep/layout/common.html.ep");
-        $t->at('layout #main2 current_template4')->text_is("$FindBin::Bin/public_html/ep/use_layout.html.ep");
+        path_is $t->at('layout current_template1')->dom->[0]->text, "$FindBin::Bin/public_html/ep/layout/common.html.ep";
+        path_is $t->at('layout #main2 current_template2')->dom->[0]->text, "$FindBin::Bin/public_html/ep/layout/common.html.ep";
+        path_is $t->at('layout #main2 current_template3')->dom->[0]->text, "$FindBin::Bin/public_html/ep/layout/common.html.ep";
+        path_is $t->at('layout #main2 current_template4')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout.html.ep";
         $t->at('layout #main2 current_template5')->text_is("");
         $t->at('layout #namespace_test')->text_is("global stash content");
     });
@@ -169,16 +171,16 @@ $t->get_ok('/ep/use_layout2.html')
         $t->at('title')->text_is('タイトル');
         $t->at('#main')->text_is('メインコンテンツdynamic');
         $t->at('#main2')->text_is('DEFAULT MAIN2');
-        $t->at('current_template1')->text_is("$FindBin::Bin/public_html/ep/use_layout2.html.ep");
+        path_is $t->at('current_template1')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout2.html.ep";
         $t->at('current_template2')->text_is("");
-        $t->at('use_layout current_template3')->text_is("$FindBin::Bin/public_html/ep/use_layout2.html.ep");
-        $t->at('use_layout current_template4')->text_is("$FindBin::Bin/public_html/ep/layout/common2.html");
-        $t->at('use_layout current_template5')->text_is("$FindBin::Bin/public_html/ep/use_layout2.html.ep");
+        path_is $t->at('use_layout current_template3')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout2.html.ep";
+        path_is $t->at('use_layout current_template4')->dom->[0]->text, "$FindBin::Bin/public_html/ep/layout/common2.html";
+        path_is $t->at('use_layout current_template5')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout2.html.ep";
         $t->at('use_layout current_template6')->text_is("");
-        $t->at('layout current_template1')->text_is("$FindBin::Bin/public_html/ep/layout/common2.html");
-        $t->at('layout #main2 current_template2')->text_is("$FindBin::Bin/public_html/ep/layout/common2.html");
-        $t->at('layout #main2 current_template3')->text_is("$FindBin::Bin/public_html/ep/layout/common2.html");
-        $t->at('layout #main2 current_template4')->text_is("$FindBin::Bin/public_html/ep/use_layout2.html.ep");
+        path_is $t->at('layout current_template1')->dom->[0]->text, "$FindBin::Bin/public_html/ep/layout/common2.html";
+        path_is $t->at('layout #main2 current_template2')->dom->[0]->text, "$FindBin::Bin/public_html/ep/layout/common2.html";
+        path_is $t->at('layout #main2 current_template3')->dom->[0]->text, "$FindBin::Bin/public_html/ep/layout/common2.html";
+        path_is $t->at('layout #main2 current_template4')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout2.html.ep";
         $t->at('layout #main2 current_template5')->text_is("");
         $t->at('layout #namespace_test')->text_is("global stash content");
     });

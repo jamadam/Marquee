@@ -1,0 +1,240 @@
+=head1 NAME
+
+Cookbook - Marquee cookbook
+
+=head1 OVERVIEW
+
+This document contains some recipes to develop Marquee application.
+
+=head1 GETTING STARTED
+
+最小のMarqueeアプリです。
+
+    use Marquee;
+    
+    my $app = Marquee->new;
+    
+    $app->start;
+
+You also can separate the app into own class (shown below) and
+boot script (similar to above).
+
+    package MyApp;
+    use Mojo::Base 'Marquee';
+    
+    sub new {
+        my $self = shift->SUPER::new(@_);
+        ...
+        return $self;
+    }
+
+このアプリはMojoのやり方で起動できます。
+The application can be start in Mojo way.
+
+    $ ./myapp daemon
+    Server available at http://127.0.0.1:3000.
+
+プロダクションでは..
+    
+    $ hypnotoad ./myapp
+
+=head1 CONTEXT OBJECT
+
+Marquee don't encourage passing the transaction object one method to another.
+You can always get a localized context object containing transaction
+via Marquee class method from anywhere in you application.
+For more information see also L<Marquee/context> and L<Marquee::Context>.
+
+    my $context = Marquee->c; # Marquee::Context
+    my $app = $context->app;  # Marquee application
+    my $tx  = $context->tx;   # Mojo::Transaction
+
+=head1 STASH
+
+Stash is a wide scope hash for sharing data. Marquee defines two levels for
+stash scope, application level and request level. Application level stash can
+be referred from anywhere in your application. Request level stash is a
+local copy of application level stash and last during the transaction.
+Both are belong to application and accessible
+by same interface C<$app-E<gt>stash>.
+For more information see also L<Marqee/Stash> and L<Marquee::Stash>.
+
+    $app = Marquee->new;
+    $app->stash(mydata => 'app data'); # set data
+
+Inside template..
+
+    <% my $stash = Marquee->stash(); # local copy for a request %>
+
+Application level data transparently available.
+
+    <% my $mydata = $stash->get('mydata'); %> <!-- app data -->
+    <% $stash->set(context_data => time); %>
+
+The set data will be discarded at the transaction close.
+
+=head1 TEMPLATING
+
+The bundled template handler for Marquee L<Marquee::SSIHandler::EP> is
+very similar to L<Mojolicious::Plugin::EPRenderer> but helper functions are
+different. See L<Marquee::SSIHandler::EP/FUNCTIONS> for detail.
+
+There is also some more differences on caching compiled templates.
+Cache for L<Marquee::SSIHandler::EP> automatically expires on the file touch
+so you don't have to restart the application to reflect the change.
+
+=head1 ROUTING
+
+Though path routing is not an outstanding issue for Marquee because of the
+concept of default mapping rule, there is a plugin L<Marquee::Plugin::Router>
+for overriding the routing.
+
+    $app->plugin(Router => sub {
+        my $r = shift;
+        $r->route(qr{^/(.+\.md)?$})->to(sub {
+            $md->serve_markdown($app->search_static(shift || 'readme.md'))
+        });
+        $r->route(qr{^/perldoc/(.+)})->to(sub {
+            $pod->serve_pod_by_name(shift);
+        });
+    });
+
+=head1 BASIC AUTHENTICATION
+
+There is a dedicated plugin L<Marquee::Plugin::Auth> for basic authentication.
+You can port apache htpasswd entries as follows.
+
+    my $htpasswd = {
+        user1 => 'znq.opIaiH.zs',
+        user2 => 'dF45lPM2wMCDA',
+    };
+    
+    $self->plugin(Auth => [
+        qr{^/admin/} => 'Secret Area' => sub {
+            my ($username, $password) = @_;
+            if (my $expect = $htpasswd->{$username}) {
+                return crypt($password, $expect) eq $expect;
+            }
+        },
+    ]);
+
+=head1 DEPLOYMENT
+
+=head2 Built-in web server
+
+    #!/usr/bin/env perl
+    use strict;
+    use warnings;
+    
+    use File::Basename 'dirname';
+    use File::Spec;
+    use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
+    use MyApp;
+    
+    MyApp->new->start;
+
+On command line..
+
+    $ ./myapp.pl daemon
+
+=head2 Hypnotoad
+
+    #!/usr/bin/env perl
+    use strict;
+    use warnings;
+    
+    use File::Basename 'dirname';
+    use File::Spec;
+    use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
+    use MyApp;
+    
+    my $app = MyApp->new;
+    $app->config(hypnotoad => {listen => ['http://*:8002']});
+    $app->start;
+
+On command line..
+
+    $ hypnotoad ./myapp.pl
+
+=head2 Apache/CGI
+
+Boot script for CGI environment should look like as follows.
+
+    #!/usr/bin/env perl
+    use strict;
+    use warnings;
+    
+    use File::Basename 'dirname';
+    use File::Spec;
+    use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
+    use MyApp;
+    
+    MyApp->new->start;
+
+htaccess should look like as follows.
+
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME}.ep -f [OR]
+    RewriteCond %{REQUEST_FILENAME}/index.html.ep -f [OR]
+    RewriteCond %{REQUEST_URI} ^/static
+    RewriteRule ^(.*)$ index.cgi/$1 [QSA]
+    RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
+
+=head1 COMMAND LINE INTERFACE
+
+[Marquee]はPerlのオブジェクト指向APIに加え、カレントディレクトリの内容を[Mojo::Daemon]を使って
+ウェブページとして発行するコマンドラインインターフェースも提供します。
+これは、開発環境用や、些細なファイル共有などにも便利です。
+APIには、オートインデックス、PODビューワー、Markdownビューワーなどの便利なオプションが備わっています。
+もうApacheなどは必要ありません。
+
+=head2 Synopsis
+
+    mojo marquee [OPTIONS]
+
+下記のコマンドが利用できます:
+  
+    -dr, --document_root <path>  ドキュメントルートのパスをしています。デフォルトはカレントです。
+    -df, --default_file <name>   デフォルトのファイル名を指定し、自動補完を有効にします。
+    -ai, --auto_index            オートインデックスを有効にします。デフォルトは0です。
+    -dv, --doc_viewer            ドキュメントビューワーを有効にします。
+    -ud, --under_development     サーバーサイドインクルードのためのデバッグスクリーンを有効にします。
+    -b, --backlog <size>         Set listen backlog size, defaults to
+                                 SOMAXCONN.
+    -c, --clients <number>       Set maximum number of concurrent clients,
+                                 defaults to 1000.
+    -g, --group <name>           Set group name for process.
+    -i, --inactivity <seconds>   Set inactivity timeout, defaults to the value
+                                 of MOJO_INACTIVITY_TIMEOUT or 15.
+    -l, --listen <location>      Set one or more locations you want to listen
+                                 on, defaults to the value of MOJO_LISTEN or
+                                 "http://*:3000".
+    -p, --proxy                  Activate reverse proxy support, defaults to
+                                 the value of MOJO_REVERSE_PROXY.
+    -r, --requests <number>      Set maximum number of requests per keep-alive
+                                 connection, defaults to 25.
+    -u, --user <name>            Set username for process.
+
+=head2 使用例1
+
+    $ mojo marquee
+    [Mon Oct 17 23:18:35 2011] [info] Server listening (http://*:3000)
+    Server available at http://127.0.0.1:3000.
+
+=head2 使用例2 (ポート番号を指定)
+
+    $ mojo marquee --listen http://*:3001
+
+=head2 使用例3 (ドキュメントルートを指定)
+
+    $ mojo marquee --document_root ./public
+
+=head2 使用例4 (デフォルトファイル名を指定)
+
+    $ mojo marquee --default_file index.html
+
+=head2 使用例5 (オートインデックスとツリー表示を有効化)
+
+    $ mojo marquee --auto_index
+
+=cut

@@ -130,7 +130,7 @@ For production use..
     
     $ hypnotoad ./myapp
 
-For more information refer to API documentations.
+For more information refer to documentations.
 
 - [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook) (Cookbook)
 - [Marquee](http://marquee.jamadam.com/perldoc/Marquee) (Marquee base class)

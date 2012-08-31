@@ -127,7 +127,7 @@ The application can be start in Mojo way.
     
     $ hypnotoad ./myapp
 
-より詳しい情報は下記のAPIドキュメントを参照してください。
+より詳しい情報は下記のドキュメントを参照してください。
 
 - [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook) (Cookbook)
 - [Marquee](http://marquee.jamadam.com/perldoc/Marquee) (Marquee base class)
@@ -141,54 +141,13 @@ The application can be start in Mojo way.
 APIには、オートインデックス、PODビューワー、Markdownビューワーなどの便利なオプションが備わっています。
 もうApacheなどは必要ありません。
 
-## SYNOPSIS
+より詳しい情報は下記のドキュメントを参照してください。
 
-    mojo marquee [OPTIONS]
+- [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (Cookbook)
 
-下記のコマンドが利用できます:
-  
-    -dr, --document_root <path>  ドキュメントルートのパスをしています。デフォルトはカレントです。
-    -df, --default_file <name>   デフォルトのファイル名を指定し、自動補完を有効にします。
-    -ai, --auto_index            オートインデックスを有効にします。デフォルトは0です。
-    -dv, --doc_viewer            ドキュメントビューワーを有効にします。
-    -ud, --under_development     サーバーサイドインクルードのためのデバッグスクリーンを有効にします。
-    -b, --backlog <size>         Set listen backlog size, defaults to
-                                 SOMAXCONN.
-    -c, --clients <number>       Set maximum number of concurrent clients,
-                                 defaults to 1000.
-    -g, --group <name>           Set group name for process.
-    -i, --inactivity <seconds>   Set inactivity timeout, defaults to the value
-                                 of MOJO_INACTIVITY_TIMEOUT or 15.
-    -l, --listen <location>      Set one or more locations you want to listen
-                                 on, defaults to the value of MOJO_LISTEN or
-                                 "http://*:3000".
-    -p, --proxy                  Activate reverse proxy support, defaults to
-                                 the value of MOJO_REVERSE_PROXY.
-    -r, --requests <number>      Set maximum number of requests per keep-alive
-                                 connection, defaults to 25.
-    -u, --user <name>            Set username for process.
+## スクリーンショット
 
-### 使用例1
-
-    $ mojo marquee
-    [Mon Oct 17 23:18:35 2011] [info] Server listening (http://*:3000)
-    Server available at http://127.0.0.1:3000.
-
-### 使用例2(ポート番号を指定)
-
-    $ mojo marquee --listen http://*:3001
-
-### 使用例3(ドキュメントルートを指定)
-
-    $ mojo marquee --document_root ./public
-
-### 使用例4(デフォルトファイル名を指定)
-
-    $ mojo marquee --default_file index.html
-
-### 使用例4(オートインデックスとツリー表示を有効化)
-
-    $ mojo marquee --auto_index
+下記はMarqueeがどんな見栄えかを示したスクリーンんショットです。
 
 ![Site list](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
 

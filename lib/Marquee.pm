@@ -2,7 +2,7 @@ package Marquee;
 use strict;
 use warnings;
 use Mojo::Base 'Mojo';
-use File::Spec;
+use File::Spec::Functions;
 use Digest::MD5 qw(md5_hex);
 use Mojo::Asset::File;
 use Mojo::URL;
@@ -58,7 +58,7 @@ sub new {
     # base path for CGI environment
     if ($ENV{DOCUMENT_ROOT} && ! defined $ENV{MARQUEE_BASE_PATH}) {
         my $tmp = $self->home->to_string;
-        if ($tmp =~ s{^$ENV{DOCUMENT_ROOT}}{}) {
+        if ($tmp =~ s{^\Q$ENV{DOCUMENT_ROOT}\E}{}) {
             $ENV{MARQUEE_BASE_PATH} = $tmp;
         }
     }
@@ -175,7 +175,7 @@ sub is_directory {
     my ($self, $path) = @_;
     
     for my $root (@{$self->roots}) {
-        if (-d File::Spec->catdir($root, $path)) {
+        if (-d catdir($root, $path)) {
             return 1;
         }
     }
@@ -237,8 +237,8 @@ sub render_ssi {
 sub search_static {
     my ($self, $path) = @_;
     
-    for my $root (($path =~ qr{^/}) ? '' : @{$self->roots}) {
-        if (-f (my $path = File::Spec->catdir($root, $path))) {
+    for my $root (file_name_is_absolute($path) ? undef : @{$self->roots}) {
+        if (-f (my $path = $root ? catdir($root, $path) : $path)) {
             return $path;
         }
     }
@@ -250,9 +250,10 @@ sub search_static {
 sub search_template {
     my ($self, $path) = @_;
     
-    for my $root (($path =~ qr{^/}) ? '' : @{$self->roots}) {
+    for my $root (file_name_is_absolute($path) ? undef : @{$self->roots}) {
+        my $base = $root ? catdir($root, $path) : $path;
         for my $ext (keys %{$self->ssi_handlers}) {
-            if (-f (my $path = File::Spec->catdir($root, "$path.$ext"))) {
+            if (-f (my $path = "$base.$ext")) {
                 return $path;
             }
         }
@@ -347,9 +348,9 @@ sub asset {
     $pm =~ s{::}{/}g;
     my @seed = (substr($INC{$pm}, 0, -3), 'Asset');
     if ($_[0]) {
-        return File::Spec->catdir(@seed, $_[0]);
+        return catdir(@seed, $_[0]);
     }
-    return File::Spec->catdir(@seed);
+    return catdir(@seed);
 }
 
 ### --

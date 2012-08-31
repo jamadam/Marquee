@@ -8,6 +8,7 @@ use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 
 use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
 use Test::More;
 use Test::Mojo::DOM;
+use Test::Path 'path_is';
 use Marquee;
 use Mojo::Date;
 use Mojo::Transaction::HTTP;
@@ -43,9 +44,9 @@ use Test::More tests => 146;
     $app->document_root("$FindBin::Bin/public_html");
     $app->_init;
     local $Marquee::CONTEXT = Marquee::Context->new(app => $app, tx => $tx);
-    is $app->search_template('index.html'), "$FindBin::Bin/public_html/index.html.ep";
-    is $app->search_template('./index.html'), "$FindBin::Bin/public_html/index.html.ep";
-    is $app->search_template("$FindBin::Bin/public_html/index.html"), "$FindBin::Bin/public_html/index.html.ep";
+    path_is $app->search_template('index.html'), "$FindBin::Bin/public_html/index.html.ep";
+    path_is $app->search_template('./index.html'), "$FindBin::Bin/public_html/index.html.ep";
+    path_is $app->search_template("$FindBin::Bin/public_html/index.html"), "$FindBin::Bin/public_html/index.html.ep";
 }
 
 my $app;
@@ -195,8 +196,8 @@ $app->add_handler(test2 => _Test2Handler->new);
 $t = Test::Mojo->new($app);
 
 $t->get_ok('/index2.html')
-    ->status_is(200)
-    ->content_is("$FindBin::Bin/public_html/index2.html.test");
+    ->status_is(200);
+path_is $t->tx->res->body, "$FindBin::Bin/public_html/index2.html.test";
 $t->get_ok('/index3.html')
     ->status_is(200)
     ->element_exists_not('body#debugScreen')
@@ -247,10 +248,10 @@ $t->get_ok('/index.unknown')
 }
 {
     local $ENV{'MOJO_HOME'} = "$FindBin::Bin/public_html";
-    local $ENV{'DOCUMENT_ROOT'} = "$FindBin::Bin";
+    local $ENV{'DOCUMENT_ROOT'} = File::Spec->canonpath($FindBin::Bin);
     $app = Marquee->new;
-    is $app->home, "$FindBin::Bin/public_html";
-    is $ENV{'MARQUEE_BASE_PATH'}, "/public_html";
+    path_is $app->home, "$FindBin::Bin/public_html";
+    path_is $ENV{'MARQUEE_BASE_PATH'}, "/public_html";
 }
 
 ### model

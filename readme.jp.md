@@ -117,17 +117,6 @@ Perl-5.8.7以降で動作させることが可能です。
     
     $app->start;
 
-アプリは下記のような独自のクラスと上記のような起動スクリプトに分けることもできます。
-
-    package MyApp;
-    use Mojo::Base 'Marquee';
-    
-    sub new {
-        my $self = shift->SUPER::new(@_);
-        ...
-        return $self;
-    }
-
 このアプリはMojoのやり方で起動できます。
 The application can be start in Mojo way.
 
@@ -140,15 +129,17 @@ The application can be start in Mojo way.
 
 より詳しい情報は下記のAPIドキュメントを参照してください。
 
+- [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook) (Cookbook)
 - [Marquee](http://marquee.jamadam.com/perldoc/Marquee) (Marquee base class)
 - [Marquee::SSIHandler::EP](http://marquee.jamadam.com/perldoc/Marquee/SSIHandler/EP) (Perlish template class)
-- [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook) (Cookbook)
 
 ## コマンドラインインターフェース
 
 [Marquee]はPerlのオブジェクト指向APIに加え、カレントディレクトリの内容を[Mojo::Daemon]を使って
-ウェブページとして発行するコマンドラインインターフェースも提供します。これは、Apacheなどを使わずに一時的にウェブページを
-発行するのに便利です。
+ウェブページとして発行するコマンドラインインターフェースも提供します。
+これは、開発環境用や、些細なファイル共有などにも便利です。
+APIには、オートインデックス、PODビューワー、Markdownビューワーなどの便利なオプションが備わっています。
+もうApacheなどは必要ありません。
 
 ## SYNOPSIS
 

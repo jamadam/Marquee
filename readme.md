@@ -119,92 +119,38 @@ To install this module, run the following commands:
 Here is a smallest Marquee application.
 
     use Marquee;
-    
-    my $app = Marquee->new;
-    
-    $app->start;
-
-You also can separate the app into own class (shown below) and
-boot script (similar to above).
-
-    package MyApp;
-    use Mojo::Base 'Marquee';
-    
-    sub new {
-        my $self = shift->SUPER::new(@_);
-        ...
-        return $self;
-    }
+    Marquee->new->start;
 
 The application can be start in Mojo way.
 
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.
 
-For productions use..
+For production use..
     
     $ hypnotoad ./myapp
 
 For more information refer to API documentations.
 
+- [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook) (Cookbook)
 - [Marquee](http://marquee.jamadam.com/perldoc/Marquee) (Marquee base class)
 - [Marquee::SSIHandler::EP](http://marquee.jamadam.com/perldoc/Marquee/SSIHandler/EP) (Perlish template class)
-- [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook) (Cookbook)
 
 ## COMMAND LINE INTERFACE
 
 In addition to Perl OOP API, Marquee also provides command line interface
-to serve current directory contents as a web pages, using [Mojo::Daemon].
-This is useful for temporarily providing web pages without any Apache things.
+to serve current directory contents as a web site, using [Mojo::Daemon].
+This is useful for such as development environment or even trivial file sharing.
+The API provides some useful option such as auto index, POD viewer,
+Markdown viewer. You don't need any Apache things anymore.
 
-## SYNOPSIS
+For more information, refer to following documentations.
 
-    mojo marquee [OPTIONS]
+- [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (Cookbook)
 
-These options are available:
-  
-    -dr, --document_root <path>  Set document root path, defaults to current dir.
-    -df, --default_file <name>   Set default file name and activate auto fill.
-    -ai, --auto_index            Activate auto index, defaults to 0.
-    -dv, --doc_viewer            Activate document viewer.
-    -ud, --under_development     Activate debug screen for server-side include.
-    -b, --backlog <size>         Set listen backlog size, defaults to
-                                 SOMAXCONN.
-    -c, --clients <number>       Set maximum number of concurrent clients,
-                                 defaults to 1000.
-    -g, --group <name>           Set group name for process.
-    -i, --inactivity <seconds>   Set inactivity timeout, defaults to the value
-                                 of MOJO_INACTIVITY_TIMEOUT or 15.
-    -l, --listen <location>      Set one or more locations you want to listen
-                                 on, defaults to the value of MOJO_LISTEN or
-                                 "http://*:3000".
-    -p, --proxy                  Activate reverse proxy support, defaults to
-                                 the value of MOJO_REVERSE_PROXY.
-    -r, --requests <number>      Set maximum number of requests per keep-alive
-                                 connection, defaults to 25.
-    -u, --user <name>            Set username for process.
+## SCREENSHOTS
 
-### EXAMPLE1
-
-    $ mojo marquee
-    [Mon Oct 17 23:18:35 2011] [info] Server listening (http://*:3000)
-    Server available at http://127.0.0.1:3000.
-
-### EXAMPLE2(specify port number)
-
-    $ mojo marquee --listen http://*:3001
-
-### EXAMPLE3(specify document root)
-
-    $ mojo marquee --document_root ./public
-
-### EXAMPLE4(specify default file name)
-
-    $ mojo marquee --default_file index.html
-
-### EXAMPLE4(activate auto index & auto tree)
-
-    $ mojo marquee --auto_index
+Here is some screenshots of how Marquee look like.
 
 ![Site list](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
 

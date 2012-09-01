@@ -121,7 +121,7 @@ Here is a smallest Marquee application.
     use Marquee;
     Marquee->new->start;
 
-The application can be start in Mojo way.
+The application can be started in Mojo way.
 
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.

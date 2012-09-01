@@ -79,6 +79,24 @@ The bundled template handler for Marquee L<Marquee::SSIHandler::EP> is
 very similar to L<Mojolicious::Plugin::EPRenderer> but helper functions are
 different. See L<Marquee::SSIHandler::EP/FUNCTIONS> for detail.
 
+Basic syntax.
+
+    <% ...; %> <!-- execute Perl code -->
+    <%= ... %> <!-- execute Perl code and output(with html escape) -->
+    <%== ... %> <!-- execute Perl code and output(without html escape) -->
+    % ...; # execute inline Perl code
+    %= ...; # execute inline Perl code code and output(with html escape)
+    %== ...; # execute inline Perl code code and output(without html escape)
+    
+Block syntax.
+
+    <% my $block = begin %>
+        <% my $arg = shift; %>
+        <%= $arg %> is given
+    <% end %>
+    
+    <%= $block->('foo') %>
+
 There is also some more differences on caching compiled templates.
 Cache for L<Marquee::SSIHandler::EP> automatically expires on the file touch
 so you don't have to restart the application to reflect the change.

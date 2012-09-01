@@ -30,41 +30,14 @@ The extensioning rule is same as [Mojolicious]. The second extension indecates
 a handler for template rendering. ep and epl are always available
 and you can also add your own handler easily.
 
-You can also override the mapping rule with Route plugin bundled in core.
-
-    $app->plugin(Router => sub {
-        my $r = shift;
-        $r->route(qr{^/path1\.html})->to(sub {
-            ...
-        });
-        $r->route(qr{^/path2\.html})->to(sub {
-            ...
-        });
-    });
+You can also override the mapping rule with [Marquee::Router] plugin bundled
+in core.
 
 ### Perlish template
 
 [Marquee] provedes [Mojo::Template] based template handler which allows templates
 to be written in more Perl instead of template specific syntax,
 therefore, it requires less lerning cost (by comparison to [Mason]).
-
-Basic syntax.
-
-    <% ...; %> <!-- execute Perl code -->
-    <%= ... %> <!-- execute Perl code and output(with html escape) -->
-    <%== ... %> <!-- execute Perl code and output(without html escape) -->
-    % ...; # execute inline Perl code
-    %= ...; # execute inline Perl code code and output(with html escape)
-    %== ...; # execute inline Perl code code and output(without html escape)
-    
-Block syntax.
-
-    <% my $block = begin %>
-        <% my $arg = shift; %>
-        <%= $arg %> is given
-    <% end %>
-    
-    <%= $block->('foo') %>
 
 Here's a practical example.
 
@@ -181,6 +154,7 @@ This program is free software; you can redistribute it and/or
 modify it under the [same terms as Perl itself].
 
 [Marquee]:http://marquee.jamadam.com/perldoc/Marquee
+[Marquee::Router]:http://marquee.jamadam.com/perldoc/Marquee/Router
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy

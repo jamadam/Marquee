@@ -25,40 +25,12 @@ URIの意味をディレクトリ構造に対応させることは物事をシ�
 
 拡張子のルールは[Mojolicious]と同様です。2つ目の拡張子はテンプレートをレンダリングするハンドラーを示します。
 epとeplは常に利用可能で、任意のハンドラーを追加することも簡単です。
-また、コアに付属のRouteプラグインでマッピングルールのオーバーライドも可能です。
-
-    $app->plugin(Router => sub {
-        my $r = shift;
-        $r->route(qr{^/path1\.html})->to(sub {
-            ...
-        });
-        $r->route(qr{^/path2\.html})->to(sub {
-            ...
-        });
-    });
+また、コアに付属の[Marquee::Router]プラグインでマッピングルールのオーバーライドも可能です。
 
 ### Perl風テンプレート
 
 [Marquee]は[Mojo::Template]ベースのテンプレートハンドラーを提供します。
 これにより、テンプレートは(Masonに比べ)テンプレート固有の構文が少ない代わりに、よりPerl風の記述が可能になり、つまり学習コストがより少ないです。
-
-Basic syntax.
-
-    <% ...; %> <!-- execute Perl code -->
-    <%= ... %> <!-- execute Perl code and output(with html escape) -->
-    <%== ... %> <!-- execute Perl code and output(without html escape) -->
-    % ...; # execute inline Perl code
-    %= ...; # execute inline Perl code code and output(with html escape)
-    %== ...; # execute inline Perl code code and output(without html escape)
-    
-Block syntax.
-
-    <% my $block = begin %>
-        <% my $arg = shift; %>
-        <%= $arg %> is given
-    <% end %>
-    
-    <%= $block->('foo') %>
 
 Here's a practical example.
 
@@ -178,6 +150,7 @@ This program is free software; you can redistribute it and/or
 modify it under the [same terms as Perl itself].
 
 [Marquee]:http://marquee.jamadam.com/perldoc/Marquee
+[Marquee::Router]:http://marquee.jamadam.com/perldoc/Marquee/Router
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy

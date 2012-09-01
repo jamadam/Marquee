@@ -182,7 +182,7 @@ htaccess should look like as follows.
 
 =head1 COMMAND LINE INTERFACE
 
-[Marquee]はPerlのオブジェクト指向APIに加え、カレントディレクトリの内容を[Mojo::Daemon]を使って
+L<Marquee>はPerlのオブジェクト指向APIに加え、カレントディレクトリの内容をL<Mojo::Daemon>を使って
 ウェブページとして発行するコマンドラインインターフェースも提供します。
 これは、開発環境用や、些細なファイル共有などにも便利です。
 APIには、オートインデックス、PODビューワー、Markdownビューワーなどの便利なオプションが備わっています。

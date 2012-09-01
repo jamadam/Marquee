@@ -16,7 +16,7 @@ use Marquee::SSIHandler::EP;
 use Marquee::SSIHandler::EPL;
 use Marquee::Stash;
 use Marquee::ErrorDocument;
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 our $CONTEXT;
 

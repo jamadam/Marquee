@@ -1,4 +1,4 @@
-Marquee beta
+Marquee
 ---------------
 
 [Marquee] distribution is yet another web application framework built on Mojo

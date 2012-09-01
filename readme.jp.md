@@ -1,4 +1,4 @@
-Marquee beta
+Marquee
 ---------------
 
 [Marquee]ディストリビューションは、[Mojolicious]ディストリビューション付属のMojoツールキットのうえに構成された、

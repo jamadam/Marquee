@@ -4,7 +4,7 @@
 =%>
 <%= extends '/base.html' => begin %>
 	<% override 'title' => begin %>
-		<title><%= stash('title') %> - Pod viewer</title>
+		<title>Index of Modules - Pod viewer</title>
 	<% end %>
 	<% override 'additionalHead' => begin %>
 		<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/pod_viewer/site_perldoc_index.css") %>" />

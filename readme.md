@@ -107,7 +107,7 @@ For more information refer to documentations.
 
 - [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook) (Cookbook)
 - [Marquee](http://marquee.jamadam.com/perldoc/Marquee) (Marquee base class)
-- [Marquee::SSIHandler::EP](http://marquee.jamadam.com/perldoc/Marquee/SSIHandler/EP) (Perlish template class)
+- [Index of Modules](http://marquee.jamadam.com/perldoc/)
 
 ## COMMAND LINE INTERFACE
 

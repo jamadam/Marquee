@@ -37,6 +37,9 @@ $app->plugin(Router => sub {
     $r->route(qr{^/perldoc/(.+)})->to(sub {
         $pod->serve_pod_by_name(shift);
     });
+    $r->route(qr{^/perldoc/})->to(sub {
+        $pod->serve_index;
+    });
 });
 
 $app->config(hypnotoad => {listen => ['http://*:8002']});

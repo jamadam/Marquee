@@ -6,6 +6,13 @@ Cookbook - Marquee cookbook
 
 This document contains some recipes to develop Marquee application.
 
+=head1 INSTALLATION
+
+    $ perl Makefile.PL
+    $ make
+    $ make test
+    $ make install
+
 =head1 GETTING STARTED
 
 最小のMarqueeアプリです。

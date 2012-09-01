@@ -15,22 +15,6 @@ This document contains some recipes to develop Marquee application.
 
 =head1 GETTING STARTED
 
-Marquee includes a application for running Marquee
-L<official site|http://marquee.jamadam.com/> and it's a good example for
-learning Marquee.
-
-    $ ./official-site.pl daemon
-    
-    [Sat Sep  1 13:20:08 2012] [info] Listening at "http://*:3000".
-    Server available at http://127.0.0.1:3000.
-
-Now following URLs are available on your browser.
-
-    http://127.0.0.1:3000/perldoc/Marquee/Guides/Cookbook 
-    http://127.0.0.1:3000/perldoc/Marquee
-
-=head1 APPLICATION
-
 Here is a smallest Marquee application.
 
     use Marquee;

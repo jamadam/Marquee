@@ -368,7 +368,7 @@ sub _init {
         die 'document_root is not a directory';
     }
     
-    unshift(@{$self->roots}, canonpath($self->document_root), __PACKAGE__->asset());
+    unshift(@{$self->roots}, canonpath($self->document_root), __PACKAGE__->asset);
 
     $self->{_handler_re} =
                 '\.(?:'. join('|', keys %{$self->ssi_handlers}). ')$';

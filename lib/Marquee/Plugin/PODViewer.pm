@@ -8,7 +8,7 @@ use Mojo::Base 'Marquee::Plugin';
 use Pod::Simple::HTML;
 use Pod::Simple::Search;
 
-__PACKAGE__->attr('paths');
+__PACKAGE__->attr('paths', sub { [map { $_, "$_/pods" } @INC] });
 __PACKAGE__->attr('no_see_also');
 
 sub register {
@@ -16,8 +16,7 @@ sub register {
     
     push(@{$app->roots}, __PACKAGE__->Marquee::asset());
     
-    $self->paths($conf->{paths} || [map { $_, "$_/pods" } @INC]);
-    
+    $self->paths($conf->{paths}) if $conf->{paths};
     $self->no_see_also($conf->{no_see_also} || 0);
     
     if (! $conf->{no_route}) {
@@ -41,8 +40,7 @@ sub serve_index {
 
     my $search = Pod::Simple::Search->new;
     $search->inc(0);
-    $search->laborious(1);
-    my $res = $search->limit_glob('*')->survey;
+    my $res = $search->limit_glob('*')->survey(@{$self->paths});
     my @found = sort {$a cmp $b} keys %$res;
     
     $c->stash->set(
@@ -116,7 +114,8 @@ sub serve_pod {
         static_dir  => 'static',
         perldoc     => "$dom",
         see_also    => ! $self->no_see_also
-            ? _detect_see_also((($podname || $title) =~ qr{(^[a-zA-Z0-9:]+)})[0])
+            ? _detect_see_also(
+                    $self, (($podname || $title) =~ qr{(^[a-zA-Z0-9:]+)})[0])
             : undef,
     );
     
@@ -151,19 +150,18 @@ sub serve_pod_by_name {
 }
 
 sub _detect_see_also {
-    my $module = shift;
+    my ($self, $module) = @_;
     
     my $search = Pod::Simple::Search->new;
     $search->inc(0);
-    $search->laborious(1);
     my @relatives;
     
     if (my $parent = ($module =~ qr{(.+)::\w+$})[0]) {
-        my $b = $search->limit_glob($parent)->survey;
+        my $b = $search->limit_glob($parent)->survey(@{$self->paths});
         push(@relatives, keys %$b);
     }
     
-    my $a = $search->limit_glob($module. '::*')->survey;
+    my $a = $search->limit_glob($module. '::*')->survey(@{$self->paths});
     push(@relatives, grep {$_ =~ qr{^$module\::\w+$}} keys %$a);
     
     return \@relatives;

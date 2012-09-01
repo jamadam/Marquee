@@ -1,8 +1,11 @@
 Revision history for Marquee
 
-0.11 2012/08/31
+0.11 2012/09/01
   - Fixed many bugs on windows.
   - Added cookbook.
+  - Added paths options for pod viewer.
+  - Added official site app.
+  - Improved documentaions.
 
 0.10 2012/08/30
   - Fixed a test

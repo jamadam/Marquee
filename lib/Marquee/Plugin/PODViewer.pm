@@ -16,7 +16,8 @@ sub register {
     
     push(@{$app->roots}, __PACKAGE__->Marquee::asset());
     
-    $self->paths([map { $_, "$_/pods" } @INC]);
+    $self->paths($conf->{paths} || [map { $_, "$_/pods" } @INC]);
+    
     $self->no_see_also($conf->{no_see_also} || 0);
     
     if (! $conf->{no_route}) {
@@ -39,6 +40,7 @@ sub serve_index {
     my $app = $c->app;
 
     my $search = Pod::Simple::Search->new;
+    $search->inc(0);
     $search->laborious(1);
     my $res = $search->limit_glob('*')->survey;
     my @found = sort {$a cmp $b} keys %$res;
@@ -136,7 +138,9 @@ sub serve_pod_by_name {
     
     my $c       = Marquee->c;
     my $app     = $c->app;
-    my $path    = Pod::Simple::Search->new->find($module, @{$self->paths});
+    my $search  = Pod::Simple::Search->new;
+    $search->inc(0);
+    my $path    = $search->find($module, @{$self->paths});
     
     if (! $path || ! -r $path) {
         return $app->serve_redirect("http://metacpan.org/module/$module");
@@ -150,6 +154,7 @@ sub _detect_see_also {
     my $module = shift;
     
     my $search = Pod::Simple::Search->new;
+    $search->inc(0);
     $search->laborious(1);
     my @relatives;
     

@@ -12,9 +12,9 @@ $ENV{MOJO_HOME} = File::Spec->rel2abs(dirname(__FILE__));
 
 my $app = Marquee->new;
 
-$app->under_development(1);
+#$app->under_development(1);
 $app->document_root($app->home->rel_dir('.'));
-my $pod = $app->plugin(PODViewer => {no_route => 1});
+my $pod = $app->plugin(PODViewer => {no_route => 1, paths => ['./lib']});
 my $md  = $app->plugin(Markdown => {no_route => 1});
 
 $app->plugin(Router => sub {

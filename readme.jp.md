@@ -101,9 +101,9 @@ The application can be start in Mojo way.
 
 より詳しい情報は下記のドキュメントを参照してください。
 
-- [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook) (クックブック)
-- [Marquee](http://marquee.jamadam.com/perldoc/Marquee) (Marqueeベースクラス)
-- [モジュールインデックス](http://marquee.jamadam.com/perldoc/)
+- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook) (クックブック)
+- [Marquee](http://mrqe.biz/perldoc/Marquee) (Marqueeベースクラス)
+- [モジュールインデックス](http://mrqe.biz/perldoc/)
 
 ## コマンドラインインターフェース
 
@@ -115,7 +115,7 @@ APIには、オートインデックス、PODビューワー、Markdownビュー
 
 より詳しい情報は下記のドキュメントを参照してください。
 
-- [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (Cookbook)
+- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (Cookbook)
 
 ## スクリーンショット
 
@@ -149,8 +149,8 @@ Copyright (c) 2012 [jamadam]
 This program is free software; you can redistribute it and/or
 modify it under the [same terms as Perl itself].
 
-[Marquee]:http://marquee.jamadam.com/perldoc/Marquee
-[Marquee::Router]:http://marquee.jamadam.com/perldoc/Marquee/Router
+[Marquee]:http://mrqe.biz/perldoc/Marquee
+[Marquee::Router]:http://mrqe.biz/perldoc/Marquee/Router
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy

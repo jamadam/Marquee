@@ -17,7 +17,7 @@
 </head>
 <body>
     <h1>
-		<a href="http://marquee.jamadam.com/" class="poweredBy">Marquee</a>
+		<a href="http://mrqe.biz/" class="poweredBy">Marquee</a>
 		<%= placeholder 'h1AdditionalContent' => begin %>
 		<% end %>
     </h1>

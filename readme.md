@@ -105,9 +105,9 @@ For production use..
 
 For more information refer to documentations.
 
-- [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook) (Cookbook)
-- [Marquee](http://marquee.jamadam.com/perldoc/Marquee) (Marquee base class)
-- [Index of Modules](http://marquee.jamadam.com/perldoc/)
+- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook) (Cookbook)
+- [Marquee](http://mrqe.biz/perldoc/Marquee) (Marquee base class)
+- [Index of Modules](http://mrqe.biz/perldoc/)
 
 ## COMMAND LINE INTERFACE
 
@@ -119,7 +119,7 @@ Markdown viewer. You don't need any Apache things anymore.
 
 For more information, refer to following documentations.
 
-- [Marquee::Guides::Cookbook](http://marquee.jamadam.com/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (Cookbook)
+- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (Cookbook)
 
 ## SCREENSHOTS
 
@@ -153,8 +153,8 @@ Copyright (c) 2012 [jamadam]
 This program is free software; you can redistribute it and/or
 modify it under the [same terms as Perl itself].
 
-[Marquee]:http://marquee.jamadam.com/perldoc/Marquee
-[Marquee::Router]:http://marquee.jamadam.com/perldoc/Marquee/Router
+[Marquee]:http://mrqe.biz/perldoc/Marquee
+[Marquee::Router]:http://mrqe.biz/perldoc/Marquee/Router
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy

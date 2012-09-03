@@ -1,6 +1,8 @@
 Revision history for Marquee
 
-0.12 2012/09/01
+0.12 2012/09/03
+  - Changed domain for official site.
+  - Improved documentations.
 
 0.11 2012/09/01
   - Fixed many bugs on windows.

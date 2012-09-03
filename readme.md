@@ -82,10 +82,9 @@ such as HTTP requests, responses, DOM and JSON.
 
 To install this module, run the following commands:
 
-    $ perl Makefile.PL
-    $ make
-    $ make test
-    $ make install
+    $ wget https://github.com/jamadam/Marquee/tarball/master -O marquee.tar.gz
+    $ cpanm marquee.tar.gz
+    $ rm marquee.tar.gz
 
 ## Perl API
 

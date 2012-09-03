@@ -74,10 +74,9 @@ Perl-5.8.7以降で動作させることが可能です。
 
 下記のコマンドでインストールします。
 
-    $ perl Makefile.PL
-    $ make
-    $ make test
-    $ make install
+    $ wget https://github.com/jamadam/Marquee/tarball/master -O marquee.tar.gz
+    $ cpanm marquee.tar.gz
+    $ rm marquee.tar.gz
 
 ## Perl API
 

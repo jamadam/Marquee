@@ -8,10 +8,9 @@ This document contains some recipes to develop Marquee application.
 
 =head1 INSTALLATION
 
-    $ perl Makefile.PL
-    $ make
-    $ make test
-    $ make install
+    $ wget https://github.com/jamadam/Marquee/tarball/master -O marquee.tar.gz
+    $ cpanm marquee.tar.gz
+    $ rm marquee.tar.gz
 
 =head1 GETTING STARTED
 

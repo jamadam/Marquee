@@ -10,7 +10,7 @@ use Marquee;
 
 $ENV{MOJO_HOME} = File::Spec->rel2abs(dirname(__FILE__));
 
-my $officical_domain = 'http://marquee.jamadam.com';
+my $officical_domain = 'http://mrqe.biz';
 
 my $app = Marquee->new;
 

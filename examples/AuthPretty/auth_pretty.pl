@@ -41,7 +41,7 @@ use Mojo::Base 'Marquee';
                 my ($username, $password) = @_;
                 return $username eq 'jamadam' && $password eq 'pass';
             },
-        ] => "$FindBin::Bin/log/auth_log/");
+        ] => "$FindBin::Bin/auth_log/");
         
         return $self;
     }

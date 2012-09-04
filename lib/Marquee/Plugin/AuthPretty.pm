@@ -1,28 +1,22 @@
 package Marquee::Plugin::AuthPretty;
 use strict;
 use warnings;
-use Mojo::Util qw'encode decode';
+use Mojo::Util qw'encode hmac_md5_sum';
 use Mojo::Base 'Marquee::Plugin';
-use Mojo::Util qw{hmac_md5_sum};
 
 __PACKAGE__->attr(realm => 'Secret Area');
-
-
-sub vacuum {
-    my ($self, $storage) = @_;
-}
 
 ### --
 ### Register the plugin into app
 ### --
 sub register {
-    my ($self, $app, $entries, $storage) = @_;
+    my ($self, $app, $entries, $storage, $expire) = @_;
     
     if (! -d $storage) {
         die "$storage is not a directory";
     }
     
-    $self->vacuum($storage);
+    $self->vacuum($storage, $expire);
     
     push(@{$app->roots}, __PACKAGE__->Marquee::asset());
     
@@ -49,7 +43,8 @@ sub register {
             
             # already authorized
             if (my $sess_id = $c->signed_cookie('pretty_auth')) {
-                if (-e File::Spec->catfile($storage, hmac_md5_sum($matched, $sess_id, $secret))) {
+                if (-e File::Spec->catfile($storage,
+                                hmac_md5_sum($matched, $sess_id, $secret))) {
                     last;
                 }
             }
@@ -93,6 +88,26 @@ sub register {
     });
 }
 
+### --
+### vacuum session file directory
+### --
+sub vacuum {
+    my ($self, $storage, $expire) = @_;
+    
+    $expire ||= 3600;
+    
+    opendir(my $dir, $storage);
+    
+    map {
+        my $file = File::Spec->catfile($storage, $_);
+        if (-f $file && time - (stat $file)[9] > $expire) {
+            unlink($file);
+        }
+    } readdir($dir);
+    
+    closedir($dir);
+}
+
 1;
 
 __END__
@@ -112,7 +127,7 @@ Marquee::Plugin::AuthPretty - [EXPEREMENTAL] Pretty authentication form
             my ($username, $password) = @_;
             return $username eq 'user' &&  $password eq 'pass';
         },
-    ], 'path/to/storage_dir');
+    ], 'path/to/storage_dir', 3600);
 
 =head1 DESCRIPTION
 

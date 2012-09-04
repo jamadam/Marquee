@@ -202,7 +202,7 @@ sub path_to_type {
 ### Register plugin
 ### --
 sub plugin {
-    my ($self, $name, $args) = @_;
+    my ($self, $name, @args) = @_;
     
     unless ($name =~ s/^\+//) {
         $name = "Marquee::Plugin\::$name";
@@ -214,7 +214,7 @@ sub plugin {
         require "$file.pm"; ## no critic
     }
     my $plug = $name->new;
-    $plug->register($self, $args);
+    $plug->register($self, @args);
     return $plug;
 }
 
@@ -681,8 +681,8 @@ Load a class as a plugin. The prefix L<Marquee::Plugin> is prepended unless the
 class name C<$class> begins with C<+> sign, which means the class name is
 already fully qualified.
 
-    my $plugin = $app->plugin(Plugin => $params); # Marquee::Plugin::PlugName
-    my $plugin = $app->plugin('+NameSpace::Plugin' => $params); # NameSpace::Plugin
+    my $plugin = $app->plugin(Plugin => @params); # Marquee::Plugin::PlugName
+    my $plugin = $app->plugin('+NameSpace::Plugin' => @params); # NameSpace::Plugin
 
 =head2 C<render_ssi>
 

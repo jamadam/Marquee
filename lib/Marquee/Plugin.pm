@@ -21,7 +21,7 @@ Marquee::Plugin - Plugin base class
     use Mojo::Base 'Marquee::Plugin';
 
     sub register {
-        my ($self, $app, $args) = @_;
+        my ($self, $app, @args) = @_;
         ...
         return $self;
     }

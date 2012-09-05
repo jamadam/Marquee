@@ -13,7 +13,7 @@ use Mojo::Base 'Marquee';
         my $lib = $self->locale ? './docs/localize/'. $self->locale. '/lib' : './lib';
         my $pod = $self->plugin(PODViewer => {no_route => 1, paths => [$lib]});
         my $md  = $self->plugin(Markdown => {no_route => 1});
-        $self->document_root($self->home->rel_dir('.'));
+        $self->document_root($self->home);
         
         $self->plugin(Router => sub {
             my $r = shift;
@@ -23,7 +23,6 @@ use Mojo::Base 'Marquee';
                 if ($self->locale) {
                     $filename = "docs/localize/". $self->locale. '/'. $filename;
                 }
-                warn $self->search_static(shift || $filename);
                 $md->serve_markdown($self->search_static(shift || $filename));
                 $self->strip_domain;
             });

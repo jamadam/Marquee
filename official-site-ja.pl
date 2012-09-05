@@ -10,7 +10,10 @@ $ENV{MOJO_HOME} = File::Spec->rel2abs(dirname(__FILE__));
 
 my $app = OfficialSite->new(domain => 'http://mrqe.biz');
 #$app->under_development(1);
-$app->config(hypnotoad => {listen => ['http://*:8003']});
+$app->config(hypnotoad => {
+    listen => ['http://*:8003'],
+    pid_file => './official-site-ja.pid',
+});
 $app->start;
 
 package OfficialSite;

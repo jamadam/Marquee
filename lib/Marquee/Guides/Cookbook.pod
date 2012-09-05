@@ -58,9 +58,9 @@ For more information see also L<Marquee/context> and L<Marquee::Context>.
 
 Stash is a wide scope hash for sharing data. Marquee defines two levels for
 stash scope, application level and request level. Application level stash can
-be referred from anywhere in your application. Request level stash is a
-local copy of application level stash and last during the transaction.
-Both are belong to application and accessible
+be referred from anywhere in your application. On the other hand, request level
+stash is a local copy of application level stash and lasts during
+the transaction. Both are belong to application and accessible
 by same interface C<$app-E<gt>stash>.
 For more information see also L<Marqee/Stash> and L<Marquee::Stash>.
 

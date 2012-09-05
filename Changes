@@ -1,6 +1,9 @@
 Revision history for Marquee
 
-0.13 2012/09/03
+0.13 2012/09/05
+  - Improved documentations.
+  - Improved plugin API to accept multiple arguments.
+  - Added experimental plugin AuthPretty.
 
 0.12 2012/09/03
   - Changed domain for official site.

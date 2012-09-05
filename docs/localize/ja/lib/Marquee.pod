@@ -281,10 +281,10 @@ C<+>はクラス名が完結していることを意味します。
 第二引数の指定がなければ、ファイル名からハンドラーを自動検出します。
 レンダラーの拡張子は自動的に付与されないことに注意してください。
 
-    # render /path/to/template.html.epをepハンドラーでレンダリングします
+    # /path/to/template.html.epをepハンドラーでレンダリングします
     my $result = $app->render_ssi('/path/to/template.html.ep');
     
-    # render /path/to/template.html.epをeplハンドラーでレンダリングします
+    # /path/to/template.html.epをeplハンドラーでレンダリングします
     my $result = $app->render_ssi('/path/to/template.html.ep', 'epl');
     
     # /path/to/template.htmlをepハンドラーでレンダリングします

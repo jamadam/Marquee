@@ -21,7 +21,7 @@
 <body>
 	<div id="wrapper">
 		<span id="realm"><%= $realm %></span>
-		<form method="POST" action="<%= $path %>">
+		<form method="post" action="<%= $path %>">
 			<table id="message">
 				<tr>
 					<th>Username</th>

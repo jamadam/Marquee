@@ -32,7 +32,7 @@ epとeplは常に利用可能で、任意のハンドラーを追加すること
 [Marquee]は[Mojo::Template]ベースのテンプレートハンドラーを提供します。
 これにより、テンプレートは(Masonに比べ)テンプレート固有の構文が少ない代わりに、よりPerl風の記述が可能になり、つまり学習コストがより少ないです。
 
-Here's a practical example.
+実践的な例を示します。
 
     <ul>
         <%
@@ -89,7 +89,6 @@ Perl-5.8.7以降で動作させることが可能です。
     $app->start;
 
 このアプリはMojoのやり方で起動できます。
-The application can be start in Mojo way.
 
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.

@@ -2,11 +2,11 @@
 
 =head1 NAME
 
-Cookbook - Marquee cookbook
+Cookbook - Marqueeクックブック
 
 =head1 OVERVIEW
 
-This document contains some recipes to develop Marquee application.
+このドキュメントには、Marqueeアプリケーション開発のいくつかのレシピで構成されます。
 
 =head1 INSTALLATION
 
@@ -24,8 +24,7 @@ This document contains some recipes to develop Marquee application.
     
     $app->start;
 
-You also can separate the app into own class (shown below) and
-boot script (similar to above).
+アプリは下記のような独自のクラスと上記の起動スクリプトに分離することもできます。
 
     package MyApp;
     use Mojo::Base 'Marquee';
@@ -37,7 +36,6 @@ boot script (similar to above).
     }
 
 このアプリはMojoのやり方で起動できます。
-The application can be start in Mojo way.
 
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.
@@ -48,46 +46,45 @@ The application can be start in Mojo way.
 
 =head1 CONTEXT OBJECT
 
-Marquee don't encourage passing the transaction object one method to another.
-You can always get a localized context object containing transaction
-via Marquee class method from anywhere in you application.
-For more information see also L<Marquee/context> and L<Marquee::Context>.
+Marqueeアプリの開発では、トランザクションオブジェクトをメソッド間でたらい回しにせず、
+Marqueeクラスメソッドにて取得することを推奨しています。いつでも、アプリ内のどこからでも
+トランザクションを内包した現在のコンテキストを取得することができます。
+詳しくはL<Marquee/context>とL<Marquee::Context>を参照してください。
 
     my $context = Marquee->c; # Marquee::Context
     my $app = $context->app;  # Marquee application
     my $tx  = $context->tx;   # Mojo::Transaction
 
-=head1 STASH
+=head1 スタッシュ
 
-Stash is a wide scope hash for sharing data. Marquee defines two levels for
-stash scope, application level and request level. Application level stash can
-be referred from anywhere in your application. Request level stash is a
-local copy of application level stash and last during the transaction.
-Both are belong to application and accessible
-by same interface C<$app-E<gt>stash>.
-For more information see also L<Marqee/Stash> and L<Marquee::Stash>.
+スタッシュは広域にデータをシェアするためのハッシュです。Marqueeは2つのレベルのスタッシュスコープを定義しています。
+アプリケーションレベルのスタッシュはアプリ内のどこからでも参照できます。他方、リクエストレベルの
+スタッシュはアプリレベルスタッシュのローカルコピーで、トランザクションの終わりまで有効です。
+どちらもアプリに属し、C<$app-E<gt>stash>という同じインターフェースでアクセス可能です。
+
+より詳しくはL<Marqee/Stash>とL<Marquee::Stash>を参照してください。
 
     $app = Marquee->new;
     $app->stash(mydata => 'app data'); # set data
 
-Inside template..
+テンプレート内にて。。
 
     <% my $stash = Marquee->stash(); # local copy for a request %>
 
-Application level data transparently available.
+アプリレベルのデータは透過的に利用可能です。
 
     <% my $mydata = $stash->get('mydata'); %> <!-- app data -->
     <% $stash->set(context_data => time); %>
 
-The set data will be discarded at the transaction close.
+setされたデータはトランザクションのクローズとともに消滅します。
 
-=head1 TEMPLATING
+=head1 テンプレート開発
 
-The bundled template handler for Marquee L<Marquee::SSIHandler::EP> is
-very similar to L<Mojolicious::Plugin::EPRenderer> but helper functions are
-different. See L<Marquee::SSIHandler::EP/FUNCTIONS> for detail.
+MarqueeにバンドルされたテンプレートハンドラーであるL<Marquee::SSIHandler::EP>は
+L<Mojolicious::Plugin::EPRenderer>にそっくりですが、ヘルパー関数において違いがあります。
+詳しくはL<Marquee::SSIHandler::EP/FUNCTIONS>を参照してください。
 
-Basic syntax.
+基本的な構文。
 
     <% ...; %> <!-- execute Perl code -->
     <%= ... %> <!-- execute Perl code and output(with html escape) -->
@@ -96,7 +93,7 @@ Basic syntax.
     %= ...; # execute inline Perl code code and output(with html escape)
     %== ...; # execute inline Perl code code and output(without html escape)
     
-Block syntax.
+ブロック構文。
 
     <% my $block = begin %>
         <% my $arg = shift; %>
@@ -105,15 +102,14 @@ Block syntax.
     
     <%= $block->('foo') %>
 
-There is also some more differences on caching compiled templates.
-Cache for L<Marquee::SSIHandler::EP> automatically expires on the file touch
-so you don't have to restart the application to reflect the change.
+テンプレートのコンパイル結果のキャッシュ方法についても違いがあります。
+L<Marquee::SSIHandler::EP>のキャッシュはファイルのutimeの変化により自動的に期限切れとなります。
+このため、テンプレートの編集を反映するためにアプリを再起動する必要はありません。
 
-=head1 ROUTING
+=head1 ルーティング
 
-Though path routing is not an outstanding issue for Marquee because of the
-concept of default mapping rule, there is a plugin L<Marquee::Plugin::Router>
-for overriding the routing.
+デフォルトのマッピングルールのコンセプトを尊重する限り、Marqueeにとってルーティングは重要な問題ではありませんが、
+L<Marquee::Plugin::Router>プラグインを使用すれば、このルーティングをオーバーライドすることができます。
 
     $app->plugin(Router => sub {
         my $r = shift;
@@ -125,10 +121,10 @@ for overriding the routing.
         });
     });
 
-=head1 BASIC AUTHENTICATION
+=head1 ベーシック認証
 
-There is a dedicated plugin L<Marquee::Plugin::Auth> for basic authentication.
-You can port apache htpasswd entries as follows.
+ベーシック認証専用のL<Marquee::Plugin::Auth>プラグインがあります。
+下記のようなApacheのhtaccessを移植することができます。
 
     my $htpasswd = {
         user1 => 'znq.opIaiH.zs',
@@ -144,9 +140,9 @@ You can port apache htpasswd entries as follows.
         },
     ]);
 
-=head1 DEPLOYMENT
+=head1 デプロイメント
 
-=head2 Built-in web server
+=head2 ビルトインwebサーバー
 
     #!/usr/bin/env perl
     use strict;
@@ -159,7 +155,7 @@ You can port apache htpasswd entries as follows.
     
     MyApp->new->start;
 
-On command line..
+コマンドラインにて。。
 
     $ ./myapp.pl daemon
 
@@ -178,13 +174,13 @@ On command line..
     $app->config(hypnotoad => {listen => ['http://*:8002']});
     $app->start;
 
-On command line..
+コマンドラインにて。
 
     $ hypnotoad ./myapp.pl
 
 =head2 Apache/CGI
 
-Boot script for CGI environment should look like as follows.
+CGI環境での起動スクリプトは下記のようになります。
 
     #!/usr/bin/env perl
     use strict;
@@ -197,7 +193,7 @@ Boot script for CGI environment should look like as follows.
     
     MyApp->new->start;
 
-htaccess should look like as follows.
+htaccessは下記のようになります。
 
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME}.ep -f [OR]
@@ -206,7 +202,7 @@ htaccess should look like as follows.
     RewriteRule ^(.*)$ index.cgi/$1 [QSA]
     RewriteRule ^ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
 
-=head1 COMMAND LINE INTERFACE
+=head1 コマンドラインインターフェース
 
 L<Marquee>はPerlのオブジェクト指向APIに加え、カレントディレクトリの内容をL<Mojo::Daemon>を使って
 ウェブページとして発行するコマンドラインインターフェースも提供します。

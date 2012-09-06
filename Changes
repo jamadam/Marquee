@@ -1,5 +1,8 @@
 Revision history for Marquee
 
+0.14 2012/09/06
+  - Improved documentations.
+
 0.13 2012/09/05
   - Improved documentations.
   - Improved plugin API to accept multiple arguments.

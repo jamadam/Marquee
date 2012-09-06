@@ -7,6 +7,21 @@ Marquee
 
 これはひょっとすると、[Mason]や[Markup::Perl]、[HTML::Embperl]、或いはPHPの再発明かも知れません。
 
+    <ul>
+        <%
+            require './lib/NewsRelease.pm';
+            my $news = NewsRelease->new();
+            my @array = $news->fetch(5);
+        %>
+        <% for my $entry (@array) { %>
+            <li>
+                <a href="<%= $entry->{url} %>">
+                    <%= $entry->{title} %>
+                </a>
+            </li>
+        <% } %>
+    </ul>
+
 ### デフォルトのURLマッピング
 
 [Marquee]はデフォルトで、リクエストパスを対応するファイルとディレクトリの構造にマッピングします。
@@ -31,23 +46,6 @@ epとeplは常に利用可能で、任意のハンドラーを追加すること
 
 [Marquee]は[Mojo::Template]ベースのテンプレートハンドラーを提供します。
 これにより、テンプレートは(Masonに比べ)テンプレート固有の構文が少ない代わりに、よりPerl風の記述が可能になり、つまり学習コストがより少ないです。
-
-実践的な例を示します。
-
-    <ul>
-        <%
-            require './lib/NewsRelease.pm';
-            my $news = NewsRelease->new();
-            my @array = $news->fetch(5);
-        %>
-        <% for my $entry (@array) { %>
-            <li>
-                <a href="<%= $entry->{url} %>">
-                    <%= $entry->{title} %>
-                </a>
-            </li>
-        <% } %>
-    </ul>
 
 ### Content-Typeの自動生成
 

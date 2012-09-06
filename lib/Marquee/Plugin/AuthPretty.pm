@@ -16,7 +16,7 @@ sub register {
         die "$storage is not a directory";
     }
     
-    $self->vacuum($storage, $expire);
+    _vacuum($self, $storage, $expire);
     
     push(@{$app->roots}, __PACKAGE__->Marquee::asset());
     
@@ -91,7 +91,7 @@ sub register {
 ### --
 ### vacuum session file directory
 ### --
-sub vacuum {
+sub _vacuum {
     my ($self, $storage, $expire) = @_;
     
     $expire ||= 3600;
@@ -114,7 +114,7 @@ __END__
 
 =head1 NAME
 
-Marquee::Plugin::AuthPretty - [EXPEREMENTAL] Pretty authentication form
+Marquee::Plugin::AuthPretty - [EXPERIMENTAL] Pretty authentication form
 
 =head1 SYNOPSIS
     

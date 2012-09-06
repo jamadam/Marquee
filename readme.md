@@ -8,6 +8,21 @@ development to be plotted at an extension of traditional designer work.
 This may possibly be a reinvention of [Mason], [Markup::Perl], [HTML::Embperl]
 or PHP.
 
+    <ul>
+        <%
+            require './lib/NewsRelease.pm';
+            my $news = NewsRelease->new();
+            my @array = $news->fetch(5);
+        %>
+        <% for my $entry (@array) { %>
+            <li>
+                <a href="<%= $entry->{url} %>">
+                    <%= $entry->{title} %>
+                </a>
+            </li>
+        <% } %>
+    </ul>
+
 ### Default URL mapping
 
 By default, [Marquee] automatically maps request paths to corresponding
@@ -38,23 +53,6 @@ in core.
 [Marquee] provedes [Mojo::Template] based template handler which allows templates
 to be written in more Perl instead of template specific syntax,
 therefore, it requires less lerning cost (by comparison to [Mason]).
-
-Here's a practical example.
-
-    <ul>
-        <%
-            require './lib/NewsRelease.pm';
-            my $news = NewsRelease->new();
-            my @array = $news->fetch(5);
-        %>
-        <% for my $entry (@array) { %>
-            <li>
-                <a href="<%= $entry->{url} %>">
-                    <%= $entry->{title} %>
-                </a>
-            </li>
-        <% } %>
-    </ul>
 
 ### Generating Content-Type automatically
 

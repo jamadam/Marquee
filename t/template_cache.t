@@ -3,9 +3,9 @@ use warnings;
 use utf8;
 use FindBin;
 use File::Basename 'dirname';
-use File::Spec;
-use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
-use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
+use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
+use lib catdir(dirname(__FILE__), '../lib');
+use lib catdir(dirname(__FILE__), 'lib');
 use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
@@ -28,7 +28,7 @@ my $t;
     $t->get_ok('/template_cache/cache.html')
         ->status_is(200);
     
-    my $path = File::Spec->canonpath("$FindBin::Bin/public_html/template_cache/cache.html.ep");
+    my $path = canonpath("$FindBin::Bin/public_html/template_cache/cache.html.ep");
     my $expected_key = md5_sum(encode('UTF-8', $path));
     my $cache = $app->ssi_handlers->{ep}->template_cache;
     is scalar keys %{$cache->{1}}, 1, 'right cache amount';
@@ -48,7 +48,7 @@ my $t;
     $t->get_ok('/template_cache/cache3.html')
         ->status_is(200);
     
-    my $path = File::Spec->canonpath("$FindBin::Bin/public_html/template_cache/cache3.html.epl");
+    my $path = canonpath("$FindBin::Bin/public_html/template_cache/cache3.html.epl");
     my $expected_key = md5_sum(encode('UTF-8', $path));
     my $cache = $app->ssi_handlers->{epl}->template_cache;
     is scalar keys %{$cache->{1}}, 1, 'right cache amount';

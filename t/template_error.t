@@ -3,9 +3,9 @@ use warnings;
 use utf8;
 use FindBin;
 use File::Basename 'dirname';
-use File::Spec;
-use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
-use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
+use File::Spec::Functions qw{catdir splitdir rel2abs canonpath canonpath};
+use lib catdir(dirname(__FILE__), '../lib');
+use lib catdir(dirname(__FILE__), 'lib');
 use Test::More;
 use Test::Mojo::DOM;
 use Test::Path qw'path_is path_like';
@@ -82,7 +82,7 @@ $t->get_ok('/not_good.html')
     ->dom_inspector(sub {
         my $t = shift;
         $t->at('title')->text_is('Debug Screen');
-        my $path = File::Spec->canonpath('t/public_html/not_good.html.ep');
+        my $path = canonpath('t/public_html/not_good.html.ep');
         $t->at('#showcase pre')->text_like(qr{Global symbol "\$nonexitsts" requires explicit package name at (.+?)\Q$path\E line 4\.});
         $t->at('#context tr:nth-child(1) td.key')->text_is('1.');
         $t->at('#context tr:nth-child(1) td.value pre')->content_xml_is('&lt;filename&gt;not_good.html.ep&lt;/filename&gt;');
@@ -134,7 +134,7 @@ $t->get_ok('/template_error.html')
         $t->at('#request tr:nth-child(5) td.key')->content_xml_is('Stash:');
         $t->at('#request tr:nth-child(5) td.value pre')->content_xml_is("{\n  &#39;test&#39; =&gt; &#39;value&#39;\n}\n");
         $t->at('title')->text_is('Debug Screen');
-        my $path = File::Spec->canonpath('/t/public_html/template_error/1.html.ep');
+        my $path = canonpath('/t/public_html/template_error/1.html.ep');
         $t->at('#showcase pre')->text_like(qr{Global symbol "\$nonexist" requires explicit package name at (.+)\Q$path\E line 2.});
         $t->at('#context tr:nth-child(1) td.key')->text_is('1.');
         $t->at('#context tr:nth-child(1) td.value pre')->content_xml_is('&lt;filename&gt;/template_error/1.html.ep&lt;/filename&gt;');

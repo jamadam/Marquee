@@ -3,9 +3,9 @@ use warnings;
 use utf8;
 use FindBin;
 use File::Basename 'dirname';
-use File::Spec;
-use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
-use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
+use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
+use lib catdir(dirname(__FILE__), '../lib');
+use lib catdir(dirname(__FILE__), 'lib');
 use Test::More;
 use Test::Mojo::DOM;
 use Test::Path 'path_is';
@@ -248,7 +248,7 @@ $t->get_ok('/index.unknown')
 }
 {
     local $ENV{'MOJO_HOME'} = "$FindBin::Bin/public_html";
-    local $ENV{'DOCUMENT_ROOT'} = File::Spec->canonpath($FindBin::Bin);
+    local $ENV{'DOCUMENT_ROOT'} = canonpath($FindBin::Bin);
     $app = Marquee->new;
     path_is $app->home, "$FindBin::Bin/public_html";
     path_is $ENV{'MARQUEE_BASE_PATH'}, "/public_html";

@@ -1,6 +1,5 @@
 package Test::Path;
 use Test::More;
-use File::Spec;
 our(@ISA, @EXPORT_OK);
 require Exporter;
 @ISA = qw(Exporter);

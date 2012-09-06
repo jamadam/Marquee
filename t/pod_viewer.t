@@ -3,9 +3,9 @@ use warnings;
 use utf8;
 use FindBin;
 use File::Basename 'dirname';
-use File::Spec;
-use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), '../lib';
-use lib join '/', File::Spec->splitdir(File::Spec->rel2abs(dirname(__FILE__))), 'lib';
+use File::Spec::Functions qw{catdir splitdir rel2abs};
+use lib join '/', splitdir(rel2abs(dirname(__FILE__))), '../lib';
+use lib join '/', splitdir(rel2abs(dirname(__FILE__))), 'lib';
 use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
@@ -19,7 +19,7 @@ my $t;
 $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
-$app->plugin('PODViewer');
+$app->plugin('PODViewer' => {paths => [catdir(dirname(__FILE__), '../lib')]});
 
 $t = Test::Mojo::DOM->new($app);
 
@@ -86,7 +86,7 @@ $t->get_ok('/perldoc/Marquee/SSIHandler')
 $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
-$app->plugin('PODViewer', {no_see_also => 1});
+$app->plugin('PODViewer', {no_see_also => 1, paths => [catdir(dirname(__FILE__), '../lib')]});
 
 $t = Test::Mojo::DOM->new($app);
 

@@ -1,7 +1,7 @@
 Marquee
 ---------------
 
-[Marquee]ディストリビューションは、[Mojolicious]ディストリビューション付属のMojoツールキットのうえに構成された、
+[Marquee]は、[Mojolicious]ディストリビューション付属のMojoツールキットのうえに構成された、
 もうひとつのウェブアプリケーションフレームワークです。
 ダイナミックなウェブサイトの開発が、昔ながらのデザイナーワークの延長線上に配置されることを想定してデザインされています。
 
@@ -55,10 +55,6 @@ epとeplは常に利用可能で、任意のハンドラーを追加すること
 システムはContent-Typeを自動検出し、ヘッダーを暗黙的に出力することができます。この方式は(PHPに比べ)
 より合理的です。
 
-    index.html.ep
-    index.json.ep
-    index.txt.epl
-
 ### インストールが容易
 
 [Marquee]はPure-Perlで実装されており、また、唯一の依存先である[Mojolicious]ディストリビューションもPure-Perlですので、
@@ -70,6 +66,14 @@ Perl-5.8.7以降で動作させることが可能です。
 
 [Marquee]はmojoのうえに実装されているため、多くのmojoクラスによって、HTTPリクエストや、HTTPレスポンス、DOM、JSONなどの操作が簡単に行えます。
 
+### コマンドラインインターフェース
+
+[Marquee]はPerlのオブジェクト指向APIに加え、カレントディレクトリの内容を[Mojo::Daemon]を使って
+ウェブページとして発行するコマンドラインインターフェースも提供します。
+これは、開発環境用や、些細なファイル共有などにも便利です。
+APIには、オートインデックス、PODビューワー、Markdownビューワーなどの便利なオプションが備わっています。
+もうApacheなどは必要ありません。
+
 ## インストール
 
 下記のコマンドでインストールします。
@@ -78,42 +82,14 @@ Perl-5.8.7以降で動作させることが可能です。
     $ cpanm marquee.tar.gz
     $ rm marquee.tar.gz
 
-## Perl API
-
-最小のMarqueeアプリです。
-
-    use Marquee;
-    
-    my $app = Marquee->new;
-    
-    $app->start;
-
-このアプリはMojoのやり方で起動できます。
-
-    $ ./myapp daemon
-    Server available at http://127.0.0.1:3000.
-
-プロダクションでは..
-    
-    $ hypnotoad ./myapp
+## ドキュメンテーション
 
 より詳しい情報は下記のドキュメントを参照してください。
 
 - [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook) (クックブック)
 - [Marquee](http://mrqe.biz/perldoc/Marquee) (Marqueeベースクラス)
 - [モジュールインデックス](http://mrqe.biz/perldoc/)
-
-## コマンドラインインターフェース
-
-[Marquee]はPerlのオブジェクト指向APIに加え、カレントディレクトリの内容を[Mojo::Daemon]を使って
-ウェブページとして発行するコマンドラインインターフェースも提供します。
-これは、開発環境用や、些細なファイル共有などにも便利です。
-APIには、オートインデックス、PODビューワー、Markdownビューワーなどの便利なオプションが備わっています。
-もうApacheなどは必要ありません。
-
-より詳しい情報は下記のドキュメントを参照してください。
-
-- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (Cookbook)
+- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (コマンドラインインターフェース)
 
 ## スクリーンショット
 

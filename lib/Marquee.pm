@@ -444,9 +444,6 @@ L<Marquee> distribution is yet another web application framework built on mojo
 modules in L<Mojolicious> distribution, designed to make dynamic content
 development to be plotted at an extension of designer work.
 
-L<Marquee> module is the base class of applications. The module also is a
-backend of L<Mojolicious::Command::marquee>, a command line tool.
-
 =head1 ATTRIBUTES
 
 L<Marquee> inherits all attributes from L<Mojo> and implements the following

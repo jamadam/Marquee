@@ -1,7 +1,7 @@
 Marquee
 ---------------
 
-[Marquee] distribution is yet another web application framework built on Mojo
+[Marquee] is yet another web application framework built on Mojo
 toolkit in [Mojolicious] distribution, designed to make dynamic website
 development to be plotted at an extension of traditional designer work.
 
@@ -62,10 +62,6 @@ Here's a practical example.
 the system can auto detect Content-Type and implicitly serve the header.
 This system is more resonable (by comparison to PHP).
 
-    index.html.ep
-    index.json.ep
-    index.txt.epl
-
 ### Easy to install
 
 [Marquee] is written in pure-perl and depends on only [Mojolicious] distribution
@@ -78,6 +74,14 @@ to adopt backport project [mojo-legacy] to run on perl-5.8.7.
 Since [Marquee] is based on mojo, many mojo classes helps you on manipulating
 such as HTTP requests, responses, DOM and JSON.
 
+### Command line interface
+
+In addition to Perl OOP API, Marquee also provides command line interface
+to serve current directory contents as a web site, using [Mojo::Daemon].
+This is useful for such as development environment or even trivial file sharing.
+The API provides some useful option such as auto index, POD viewer,
+Markdown viewer. You don't need any Apache things anymore.
+
 ## INSTALLATION
 
 To install this module, run the following commands:
@@ -86,39 +90,14 @@ To install this module, run the following commands:
     $ cpanm marquee.tar.gz
     $ rm marquee.tar.gz
 
-## Perl API
+## DOCUMENTATIONS
 
-Here is a smallest Marquee application.
-
-    use Marquee;
-    Marquee->new->start;
-
-The application can be started in Mojo way.
-
-    $ ./myapp daemon
-    Server available at http://127.0.0.1:3000.
-
-For production use..
-    
-    $ hypnotoad ./myapp
-
-For more information refer to documentations.
+For more information refer to following documentations.
 
 - [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook) (Cookbook)
 - [Marquee](http://mrqe.biz/perldoc/Marquee) (Marquee base class)
 - [Index of Modules](http://mrqe.biz/perldoc/)
-
-## COMMAND LINE INTERFACE
-
-In addition to Perl OOP API, Marquee also provides command line interface
-to serve current directory contents as a web site, using [Mojo::Daemon].
-This is useful for such as development environment or even trivial file sharing.
-The API provides some useful option such as auto index, POD viewer,
-Markdown viewer. You don't need any Apache things anymore.
-
-For more information, refer to following documentations.
-
-- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (Cookbook)
+- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (Command line interface)
 
 ## SCREENSHOTS
 

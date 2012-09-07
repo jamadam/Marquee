@@ -8,20 +8,7 @@ development to be plotted at an extension of traditional designer work.
 This may possibly be a reinvention of [Mason], [Markup::Perl], [HTML::Embperl]
 or PHP.
 
-    <ul>
-        <%
-            require './lib/NewsRelease.pm';
-            my $news = NewsRelease->new();
-            my @array = $news->fetch(5);
-        %>
-        <% for my $entry (@array) { %>
-            <li>
-                <a href="<%= $entry->{url} %>">
-                    <%= $entry->{title} %>
-                </a>
-            </li>
-        <% } %>
-    </ul>
+![Komodo Edit](http://mrqe.biz/screenshot/komodo.png "Komodo Edit")
 
 ### Default URL mapping
 
@@ -103,15 +90,15 @@ Here is some screenshots of how Marquee look like.
 
 ### debug screen
 
-![debug screen](https://github.com/jamadam/Marquee/raw/master/screenshot/debug_screen.png "Debug screen")
+![debug screen](http://mrqe.biz/screenshot/debug_screen.png "Debug screen")
 
 ### Auto index
 
-![auto index](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
+![auto index](http://mrqe.biz/screenshot/autoindex.png "Auto Index")
 
 ### Auto tree
 
-![auto tree](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindextree.png "Auto Index")
+![auto tree](http://mrqe.biz/screenshot/autoindextree.png "Auto Index")
 
 ## REPOSITORY
 

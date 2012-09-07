@@ -7,20 +7,7 @@ Marquee
 
 これはひょっとすると、[Mason]や[Markup::Perl]、[HTML::Embperl]、或いはPHPの再発明かも知れません。
 
-    <ul>
-        <%
-            require './lib/NewsRelease.pm';
-            my $news = NewsRelease->new();
-            my @array = $news->fetch(5);
-        %>
-        <% for my $entry (@array) { %>
-            <li>
-                <a href="<%= $entry->{url} %>">
-                    <%= $entry->{title} %>
-                </a>
-            </li>
-        <% } %>
-    </ul>
+![Komodo Edit](http://mrqe.biz/screenshot/komodo.png "Komodo Edit")
 
 ### デフォルトのURLマッピング
 
@@ -95,15 +82,15 @@ APIには、オートインデックス、PODビューワー、Markdownビュー
 
 ### デバッグスクリーン
 
-![debug screen](https://github.com/jamadam/Marquee/raw/master/screenshot/debug_screen.png "Debug screen")
+![debug screen](http://mrqe.biz/screenshot/debug_screen.png "Debug screen")
 
 ### オートインデックス
 
-![auto index](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindex.png "Auto Index")
+![auto index](http://mrqe.biz/screenshot/autoindex.png "Auto Index")
 
 ### オートツリー
 
-![auto tree](https://github.com/jamadam/Marquee/raw/master/screenshot/autoindextree.png "Auto Index")
+![auto tree](http://mrqe.biz/screenshot/autoindextree.png "Auto Index")
 
 ## REPOSITORY
 

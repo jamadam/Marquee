@@ -12,7 +12,7 @@ use Mojo::Date;
 use Marquee;
 use File::Path 'rmtree';
 
-use Test::More tests => 21;
+use Test::More tests => 34;
 
 my $app;
 my $t;
@@ -30,11 +30,11 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 
 $app->plugin(Router => sub {
     my $r = shift;
-    $r->route(qr{^/})->to(sub {
+    $r->route(qr{^/admin/index})->to(sub {
         my $res = Marquee->c->tx->res;
         $res->code(200);
         $res->headers->content_type($app->types->type('html'));
-        $res->body('index.html');
+        $res->body('/admin/index passed');
     });
     $r->route(qr{^/admin/})->to(sub {
         my $res = Marquee->c->tx->res;
@@ -42,11 +42,17 @@ $app->plugin(Router => sub {
         $res->headers->content_type($app->types->type('html'));
         $res->body('/admin/ passed');
     });
-    $r->route(qr{^/admin/index})->to(sub {
+    $r->route(qr{^/admin2/})->to(sub {
         my $res = Marquee->c->tx->res;
         $res->code(200);
         $res->headers->content_type($app->types->type('html'));
-        $res->body('/admin/index passed');
+        $res->body('/admin2/ passed');
+    });
+    $r->route(qr{^/})->to(sub {
+        my $res = Marquee->c->tx->res;
+        $res->code(200);
+        $res->headers->content_type($app->types->type('html'));
+        $res->body('index.html');
     });
 });
 
@@ -54,6 +60,10 @@ $app->plugin(AuthPretty => [
     qr{^/admin/} => 'Secret Area' => sub {
         my ($username, $password) = @_;
         return $username eq 'jamadam' && $password eq 'pass';
+    },
+    qr{^/admin2/} => 'Secret Area2' => sub {
+        my ($username, $password) = @_;
+        return $username eq 'jamadam' && $password eq 'pass2';
     },
 ] => catdir(dirname(__FILE__), 'auth_log'));
 
@@ -71,6 +81,12 @@ $t->get_ok('/admin/index')
     ->status_is(200)
     ->text_is('title', 'Secret Area');
 
+$t->post_form_ok('/admin/', {username => 'jamadam', password => 'wrong pass'})
+    ->status_is(200)
+    ->header_is('Set-Cookie', undef)
+    ->header_is('Location', undef)
+    ->text_is('title', 'Secret Area');
+
 $t->post_form_ok('/admin/', {username => 'jamadam', password => 'pass'})
     ->status_is(301)
     ->header_like('Set-Cookie', qr'pretty_auth=.+?--.+?')
@@ -78,14 +94,23 @@ $t->post_form_ok('/admin/', {username => 'jamadam', password => 'pass'})
 
 $t->get_ok('/admin/')
     ->status_is(200)
-    ->text_is('title', 'Secret Area');
-
-$t->get_ok('/admin/', {Cookie => {}})
-    ->status_is(200)
     ->content_is('/admin/ passed');
 
-$t->get_ok('/admin/index', {Cookie => {}})
+$t->get_ok('/admin/index')
     ->status_is(200)
     ->content_is('/admin/index passed');
+
+$t->get_ok('/admin2/')
+    ->status_is(200)
+    ->text_is('title', 'Secret Area2');
+
+$t->post_form_ok('/admin2/', {username => 'jamadam', password => 'pass2'})
+    ->status_is(301)
+    ->header_like('Set-Cookie', qr'pretty_auth=.+?--.+?')
+    ->header_is('Location', '/admin2/');
+
+$t->get_ok('/admin2/')
+    ->status_is(200)
+    ->content_is('/admin2/ passed');
 
 __END__

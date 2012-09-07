@@ -52,6 +52,12 @@ use Mojo::Base 'Marquee';
             $org =~ s{^\Q$domain\E}{};
             $e->attrs('href', $org);
         });
+        $dom->find("img[src^=$domain/]")->each(sub {
+            my $e = shift;
+            my $org = $e->attrs('src');
+            $org =~ s{^\Q$domain\E}{};
+            $e->attrs('src', $org);
+        });
         $res->body($dom);
     }
 

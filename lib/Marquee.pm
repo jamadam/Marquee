@@ -397,7 +397,7 @@ __END__
 
 =head1 NAME
 
-Marquee - Yet another Mojolicious based web framework
+Marquee - Yet another Mojo based web framework
 
 =head1 SYNOPSIS
 

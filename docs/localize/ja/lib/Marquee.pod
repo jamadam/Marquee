@@ -2,7 +2,7 @@
 
 =head1 NAME
 
-Marquee - もうひとつのMojoliciousベースのウェブフレームワーク 
+Marquee - もうひとつのMojoベースのウェブフレームワーク 
 
 =head1 SYNOPSIS
 

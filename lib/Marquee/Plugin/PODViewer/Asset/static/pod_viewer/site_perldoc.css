@@ -8,37 +8,37 @@ body {
 	line-height: 1.5;
 	margin: 0;
 }
-#wrapper > * {
-	margin-bottom: 20px;
-}
-#wrapper ol,
-#wrapper ul {
-	padding-left:40px;
-}
-	#wrapper ol li {
-		list-style-type: decimal;
-		list-style-position: outside;
-	}
-	#wrapper ul li {
-		list-style-type: disc;
-		list-style-position: outside;
-	}
-		#wrapper ul ul li {
-			list-style-type: circle;
-		}
-			#wrapper ul ul ul li {
-				list-style-type: square;
-			}
-	#wrapper a:hover {
-		color: #2a2a2a
-	}
-	#wrapper a img {
-		border: 0
-	}
 #wrapper {
 	padding-left: 3em;
 	padding-right: 3em;
 }
+	#wrapper > * {
+		margin-bottom: 20px;
+	}
+	#wrapper ol,
+	#wrapper ul {
+		padding-left:40px;
+	}
+		#wrapper ol li {
+			list-style-type: decimal;
+			list-style-position: outside;
+		}
+		#wrapper ul li {
+			list-style-type: disc;
+			list-style-position: outside;
+		}
+			#wrapper ul ul li {
+				list-style-type: circle;
+			}
+				#wrapper ul ul ul li {
+					list-style-type: square;
+				}
+		#wrapper a:hover {
+			color: #2a2a2a
+		}
+		#wrapper a img {
+			border: 0
+		}
 	#wrapper h1 {
 		position: relative;
 		background-color: inherit;

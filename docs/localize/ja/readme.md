@@ -70,10 +70,10 @@ APIには、オートインデックス、PODビューワー、Markdownビュー
 
 より詳しい情報は下記のドキュメントを参照してください。
 
-- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook) (クックブック)
-- [Marquee](http://mrqe.biz/perldoc/Marquee) (Marqueeベースクラス)
-- [モジュールインデックス](http://mrqe.biz/perldoc/)
-- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (コマンドラインインターフェース)
+- [Marquee::Guides::Cookbook](http://ja.mrqe.biz/perldoc/Marquee/Guides/Cookbook) (クックブック)
+- [Marquee](http://ja.mrqe.biz/perldoc/Marquee) (Marqueeベースクラス)
+- [モジュールインデックス](http://ja.mrqe.biz/perldoc/)
+- [Marquee::Guides::Cookbook](http://ja.mrqe.biz/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (コマンドラインインターフェース)
 
 ## スクリーンショット
 
@@ -107,8 +107,8 @@ Copyright (c) 2012 [jamadam]
 This program is free software; you can redistribute it and/or
 modify it under the [same terms as Perl itself].
 
-[Marquee]:http://mrqe.biz/perldoc/Marquee
-[Marquee::Router]:http://mrqe.biz/perldoc/Marquee/Router
+[Marquee]:http://ja.mrqe.biz/perldoc/Marquee
+[Marquee::Router]:http://ja.mrqe.biz/perldoc/Marquee/Router
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy

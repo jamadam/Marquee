@@ -4,12 +4,7 @@ use warnings;
 use Mojo::Base -base;
 
 sub get {
-    my $self = shift;
-    if (! $_[0]) {
-        return $self;
-    }
-    
-    return $self->{$_[0]};
+    return $_[1] ? $_[0]->{$_[1]} : $_[0];
 }
 
 sub set {

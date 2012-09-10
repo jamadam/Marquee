@@ -9,8 +9,6 @@ body {
 	margin: 0;
 }
 #wrapper {
-	padding-left: 3em;
-	padding-right: 3em;
 }
 	#wrapper > * {
 		margin-bottom: 20px;

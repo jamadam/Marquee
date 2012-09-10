@@ -142,15 +142,16 @@ sub _init {
         
         $path = $self->_doc_path($path);
         my $c = Marquee->c;
+        my $app = $c->app;
         
-        if (my $path = $c->app->search_static($path)) {
+        if (my $path = $app->search_static($path)) {
             return b(decode_utf8(Mojo::Asset::File->new(path => $path)->slurp));
         }
         
-        if (my $path = $c->app->search_template($path)) {
+        if (my $path = $app->search_template($path)) {
             local $c->{stash} = $c->{stash}->clone;
             $c->{stash}->set(@args);
-            return b($c->app->render_ssi($path));
+            return b($app->render_ssi($path));
         }
         
         die "$path not found";
@@ -219,10 +220,9 @@ sub _init {
     $self->funcs->{extends} = sub {
         my ($self, $path, $block) = @_;
         
+        $path = $self->_doc_path($path);
         my $c = Marquee->c;
         my $app = $c->app;
-        
-        $path = $self->_doc_path($path);
         
         local $c->{stash} = $c->{stash}->clone;
         

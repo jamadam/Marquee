@@ -54,7 +54,7 @@ $t->status_is(200);
 $t->header_is('Content-Type', 'text/html;charset=UTF-8');
 $t->dom_inspector(sub {
     my $t = shift;
-    $t->at('title')->text_is('Marquee - Yet another Mojolicious based web framework - Pod viewer');
+    $t->at('title')->text_is('Marquee - Yet another Mojo based web framework - Pod viewer');
 });
 
 ### ja
@@ -91,7 +91,7 @@ $t->status_is(200);
 $t->header_is('Content-Type', 'text/html;charset=UTF-8');
 $t->dom_inspector(sub {
     my $t = shift;
-    $t->at('title')->text_is('Marquee - もうひとつのMojoliciousベースのウェブフレームワーク - Pod viewer');
+    $t->at('title')->text_is('Marquee - もうひとつのMojoベースのウェブフレームワーク - Pod viewer');
 });
 
 

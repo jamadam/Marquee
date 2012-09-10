@@ -32,9 +32,11 @@ application root.
     /public_html/news/sports/hockey.html.epl
 
 The extensioning rule is same as [Mojolicious]. The second extension indecates
-a handler for template rendering. ep and epl are always available
-and you can also add your own handler easily.
+a handler for template rendering. The rule allows Marquee to detect Content-Type
+and implicitly serve the header. This system is more resonable
+(by comparison to PHP).
 
+ep and epl are always available and you can also add your own handler easily.
 You can also override the mapping rule with [Marquee::Router] plugin bundled
 in core.
 
@@ -43,12 +45,6 @@ in core.
 [Marquee] provedes [Mojo::Template] based template handler which allows templates
 to be written in more Perlish instead of template specific syntax,
 therefore, it requires less lerning cost (by comparison to [Mason]).
-
-### Generating Content-Type automatically
-
-[Marquee] restricts tempalte names as name.format.handler style so that
-the system can auto detect Content-Type and implicitly serve the header.
-This system is more resonable (by comparison to PHP).
 
 ### Easy to install
 

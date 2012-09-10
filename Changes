@@ -1,6 +1,7 @@
 Revision history for Marquee
 
-0.15 2012/09/07
+0.15 2012/09/10
+  - Added session function for ep renderer.
 
 0.14 2012/09/07
   - Improved documentations.

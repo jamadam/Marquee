@@ -207,7 +207,7 @@ htaccess should look like as follows.
 
 In addition to Perl OOP API, L<Marquee> also provides command line interface
 to serve current directory contents as a web site, using L<Mojo::Daemon>.
-This is useful for such as development environment or even trivial file sharing.
+This is useful for development environment or even trivial file sharing.
 The API provides some useful option such as auto index, POD viewer,
 Markdown viewer. You don't need any Apache things anymore.
 

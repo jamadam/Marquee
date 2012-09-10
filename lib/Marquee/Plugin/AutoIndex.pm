@@ -81,8 +81,6 @@ sub serve_tree {
     
     $c->res->code(200);
     $c->res->headers->content_type($app->types->type('html'));
-    
-    return $app;
 }
 
 ### ---
@@ -109,8 +107,6 @@ sub serve_index {
     );
     $c->res->code(200);
     $c->res->headers->content_type($app->types->type('html'));
-    
-    return $app;
 }
 
 ### ---

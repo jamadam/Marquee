@@ -146,7 +146,7 @@ sub serve_pod_by_name {
     }
     
     open my $file, '<', $path;
-    return $self->serve_pod(join('', <$file>), $module);
+    $self->serve_pod(join('', <$file>), $module);
 }
 
 sub _detect_see_also {

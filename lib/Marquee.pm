@@ -268,7 +268,6 @@ sub serve_redirect {
     
     $CONTEXT->res->code(301);
     $CONTEXT->res->headers->location($self->to_abs($uri)->to_string);
-    return $self;
 }
 
 ### --
@@ -299,8 +298,6 @@ sub serve_static {
     if (my $type = $self->path_to_type($path)) {
         $CONTEXT->res->headers->content_type($type);
     }
-    
-    return $self;
 }
 
 ### --
@@ -316,8 +313,6 @@ sub serve_dynamic {
             $CONTEXT->res->headers->content_type($type);
         }
     }
-    
-    return $self;
 }
 
 sub start {

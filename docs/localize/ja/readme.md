@@ -7,6 +7,8 @@ Marquee
 
 これはひょっとすると、[Mason]や[Markup::Perl]、[HTML::Embperl]、或いはPHPの再発明かも知れません。
 
+__このソフトウェアはアルファクオリティのため、定常的な使用は推奨されません。__
+
 ![Komodo Edit](http://mrqe.biz/screenshot/komodo.png "Komodo Edit")
 
 ### デフォルトのURLマッピング

@@ -8,6 +8,9 @@ development to be plotted at an extension of traditional designer work.
 This may possibly be a reinvention of [Mason], [Markup::Perl], [HTML::Embperl]
 or PHP.
 
+__This software is considered to be alpha quality and isn't recommended for
+regular usage.__
+
 ![Komodo Edit](http://mrqe.biz/screenshot/komodo.png "Komodo Edit")
 
 ### Default URL mapping

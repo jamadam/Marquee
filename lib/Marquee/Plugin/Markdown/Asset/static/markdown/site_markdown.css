@@ -11,38 +11,39 @@ body {
 #wrapper > * {
 	margin-bottom: 20px;
 }
-#wrapper ol,
-#wrapper ul {
-	padding-left:40px;
-}
-	#wrapper ol li {
-		list-style-type: decimal;
-		list-style-position: outside;
-	}
-	#wrapper ul li {
-		list-style-type: disc;
-		list-style-position: outside;
-	}
-		#wrapper ul ul li {
-			list-style-type: circle;
-		}
-			#wrapper ul ul ul li {
-				list-style-type: square;
-			}
-	#wrapper a:hover {
-		color: #2a2a2a
-	}
-	#wrapper a img {
-		border: 0
-	}
 #wrapper {
 	padding-left: 3em;
 	padding-right: 3em;
+	font-size: 14px;
+	line-height: 1.6;
 }
-	#wrapper {
-		font-size: 14px;
-		line-height: 1.6;
+	#wrapper strong {
+		font-weight: bold;
 	}
+	#wrapper ol,
+	#wrapper ul {
+		padding-left:40px;
+	}
+		#wrapper ol li {
+			list-style-type: decimal;
+			list-style-position: outside;
+		}
+		#wrapper ul li {
+			list-style-type: disc;
+			list-style-position: outside;
+		}
+			#wrapper ul ul li {
+				list-style-type: circle;
+			}
+				#wrapper ul ul ul li {
+					list-style-type: square;
+				}
+		#wrapper a:hover {
+			color: #2a2a2a
+		}
+		#wrapper a img {
+			border: 0
+		}
 	#wrapper > *:first-child {
 		margin-top: 0 !important;
 	}

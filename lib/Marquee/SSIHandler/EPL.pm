@@ -38,13 +38,8 @@ sub render {
         $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
     }
     
-    my $output;
-    
-    if ($mt->compiled) {
-        $output = $mt->interpret($self, $c);
-    } else {
-        $output = $mt->render_file($path, $self, $c);
-    }
+    my $output = $mt->compiled
+            ? $mt->interpret($self, $c) : $mt->render_file($path, $self, $c);
     
     return ref $output ? die $output : $output;
 }

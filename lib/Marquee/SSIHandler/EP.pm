@@ -100,6 +100,18 @@ sub _init {
         return Marquee->c->req->param($_[0]);
     };
     
+    $self->funcs->{session} = sub {
+        shift;
+        my $sesison = Marquee->c->session;
+        if ($_[0] && $_[1]) {
+            return $sesison->{$_[0]} = $_[1];
+        } elsif (! $_[0]) {
+            return $sesison;
+        } else {
+            return $sesison->{$_[0]};
+        }
+    };
+    
     $self->funcs->{stash} = sub {
         shift;
         my $stash = Marquee->c->stash;
@@ -440,6 +452,14 @@ Returns request parameters for given key.
 =head2 C<placeholder>
 
 Set placeholder with default block. See L</extends> method.
+
+=head2 C<session>
+
+Sets or get a session value or get all data in hash.
+
+    <%= session('key') %>
+    <% session('key', 'value'); %>
+    <% $hash = session(); %>
 
 =head2 C<stash>
 

@@ -13,7 +13,7 @@ use Marquee;
 use Mojo::Date;
 use Marquee::SSIHandler::EP;
 
-use Test::More tests => 91;
+use Test::More tests => 100;
 
 ### add_function
 
@@ -186,5 +186,19 @@ $t->get_ok('/ep/use_layout2.html')
     });
 
 ok ! exists $app->stash->{title};
+
+### session
+
+$t = Test::Mojo->new($app);
+$t->get_ok('/ep/session.html');
+$t->text_is(test1 => '');
+$t->text_is(test2 => 'bar');
+$t->get_ok('/ep/session.html');
+$t->text_is(test1 => 'bar');
+$t->text_is(test2 => 'bar');
+$t = Test::Mojo->new($app);
+$t->get_ok('/ep/session.html');
+$t->text_is(test1 => '');
+$t->text_is(test2 => 'bar');
 
 __END__

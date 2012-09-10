@@ -1,7 +1,9 @@
 Revision history for Marquee
 
 0.15 2012/09/10
+  - Improved bundle css styles.
   - Added session function for ep renderer.
+  - Fixed some documents.
 
 0.14 2012/09/07
   - Improved documentations.

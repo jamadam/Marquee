@@ -38,18 +38,18 @@ in core.
 ### Perlish template
 
 [Marquee] provedes [Mojo::Template] based template handler which allows templates
-to be written in more Perl instead of template specific syntax,
+to be written in more Perlish instead of template specific syntax,
 therefore, it requires less lerning cost (by comparison to [Mason]).
 
 ### Generating Content-Type automatically
 
-[Marquee] restricts the name of templates as name.format.handler style so that
+[Marquee] restricts tempalte names as name.format.handler style so that
 the system can auto detect Content-Type and implicitly serve the header.
 This system is more resonable (by comparison to PHP).
 
 ### Easy to install
 
-[Marquee] is written in pure-perl and depends on only [Mojolicious] distribution
+[Marquee] is written in pure-perl and only depends on [Mojolicious] distribution
 which is also a pure-perl, so you can even deploy them via FTP.
 Though [Mojolicious] depends on perl-5.10.1 or higher, there is still an option
 to adopt backport project [mojo-legacy] to run on perl-5.8.7.
@@ -63,7 +63,7 @@ such as HTTP requests, responses, DOM and JSON.
 
 In addition to Perl OOP API, Marquee also provides command line interface
 to serve current directory contents as a web site, using [Mojo::Daemon].
-This is useful for such as development environment or even trivial file sharing.
+This is useful for development environment or even trivial file sharing.
 The API provides some useful option such as auto index, POD viewer,
 Markdown viewer. You don't need any Apache things anymore.
 

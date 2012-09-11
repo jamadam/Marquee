@@ -36,6 +36,10 @@ use Mojo::Base 'Marquee';
             });
         });
         
+        $self->static->maxage(604800);
+        
+        $self->plugin('ETag');
+        
         return $self;
     }
     

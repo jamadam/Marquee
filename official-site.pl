@@ -16,5 +16,4 @@ $app->config(hypnotoad => {
     listen => ['http://*:8002'],
     pid_file => './official-site.pid',
 });
-$app->static->maxage(604800);
 $app->start;

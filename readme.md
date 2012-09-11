@@ -1,8 +1,8 @@
 Marquee
 ---------------
 
-[Marquee] is yet another web application framework built on Mojo
-toolkit in [Mojolicious] distribution, designed to make dynamic website
+[Marquee] is yet another web framework built on Mojo toolkit in
+[Mojolicious] distribution, designed to make dynamic website
 development to be plotted at an extension of traditional designer work.
 
 This may possibly be a reinvention of [Mason], [Markup::Perl], [HTML::Embperl]

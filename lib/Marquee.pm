@@ -10,12 +10,13 @@ use Mojo::Util qw'encode';
 use Mojolicious::Types;
 use Mojolicious::Commands;
 use Mojo::Exception;
-use Marquee::Hooks;
 use Marquee::Context;
+use Marquee::ErrorDocument;
+use Marquee::Hooks;
 use Marquee::SSIHandler::EP;
 use Marquee::SSIHandler::EPL;
 use Marquee::Stash;
-use Marquee::ErrorDocument;
+use Marquee::Static;
 our $VERSION = '0.16';
 
 our $CONTEXT;
@@ -28,6 +29,7 @@ __PACKAGE__->attr(roots => sub {[]});
 __PACKAGE__->attr(secret => sub {md5_hex($^T. $$. rand(1000000))});
 __PACKAGE__->attr(ssi_handlers => sub {{}});
 __PACKAGE__->attr(stash => sub {Marquee::Stash->new});
+__PACKAGE__->attr(static => sub {Marquee::Static->new});
 __PACKAGE__->attr(types => sub { Mojolicious::Types->new });
 __PACKAGE__->attr('under_development' => 0);
 __PACKAGE__->attr('x_powered_by' => 'Marquee(Perl)');
@@ -45,7 +47,7 @@ sub new {
     });
     $self->hook(around_static => sub {
         shift;
-        $CONTEXT->app->serve_static(@_);
+        $CONTEXT->app->static->serve(@_);
     });
     $self->hook(around_dynamic => sub {
         shift;
@@ -274,30 +276,7 @@ sub serve_redirect {
 ### serve static content
 ### --
 sub serve_static {
-    my ($self, $path) = @_;
-    
-    my $asset = Mojo::Asset::File->new(path => $path);
-    my $modified = (stat $path)[9];
-    
-    # If modified since
-    my $req_headers = $CONTEXT->req->headers;
-    my $res_headers = $CONTEXT->res->headers;
-    if (my $date = $req_headers->if_modified_since) {
-        my $since = Mojo::Date->new($date)->epoch;
-        if (defined $since && $since == $modified) {
-            $res_headers->remove('Content-Type')
-                ->remove('Content-Length')
-                ->remove('Content-Disposition');
-            return $CONTEXT->res->code(304);
-        }
-    }
-    
-    $CONTEXT->res->content->asset($asset);
-    $CONTEXT->res->code(200);
-    $res_headers->last_modified(Mojo::Date->new($modified));
-    if (my $type = $self->path_to_type($path)) {
-        $CONTEXT->res->headers->content_type($type);
-    }
+    shift->static->serve(@_);
 }
 
 ### --
@@ -503,6 +482,13 @@ and can be referred transparently from anywhere.
 
     $app->stash(Marquee::Stash->new);
     my $stash = $app->stash;
+
+=head2 C<static>
+
+Static class instance.
+
+    $app->static(Marquee::Static->new);
+    my $static = $app->static;
 
 =head2 C<types>
 
@@ -716,7 +702,8 @@ Serves response that redirects to given URI.
 
 =head2 C<serve_static>
 
-Serves static file of given path.
+Serves static file of given path. This method is an alias to
+L<Marquee::Static/serve>.
 
     $app->serve_static('/path/to/static.png');
 

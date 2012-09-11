@@ -1,0 +1,39 @@
+=encoding utf8
+
+=head1 NAME
+
+Marquee::Static - Static server
+
+=head1 SYNOPSIS
+
+    my $static = Maruqee::Static->new;
+    $static->maxage(3600);
+    $static->serve('/path/to/file.png');
+
+=head1 DESCRIPTION
+
+L<Marquee::Static> represents static file server.
+
+=head1 ATTRIBUTES
+
+L<Marquee::Static> implements the following attributes.
+
+=head2 C<maxage>
+
+    $static->maxage(3600);
+
+=head1 INSTANCE METHODS
+
+L<Marquee::Static> implements the following instance methods.
+
+=head2 C<serve>
+
+Serves static file.
+
+    $static->serve('/path/to/static.png');
+
+=head1 SEE ALSO
+
+L<Marquee>, L<Mojolicious>
+
+=cut

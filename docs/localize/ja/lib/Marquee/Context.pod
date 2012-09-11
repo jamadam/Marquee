@@ -32,7 +32,7 @@ L<Marquee>アプリケーションのインスタンスです。
 
 =head2 C<req>
 
-C<$c-E<gt>tx-E<gt>req>へのエイリアスです。
+C<$self-E<gt>tx-E<gt>req>へのエイリアスです。
 
     my $req = $c->tx->req;
     $c->tx->req($req);

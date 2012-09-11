@@ -209,7 +209,7 @@ L<Marquee> application instance.
 
 =head2 C<req>
 
-An Alias to C<$c-E<gt>tx-E<gt>req>.
+An Alias to C<$self-E<gt>tx-E<gt>req>.
 
     my $req = $c->tx->req;
     $c->tx->req($req);

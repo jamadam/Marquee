@@ -64,8 +64,6 @@ sub serve_markdown {
     my $c = Marquee->c;
     my $app = $c->app;
     
-    my @parts = ();
-    
     open my $file, '<', $path or die "cannot open $path";
     my $html = markdown(decode('UTF-8', join('', <$file>)));
     my $dom = Mojo::DOM->new($html);
@@ -83,7 +81,6 @@ sub serve_markdown {
 
     Marquee->c->stash->set(
         title       => $title,
-        parts       => \@parts,
         static_dir  => 'static',
         markdown     => "$dom",
     );

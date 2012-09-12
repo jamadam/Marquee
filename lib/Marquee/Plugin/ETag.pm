@@ -19,7 +19,8 @@ sub register {
         my $req = Marquee->c->req;
         my $res = Marquee->c->res;
         
-        if ($res->code == 200 && $req->method eq 'GET' && (my $body = $res->body)) {
+        if ($res->code && $res->code == 200
+                        && $req->method eq 'GET' && (my $body = $res->body)) {
             
             my $new_etag = Mojo::ByteStream->new($body)->md5_sum;
             $res->headers->header('ETag' => $new_etag);

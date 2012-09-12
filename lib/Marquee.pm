@@ -662,8 +662,8 @@ Load a class as a plugin. The prefix L<Marquee::Plugin> is prepended unless the
 class name C<$class> begins with C<+> sign, which means the class name is
 already fully qualified.
 
-    my $plugin = $app->plugin(Plugin => @params); # Marquee::Plugin::PlugName
-    my $plugin = $app->plugin('+NameSpace::Plugin' => @params); # NameSpace::Plugin
+    my $plugin = $app->plugin(MyPlug => @params); # Marquee::Plugin::MyPlug
+    my $plugin = $app->plugin('+MyPlugins::MyPlug' => @params); # MyPlugins::MyPlug
 
 =head2 C<render_ssi>
 

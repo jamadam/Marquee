@@ -269,8 +269,8 @@ $app->hooks->onのエイリアスです。指定のフックポイントにコ�
 クラスをプラグインとしてロードします。クラス名の先頭がC<+>でなければ接頭辞L<Marquee::Plugin>が付与されます。
 C<+>はクラス名が完結していることを意味します。
 
-    my $plugin = $app->plugin(Plugin => $params); # Marquee::Plugin::PlugName
-    my $plugin = $app->plugin('+NameSpace::Plugin' => $params); # NameSpace::Plugin
+    my $plugin = $app->plugin(MyPlug => @params); # Marquee::Plugin::MyPlug
+    my $plugin = $app->plugin('+MyPlugins::MyPlug' => @params); # MyPlugins::MyPlug
 
 =head2 C<render_ssi>
 

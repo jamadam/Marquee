@@ -106,7 +106,7 @@ sub stash {
 }
 
 ### ---
-### Set or Get signed cookie
+### check if status code is already set
 ### ---
 sub served {
     return defined shift->res->code;

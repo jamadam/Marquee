@@ -294,23 +294,30 @@ sub serve_dynamic {
     }
 }
 
+### --
+### generate absolute uri
+### --
+sub to_abs {
+    my ($self, $url) = @_;
+    
+    $url = Mojo::URL->new($url);
+    
+    if (! $url->scheme) {
+        my $base = $CONTEXT->req->url->clone;
+        $base->userinfo(undef);
+        $url->base($base);
+    }
+    
+    return $url->to_abs;
+}
+
+### --
+### start application
+### --
 sub start {
     my $self = $ENV{MOJO_APP} = shift;
     $self->_init;
     Mojolicious::Commands->new(app => $self)->run(@_ ? @_ : @ARGV);
-}
-
-### --
-### auto fill files
-### --
-sub _auto_fill_filename {
-    my ($path, $default) = @_;
-    
-    if ($default && ($path->trailing_slash || ! @{$path->parts})) {
-        push(@{$path->parts}, $default);
-        $path->trailing_slash(0);
-    }
-    return $path;
 }
 
 ### ---
@@ -325,6 +332,19 @@ sub asset {
         return catdir(@seed, $_[0]);
     }
     return catdir(@seed);
+}
+
+### --
+### auto fill files
+### --
+sub _auto_fill_filename {
+    my ($path, $default) = @_;
+    
+    if ($default && ($path->trailing_slash || ! @{$path->parts})) {
+        push(@{$path->parts}, $default);
+        $path->trailing_slash(0);
+    }
+    return $path;
 }
 
 ### --
@@ -346,23 +366,6 @@ sub _init {
 
     $self->{_handler_re} =
                 '\.(?:'. join('|', keys %{$self->ssi_handlers}). ')$';
-}
-
-### --
-### generate absolute uri
-### --
-sub to_abs {
-    my ($self, $url) = @_;
-    
-    $url = Mojo::URL->new($url);
-    
-    if (! $url->scheme) {
-        my $base = $CONTEXT->req->url->clone;
-        $base->userinfo(undef);
-        $url->base($base);
-    }
-    
-    return $url->to_abs;
 }
 
 1;

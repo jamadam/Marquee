@@ -2,8 +2,6 @@ package Marquee::SSIHandler;
 use strict;
 use warnings;
 use Mojo::Base -base;
-use Mojo::Cache;
-use Mojo::Util qw/encode md5_sum/;
 
 __PACKAGE__->attr(log => sub {
     if (my $c = Marquee->c) {

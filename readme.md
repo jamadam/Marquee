@@ -120,8 +120,8 @@ modify it under the [same terms as Perl itself].
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy
-[Mojo::Template]:http://search.cpan.org/~sri/Mojolicious-3.35/lib/Mojo/Template.pm
-[Mojo::Daemon]:http://search.cpan.org/~sri/Mojolicious-3.35/lib/Mojo/Daemon.pm
+[Mojo::Template]:/perldoc/Mojo/Template
+[Mojo::Daemon]:/perldoc/Mojo/Daemon
 [same terms as Perl itself]:http://dev.perl.org/licenses/
 [Yusuke Kamiyamane]:http://p.yusukekamiyamane.com/
 [jamadam]: http://blog2.jamadam.com/

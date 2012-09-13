@@ -34,6 +34,18 @@ boot script (similar to above).
         return $self;
     }
 
+The following shows how practical application look like.
+
+    sub new {
+        my $self = shift->SUPER::new(@_);
+        
+        $self->document_root($self->home->rel_dir('htdocs'));
+        $self->log_file($self->home->rel_dir('mojo_log/Marquee.log'));
+        $self->default_file('index.html');
+        $self->under_development(1);
+        $self->secret('g4ioaseut84937');
+    }
+
 The application can be start in Mojo way.
 
     $ ./myapp daemon
@@ -106,6 +118,39 @@ There is also some more differences on caching compiled templates.
 Cache for L<Marquee::SSIHandler::EP> automatically expires on the file touch
 so you don't have to restart the application to reflect the change.
 
+=head2 Adding Custom function
+
+You can easily add functions to ep handler. Following example adds a function
+that retrieves all text data out of given HTML.
+
+    $app = Marquee->new;
+    $app->ssi_handlers->{ep}->add_function(html_to_text => sub {
+        my ($ep, $html) = @_;
+        return Mojo::DOM->new($html)->all_text;
+    });
+
+The function will be available in templates as follows.
+
+    <%= html_to_text($html) %>
+
+=head1 MODEL
+
+Marquee doesn't provide any data model layer so you should adopt some Perl
+modules you like.
+
+To make your model accessible in Marquee app, we recommend registering it to
+applicatin level stash so that the object can be accessible from anywhare in
+your app even in tempaltes.
+
+    use MyApp::NewsRelease;
+    
+    my $app = Marquee->new;
+    $app->stash->set(news_release => MyApp::NewsRelease->new);
+
+Inside templates..
+
+    <% my @news = $news_release->top(5); %>
+
 =head1 ROUTING
 
 Though path routing is not an outstanding issue for Marquee because of the
@@ -114,13 +159,21 @@ for overriding the routing.
 
     $app->plugin(Router => sub {
         my $r = shift;
-        $r->route(qr{^/(.+\.md)?$})->to(sub {
-            $md->serve_markdown($app->search_static(shift || 'readme.md'))
-        });
-        $r->route(qr{^/perldoc/(.+)})->to(sub {
-            $pod->serve_pod_by_name(shift);
+        $r->route(qr{/api/member.json})->via('get')->to(sub {
+            my $res = Marquee->c->res;
+            my $member = {1 => 'sato', 2 => 'saito', 3 => 'suzuki'};
+            
+            $res->body(Mojo::JSON->new->encode($member));
+            $res->code(200);
+            $res->headers->content_type('application/json');
         });
     });
+
+=head1 TESTING
+
+Marquee application can be tested in the same way as Mojo applications.
+
+See also L<http://mojolicio.us/perldoc/Mojolicious/Guides/Growing#Testing>
 
 =head1 BASIC AUTHENTICATION
 

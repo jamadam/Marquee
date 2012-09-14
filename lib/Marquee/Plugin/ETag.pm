@@ -1,7 +1,6 @@
 package Marquee::Plugin::ETag;
 use strict;
 use warnings;
-use Marquee::Plugin::Router::Route;
 use Mojo::Base 'Marquee::Plugin';
 use Mojo::ByteStream;
 
@@ -53,7 +52,7 @@ L<Marquee::Plugin::ETag> plugin generates ETag to reduce http traffic.
 
 =head1 INSTANCE METHODS
 
-L<Marquee::Plugin::Router> inherits all instance methods from
+L<Marquee::Plugin::ETag> inherits all instance methods from
 L<Marquee::Plugin> and implements the following new ones.
 
 =head2 register
@@ -64,7 +63,6 @@ Register the plugin.
 
 =head1 SEE ALSO
 
-L<Marquee::Plugin::Router::Route>, L<Marquee>,
-L<Mojolicious>
+L<Marquee::Plugin>, L<Marquee>, L<Mojolicious>
 
 =cut

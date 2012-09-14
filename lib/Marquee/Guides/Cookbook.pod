@@ -34,7 +34,10 @@ boot script (similar to above).
         return $self;
     }
 
-The following shows how practical application look like.
+The following shows how practical application class look like.
+
+    package MyApp;
+    use Mojo::Base 'Marquee';
 
     sub new {
         my $self = shift->SUPER::new(@_);
@@ -44,6 +47,8 @@ The following shows how practical application look like.
         $self->default_file('index.html');
         $self->under_development(1);
         $self->secret('g4ioaseut84937');
+        
+        return $self;
     }
 
 The application can be start in Mojo way.
@@ -149,7 +154,7 @@ your app even in tempaltes.
 
 Inside templates..
 
-    <% my @news = $news_release->top(5); %>
+    <% my @news = $news_release->fetch(5); %>
 
 =head1 ROUTING
 

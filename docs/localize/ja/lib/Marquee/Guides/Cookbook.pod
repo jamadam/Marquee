@@ -35,7 +35,10 @@ Cookbook - Marqueeクックブック
         return $self;
     }
 
-The following shows how practical application look like.
+次の例は実際のアプリケーションクラスの例です。
+
+    package MyApp;
+    use Mojo::Base 'Marquee';
 
     sub new {
         my $self = shift->SUPER::new(@_);
@@ -45,6 +48,8 @@ The following shows how practical application look like.
         $self->default_file('index.html');
         $self->under_development(1);
         $self->secret('g4ioaseut84937');
+        
+        return $self;
     }
 
 このアプリはMojoのやり方で起動できます。
@@ -120,8 +125,7 @@ L<Marquee::SSIHandler::EP>のキャッシュはファイルのutimeの変化に�
 
 =head2 カスタムファンクションの追加
 
-You can easily add functions to ep handler. Following example adds a function
-that retrieves all text data out of given HTML.
+epハンドラーに関数を追加するのは簡単です。次の例は与えられたHTMLから全てのテキストデータを抽出する関数を追加します。
 
     $app = Marquee->new;
     $app->ssi_handlers->{ep}->add_function(html_to_text => sub {
@@ -131,21 +135,19 @@ that retrieves all text data out of given HTML.
 
 =head1 モデル
 
-Marquee doesn't provide any data model layer so you should adopt some Perl
-modules you like.
+Marqueeは特にモデルレイヤーを提供しませんので、あなたの好きなPerlモジュールを採用してください。
 
-To make your model accessible in Marquee app, we recommend registering it to
-applicatin level stash so that the object can be accessible from anywhare in
-your app even in tempaltes.
+あなたのモデルをMarqueeアプリ内でアクセス可能にするのには、アプリケーションレベルのスタッシュにこれを登録することを推奨します。
+そうすることで、オブジェクトはテンプレートを含むアプリ内のどこからでもアクセス可能になります。
 
     use MyApp::NewsRelease;
     
     my $app = Marquee->new;
     $app->stash->set(news_release => MyApp::NewsRelease->new);
 
-Inside templates..
+テンプレート内にて。。
 
-    <% my @news = $news_release->top(5); %>
+    <% my @news = $news_release->fetch(5); %>
 
 =head1 ルーティング
 

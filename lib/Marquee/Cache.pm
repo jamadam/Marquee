@@ -10,14 +10,10 @@ my $ATTR_STACK      = 2;
 
 sub get {
     if (my $cache = $_[0]->{$ATTR_CACHE}->{$_[1]}) {
-        if ($cache->[2]) {
-            for my $code (@{$cache->[2]}) {
-                if ($code->($cache->[1])) {
-                    delete $_[0]->{$ATTR_CACHE}->{$_[1]};
-                    $_[0]->_vacuum;
-                    return;
-                }
-            }
+        if ($cache->[2] && $cache->[2]->($cache->[1])) {
+            delete $_[0]->{$ATTR_CACHE}->{$_[1]};
+            $_[0]->_vacuum;
+            return;
         }
         $cache->[0];
     }
@@ -45,11 +41,7 @@ sub set {
     
     push @$stack, $key;
     
-    $cache->{$key} = [
-        $value,
-        time,
-        (ref $expire eq 'CODE') ? [$expire] : $expire
-    ];
+    $cache->{$key} = [$value, time, $expire];
 }
 
 1;
@@ -99,12 +91,11 @@ Get cache value for given name.
 
 =head2 C<set>
 
-Set cache values with given name and data. By 3rd argument, you can set one or
-more conditions to expire the cache.
+Set cache values with given name and data. By 3rd argument, you can set a
+condition to expire the cache.
 
     $cache->set(key, $data);
     $cache->set(key, $data, sub {...});
-    $cache->set(key, $data, [sub {...}, sub {...}]);
 
 The coderef gets the cache timestamp in seconds since the epoch and can
 return true for expire.

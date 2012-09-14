@@ -169,6 +169,20 @@ for overriding the routing.
         });
     });
 
+Here's another example which shows how placeholders work.
+
+    $app->plugin(Router => sub {
+        my $r = shift;
+        $r->route(qr{^/(.+\.md)?$})->to(sub {
+            my $filename = shift;
+            $md->serve_markdown($app->search_static($filename || 'readme.md'))
+        });
+        $r->route(qr{^/perldoc/(.+)})->to(sub {
+            my $module = shift;
+            $pod->serve_pod_by_name($module);
+        });
+    });
+
 =head1 TESTING
 
 Marquee application can be tested in the same way as Mojo applications.

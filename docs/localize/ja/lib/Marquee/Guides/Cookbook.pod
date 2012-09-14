@@ -163,6 +163,20 @@ L<Marquee::Plugin::Router>プラグインを使用すれば、このルーティ
         });
     });
 
+もうひとつ、プレースホルダーがどのように動くかを示した例です。
+
+    $app->plugin(Router => sub {
+        my $r = shift;
+        $r->route(qr{^/(.+\.md)?$})->to(sub {
+            my $filename = shift;
+            $md->serve_markdown($app->search_static($filename || 'readme.md'))
+        });
+        $r->route(qr{^/perldoc/(.+)})->to(sub {
+            my $module = shift;
+            $pod->serve_pod_by_name($module);
+        });
+    });
+
 =head1 テスト
 
 MarqueeアプリケーションはMojoアプリケーションと同様にテストできます。

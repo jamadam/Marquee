@@ -1,5 +1,7 @@
 Revision history for Marquee
 
+0.18 2012/09/16
+
 0.17 2012/09/14
   - Improved documentations.
   - Fixed ETag plugin to cause less undef warnings.

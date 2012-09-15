@@ -9,7 +9,7 @@
 	<% override 'additionalHead' => begin %>
 		<link type="text/css" rel="stylesheet" href="<%= url_for("$static_dir/pod_viewer/site_perldoc_index.css") %>" />
 	<% end %>
-	<%= override 'h1AdditionalContent' => begin %>
+	<% override 'h1AdditionalContent' => begin %>
 	<% end %>
 	<% override 'mainContent' => begin %>
 		<h2>

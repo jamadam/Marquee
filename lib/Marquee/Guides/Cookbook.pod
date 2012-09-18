@@ -129,7 +129,7 @@ You can easily add functions to ep handler. Following example adds a function
 that retrieves all text data out of given HTML.
 
     $app = Marquee->new;
-    $app->ssi_handlers->{ep}->add_function(html_to_text => sub {
+    $app->dynamic->handlers->{ep}->add_function(html_to_text => sub {
         my ($ep, $html) = @_;
         return Mojo::DOM->new($html)->all_text;
     });
@@ -144,8 +144,8 @@ Marquee doesn't provide any data model layer so you should adopt some Perl
 modules you like.
 
 To make your model accessible in Marquee app, we recommend registering it to
-applicatin level stash so that the object can be accessible from anywhare in
-your app even in tempaltes.
+application level stash so that the object can be accessible from anywhere in
+your app even in templates.
 
     use MyApp::NewsRelease;
     
@@ -180,7 +180,7 @@ Here's another example which shows how placeholders work.
         my $r = shift;
         $r->route(qr{^/(.+\.md)?$})->to(sub {
             my $filename = shift;
-            $md->serve_markdown($app->search_static($filename || 'readme.md'))
+            $md->serve_markdown($app->dynamic->search($filename || 'readme.md'))
         });
         $r->route(qr{^/perldoc/(.+)})->to(sub {
             my $module = shift;

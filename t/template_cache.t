@@ -30,7 +30,7 @@ my $t;
     
     my $path = canonpath("$FindBin::Bin/public_html/template_cache/cache.html.ep");
     my $expected_key = md5_sum(encode('UTF-8', $path));
-    my $cache = $app->ssi_handlers->{ep}->template_cache;
+    my $cache = $app->dynamic->handlers->{ep}->template_cache;
     is scalar keys %{$cache->{1}}, 1, 'right cache amount';
     my $mt = $cache->get($expected_key);
     is ref $mt, 'Mojo::Template';
@@ -50,7 +50,7 @@ my $t;
     
     my $path = canonpath("$FindBin::Bin/public_html/template_cache/cache3.html.epl");
     my $expected_key = md5_sum(encode('UTF-8', $path));
-    my $cache = $app->ssi_handlers->{epl}->template_cache;
+    my $cache = $app->dynamic->handlers->{epl}->template_cache;
     is scalar keys %{$cache->{1}}, 1, 'right cache amount';
     my $mt = $cache->get($expected_key);
     is ref $mt, 'Mojo::Template';

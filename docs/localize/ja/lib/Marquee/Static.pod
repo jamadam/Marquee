@@ -22,13 +22,27 @@ L<Marquee::Static> implements the following attributes.
 
     $static->maxage(3600);
 
+=head2 C<roots>
+
+Root array for searching static files.
+
+    $dynamic->roots(['path/to/dir1', 'path/to/dir1']);
+    my $roots = $dynamic->roots;
+
 =head1 INSTANCE METHODS
 
 L<Marquee::Static> implements the following instance methods.
 
+=head2 C<search>
+
+指定のパスの静的ファイルを検索し、存在すればパスを返します。ファイルの検索はL</roots>属性のディレクトリ群を対象に行われます。
+
+    my $path = $static->search('./a.html'); # /path/to/document_root/a.html
+    my $path = $static->search('/path/to/a.html'); # /path/to/a.html
+
 =head2 C<serve>
 
-Serves static file.
+指定のパスのファイルを出力します。
 
     $static->serve('/path/to/static.png');
 

@@ -27,11 +27,11 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 $app->plugin(Router => sub {
     my $r = shift;
     $r->route(qr{^/index\.html})->to(sub {
-        MyApp->c->app->serve_dynamic("$FindBin::Bin/public_html/index2.txt.ep");
+        MyApp->c->app->dynamic->serve("$FindBin::Bin/public_html/index2.txt.ep");
         is $_[0], undef;
     });
     $r->route(qr{^/special\.html})->to(sub {
-        MyApp->c->app->serve_static("$FindBin::Bin/public_html/index.txt");
+        MyApp->c->app->static->serve("$FindBin::Bin/public_html/index.txt");
     });
     $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
         my ($a, $b) = @_;

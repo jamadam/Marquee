@@ -11,7 +11,7 @@ sub register {
     my ($self, $app) = @_;
     
     # Commify a number
-    $app->ssi_handlers->{ep}->add_function(commify => sub {
+    $app->dynamic->handlers->{ep}->add_function(commify => sub {
         my ($ep, $num) = @_;
         
         if ($num) {
@@ -25,7 +25,7 @@ sub register {
     });
     
     # Mininum value out of given array
-    $app->ssi_handlers->{ep}->add_function(min => sub {
+    $app->dynamic->handlers->{ep}->add_function(min => sub {
         my ($ep, @array) = @_;
         if (ref $array[0] && ref $array[0] eq 'ARRAY') {
             @array = @{$array[0]};
@@ -34,7 +34,7 @@ sub register {
     });
     
     # Maximum value out of given array
-    $app->ssi_handlers->{ep}->add_function(max => sub {
+    $app->dynamic->handlers->{ep}->add_function(max => sub {
         my ($ep, @array) = @_;
         if (ref $array[0] && ref $array[0] eq 'ARRAY') {
             @array = @{$array[0]};
@@ -43,7 +43,7 @@ sub register {
     });
     
     # Replace string
-    $app->ssi_handlers->{ep}->add_function(replace => sub {
+    $app->dynamic->handlers->{ep}->add_function(replace => sub {
         my ($ep, $str, $search, $replace) = @_;
         if (ref $search && ref $search eq 'Regexp') {
             $str =~ s{$search}{$replace}g;

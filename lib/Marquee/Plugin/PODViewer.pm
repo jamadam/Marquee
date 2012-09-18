@@ -50,7 +50,7 @@ sub serve_index {
     
     $c->res->body(
         encode('UTF-8',
-            $app->ssi_handlers->{ep}->render_traceable(
+            $app->dynamic->handlers->{ep}->render_traceable(
                 __PACKAGE__->Marquee::asset('perldoc_index.html.ep')
             )
         )
@@ -72,7 +72,7 @@ sub serve_pod {
     $dom->find('a[href]')->each(sub {
         my $attrs = shift->attrs;
         if ($attrs->{href} =~ s{^http\://search\.cpan\.org/perldoc\?}{
-                $app->ssi_handlers->{ep}->url_for('/perldoc/')
+                $app->dynamic->handlers->{ep}->url_for('/perldoc/')
             }e) {
             $attrs->{href} =~ s!%3A%3A!/!gi;
         }
@@ -121,7 +121,7 @@ sub serve_pod {
     
     $c->res->body(
         encode('UTF-8',
-            $app->ssi_handlers->{ep}->render_traceable(
+            $app->dynamic->handlers->{ep}->render_traceable(
                 __PACKAGE__->Marquee::asset('perldoc.html.ep')
             )
         )

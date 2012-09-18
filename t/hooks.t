@@ -18,10 +18,6 @@ my $t;
 {
     package MyApp;
     use Mojo::Base 'Marquee';
-    
-    sub serve_static {
-        shift->SUPER::serve_static(@_);
-    }
 }
 
 {

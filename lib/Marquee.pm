@@ -11,6 +11,7 @@ use Mojolicious::Types;
 use Mojolicious::Commands;
 use Mojo::Exception;
 use Marquee::Context;
+use Marquee::Dynamic;
 use Marquee::ErrorDocument;
 use Marquee::Hooks;
 use Marquee::SSIHandler::EP;
@@ -23,11 +24,11 @@ our $CONTEXT;
 
 __PACKAGE__->attr('document_root');
 __PACKAGE__->attr('default_file');
+__PACKAGE__->attr(dynamic => sub {Marquee::Dynamic->new});
 __PACKAGE__->attr(error_document => sub {Marquee::ErrorDocument->new});
 __PACKAGE__->attr(hooks => sub {Marquee::Hooks->new});
 __PACKAGE__->attr(roots => sub {[]});
 __PACKAGE__->attr(secret => sub {md5_hex($^T. $$. rand(1000000))});
-__PACKAGE__->attr(ssi_handlers => sub {{}});
 __PACKAGE__->attr(stash => sub {Marquee::Stash->new});
 __PACKAGE__->attr(static => sub {Marquee::Static->new});
 __PACKAGE__->attr(types => sub { Mojolicious::Types->new });
@@ -51,7 +52,7 @@ sub new {
     });
     $self->hook(around_dynamic => sub {
         shift;
-        $CONTEXT->app->serve_dynamic(@_);
+        $CONTEXT->app->dynamic->serve(@_);
     });
     
     $self->add_handler(ep => Marquee::SSIHandler::EP->new(log => $self->log));
@@ -73,7 +74,7 @@ sub new {
 ### --
 sub add_handler {
     my ($self, $name, $handler) = @_;
-    $self->ssi_handlers->{$name} = $handler;
+    $self->dynamic->handlers->{$name} = $handler;
     return $self;
 }
 
@@ -104,7 +105,7 @@ sub dispatch {
     }
     
     if (! $CONTEXT->served) {
-        if ($path =~ /$self->{_handler_re}/) {
+        if ($path =~ $self->dynamic->handler_re) {
             $self->error_document->serve(403);
             return;
         }
@@ -115,9 +116,9 @@ sub dispatch {
         $path->leading_slash(0);
         $path = "$path";
         
-        if (my $try1 = $self->search_static($path)) {
+        if (my $try1 = $self->static->search($path)) {
             $self->hooks->emit_chain('around_static', $try1);
-        } elsif (my $try2 = $self->search_template($path)) {
+        } elsif (my $try2 = $self->dynamic->search($path)) {
             $self->hooks->emit_chain('around_dynamic', $try2);
         }
     }
@@ -224,42 +225,24 @@ sub plugin {
 ### detect and render
 ### --
 sub render_ssi {
-    my ($self, $path, $handler_ext) = @_;
-    my $ext = $handler_ext || ($path =~ qr{\.\w+\.(\w+)$})[0];
-    if (my $handler = $self->ssi_handlers->{$ext}) {
-        return $handler->render_traceable($path);
-    } else {
-        die "SSI handler not detected for $path";
-    }
+    warn 'render_ssi is deprecated in favor of $app->dynamic->render';
+    shift->dynamic->render(@_);
 }
 
 ### --
 ### search static file
 ### --
 sub search_static {
-    my ($self, $path) = @_;
-    
-    for my $root (file_name_is_absolute($path) ? undef : @{$self->roots}) {
-        if (-f (my $path = $root ? catdir($root, $path) : $path)) {
-            return $path;
-        }
-    }
+    warn 'search_static is deprecated in favor of $app->static->search';
+    shift->static->search(@_);
 }
 
 ### --
 ### search template
 ### --
 sub search_template {
-    my ($self, $path) = @_;
-    
-    for my $root (file_name_is_absolute($path) ? undef : @{$self->roots}) {
-        my $base = $root ? catdir($root, $path) : $path;
-        for my $ext (keys %{$self->ssi_handlers}) {
-            if (-f (my $path = "$base.$ext")) {
-                return $path;
-            }
-        }
-    }
+    warn 'search_template is deprecated in favor of $app->dynamic->search';
+    shift->dynamic->search(@_);
 }
 
 ### --
@@ -276,6 +259,7 @@ sub serve_redirect {
 ### serve static content
 ### --
 sub serve_static {
+    warn 'serve_static is deprecated in favor of $app->static->serve';
     shift->static->serve(@_);
 }
 
@@ -283,15 +267,16 @@ sub serve_static {
 ### serve dynamic content
 ### --
 sub serve_dynamic {
-    my ($self, $path) = @_;
-    
-    if (defined (my $ret = $self->render_ssi($path))) {
-        $CONTEXT->res->body(encode('UTF-8', $ret));
-        $CONTEXT->res->code(200);
-        if (my $type = $self->path_to_type($path)) {
-            $CONTEXT->res->headers->content_type($type);
-        }
-    }
+    warn 'serve_dynamic is deprecated in favor of $app->dynamic->serve';
+    shift->dynamic->serve(@_);
+}
+
+### --
+### alias for dynamic handlers
+### --
+sub ssi_handlers {
+    warn 'ssi_handlers is deprecated in favor of $app->dynamic->handlers';
+    shift->dynamic->handlers;
 }
 
 ### --
@@ -363,9 +348,9 @@ sub _init {
     }
     
     unshift(@{$self->roots}, canonpath($self->document_root), __PACKAGE__->asset);
-
-    $self->{_handler_re} =
-                '\.(?:'. join('|', keys %{$self->ssi_handlers}). ')$';
+    
+    $self->static->roots($self->roots);
+    $self->dynamic->roots($self->roots);
 }
 
 1;
@@ -440,6 +425,13 @@ when the request path is trailing slashed.
 
     $app->default_file('index.html');
 
+=head2 C<dynamic>
+
+L<Marquee::Dynamic> class instance.
+
+    $app->dynamic(Marquee::Dynamic->new);
+    my $dynamic = $app->dynamic;
+
 =head2 C<error_document>
 
 Error document renderer instance. Defaults to L<Marquee::ErrorDocument>.
@@ -468,15 +460,6 @@ string. By changing this, you can expire all signed cookies at once.
     my $secret = $app->secret;
     $app       = $app->secret('passw0rd');
 
-=head2 C<ssi_handlers>
-
-An hash ref that contains Server side include handlers. The hash keys
-corresponds to the last extensions of templates.
-
-    $app->ssi_handlers->{myhandler} = Marquee::SSIHandler::MyHandler->new;
-
-You can append SSI association by L</add_handler> instead of doing above.
-
 =head2 C<stash>
 
 An L<Marquee::Stash> instance. Though Marquee's stash is localized and cloned
@@ -488,7 +471,7 @@ and can be referred transparently from anywhere.
 
 =head2 C<static>
 
-Static class instance.
+L<Marquee::Static> class instance.
 
     $app->static(Marquee::Static->new);
     my $static = $app->static;
@@ -560,8 +543,8 @@ following new ones.
 
 =head2 C<add_handler>
 
-Adds L</ssi_handlers> entry. The first argument is corresponds to the last
-extensions of templates. Second argument must be a
+Adds L<Marquee::Dynamic/handlers> entry. The first argument is corresponds to
+the last extensions of templates. Second argument must be a
 L<Marquee::SSIHandler> sub class instance. See L<Marquee::SSIHandler::EPL> as an
 example.
 
@@ -665,56 +648,12 @@ already fully qualified.
     my $plugin = $app->plugin(MyPlug => @params); # Marquee::Plugin::MyPlug
     my $plugin = $app->plugin('+MyPlugins::MyPlug' => @params); # MyPlugins::MyPlug
 
-=head2 C<render_ssi>
-
-Render given file of path as SSI template and returns the result.
-This method auto detect the handler with the file name unless second argument is
-given. Note that the renderer extension is NOT to be suffixed automatically.
-
-    # render /path/to/template.html.ep by ep handler
-    my $result = $app->render_ssi('/path/to/template.html.ep');
-    
-    # render /path/to/template.html.ep by epl handler
-    my $result = $app->render_ssi('/path/to/template.html.ep', 'epl');
-    
-    # render /path/to/template.html by ep handler
-    my $result = $app->render_ssi('/path/to/template2.html', 'ep');
-
-=head2 C<search_static>
-
-Searches for static files for given path and returns the path if exists.
-The search is against the directories in L</roots> attribute.
-
-    my $path = $app->search_static('./a.html'); # /path/to/document_root/a.html
-    my $path = $app->search_static('/path/to/a.html'); # /path/to/a.html
-
-=head2 C<search_template>
-
-Searches for SSI template for given path and returns the path with SSI
-extension if exists. The search is against the directories in C</roots> attribute.
-
-    my $path = $app->search_template('./tmpl.html'); # /path/to/document_root/tmpl.html.ep
-    my $path = $app->search_template('/path/to/tmpl.html'); # /path/to/tmpl.html.ep
-
 =head2 C<serve_redirect>
 
 Serves response that redirects to given URI.
 
     $app->serve_redirect('http://example.com/');
     $app->serve_redirect('/path/');
-
-=head2 C<serve_static>
-
-Serves static file of given path. This method is an alias to
-L<Marquee::Static/serve>.
-
-    $app->serve_static('/path/to/static.png');
-
-=head2 C<serve_dynamic>
-
-Serves dynamic SSI page with given file path.
-
-    $app->serve_dynamic('/path/to/template.html.ep');
 
 =head2 C<start>
 

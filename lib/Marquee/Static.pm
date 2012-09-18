@@ -2,8 +2,23 @@ package Marquee::Static;
 use strict;
 use warnings;
 use Mojo::Base -base;
+use File::Spec::Functions;
 
 __PACKAGE__->attr('maxage' => 0);
+__PACKAGE__->attr('roots');
+
+### --
+### search static file
+### --
+sub search {
+    my ($self, $path) = @_;
+    
+    for my $root (file_name_is_absolute($path) ? undef : @{$self->roots}) {
+        if (-f (my $path = $root ? catdir($root, $path) : $path)) {
+            return $path;
+        }
+    }
+}
 
 ### --
 ### serve static content
@@ -69,9 +84,24 @@ L<Marquee::Static> implements the following attributes.
 
     $static->maxage(3600);
 
+=head2 C<roots>
+
+Root array for searching static files.
+
+    $dynamic->roots(['path/to/dir1', 'path/to/dir1']);
+    my $roots = $dynamic->roots;
+
 =head1 INSTANCE METHODS
 
 L<Marquee::Static> implements the following instance methods.
+
+=head2 C<search>
+
+Searches for static files for given path and returns the path if exists.
+The search is against the directories in L</roots> attribute.
+
+    my $path = $static->search('./a.html'); # /path/to/document_root/a.html
+    my $path = $static->search('/path/to/a.html'); # /path/to/a.html
 
 =head2 C<serve>
 

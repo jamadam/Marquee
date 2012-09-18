@@ -37,6 +37,7 @@ Plugins
 plugins
 WAF
 HTTP
+http
 Marquee
 app
 backend
@@ -78,3 +79,5 @@ Hypnotoad
 API
 URLs
 OOP
+placeholders
+ETag

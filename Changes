@@ -1,6 +1,7 @@
 Revision history for Marquee
 
-0.18 2012/09/16
+0.18 2012/09/18
+  - Deprecated some Marquee methods in favor of refactored classes.
 
 0.17 2012/09/14
   - Improved documentations.

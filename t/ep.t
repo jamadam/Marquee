@@ -61,8 +61,8 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
 
 eval {
-    $app->ssi_handlers->{ep}->add_function('redefine' => sub {});
-    $app->ssi_handlers->{ep}->add_function('redefine' => sub {});
+    $app->dynamic->handlers->{ep}->add_function('redefine' => sub {});
+    $app->dynamic->handlers->{ep}->add_function('redefine' => sub {});
 };
 
 is $@, '';

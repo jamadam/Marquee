@@ -60,7 +60,7 @@ sub register {
                 );
                 $c->res->body(
                     encode('UTF-8',
-                        $app->ssi_handlers->{ep}->render_traceable(
+                        $app->dynamic->handlers->{ep}->render_traceable(
                             __PACKAGE__->Marquee::asset('auth.html.ep')
                         )
                     )

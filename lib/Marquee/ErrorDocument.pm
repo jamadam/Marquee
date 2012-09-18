@@ -22,7 +22,7 @@ sub serve {
     my $c           = Marquee->c;
     my $stash       = $c->stash;
     my $template    = ($self->status_template)->{$code} || $self->template;
-    my $ep          = $c->app->ssi_handlers->{ep};
+    my $ep          = $c->app->dynamic->handlers->{ep};
     
     if ($c->app->under_development) {
         my $snapshot = $stash->clone;

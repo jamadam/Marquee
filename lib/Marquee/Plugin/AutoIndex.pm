@@ -129,7 +129,8 @@ sub _file_list {
     @files = map {
         my $name = decode('UTF-8', url_unescape($_));
         my $pub_name = $name;
-        $pub_name =~ s{(\.\w+)$app->{_handler_re}}{$1};
+        my $handler_regex = $app->dynamic->handler_re;
+        $pub_name =~ s{(\.\w+)$handler_regex}{$1};
         my $real_abs = File::Spec->catfile($fixed_path, $name);
         {
             type        => -d $real_abs

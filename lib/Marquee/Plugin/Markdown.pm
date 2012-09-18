@@ -49,7 +49,7 @@ sub serve_index {
     
     $c->res->body(
         encode('UTF-8',
-            $app->ssi_handlers->{ep}->render_traceable(
+            $app->dynamic->handlers->{ep}->render_traceable(
                 __PACKAGE__->Marquee::asset('markdown_index.html.ep')
             )
         )
@@ -87,7 +87,7 @@ sub serve_markdown {
     
     $c->res->body(
         encode('UTF-8',
-            $app->ssi_handlers->{ep}->render_traceable(
+            $app->dynamic->handlers->{ep}->render_traceable(
                 __PACKAGE__->Marquee::asset('markdown.html.ep')
             )
         )

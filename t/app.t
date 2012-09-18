@@ -44,9 +44,9 @@ use Test::More tests => 146;
     $app->document_root("$FindBin::Bin/public_html");
     $app->_init;
     local $Marquee::CONTEXT = Marquee::Context->new(app => $app, tx => $tx);
-    path_is $app->search_template('index.html'), "$FindBin::Bin/public_html/index.html.ep";
-    path_is $app->search_template('./index.html'), "$FindBin::Bin/public_html/index.html.ep";
-    path_is $app->search_template("$FindBin::Bin/public_html/index.html"), "$FindBin::Bin/public_html/index.html.ep";
+    path_is $app->dynamic->search('index.html'), "$FindBin::Bin/public_html/index.html.ep";
+    path_is $app->dynamic->search('./index.html'), "$FindBin::Bin/public_html/index.html.ep";
+    path_is $app->dynamic->search("$FindBin::Bin/public_html/index.html"), "$FindBin::Bin/public_html/index.html.ep";
 }
 
 my $app;

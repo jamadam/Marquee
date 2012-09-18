@@ -65,6 +65,13 @@ L<Marquee>はL<Mojo>から全ての属性を継承し、下記を追加で実装
 
     $app->default_file('index.html');
 
+=head2 C<dynamic>
+
+L<Marquee::Dynamic> class instance.
+
+    $app->dynamic(Marquee::Dynamic->new);
+    my $dynamic = $app->dynamic;
+
 =head2 C<error_document>
 
 エラードキュメントのレンダラーインスタンスを格納します。デフォルトはL<Marquee::ErrorDocument>です。
@@ -92,14 +99,6 @@ L<Marquee::Hooks>インスタンスを格納します。
     my $secret = $app->secret;
     $app       = $app->secret('passw0rd');
 
-=head2 C<ssi_handlers>
-
-サーバーサイドインクルードのハンドラーをハッシュリファレンスで格納します。ハッシュのキーはテンプレートの最後の拡張子に対応します。
-
-    $app->ssi_handlers->{myhandler} = Marquee::SSIHandler::MyHandler->new;
-
-上記の例の代わりに、L</add_handler>メソッドを使用してSSIの関連付けを追加することが可能です。
-
 =head2 C<stash>
 
 L<Marquee::Stash>インスタンスを格納します。Marqueeアプリのstashはリクエスト毎にコンテキストオブジェクトに
@@ -107,6 +106,13 @@ L<Marquee::Stash>インスタンスを格納します。Marqueeアプリのstash
 
     $app->stash(Marquee::Stash->new);
     my $stash = $app->stash;
+
+=head2 C<static>
+
+L<Marquee::Static> class instance.
+
+    $app->static(Marquee::Static->new);
+    my $static = $app->static;
 
 =head2 C<types>
 
@@ -272,53 +278,12 @@ C<+>はクラス名が完結していることを意味します。
     my $plugin = $app->plugin(MyPlug => @params); # Marquee::Plugin::MyPlug
     my $plugin = $app->plugin('+MyPlugins::MyPlug' => @params); # MyPlugins::MyPlug
 
-=head2 C<render_ssi>
-
-指定のパスのファイルをSSIとしてレンダリングし、結果を返します。
-第二引数の指定がなければ、ファイル名からハンドラーを自動検出します。
-レンダラーの拡張子は自動的に付与されないことに注意してください。
-
-    # /path/to/template.html.epをepハンドラーでレンダリングします
-    my $result = $app->render_ssi('/path/to/template.html.ep');
-    
-    # /path/to/template.html.epをeplハンドラーでレンダリングします
-    my $result = $app->render_ssi('/path/to/template.html.ep', 'epl');
-    
-    # /path/to/template.htmlをepハンドラーでレンダリングします
-    my $result = $app->render_ssi('/path/to/template2.html', 'ep');
-
-=head2 C<search_static>
-
-指定のパスの静的ファイルを検索し、存在すればパスを返します。ファイルの検索はL</roots>属性のディレクトリ群を対象に行われます。
-
-    my $path = $app->search_static('./a.html'); # /path/to/document_root/a.html
-    my $path = $app->search_static('/path/to/a.html'); # /path/to/a.html
-
-=head2 C<search_template>
-
-指定のパスのSSIテンプレートファイルを検索し、存在すればパスを返します。ファイルの検索はL</roots>属性のディレクトリ群を対象に行われます。
-
-    my $path = $app->search_template('./tmpl.html'); # /path/to/document_root/tmpl.html.ep
-    my $path = $app->search_template('/path/to/tmpl.html'); # /path/to/tmpl.html.ep
-
 =head2 C<serve_redirect>
 
 指定のURIへリダイレクトするレスポンスを出力します。
 
     $app->serve_redirect('http://example.com/');
     $app->serve_redirect('/path/');
-
-=head2 C<serve_static>
-
-指定のパスのファイルを出力します。
-
-    $app->serve_static('/path/to/static.png');
-
-=head2 C<serve_dynamic>
-
-指定のパスの動的SSIページを出力します。
-
-    $app->serve_dynamic('/path/to/template.html.ep');
 
 =head2 C<start>
 

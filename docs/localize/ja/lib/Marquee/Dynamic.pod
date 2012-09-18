@@ -1,0 +1,76 @@
+=encoding utf8
+
+=head1 NAME
+
+Marquee::Dynamic - Dynamic server
+
+=head1 SYNOPSIS
+
+    my $dynamic = Maruqee::dynamic->new;
+    $dynamic->maxage(3600);
+    $dynamic->serve('/path/to/file.png');
+
+=head1 DESCRIPTION
+
+L<Marquee::Dynamic> represents dynamic page server.
+
+=head1 ATTRIBUTES
+
+L<Marquee::Dynamic> implements the following attributes.
+
+=head2 C<handlers>
+
+サーバーサイドインクルードのハンドラーをハッシュリファレンスで格納します。ハッシュのキーはテンプレートの最後の拡張子に対応します。
+
+    $dynamic->handlers->{myhandler} = Marquee::SSIHandler::MyHandler->new;
+
+=head2 C<handler_re>
+
+A regex pattern to detect handler extensions. This is automatically generated.
+
+    my $regex = $dynamic->handler_re;
+
+=head2 C<roots>
+
+Root array for searching templates.
+
+    $dynamic->roots(['path/to/dir1', 'path/to/dir1']);
+    my $roots = $dynamic->roots;
+
+=head1 INSTANCE METHODS
+
+L<Marquee::Dynamic> implements the following instance methods.
+
+=head2 C<render>
+
+指定のパスのファイルをSSIとしてレンダリングし、結果を返します。
+第二引数の指定がなければ、ファイル名からハンドラーを自動検出します。
+レンダラーの拡張子は自動的に付与されないことに注意してください。
+
+    # render /path/to/template.html.ep by ep handler
+    my $result = $dynamic->render('/path/to/template.html.ep');
+    
+    # render /path/to/template.html.ep by epl handler
+    my $result = $dynamic->render('/path/to/template.html.ep', 'epl');
+    
+    # render /path/to/template.html by ep handler
+    my $result = $dynamic->render('/path/to/template2.html', 'ep');
+
+=head2 C<search>
+
+指定のパスのSSIテンプレートファイルを検索し、存在すればパスを返します。ファイルの検索はL</roots>属性のディレクトリ群を対象に行われます。
+
+    my $path = $dynamic->search('./tmpl.html'); # /path/to/document_root/tmpl.html.ep
+    my $path = $dynamic->search('/path/to/tmpl.html'); # /path/to/tmpl.html.ep
+
+=head2 C<serve>
+
+指定のパスの動的SSIページを出力します。
+
+    $dynamic->serve('/path/to/template.html.ep');
+
+=head1 SEE ALSO
+
+L<Marquee>, L<Mojolicious>
+
+=cut

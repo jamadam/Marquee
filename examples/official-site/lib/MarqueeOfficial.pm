@@ -23,7 +23,7 @@ use Mojo::Base 'Marquee';
                 if ($self->locale) {
                     $filename = "docs/localize/". $self->locale. '/'. $filename;
                 }
-                $md->serve_markdown($self->search_static($filename));
+                $md->serve_markdown($self->static->search($filename));
                 $self->strip_domain;
             });
             

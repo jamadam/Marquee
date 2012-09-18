@@ -144,14 +144,14 @@ sub _init {
         my $c = Marquee->c;
         my $app = $c->app;
         
-        if (my $path = $app->search_static($path)) {
+        if (my $path = $app->static->search($path)) {
             return b(decode_utf8(Mojo::Asset::File->new(path => $path)->slurp));
         }
         
-        if (my $path = $app->search_template($path)) {
+        if (my $path = $app->dynamic->search($path)) {
             local $c->{stash} = $c->{stash}->clone;
             $c->{stash}->set(@args);
-            return b($app->render_ssi($path));
+            return b($app->dynamic->render($path));
         }
         
         die "$path not found";
@@ -164,10 +164,10 @@ sub _init {
         my $c = Marquee->c;
         my $app = $c->app;
         
-        if (my $path = $app->search_static($path)) {
+        if (my $path = $app->static->search($path)) {
             local $c->{stash} = $c->{stash}->clone;
             $c->{stash}->set(@args);
-            return b($app->render_ssi($path, $handler));
+            return b($app->dynamic->render($path, $handler));
         }
         
         die "$path not found";
@@ -228,8 +228,8 @@ sub _init {
         
         $block->();
         
-        if (my $path = $app->search_template($path)) {
-            return b($app->render_ssi($path, 'ep'));
+        if (my $path = $app->dynamic->search($path)) {
+            return b($app->dynamic->render($path, 'ep'));
         }
         
         die "$path not found";
@@ -246,8 +246,8 @@ sub _init {
         
         $block->();
         
-        if (my $path = $app->search_static($path)) {
-            return b($app->render_ssi($path, $handler));
+        if (my $path = $app->static->search($path)) {
+            return b($app->dynamic->render($path, $handler));
         }
         
         die "$path not found";

@@ -6,8 +6,6 @@ use File::Spec::Functions;
 use Digest::MD5 qw(md5_hex);
 use Mojo::Asset::File;
 use Mojo::URL;
-use Mojo::Util qw'encode';
-use Mojolicious::Types;
 use Mojolicious::Commands;
 use Mojo::Exception;
 use Marquee::Context;
@@ -18,6 +16,7 @@ use Marquee::SSIHandler::EP;
 use Marquee::SSIHandler::EPL;
 use Marquee::Stash;
 use Marquee::Static;
+use Marquee::Types;
 our $VERSION = '0.18';
 
 our $CONTEXT;
@@ -31,7 +30,7 @@ __PACKAGE__->attr(roots => sub {[]});
 __PACKAGE__->attr(secret => sub {md5_hex($^T. $$. rand(1000000))});
 __PACKAGE__->attr(stash => sub {Marquee::Stash->new});
 __PACKAGE__->attr(static => sub {Marquee::Static->new});
-__PACKAGE__->attr(types => sub { Mojolicious::Types->new });
+__PACKAGE__->attr(types => sub { Marquee::Types->new });
 __PACKAGE__->attr('under_development' => 0);
 __PACKAGE__->attr('x_powered_by' => 'Marquee(Perl)');
 
@@ -195,10 +194,8 @@ sub log_file {
 ### detect mime type out of path name
 ### --
 sub path_to_type {
-    my ($self, $path) = @_;
-    if (my $ext = ($path =~ qr{\.(\w+)(?:\.\w+)?$})[0]) {
-        return $self->types->type($ext);
-    }
+    warn 'path_to_type is deprecated in favor of Marquee::Type->type_by_path';
+    shift->types->type_by_path(@_);
 }
 
 ### --
@@ -632,12 +629,6 @@ L</roots> attribute paths.
 Set log file
 
     $app->log_file('/path/to/file')
-
-=head2 C<path_to_type>
-
-Detect MIME type out of path name.
-
-    my $type = $app->path_to_type('/path/to/file.css') # text/css
 
 =head2 C<plugin>
 

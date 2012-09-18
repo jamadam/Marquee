@@ -38,7 +38,7 @@ sub serve {
     if (defined (my $ret = $self->render($path))) {
         $c->res->body(encode('UTF-8', $ret));
         $c->res->code(200);
-        if (my $type = $c->app->path_to_type($path)) {
+        if (my $type = $c->app->types->type_by_path($path)) {
             $c->res->headers->content_type($type);
         }
     }

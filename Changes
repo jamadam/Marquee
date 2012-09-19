@@ -1,7 +1,13 @@
 Revision history for Marquee
 
-0.18 2012/09/18
-  - Deprecated some Marquee methods in favor of refactored classes.
+0.18 2012/09/19
+  - Deprecated path_to_type in favor of $app->types->type_by_path
+  - Deprecated render_ssi in favor of $app->dynamic->render
+  - Deprecated search_static in favor of $app->static->search
+  - Deprecated search_template in favor of $app->dynamic->search
+  - Deprecated serve_static in favor of $app->static->serve
+  - Deprecated serve_dynamic in favor of $app->dynamic->serve
+  - Deprecated ssi_handlers in favor of $app->dynamic->handlers
 
 0.17 2012/09/14
   - Improved documentations.

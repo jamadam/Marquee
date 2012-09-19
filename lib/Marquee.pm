@@ -69,6 +69,20 @@ sub add_handler {
     return $self;
 }
 
+### ---
+### Asset directory
+### ---
+sub asset {
+    my $class = shift;
+    my $pm = $class. '.pm';
+    $pm =~ s{::}{/}g;
+    my @seed = (substr($INC{$pm}, 0, -3), 'Asset');
+    if ($_[0]) {
+        return catdir(@seed, $_[0]);
+    }
+    return catdir(@seed);
+}
+
 ### --
 ### Shortcut for context
 ### --
@@ -186,7 +200,7 @@ sub log_file {
 ### detect mime type out of path name
 ### --
 sub path_to_type {
-    warn 'path_to_type is deprecated in favor of Marquee::Type->type_by_path';
+    warn 'path_to_type is deprecated in favor of $app->types->type_by_path';
     shift->types->type_by_path(@_);
 }
 
@@ -292,20 +306,6 @@ sub start {
     my $self = $ENV{MOJO_APP} = shift;
     $self->_init;
     Mojolicious::Commands->new(app => $self)->run(@_ ? @_ : @ARGV);
-}
-
-### ---
-### Asset directory
-### ---
-sub asset {
-    my $class = shift;
-    my $pm = $class. '.pm';
-    $pm =~ s{::}{/}g;
-    my @seed = (substr($INC{$pm}, 0, -3), 'Asset');
-    if ($_[0]) {
-        return catdir(@seed, $_[0]);
-    }
-    return catdir(@seed);
 }
 
 ### --

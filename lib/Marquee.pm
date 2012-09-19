@@ -57,14 +57,6 @@ sub new {
     $self->add_handler(ep => Marquee::SSIHandler::EP->new(log => $self->log));
     $self->add_handler(epl => Marquee::SSIHandler::EPL->new(log => $self->log));
     
-    # base path for CGI environment
-    if ($ENV{DOCUMENT_ROOT} && ! defined $ENV{MARQUEE_BASE_PATH}) {
-        my $tmp = $self->home->to_string;
-        if ($tmp =~ s{^\Q$ENV{DOCUMENT_ROOT}\E}{}) {
-            $ENV{MARQUEE_BASE_PATH} = $tmp;
-        }
-    }
-    
     return $self;
 }
 

@@ -14,7 +14,7 @@ use Mojo::Date;
 use Mojo::Transaction::HTTP;
 use Mojo::URL;
 
-use Test::More tests => 146;
+use Test::More tests => 147;
 
 {
     my $app = Marquee->new;
@@ -232,6 +232,17 @@ $t->get_ok('/index.unknown')
 ### path base
 
 {
+    local $ENV{'MOJO_HOME'} = "$FindBin::Bin/public_html";
+    local $ENV{'DOCUMENT_ROOT'} = canonpath($FindBin::Bin);
+    $app = Marquee->new;
+    $app->document_root("$FindBin::Bin/public_html");
+    $app->log_file("$FindBin::Bin/Marquee.log");
+    $t = Test::Mojo->new($app);
+    $t->get_ok('/path_base.html');
+    path_is $app->home, "$FindBin::Bin/public_html";
+    path_is $ENV{'MARQUEE_BASE_PATH'}, "/public_html";
+}
+{
     local $ENV{'MARQUEE_BASE_PATH'} = '/base/';
     $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
@@ -245,13 +256,6 @@ $t->get_ok('/index.unknown')
         ->text_is('test1', '/base/a/b/c')
         ->text_is('test2', '/base/a/b/c')
         ->text_is('test3', '/base/a/b/c');
-}
-{
-    local $ENV{'MOJO_HOME'} = "$FindBin::Bin/public_html";
-    local $ENV{'DOCUMENT_ROOT'} = canonpath($FindBin::Bin);
-    $app = Marquee->new;
-    path_is $app->home, "$FindBin::Bin/public_html";
-    path_is $ENV{'MARQUEE_BASE_PATH'}, "/public_html";
 }
 
 ### model

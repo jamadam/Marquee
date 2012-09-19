@@ -261,11 +261,21 @@ sub _init {
 ### --
 sub url_for {
     my ($self, $path) = @_;
+    
+    # base path for CGI environment
+    if ($ENV{DOCUMENT_ROOT} && ! defined $ENV{MARQUEE_BASE_PATH}) {
+        my $tmp = Marquee->c->app->home->to_string;
+        if ($tmp =~ s{^\Q$ENV{DOCUMENT_ROOT}\E}{}) {
+            $ENV{MARQUEE_BASE_PATH} = $tmp;
+        }
+    }
+    
     $path =~ s{^\.*/}{};
     my $abs = Mojo::Path->new($ENV{'MARQUEE_BASE_PATH'});
     $abs->trailing_slash(1);
     $abs->merge($path);
     $abs->leading_slash(1);
+    
     return $abs;
 }
 

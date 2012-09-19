@@ -4,6 +4,7 @@ use warnings;
 use Mojo::Base 'Mojo';
 use File::Spec::Functions;
 use Digest::MD5 qw(md5_hex);
+use Carp;
 use Mojo::Asset::File;
 use Mojo::URL;
 use Mojolicious::Commands;
@@ -200,7 +201,7 @@ sub log_file {
 ### detect mime type out of path name
 ### --
 sub path_to_type {
-    warn 'path_to_type is deprecated in favor of $app->types->type_by_path';
+    carp 'path_to_type is deprecated in favor of $app->types->type_by_path';
     shift->types->type_by_path(@_);
 }
 
@@ -228,7 +229,7 @@ sub plugin {
 ### detect and render
 ### --
 sub render_ssi {
-    warn 'render_ssi is deprecated in favor of $app->dynamic->render';
+    carp 'render_ssi is deprecated in favor of $app->dynamic->render';
     shift->dynamic->render(@_);
 }
 
@@ -236,7 +237,7 @@ sub render_ssi {
 ### search static file
 ### --
 sub search_static {
-    warn 'search_static is deprecated in favor of $app->static->search';
+    carp 'search_static is deprecated in favor of $app->static->search';
     shift->static->search(@_);
 }
 
@@ -244,7 +245,7 @@ sub search_static {
 ### search template
 ### --
 sub search_template {
-    warn 'search_template is deprecated in favor of $app->dynamic->search';
+    carp 'search_template is deprecated in favor of $app->dynamic->search';
     shift->dynamic->search(@_);
 }
 
@@ -262,7 +263,7 @@ sub serve_redirect {
 ### serve static content
 ### --
 sub serve_static {
-    warn 'serve_static is deprecated in favor of $app->static->serve';
+    carp 'serve_static is deprecated in favor of $app->static->serve';
     shift->static->serve(@_);
 }
 
@@ -270,7 +271,7 @@ sub serve_static {
 ### serve dynamic content
 ### --
 sub serve_dynamic {
-    warn 'serve_dynamic is deprecated in favor of $app->dynamic->serve';
+    carp 'serve_dynamic is deprecated in favor of $app->dynamic->serve';
     shift->dynamic->serve(@_);
 }
 
@@ -278,7 +279,7 @@ sub serve_dynamic {
 ### alias for dynamic handlers
 ### --
 sub ssi_handlers {
-    warn 'ssi_handlers is deprecated in favor of $app->dynamic->handlers';
+    carp 'ssi_handlers is deprecated in favor of $app->dynamic->handlers';
     shift->dynamic->handlers;
 }
 

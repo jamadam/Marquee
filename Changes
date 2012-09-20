@@ -1,5 +1,7 @@
 Revision history for Marquee
 
+0.19 2012/09/20
+
 0.18 2012/09/20
   - Refactored many features into classes.
   - Deprecated path_to_type in favor of $app->types->type_by_path.

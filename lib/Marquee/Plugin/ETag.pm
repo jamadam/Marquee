@@ -11,9 +11,9 @@ sub register {
     my ($self, $app, $generator) = @_;
     
     $app->hook(around_dispatch => sub {
-        my ($next, @args) = @_;
+        my ($next) = @_;
         
-        $next->(@args);
+        $next->();
         
         my $req = Marquee->c->req;
         my $res = Marquee->c->res;

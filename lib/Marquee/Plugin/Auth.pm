@@ -12,7 +12,7 @@ sub register {
     my ($self, $app, $entries) = @_;
     
     $app->hook(around_dispatch => sub {
-        my ($next, @args) = @_;
+        my ($next) = @_;
         
         my $c    = Marquee->c;
         my $path = $c->req->url->path->clone->leading_slash(1)->to_string;
@@ -34,7 +34,7 @@ sub register {
         }
         
         if (! $c->served) {
-            $next->(@args);
+            $next->();
         }
     });
 }

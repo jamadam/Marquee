@@ -580,9 +580,9 @@ These hooks are currently available:
 Wraps dispatch process.
 
     $app->hook(around_dispatch => sub {
-        my ($next, @args) = @_;
+        my ($next) = @_;
         ### pre-process
-        $next->(@args);
+        $next->();
         ### post-process
     });
 

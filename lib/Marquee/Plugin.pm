@@ -43,12 +43,12 @@ A plugin looks like as follows.
         my ($self, $app, $params) = @_;
         
         $app->hook(around_dispatch => sub {
-            my ($next, @args) = @_;
+            my ($next) = @_;
             
             my $c = Marquee->c;
             
             if (! $c->served) {
-                $next->(@args);
+                $next->();
             }
         });
     }

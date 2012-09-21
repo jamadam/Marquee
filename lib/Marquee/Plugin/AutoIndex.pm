@@ -17,7 +17,7 @@ sub register {
     push(@{$app->roots}, __PACKAGE__->Marquee::asset());
     
     $app->hook(around_dispatch => sub {
-        my ($next, @args) = @_;
+        my ($next) = @_;
         
         $next->();
         

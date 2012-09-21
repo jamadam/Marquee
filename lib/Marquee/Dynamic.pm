@@ -12,6 +12,15 @@ __PACKAGE__->attr('handler_re' => sub {
 });
 
 ### --
+### Add SSI handler
+### --
+sub add_handler {
+    my ($self, $name, $handler) = @_;
+    $self->handlers->{$name} = $handler;
+    return $self;
+}
+
+### --
 ### search template
 ### --
 sub search {
@@ -102,6 +111,19 @@ Root array for searching templates.
 =head1 INSTANCE METHODS
 
 L<Marquee::Dynamic> implements the following instance methods.
+
+=head2 C<add_handler>
+
+Adds L</handlers> entry. The first argument is corresponds to
+the last extensions of templates. Second argument must be a
+L<Marquee::SSIHandler> sub class instance. See L<Marquee::SSIHandler::EPL> as an
+example.
+
+    $app->add_handler(myhandler => Marquee::SSIHandler::MyHandler->new);
+
+Following file will be available.
+
+    template.html.myhandler
 
 =head2 C<render>
 

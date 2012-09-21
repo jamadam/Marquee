@@ -55,8 +55,10 @@ sub new {
         $CONTEXT->app->dynamic->serve(@_);
     });
     
-    $self->add_handler(ep => Marquee::SSIHandler::EP->new(log => $self->log));
-    $self->add_handler(epl => Marquee::SSIHandler::EPL->new(log => $self->log));
+    $self->dynamic->add_handler(
+                    ep => Marquee::SSIHandler::EP->new(log => $self->log));
+    $self->dynamic->add_handler(
+                    epl => Marquee::SSIHandler::EPL->new(log => $self->log));
     
     return $self;
 }
@@ -65,8 +67,9 @@ sub new {
 ### Add SSI handler
 ### --
 sub add_handler {
-    my ($self, $name, $handler) = @_;
-    $self->dynamic->handlers->{$name} = $handler;
+    my $self = shift;
+    carp 'add_handler is deprecated in favor of $app->dynamic->add_handler';
+    $self->dynamic->add_handler(@_);
     return $self;
 }
 
@@ -530,19 +533,6 @@ The following is an example for getting bundle files of arbitrary module.
 
 L<Marquee> inherits all instance methods from L<Mojo> and implements the
 following new ones.
-
-=head2 C<add_handler>
-
-Adds L<Marquee::Dynamic/handlers> entry. The first argument is corresponds to
-the last extensions of templates. Second argument must be a
-L<Marquee::SSIHandler> sub class instance. See L<Marquee::SSIHandler::EPL> as an
-example.
-
-    $app->add_handler(myhandler => Marquee::SSIHandler::MyHandler->new);
-
-Following file will be available.
-
-    template.html.myhandler
 
 =head2 C<c>
 

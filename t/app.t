@@ -190,8 +190,8 @@ $app->log_file("$FindBin::Bin/Marquee.log");
     sub render {return 'rendered'}
 }
 
-$app->add_handler(test => _TestHandler->new);
-$app->add_handler(test2 => _Test2Handler->new);
+$app->dynamic->add_handler(test => _TestHandler->new);
+$app->dynamic->add_handler(test2 => _Test2Handler->new);
 
 $t = Test::Mojo->new($app);
 

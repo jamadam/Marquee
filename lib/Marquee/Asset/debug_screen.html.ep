@@ -129,7 +129,7 @@
 		<div id="more" class="box infobox spaced">
 			<div id="infos">
 				<table>
-					%= $kv->(Perl => "$^V ($^O)")
+					%= $kv->(Perl => sprintf("v%vd", $^V) . " ($^O)")
 					% my $version  = $Marquee::VERSION;
 					%= $kv->('Marquee' => "$version")
 					%= $kv->(Home => app->home)

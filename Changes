@@ -3,6 +3,7 @@ Revision history for Marquee
 0.19 2012/09/21
   - Refactored add_handler.
   - Deprecated add_handler in favor of $app->dynamic->add_handler
+  - Improved debug screen
 
 0.18 2012/09/20
   - Refactored many features into classes.

@@ -118,7 +118,7 @@
 				%= $kv->(Parameters => dumper $req->params->to_hash)
 				% my %snapshot = %{snapshot()};
 				%= $kv->(Stash => dumper \%snapshot)
-				%# $kv->(Session => dumper $c->session)
+				%= $kv->(Session => dumper $c->session)
 				%= $kv->(Version => $req->version)
 				% for my $name (@{$req->headers->names}) {
 					% my $value = $req->headers->header($name);

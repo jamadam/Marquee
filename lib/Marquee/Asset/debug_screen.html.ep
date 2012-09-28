@@ -130,8 +130,8 @@
 			<div id="infos">
 				<table>
 					%= $kv->(Perl => sprintf("v%vd", $^V) . " ($^O)")
-					% my $version  = $Marquee::VERSION;
-					%= $kv->('Marquee' => "$version")
+					%= $kv->('Mojo' => $Mojolicious::VERSION)
+					%= $kv->('Marquee' => $Marquee::VERSION)
 					%= $kv->(Home => app->home)
 					%= $kv->(Include => dumper \@INC)
 					%= $kv->(PID => $$)

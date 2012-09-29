@@ -12,7 +12,7 @@ use Test::Path qw'path_is path_like';
 use Mojo::Date;
 use Marquee;
 
-use Test::More tests => 79;
+use Test::More tests => 83;
 
 my $app;
 my $t;
@@ -66,8 +66,10 @@ $t->get_ok('/not_found.html')
         
         $t->at('#more tr:nth-child(1) td.key')->content_xml_is('Perl:');
         $t->at('#more tr:nth-child(1) td.value pre')->content_xml_like(qr'^v\d+\.\d+');
-        $t->at('#more tr:nth-child(2) td.key')->content_xml_is('Marquee:');
+        $t->at('#more tr:nth-child(2) td.key')->content_xml_is('Mojo:');
         $t->at('#more tr:nth-child(2) td.value pre')->content_xml_like(qr'^\d+\.\d+');
+        $t->at('#more tr:nth-child(3) td.key')->content_xml_is('Marquee:');
+        $t->at('#more tr:nth-child(3) td.value pre')->content_xml_like(qr'^\d+\.\d+');
         
         ### others
         
@@ -112,8 +114,10 @@ $t->get_ok('/not_good.html')
         
         $t->at('#more tr:nth-child(1) td.key')->content_xml_is('Perl:');
         $t->at('#more tr:nth-child(1) td.value pre')->content_xml_like(qr'^v\d+\.\d+');
-        $t->at('#more tr:nth-child(2) td.key')->content_xml_is('Marquee:');
+        $t->at('#more tr:nth-child(2) td.key')->content_xml_is('Mojo:');
         $t->at('#more tr:nth-child(2) td.value pre')->content_xml_like(qr'^\d+\.\d+');
+        $t->at('#more tr:nth-child(3) td.key')->content_xml_is('Marquee:');
+        $t->at('#more tr:nth-child(3) td.value pre')->content_xml_like(qr'^\d+\.\d+');
         
         ### others
         

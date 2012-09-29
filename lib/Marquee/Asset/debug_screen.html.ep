@@ -129,6 +129,7 @@
 		<div id="more" class="box infobox spaced">
 			<div id="infos">
 				<table>
+					% use Mojolicious;
 					%= $kv->(Perl => sprintf("v%vd", $^V) . " ($^O)")
 					%= $kv->('Mojo' => $Mojolicious::VERSION)
 					%= $kv->('Marquee' => $Marquee::VERSION)

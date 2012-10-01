@@ -1,6 +1,9 @@
 Revision history for Marquee
 
-0.20 2012/09/29
+0.21 2012/10/01
+  - Removed deprecated methods.
+
+0.20 2012/10/01
   - Fixed that some tests have been unpassed.
   - Fixed potential bug on debug screen .
 

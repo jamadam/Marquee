@@ -18,7 +18,7 @@ use Marquee::SSIHandler::EPL;
 use Marquee::Stash;
 use Marquee::Static;
 use Marquee::Types;
-our $VERSION = '0.20';
+our $VERSION = '0.21';
 
 our $CONTEXT;
 
@@ -60,16 +60,6 @@ sub new {
     $self->dynamic->add_handler(
                     epl => Marquee::SSIHandler::EPL->new(log => $self->log));
     
-    return $self;
-}
-
-### --
-### Add SSI handler
-### --
-sub add_handler {
-    my $self = shift;
-    carp 'add_handler is deprecated in favor of $app->dynamic->add_handler';
-    $self->dynamic->add_handler(@_);
     return $self;
 }
 
@@ -201,14 +191,6 @@ sub log_file {
 }
 
 ### --
-### detect mime type out of path name
-### --
-sub path_to_type {
-    carp 'path_to_type is deprecated in favor of $app->types->type_by_path';
-    shift->types->type_by_path(@_);
-}
-
-### --
 ### Register plugin
 ### --
 sub plugin {
@@ -229,30 +211,6 @@ sub plugin {
 }
 
 ### --
-### detect and render
-### --
-sub render_ssi {
-    carp 'render_ssi is deprecated in favor of $app->dynamic->render';
-    shift->dynamic->render(@_);
-}
-
-### --
-### search static file
-### --
-sub search_static {
-    carp 'search_static is deprecated in favor of $app->static->search';
-    shift->static->search(@_);
-}
-
-### --
-### search template
-### --
-sub search_template {
-    carp 'search_template is deprecated in favor of $app->dynamic->search';
-    shift->dynamic->search(@_);
-}
-
-### --
 ### serve redirect
 ### --
 sub serve_redirect {
@@ -260,30 +218,6 @@ sub serve_redirect {
     
     $CONTEXT->res->code(301);
     $CONTEXT->res->headers->location($self->to_abs($uri)->to_string);
-}
-
-### --
-### serve static content
-### --
-sub serve_static {
-    carp 'serve_static is deprecated in favor of $app->static->serve';
-    shift->static->serve(@_);
-}
-
-### --
-### serve dynamic content
-### --
-sub serve_dynamic {
-    carp 'serve_dynamic is deprecated in favor of $app->dynamic->serve';
-    shift->dynamic->serve(@_);
-}
-
-### --
-### alias for dynamic handlers
-### --
-sub ssi_handlers {
-    carp 'ssi_handlers is deprecated in favor of $app->dynamic->handlers';
-    shift->dynamic->handlers;
 }
 
 ### --

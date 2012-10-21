@@ -24,7 +24,7 @@ sub register {
             my ($regex, $cond, $cb) = @$elem;
             map {$_->($c) || next} @$cond;
             if (my @captures = ($path =~ $regex)) {
-                $cb->(defined $1 ? @captures : ());
+                $cb->($#+ ? @captures : ());
                 last;
             }
         }

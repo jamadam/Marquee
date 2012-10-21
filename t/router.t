@@ -10,7 +10,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
 
-use Test::More tests => 59;
+use Test::More tests => 64;
 
 my $app;
 my $t;
@@ -33,10 +33,22 @@ $app->plugin(Router => sub {
     $r->route(qr{^/special\.html})->to(sub {
         MyApp->c->app->static->serve("$FindBin::Bin/public_html/index.txt");
     });
-    $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
+    $r->route(qr{^/capture/(.+)-(.+)})->to(sub {
         my ($a, $b) = @_;
-        is $a, 'foo';
-        is $b, 'bar';
+        MyApp->c->res->code(200);
+        MyApp->c->res->body("$a-$b");
+    });
+    $r->route(qr{^/capture2/(.+)?-(.+)})->to(sub {
+        my ($a, $b) = @_;
+        MyApp->c->res->code(200);
+        $a = defined $a ? $a : '';
+        MyApp->c->res->body("$a-$b");
+    });
+    $r->route(qr{^/capture3/(.+)?})->to(sub {
+        my ($a) = @_;
+        MyApp->c->res->code(200);
+        $a = defined $a ? $a : '';
+        MyApp->c->res->body("$a");
     });
     $r->route(qr{^/rare/})->via('get')->to(sub {
         MyApp->c->res->code(200);
@@ -81,7 +93,17 @@ $t->get_ok('/special.html')
     ->header_is('Content-Length', 20)
     ->content_is('static <%= time() %>');
 
-$t->get_ok('/capture/foo-bar.html');
+$t->get_ok('/capture/foo-bar')
+    ->content_is('foo-bar');
+
+$t->get_ok('/capture2/-bar')
+    ->content_is('-bar');
+
+$t->get_ok('/capture3/bar')
+    ->content_is('bar');
+
+$t->get_ok('/capture3/')
+    ->content_is('');
 
 $t->get_ok('/default.html')
     ->status_is(200)

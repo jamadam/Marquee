@@ -1,5 +1,7 @@
 Revision history for Marquee
 
+0.22 2012/10/21
+
 0.21 2012/10/21
   - Removed deprecated methods.
   - Impoved router on capturing hehavior.

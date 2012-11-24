@@ -62,7 +62,7 @@ APIには、オートインデックス、PODビューワー、Markdownビュー
 
 下記のコマンドでインストールします。
 
-    $ wget https://github.com/jamadam/Marquee/tarball/master -O marquee.tar.gz
+    $ curl -L -o marquee.tar.gz https://github.com/jamadam/Marquee/tarball/master
     $ cpanm marquee.tar.gz
     $ rm marquee.tar.gz
 

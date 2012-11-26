@@ -70,9 +70,7 @@ Markdown viewer. You don't need any Apache things anymore.
 
 To install this module, run the following commands:
 
-    $ curl -L -o marquee.tar.gz https://github.com/jamadam/Marquee/tarball/master
-    $ cpanm marquee.tar.gz
-    $ rm marquee.tar.gz
+	$ curl http://get.mrqe.biz/ | sh
 
 ## DOCUMENTATIONS
 

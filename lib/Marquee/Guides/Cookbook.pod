@@ -8,9 +8,7 @@ This document contains some recipes to develop Marquee application.
 
 =head1 INSTALLATION
 
-    $ curl -L -o marquee.tar.gz https://github.com/jamadam/Marquee/tarball/master
-    $ cpanm marquee.tar.gz
-    $ rm marquee.tar.gz
+	$ curl http://get.mrqe.biz/ | sh
 
 =head1 GETTING STARTED
 

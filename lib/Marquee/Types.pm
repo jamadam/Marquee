@@ -1,4 +1,6 @@
 package Marquee::Types;
+use strict;
+use warnings;
 use Mojo::Base -base;
 
 has types => sub {{

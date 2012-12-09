@@ -34,15 +34,15 @@ L<Marquee>アプリケーションのインスタンスです。
 
 C<$self-E<gt>tx-E<gt>req>へのエイリアスです。
 
-    my $req = $c->tx->req;
-    $c->tx->req($req);
+    my $req = $c->req;
+    $c->req($req);
 
 =head2 C<res>
 
 C<$self-E<gt>tx-E<gt>res>へのエイリアスです。
 
-    my $res = $c->tx->req;
-    $c->tx->req($res);
+    my $res = $c->req;
+    $c->req($res);
 
 =head2 C<session>
 

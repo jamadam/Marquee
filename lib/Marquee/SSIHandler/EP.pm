@@ -479,7 +479,7 @@ Returns stash value for given key.
 
 =head2 C<to_abs>
 
-Generate absolute path for server filesystem root with given relative one.
+Generates absolute path for server filesystem root with given relative one.
 Leading dot-segment indicates current file and the leading slash indicates
 Marquee root.
 
@@ -491,7 +491,7 @@ At C</path/to/Marquee/html/category/index.html>
 
 =head2 C<url_for>
 
-Generate a portable URL relative to document root.
+Generates a portable URL relative to document root.
 
     <%= url_for('./b.css') %> # current is '/a/.html' then generates '/a/b.css'
     <%= url_for('/b.css') %>  # current is '/a/.html' then generates '/b.css'
@@ -534,7 +534,7 @@ L<Mojo::Exception>.
 
 =head2 C<url_for>
 
-Generate a portable URL relative to document root.
+Generates a portable URL relative to document root.
 
     $ep->url_for('./path.css')
 

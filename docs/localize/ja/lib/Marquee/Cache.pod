@@ -51,13 +51,7 @@ L<Marquee::Cache>は下記のインスタンスメソッドを実装します。
 
 各期限切れ条件は、キャッシュの生成時刻をエポック秒で受け取り、期限切れのとき真を返します。
 
-    my $expire = sub {
-        my $epoch = shift;
-        
-        # some tests here
-        
-        return 1; # or 0
-    });
+    my $expire = sub { return (time() - shift > 86400) };
 
 =head1 SEE ALSO
 

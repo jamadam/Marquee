@@ -100,13 +100,7 @@ condition to expire the cache.
 The coderef gets the cache timestamp in seconds since the epoch and can
 return true for expire.
 
-    my $expire = sub {
-        my $epoch = shift;
-        
-        # some tests here
-        
-        return 1; # or 0
-    });
+    my $expire = sub { return (time() - shift > 86400) };
 
 =head1 SEE ALSO
 

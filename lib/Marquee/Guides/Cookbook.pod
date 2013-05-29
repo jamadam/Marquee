@@ -20,8 +20,8 @@ Here is a smallest Marquee application.
     
     $app->start;
 
-You also can separate the app into own class (shown below) and
-boot script (similar to above).
+You also can separate the app into a class (shown below) and
+a boot script (similar to above).
 
     package MyApp;
     use Mojo::Base 'Marquee';
@@ -49,7 +49,7 @@ The following shows how practical application class look like.
         return $self;
     }
 
-The application can be start in Mojo way.
+The application can be started in Mojo way.
 
     $ ./myapp daemon
     Server available at http://127.0.0.1:3000.
@@ -60,7 +60,7 @@ For production use..
 
 =head1 CONTEXT OBJECT
 
-Marquee don't encourage passing the transaction object one method to another.
+We don't encourage passing the transaction object one method to another.
 You can always get a localized context object containing transaction
 via Marquee class method from anywhere in you application.
 For more information see also L<Marquee/context> and L<Marquee::Context>.

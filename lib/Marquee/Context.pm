@@ -211,15 +211,15 @@ L<Marquee> application instance.
 
 An Alias to C<$self-E<gt>tx-E<gt>req>.
 
-    my $req = $c->tx->req;
-    $c->tx->req($req);
+    my $req = $c->req;
+    $c->req($req);
 
 =head2 C<res>
 
 An Alias to C<$self-E<gt>tx-E<gt>res>.
 
-    my $res = $c->tx->req;
-    $c->tx->req($res);
+    my $res = $c->req;
+    $c->req($res);
 
 =head2 C<session>
 

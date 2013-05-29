@@ -143,7 +143,7 @@ $t = Test::Mojo->new($app);
 # GET /session_cookie
 $t->get_ok('/session_cookie')
     ->status_is(200)
-    ->header_is('Set-Cookie', 'session=23--4b29072a4de04717618b2ec10e2e60be; path=/session_cookie')
+    ->header_is('Set-Cookie', 'session=23--d53c3020cb6eb007b28f3ef32c15d8d5d20a3047; path=/session_cookie')
     ->content_is('Cookie set!');
 
 # GET /session_cookie/2
@@ -197,7 +197,7 @@ $t2 = Test::Mojo->new($app);
 # GET /session_cookie
 $t->get_ok('/session_cookie')
     ->status_is(200)
-    ->header_like('Set-Cookie', qr{^mrqe=eyJ0ZXN0Ijoic2Vzc2lvbiB0ZXN0In0---9a77f38057310a620345c9c300fc2ea1;})
+    ->header_like('Set-Cookie', qr{^mrqe=eyJ0ZXN0Ijoic2Vzc2lvbiB0ZXN0In0---164ff366836b4cb8a3617acf1a43164cc4319667;})
     ->content_is('Session set!');
 
 # GET /session_cookie/2
@@ -220,7 +220,7 @@ $t->get_ok('/session_cookie/2')->status_is(200)
 
 $t->get_ok('/session_cookie')
     ->status_is(200)
-    ->header_like('Set-Cookie', qr{^mrqe=eyJ0ZXN0Ijoic2Vzc2lvbiB0ZXN0In0---9a77f38057310a620345c9c300fc2ea1;})
+    ->header_like('Set-Cookie', qr{^mrqe=eyJ0ZXN0Ijoic2Vzc2lvbiB0ZXN0In0---164ff366836b4cb8a3617acf1a43164cc4319667;})
     ->content_is('Session set!');
 
 $t->get_ok('/session_cookie/3')->status_is(200)

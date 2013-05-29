@@ -1,7 +1,7 @@
 package Marquee::Plugin::AuthPretty;
 use strict;
 use warnings;
-use Mojo::Util qw'encode hmac_md5_sum';
+use Mojo::Util qw'encode hmac_sha1_sum';
 use Mojo::Base 'Marquee::Plugin';
 
 __PACKAGE__->attr(realm => 'Secret Area');
@@ -44,7 +44,7 @@ sub register {
             # already authorized
             if (my $sess_id = $c->signed_cookie('pretty_auth')) {
                 if (-e File::Spec->catfile($storage,
-                                hmac_md5_sum($matched, $sess_id, $secret))) {
+                                hmac_sha1_sum($matched, $sess_id, $secret))) {
                     last;
                 }
             }
@@ -71,9 +71,9 @@ sub register {
             }
             
             # store session
-            my $sess_id = hmac_md5_sum($^T. $$. rand(1000000));
+            my $sess_id = hmac_sha1_sum($^T. $$. rand(1000000));
             $c->signed_cookie(pretty_auth => $sess_id);
-            my $sess_file = hmac_md5_sum($matched, $sess_id, $secret);
+            my $sess_file = hmac_sha1_sum($matched, $sess_id, $secret);
             IO::File->new(
                     File::Spec->catfile($storage, $sess_file), '>>') or die $!;
             

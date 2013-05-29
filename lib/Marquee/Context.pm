@@ -2,7 +2,7 @@ package Marquee::Context;
 use strict;
 use warnings;
 use Mojo::Base -base;
-use Mojo::Util qw{hmac_md5_sum secure_compare b64_decode b64_encode};
+use Mojo::Util qw{hmac_sha1_sum secure_compare b64_decode b64_encode};
 
 ### ---
 ### App
@@ -122,7 +122,7 @@ sub signed_cookie {
     
     if (defined $value) {
         return $self->cookie($name,
-                        "$value--" . hmac_md5_sum($value, $secret), $opt);
+                        "$value--" . hmac_sha1_sum($value, $secret), $opt);
     }
   
     my @results;
@@ -131,7 +131,7 @@ sub signed_cookie {
         if ($value =~ s/--([^\-]+)$//) {
             my $sig = $1;
       
-            if (secure_compare($sig, hmac_md5_sum($value, $secret))) {
+            if (secure_compare($sig, hmac_sha1_sum($value, $secret))) {
                 push(@results, $value);
             } else {
                 $self->{app}->log->debug(

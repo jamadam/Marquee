@@ -81,13 +81,13 @@ $t->get_ok('/admin/index')
     ->status_is(200)
     ->text_is('title', 'Secret Area');
 
-$t->post_form_ok('/admin/', {username => 'jamadam', password => 'wrong pass'})
+$t->post_ok('/admin/', form => {username => 'jamadam', password => 'wrong pass'})
     ->status_is(200)
     ->header_is('Set-Cookie', undef)
     ->header_is('Location', undef)
     ->text_is('title', 'Secret Area');
 
-$t->post_form_ok('/admin/', {username => 'jamadam', password => 'pass'})
+$t->post_ok('/admin/', form => {username => 'jamadam', password => 'pass'})
     ->status_is(301)
     ->header_like('Set-Cookie', qr'pretty_auth=.+?--.+?')
     ->header_is('Location', '/admin/');
@@ -104,7 +104,7 @@ $t->get_ok('/admin2/')
     ->status_is(200)
     ->text_is('title', 'Secret Area2');
 
-$t->post_form_ok('/admin2/', {username => 'jamadam', password => 'pass2'})
+$t->post_ok('/admin2/', form => {username => 'jamadam', password => 'pass2'})
     ->status_is(301)
     ->header_like('Set-Cookie', qr'pretty_auth=.+?--.+?')
     ->header_is('Location', '/admin2/');

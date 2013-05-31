@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use utf8;
 use Mojo::Base 'Marquee';
+use Mojo::Util qw'encode';
 
     has 'domain' => '';
     has 'locale' => '';
@@ -62,7 +63,7 @@ use Mojo::Base 'Marquee';
             $org =~ s{^\Q$domain\E}{};
             $e->attrs('src', $org);
         });
-        $res->body($dom);
+        $res->body(encode('UTF-8', $dom));
     }
 
 1;

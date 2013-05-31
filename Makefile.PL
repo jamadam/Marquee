@@ -11,7 +11,7 @@ my %params = (
     PREREQ_PM     => {
     },
     BUILD_REQUIRES => {
-        'Mojolicious'    	  => '3.97',
+        'Mojolicious'    	  => '4.09',
     },
     META_MERGE => {
         resources => {

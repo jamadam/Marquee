@@ -1,6 +1,8 @@
 Revision history for Marquee
 
-0.24 2012/11/26
+0.24 2013/05/31
+  - Fixed a bug on Official site example.
+  - Now it depends on Mojolicious v4.09.
 
 0.23 2012/11/26
   - Improved installation direction.

@@ -98,7 +98,7 @@ L<Marquee::Static> implements the following instance methods.
 =head2 C<search>
 
 Searches for static files for given path and returns the path if exists.
-The search is against the directories in L</roots> attribute.
+The search is made within the directories out of L</roots> attribute.
 
     my $path = $static->search('./a.html'); # /path/to/document_root/a.html
     my $path = $static->search('/path/to/a.html'); # /path/to/a.html

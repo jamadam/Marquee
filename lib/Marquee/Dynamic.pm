@@ -77,8 +77,8 @@ Marquee::Dynamic - Dynamic server
 =head1 SYNOPSIS
 
     my $dynamic = Maruqee::dynamic->new;
-    $dynamic->maxage(3600);
-    $dynamic->serve('/path/to/file.png');
+    $dynamic->add_handler(ep => Marquee::SSIHandler::EP->new());
+    $dynamic->serve('/path/to/template.html.ep');
 
 =head1 DESCRIPTION
 
@@ -119,7 +119,7 @@ the last extensions of templates. Second argument must be a
 L<Marquee::SSIHandler> sub class instance. See L<Marquee::SSIHandler::EPL> as an
 example.
 
-    $app->add_handler(myhandler => Marquee::SSIHandler::MyHandler->new);
+    $dynamic->add_handler(myhandler => Marquee::SSIHandler::MyHandler->new);
 
 Following file will be available.
 
@@ -143,7 +143,8 @@ given. Note that the renderer extension is NOT to be suffixed automatically.
 =head2 C<search>
 
 Searches for SSI template for given path and returns the path with SSI
-extension if exists. The search is against the directories in C</roots> attribute.
+extension if exists. The search is made within the directories out of C</roots>
+attribute.
 
     my $path = $dynamic->search('./tmpl.html'); # /path/to/document_root/tmpl.html.ep
     my $path = $dynamic->search('/path/to/tmpl.html'); # /path/to/tmpl.html.ep

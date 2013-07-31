@@ -37,13 +37,16 @@ sub register {
         my $c = Marquee->c;
         
         if (!$c->served && (my $path = $c->req->url->path) =~ m{\.css$}) {
-            my $res = Marquee->c->res;
+            my $res = $c->res;
             $path =~ s/\.css$/.scss/i;
             $c->req->url->path($path);
             $next->();
-            my $css = $self->scss->($res->body);
-            $res->code(200);
-            $res->body($css);
+            if ($c->served) {
+                my $css = $self->scss->($res->body);
+                $res->code(200);
+                $res->body($css);
+                $res->headers->content_type('text/css');
+            }
         }
     });
 }

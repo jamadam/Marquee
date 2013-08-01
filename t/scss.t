@@ -40,7 +40,7 @@ $t->get_ok('/scss/test2.css')
     ->status_is(200)
     ->header_is('Content-Type', 'text/css');
 
-is shorten($t->tx->res->body), shorten("#test2.scss { color:#fff; }");
+is shorten($t->tx->res->body), shorten("#test2.scss { color: #fff;}");
 
 is(Mojo::Date->new($t->tx->res->headers->last_modified)->epoch, ts('test2.scss'));
 
@@ -52,12 +52,19 @@ is shorten($t->tx->res->body), shorten("#test3.css { color:#fff; }");
 
 is(Mojo::Date->new($t->tx->res->headers->last_modified)->epoch, ts('test3.css'));
 
+$t->get_ok('/scss/test4.css')
+    ->status_is(200)
+    ->header_is('Content-Type', 'text/css');
+
+is shorten($t->tx->res->body), shorten('#test2.scss { color: #fff;}#test2.scss #test3 { color: #fff;}');
+
 $t->get_ok('/scss/notfound.css')
     ->status_is(404);
 
 sub shorten {
     my $css = shift;
-    $css =~ s{\r\n|\r|\n|\s}{}g;
+    $css =~ s{\r\n|\r|\n}{}g;
+    $css =~ s{\s+}{ }g;
     return $css;
 }
 

@@ -9,8 +9,7 @@ use lib catdir(dirname(__FILE__), 'lib');
 use Test::More;
 use Marquee;
 use Mojo::Date;
-
-use Test::More tests => 17;
+use Test::Mojo;
 
 my $app;
 my $t;
@@ -19,7 +18,12 @@ $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
-$app->plugin('Scss');
+eval {
+    my $scss = $app->plugin('Scss');
+};
+if ($@) {
+    plan skip_all => $@;
+}
 $app->_init();
 
 $t = Test::Mojo->new($app);
@@ -61,5 +65,7 @@ sub ts {
     my $ts = (stat $app->static->search('./scss/'. shift))[9];
     return $ts;
 }
+
+done_testing();
 
 __END__

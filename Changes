@@ -2,6 +2,7 @@ Revision history for Marquee
 
 0.25 2013/05/31
   - Added SCSS plugin
+  - Updated API usage in favor of mojo v4.13
 
 0.24 2013/05/31
   - Fixed a bug on Official site example.

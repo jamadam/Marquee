@@ -69,9 +69,9 @@ sub serve_markdown {
     my $dom = Mojo::DOM->new($html);
     
     $dom->find('pre code')->each(sub {
-        my $attrs = shift->attrs;
-        my $class = $attrs->{class};
-        $attrs->{class} = defined $class ? "$class prettyprint" : 'prettyprint';
+        my $attr = shift->attr;
+        my $class = $attr->{class};
+        $attr->{class} = defined $class ? "$class prettyprint" : 'prettyprint';
     });
     
     my $title = 'Markdown Viewer';

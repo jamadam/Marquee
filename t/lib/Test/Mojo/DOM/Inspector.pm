@@ -65,7 +65,7 @@ use Test::More;
   sub attr_is {
     my ($self, $name, $value, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::is $self->dom(0)->attrs($name),
+    Test::More::is $self->dom(0)->attr($name),
                                 $value, $desc || 'exact match for attr value';
     return $self;
   }
@@ -73,7 +73,7 @@ use Test::More;
   sub attr_isnt {
     my ($self, $name, $value, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::isnt $self->dom(0)->attrs($name),
+    Test::More::isnt $self->dom(0)->attr($name),
                                     $value, $desc || 'no match for attr value';
     return $self;
   }
@@ -81,7 +81,7 @@ use Test::More;
   sub attr_like {
     my ($self, $name, $value, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::like $self->dom(0)->attrs($name),
+    Test::More::like $self->dom(0)->attr($name),
                                       $value, $desc || 'attr value is similar';
     return $self;
   }
@@ -89,7 +89,7 @@ use Test::More;
   sub attr_unlike {
     my ($self, $name, $value, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::unlike $self->dom(0)->attrs($name),
+    Test::More::unlike $self->dom(0)->attr($name),
                                   $value, $desc || 'attr value is not similar';
     return $self;
   }
@@ -139,7 +139,7 @@ use Test::More;
   sub has_attr {
     my ($self, $name, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::ok $self->dom(0)->attrs($name),
+    Test::More::ok $self->dom(0)->attr($name),
                                             $desc || qq/has attribute "$name"/;
     return $self;
   }
@@ -147,7 +147,7 @@ use Test::More;
   sub has_attr_not {
     my ($self, $name, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::ok ! $self->dom(0)->attrs($name),
+    Test::More::ok ! $self->dom(0)->attr($name),
                                         $desc || qq/has attribute "$name" not/;
     return $self;
   }
@@ -171,7 +171,7 @@ use Test::More;
   sub has_class {
     my ($self, $name, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    my @classes = split(/\s/, $self->dom(0)->attrs('class') || '');
+    my @classes = split(/\s/, $self->dom(0)->attr('class') || '');
     my $len = scalar grep {$_ eq $name} (@classes);
     Test::More::ok($len, $desc || qq/has class "$name"/);
     return $self;
@@ -180,7 +180,7 @@ use Test::More;
   sub has_class_not {
     my ($self, $name, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    my @classes = split(/\s/, $self->dom(0)->attrs('class') || '');
+    my @classes = split(/\s/, $self->dom(0)->attr('class') || '');
     my $len = scalar grep {$_ eq $name} (@classes);
     Test::More::ok(! $len, $desc || qq/has class "$name"/);
     return $self;

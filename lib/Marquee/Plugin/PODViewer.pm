@@ -70,20 +70,20 @@ sub serve_pod {
     # Rewrite links
     my $dom = Mojo::DOM->new($html);
     $dom->find('a[href]')->each(sub {
-        my $attrs = shift->attrs;
-        if ($attrs->{href} =~ s{^http\://search\.cpan\.org/perldoc\?}{
+        my $attr = shift->attr;
+        if ($attr->{href} =~ s{^http\://search\.cpan\.org/perldoc\?}{
                 $app->dynamic->handlers->{ep}->url_for('/perldoc/')
             }e) {
-            $attrs->{href} =~ s!%3A%3A!/!gi;
+            $attr->{href} =~ s!%3A%3A!/!gi;
         }
     });
 
     # Rewrite code blocks for syntax highlighting
     $dom->find('pre')->each(sub {
         my $e = shift;
-        my $attrs = $e->attrs;
-        my $class = $attrs->{class};
-        $attrs->{class} = defined $class ? "$class prettyprint" : 'prettyprint';
+        my $attr = $e->attr;
+        my $class = $attr->{class};
+        $attr->{class} = defined $class ? "$class prettyprint" : 'prettyprint';
     });
     
     # Rewrite headers

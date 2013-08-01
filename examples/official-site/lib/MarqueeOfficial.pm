@@ -53,15 +53,15 @@ use Mojo::Util qw'encode';
         my $dom = $res->dom;
         $dom->find("a[href^=$domain/]")->each(sub {
             my $e = shift;
-            my $org = $e->attrs('href');
+            my $org = $e->attr('href');
             $org =~ s{^\Q$domain\E}{};
-            $e->attrs('href', $org);
+            $e->attr('href', $org);
         });
         $dom->find("img[src^=$domain/]")->each(sub {
             my $e = shift;
-            my $org = $e->attrs('src');
+            my $org = $e->attr('src');
             $org =~ s{^\Q$domain\E}{};
-            $e->attrs('src', $org);
+            $e->attr('src', $org);
         });
         $res->body(encode('UTF-8', $dom));
     }

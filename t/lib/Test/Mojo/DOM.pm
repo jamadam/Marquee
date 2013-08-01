@@ -1,7 +1,7 @@
 package Test::Mojo::DOM;
 use Mojo::Base 'Test::Mojo';
 use Test::Mojo::DOM::Inspector;
-our $VERSION = '0.02';
+our $VERSION = '0.04';
 
   sub dom_inspector {
     my ($self, $cb) = @_;
@@ -37,7 +37,7 @@ Test::Mojo::DOM - DOM test
               ->text_like(qr'some')
               ->text_unlike(qr'some2')
               ->has_attr('href')
-              ->has_attr('empty')
+              ->has_attr_not('empty')
               ->has_attr_not('not_exists');
           $t->at('a')->get(1)
               ->text_is('some link2');

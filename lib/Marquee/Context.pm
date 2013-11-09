@@ -106,6 +106,13 @@ sub stash {
 }
 
 ### ---
+### Alias for app->render
+### ---
+sub serve {
+    shift->{app}->serve(@_);
+}
+
+### ---
 ### check if status code is already set
 ### ---
 sub served {
@@ -302,6 +309,26 @@ Access request cookie values and create new response cookies.
 
     # Create response cookie with domain
     $c->cookie(name => 'sebastian', {domain => 'mojolicio.us'});
+
+=head2 C<res>
+
+An alias for $c->tx->res
+
+    $c->tx->res($res);
+    $res = $c->tx->res;
+
+=head2 C<req>
+
+An alias for $c->tx->req
+
+    $c->tx->res($req);
+    $req = $c->tx->res;
+
+=head2 C<serve>
+
+An alias for $app->serve
+
+    $c->serve('path/to/index.html');
 
 =head2 C<served>
 

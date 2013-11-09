@@ -1,0 +1,2 @@
+<filename>router2.html.ep</filename>
+<test1><%= 'ok' =%></test1>

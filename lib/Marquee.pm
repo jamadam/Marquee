@@ -113,13 +113,7 @@ sub dispatch {
     if (! $CONTEXT->served) {
         my $path = _auto_fill_filename($path->clone, $self->default_file);
         $path->leading_slash(0);
-        $path = "$path";
-        
-        if (my $try1 = $self->static->search($path)) {
-            $self->hooks->emit_chain('around_static', $try1);
-        } elsif (my $try2 = $self->dynamic->search($path)) {
-            $self->hooks->emit_chain('around_dynamic', $try2);
-        }
+        $self->serve($path->to_string);
     }
     
     if (! $CONTEXT->served) {
@@ -208,6 +202,18 @@ sub plugin {
     my $plug = $name->new;
     $plug->register($self, @args);
     return $plug;
+}
+
+### --
+### serve
+### --
+sub serve {
+    my ($self, $path) = @_;
+    if (my $try1 = $self->static->search($path)) {
+        $self->hooks->emit_chain('around_static', $try1);
+    } elsif (my $try2 = $self->dynamic->search($path)) {
+        $self->hooks->emit_chain('around_dynamic', $try2);
+    }
 }
 
 ### --
@@ -555,6 +561,13 @@ already fully qualified.
 
     my $plugin = $app->plugin(MyPlug => @params); # Marquee::Plugin::MyPlug
     my $plugin = $app->plugin('+MyPlugins::MyPlug' => @params); # MyPlugins::MyPlug
+
+=head2 C<serve>
+
+Serves specific content for given file path. This internally searches static
+contents and dynamic contents.
+
+    $app->serve('index.html');
 
 =head2 C<serve_redirect>
 

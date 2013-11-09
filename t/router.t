@@ -10,7 +10,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
 
-use Test::More tests => 64;
+use Test::More tests => 75;
 
 my $app;
 my $t;
@@ -61,6 +61,15 @@ $app->plugin(Router => sub {
     $r->route(qr{^/default})->to(sub {
         MyApp->c->res->code(200);
         MyApp->c->res->body('default');
+    });
+    $r->route(qr{^/serve1})->to(sub {
+        MyApp->c->serve('router1.html');
+    });
+    $r->route(qr{^/serve2})->to(sub {
+        MyApp->c->serve('router2.html');
+    });
+    $r->route(qr{^/serve3})->to(sub {
+        MyApp->c->serve('router3.html');
     });
 });
 $t = Test::Mojo->new($app);
@@ -123,6 +132,20 @@ $t->get_ok('/rare2/')
 
 $t->head_ok('/rare2/')
     ->status_is(200);
+
+$t->get_ok('/serve1/')
+    ->status_is(200)
+    ->text_is('filename', 'router1.html.ep')
+    ->text_is('test1', 'ok');
+
+$t->get_ok('/serve2/')
+    ->status_is(200)
+    ->text_is('filename', 'router2.html.ep')
+    ->text_is('test1', 'ok');
+
+$t->get_ok('/serve3/')
+    ->status_is(200)
+    ->text_is('filename', 'router3.html');
 
 # bridge
 

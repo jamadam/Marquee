@@ -36,7 +36,7 @@ sub to {
 sub via {
     my ($self, @methods) = @_;
     return $self->add_cond(sub {
-        my $c = shift;
+        my $c = Marquee->c;
         scalar grep {uc $_ eq uc $c->req->method} @methods;
     });
 }
@@ -100,7 +100,7 @@ L<Marquee::Plugin::Router> implements the following instance methods.
 =head2 bridge
 
     my $bridge = $r->bridge(sub {
-        my $c = shift;
+        my $c = Marquee->c;
         return $bool;
     });
 

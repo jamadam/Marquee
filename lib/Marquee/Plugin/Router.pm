@@ -22,7 +22,7 @@ sub register {
         
         for my $elem (@{$self->route->elems}) {
             my ($regex, $cond, $cb) = @$elem;
-            map {$_->($c) || next} @$cond;
+            map {$_->() || next} @$cond;
             if (my @captures = ($path =~ $regex)) {
                 $cb->($#+ ? @captures : ());
                 last;

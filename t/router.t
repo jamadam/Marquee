@@ -171,7 +171,7 @@ $app->plugin(Router => sub {
         $res->headers->content_type('text/html;charset=UTF-8');
     });
     my $bridge2 = $r->bridge(sub {
-        my $c = shift;
+        my $c = Marquee->c;
         return $c->req->headers->user_agent =~ qr{iPhone};
     });
     $bridge2->route(qr{^/index2\.html})->to(sub {
@@ -186,7 +186,7 @@ $app->plugin(Router => sub {
         $res->body('index2.html');
         $res->headers->content_type('text/html;charset=UTF-8');
     });
-    $r->route(qr{^/index3\.html})->add_cond(sub {shift->req->headers->user_agent =~ qr{iPhone}})->to(sub {
+    $r->route(qr{^/index3\.html})->add_cond(sub {Marquee->c->req->headers->user_agent =~ qr{iPhone}})->to(sub {
         my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index3.html for iPhone');

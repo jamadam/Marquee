@@ -10,7 +10,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
 
-use Test::More tests => 75;
+use Test::More tests => 78;
 
 my $app;
 my $t;
@@ -70,6 +70,9 @@ $app->plugin(Router => sub {
     });
     $r->route(qr{^/serve3})->to(sub {
         MyApp->c->serve('router3.html');
+    });
+    $r->route(qr{^/router4.html})->to(sub {
+        # not served
     });
 });
 $t = Test::Mojo->new($app);
@@ -146,6 +149,10 @@ $t->get_ok('/serve2/')
 $t->get_ok('/serve3/')
     ->status_is(200)
     ->text_is('filename', 'router3.html');
+
+$t->get_ok('/router4.html')
+    ->status_is(500)
+    ->text_is('title', '500 Internal Server Error');
 
 # bridge
 

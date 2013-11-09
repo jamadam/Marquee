@@ -25,7 +25,12 @@ sub register {
             map {$_->() || next} @$cond;
             if (my @captures = ($path =~ $regex)) {
                 $cb->($#+ ? @captures : ());
-                last;
+                
+                if (! $c->served) {
+                    $self->log->warn("Route for $regex better serves some contents");
+                }
+                
+                return;
             }
         }
         

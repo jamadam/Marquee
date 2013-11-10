@@ -10,7 +10,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
 
-use Test::More tests => 74;
+use Test::More tests => 78;
 
 my $app;
 my $t;
@@ -76,6 +76,10 @@ $app->plugin(Router => sub {
     });
     $r->route(qr{^/router5.html})->viax('post')->to(sub {
         MyApp->c->serve('router5.html');
+    });
+    $r->route(qr{^/json.json})->to(sub {
+        MyApp->c->res->code(200);
+        MyApp->c->res->body(Mojo::JSON->new->encode({a => 1, b => 2}));
     });
 });
 $t = Test::Mojo->new($app);
@@ -163,6 +167,11 @@ $t->post_ok('/router5.html')
 $t->get_ok('/router5.html')
     ->status_is(404);
 
+$t->get_ok('/json.json')
+    ->status_is(200)
+    ->header_is('Content-Type', 'application/json')
+    ->content_is(q!{"a":1,"b":2}!);
+
 # bridge
 
 $app = MyApp->new;
@@ -178,13 +187,11 @@ $app->plugin(Router => sub {
         my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index.html for bridge');
-        $res->headers->content_type('text/html;charset=UTF-8');
     });
     $r->route(qr{^/index\.html})->to(sub {
         my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index.html');
-        $res->headers->content_type('text/html;charset=UTF-8');
     });
     my $bridge2 = $r->bridge(sub {
         my $c = Marquee->c;
@@ -194,13 +201,11 @@ $app->plugin(Router => sub {
         my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index2.html for iPhone');
-        $res->headers->content_type('text/html;charset=UTF-8');
     });
     $r->route(qr{^/index2\.html})->to(sub {
         my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index2.html');
-        $res->headers->content_type('text/html;charset=UTF-8');
     });
 });
 $t = Test::Mojo->new($app);

@@ -1,5 +1,8 @@
 Revision history for Marquee
 
+0.27 2013/11/11
+  - Now content type header is auto set when missing.
+
 0.26 2013/11/10
   - Added FormValidatorLazy plugin.
   - Refactored static/dinamic dispach logic to serve method.

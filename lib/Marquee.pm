@@ -152,6 +152,12 @@ sub handler {
         $self->log->fatal($tx->req->url->path. qq{ Not found});
     }
     
+    if ($tx->res->code == 200 && ! defined $tx->res->headers->content_type) {
+        if (my $type = $self->types->type_by_path($tx->req->url->path)) {
+            $tx->res->headers->content_type($type);
+        }
+    }
+    
     $CONTEXT->close;
     
     $tx->resume;
@@ -214,6 +220,17 @@ sub serve {
     } elsif (my $try2 = $self->dynamic->search($path)) {
         $self->hooks->emit_chain('around_dynamic', $try2);
     }
+}
+
+### --
+### JSON serve
+### --
+sub serve_json {
+    my ($self, $ref) = @_;
+    my $c = Marquee->c;
+    $c->res->body(encode('UTF-8', Mojo::JSON->new->encode($ref)));
+    $c->res->code(200);
+    $c->res->headers->content_type('application/json');
 }
 
 ### --

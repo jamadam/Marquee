@@ -10,7 +10,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
 
-use Test::More tests => 78;
+use Test::More tests => 74;
 
 my $app;
 my $t;
@@ -73,6 +73,9 @@ $app->plugin(Router => sub {
     });
     $r->route(qr{^/router4.html})->to(sub {
         # not served
+    });
+    $r->route(qr{^/router5.html})->viax('post')->to(sub {
+        MyApp->c->serve('router5.html');
     });
 });
 $t = Test::Mojo->new($app);
@@ -154,6 +157,12 @@ $t->get_ok('/router4.html')
     ->status_is(500)
     ->text_is('title', '500 Internal Server Error');
 
+$t->post_ok('/router5.html')
+    ->status_is(200);
+
+$t->get_ok('/router5.html')
+    ->status_is(404);
+
 # bridge
 
 $app = MyApp->new;
@@ -193,18 +202,6 @@ $app->plugin(Router => sub {
         $res->body('index2.html');
         $res->headers->content_type('text/html;charset=UTF-8');
     });
-    $r->route(qr{^/index3\.html})->add_cond(sub {Marquee->c->req->headers->user_agent =~ qr{iPhone}})->to(sub {
-        my $res = Marquee->c->res;
-        $res->code(200);
-        $res->body('index3.html for iPhone');
-        $res->headers->content_type('text/html;charset=UTF-8');
-    });
-    $r->route(qr{^/index3\.html})->to(sub {
-        my $res = Marquee->c->res;
-        $res->code(200);
-        $res->body('index3.html');
-        $res->headers->content_type('text/html;charset=UTF-8');
-    });
 });
 $t = Test::Mojo->new($app);
 
@@ -220,13 +217,6 @@ $t->get_ok('/index2.html', {'User-Agent' => 'iPhone'})
     ->status_is(200)
     ->header_is('Content-Length', 22)
     ->content_is('index2.html for iPhone');
-$t->get_ok('/index3.html')
-    ->status_is(200)
-    ->header_is('Content-Length', 11)
-    ->content_is('index3.html');
-$t->get_ok('/index3.html', {'User-Agent' => 'iPhone'})
-    ->status_is(200)
-    ->header_is('Content-Length', 22)
-    ->content_is('index3.html for iPhone');
+
 
 __END__

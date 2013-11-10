@@ -20,8 +20,8 @@ sub register {
         my $c       = Marquee->c;
         my $path    = $c->req->url->path->clone->leading_slash(1)->to_string;
         
-        for my $elem (@{$self->route->elems}) {
-            my ($regex, $cond, $cb) = @$elem;
+        for my $entry (@{$self->route->aggregate->data}) {
+            my ($regex, $cond, $cb) = @$entry;
             map {$_->() || next} @$cond;
             if (my @captures = ($path =~ $regex)) {
                 $cb->($#+ ? @captures : ());
@@ -71,6 +71,10 @@ Marquee::Plugin::Router - Router
         });
         
         $r->route(qr{^/rare/})->via('get')->to(sub {
+            ...
+        });
+        
+        $r->route(qr{^/rare/})->viax('post')->to(sub {
             ...
         });
         

@@ -28,6 +28,10 @@ __PACKAGE__->attr(dynamic => sub {Marquee::Dynamic->new});
 __PACKAGE__->attr(error_document => sub {Marquee::ErrorDocument->new});
 __PACKAGE__->attr(hooks => sub {Marquee::Hooks->new});
 __PACKAGE__->attr(roots => sub {[]});
+__PACKAGE__->attr('route' => sub {
+    my $router = $_[0]->plugin(Router => sub {});
+    return $router->route;
+});
 __PACKAGE__->attr(secret => sub {md5_hex($^T. $$. rand(1000000))});
 __PACKAGE__->attr(stash => sub {Marquee::Stash->new});
 __PACKAGE__->attr(static => sub {Marquee::Static->new});

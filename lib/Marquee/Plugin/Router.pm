@@ -50,44 +50,43 @@ Marquee::Plugin::Router - Router
 
 =head1 SYNOPSIS
     
-    $app->plugin(Router => sub {
-        my $r = shift;
-        $r->route(qr{^/index\.html})->to(sub {
-            my $c = Marquee->c;
-            my $req = $c->tx->req;
-            my $res = $c->tx->res;
-            $res->code(200);
-            $res->body('content');
-            $res->headers->content_type('text/html');
-        });
-        
-        $r->route(qr{^/special\.html})->to(sub {
-            ...
-        });
-        
-        $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
-            my ($a, $b) = @_;
-            ...
-        });
-        
-        $r->route(qr{^/rare/})->via('get')->to(sub {
-            ...
-        });
-        
-        $r->route(qr{^/rare/})->viax('post')->to(sub {
-            ...
-        });
-        
-        $r->route(qr{^/default})->to(sub {
-            ...
-        });
-        
-        my $bridge = $r->bridge(sub {
-            return 1; # or 0
-        });
-        
-        $bridge->route(qr{})->to(sub {...});
+    my $r = $app->route;
+    
+    $r->route(qr{^/index\.html})->to(sub {
+        my $c = Marquee->c;
+        my $req = $c->tx->req;
+        my $res = $c->tx->res;
+        $res->code(200);
+        $res->body('content');
+        $res->headers->content_type('text/html');
     });
+    
+    $r->route(qr{^/special\.html})->to(sub {
+        ...
+    });
+    
+    $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
+        my ($a, $b) = @_;
+        ...
+    });
+    
+    $r->route(qr{^/rare/})->via('get')->to(sub {
+        ...
+    });
+    
+    $r->route(qr{^/rare/})->viax('post')->to(sub {
+        ...
+    });
+    
+    $r->route(qr{^/default})->to(sub {
+        ...
+    });
+    
+    my $bridge = $r->bridge(sub {
+        return 1; # or 0
+    });
+    
+    $bridge->route(qr{})->to(sub {...});
 
 =head1 DESCRIPTION
 

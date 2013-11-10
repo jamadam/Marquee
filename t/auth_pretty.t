@@ -28,32 +28,30 @@ $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 
-$app->plugin(Router => sub {
-    my $r = shift;
-    $r->route(qr{^/admin/index})->to(sub {
-        my $res = Marquee->c->tx->res;
-        $res->code(200);
-        $res->headers->content_type($app->types->type('html'));
-        $res->body('/admin/index passed');
-    });
-    $r->route(qr{^/admin/})->to(sub {
-        my $res = Marquee->c->tx->res;
-        $res->code(200);
-        $res->headers->content_type($app->types->type('html'));
-        $res->body('/admin/ passed');
-    });
-    $r->route(qr{^/admin2/})->to(sub {
-        my $res = Marquee->c->tx->res;
-        $res->code(200);
-        $res->headers->content_type($app->types->type('html'));
-        $res->body('/admin2/ passed');
-    });
-    $r->route(qr{^/})->to(sub {
-        my $res = Marquee->c->tx->res;
-        $res->code(200);
-        $res->headers->content_type($app->types->type('html'));
-        $res->body('index.html');
-    });
+my $r = $app->route;
+$r->route(qr{^/admin/index})->to(sub {
+    my $res = Marquee->c->tx->res;
+    $res->code(200);
+    $res->headers->content_type($app->types->type('html'));
+    $res->body('/admin/index passed');
+});
+$r->route(qr{^/admin/})->to(sub {
+    my $res = Marquee->c->tx->res;
+    $res->code(200);
+    $res->headers->content_type($app->types->type('html'));
+    $res->body('/admin/ passed');
+});
+$r->route(qr{^/admin2/})->to(sub {
+    my $res = Marquee->c->tx->res;
+    $res->code(200);
+    $res->headers->content_type($app->types->type('html'));
+    $res->body('/admin2/ passed');
+});
+$r->route(qr{^/})->to(sub {
+    my $res = Marquee->c->tx->res;
+    $res->code(200);
+    $res->headers->content_type($app->types->type('html'));
+    $res->body('index.html');
 });
 
 $app->plugin(AuthPretty => [

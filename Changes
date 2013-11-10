@@ -3,6 +3,8 @@ Revision history for Marquee
 0.27 2013/11/11
   - Now content type header is auto set when missing.
   - Now dynamic renderer do not overwrite existing response.
+  - Now Router plugin is auto activated and routes can be accessible as an app
+    attribute.
 
 0.26 2013/11/10
   - Added FormValidatorLazy plugin.

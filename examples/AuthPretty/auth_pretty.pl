@@ -25,15 +25,12 @@ use Mojo::Base 'Marquee';
         $self->document_root($self->home->rel_dir('.'));
         $self->default_file('index.html');
         
-        $self->plugin(Router => sub {
-            my $r = shift;
-            
-            $r->route(qr{^/admin/})->to(sub {
-                my $res = Marquee->c->tx->res;
-                $res->code(200);
-                $res->headers->content_type($app->types->type('html'));
-                $res->body('passed');
-            });
+        my $r = $app->route;
+        $r->route(qr{^/admin/})->to(sub {
+            my $res = Marquee->c->tx->res;
+            $res->code(200);
+            $res->headers->content_type($app->types->type('html'));
+            $res->body('passed');
         });
         
         $self->plugin(AuthPretty => [

@@ -23,9 +23,8 @@ my $t;
 $app = MyApp->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
-
-$app->plugin(Router => sub {
-    my $r = shift;
+{
+    my $r = $app->route;
     $r->route(qr{^/index\.html})->to(sub {
         MyApp->c->app->dynamic->serve("$FindBin::Bin/public_html/index2.txt.ep");
         is $_[0], undef;
@@ -81,7 +80,7 @@ $app->plugin(Router => sub {
         MyApp->c->res->code(200);
         MyApp->c->res->body(Mojo::JSON->new->encode({a => 1, b => 2}));
     });
-});
+}
 $t = Test::Mojo->new($app);
 
 $t->get_ok('/index.html')
@@ -177,9 +176,8 @@ $t->get_ok('/json.json')
 $app = MyApp->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
-
-$app->plugin(Router => sub {
-    my $r = shift;
+{
+    my $r = $app->route;
     my $bridge = $r->bridge(sub {
         return 0;
     });
@@ -207,7 +205,7 @@ $app->plugin(Router => sub {
         $res->code(200);
         $res->body('index2.html');
     });
-});
+};
 $t = Test::Mojo->new($app);
 
 $t->get_ok('/index.html')

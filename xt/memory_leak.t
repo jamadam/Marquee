@@ -25,10 +25,8 @@ use Test::More tests => 6;
         my ($next, @args) = @_;
         return $next->(@args);
     });
-    $app->plugin(Router => sub {
-        shift->route(qr/index\.html/)->to(sub {
-            MyApp->context->app->serve_static("");
-        });
+    $app->route->route(qr/index\.html/)->to(sub {
+        MyApp->context->app->serve_static("");
     });
     my $t = Test::Mojo->new($app);
     $t->get_ok('/');

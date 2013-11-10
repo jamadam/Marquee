@@ -20,9 +20,8 @@ $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
-
-$app->plugin(Router => sub {
-    my $r = shift;
+{
+    my $r = $app->route;
     $r->route(qr{^/session_cookie/2})->to(sub {
         my $req     = Marquee->c->req;
         my $res     = Marquee->c->res;
@@ -43,7 +42,7 @@ $app->plugin(Router => sub {
             )
         );
     });
-});
+}
 
 $t = Test::Mojo->new($app);
 
@@ -73,9 +72,8 @@ $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
-
-$app->plugin(Router => sub {
-    my $r = shift;
+{
+    my $r = $app->route;
     $r->route(qr{^/session_cookie/2})->to(sub {
         my $res     = Marquee->c->res;
         my $session = Marquee->c->cookie('session');
@@ -89,7 +87,7 @@ $app->plugin(Router => sub {
         $res->code(200);
         Marquee->c->cookie('session', '23', {path  => '/session_cookie'});
     });
-});
+};
 
 $t = Test::Mojo->new($app);
 
@@ -120,9 +118,8 @@ $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
 $app->secret('aaaaaaaaaaaaaa');
-
-$app->plugin(Router => sub {
-    my $r = shift;
+{
+    my $r = $app->route;
     $r->route(qr{^/session_cookie/2})->to(sub {
         my $res     = Marquee->c->res;
         my $session = Marquee->c->signed_cookie('session');
@@ -136,7 +133,7 @@ $app->plugin(Router => sub {
         $res->code(200);
         Marquee->c->signed_cookie('session', '23', {path  => '/session_cookie'});
     });
-});
+}
 
 $t = Test::Mojo->new($app);
 
@@ -167,9 +164,8 @@ $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
 $app->secret('aaaaaaaaaaaaaa');
-
-$app->plugin(Router => sub {
-    my $r = shift;
+{
+    my $r = $app->route;
     $r->route(qr{^/session_cookie/2})->to(sub {
         my $res     = Marquee->c->res;
         my $session = Marquee->c->session;
@@ -189,7 +185,7 @@ $app->plugin(Router => sub {
         $res->code(200);
         Marquee->c->session({test => 'session test'});
     });
-});
+}
 
 $t = Test::Mojo->new($app);
 $t2 = Test::Mojo->new($app);

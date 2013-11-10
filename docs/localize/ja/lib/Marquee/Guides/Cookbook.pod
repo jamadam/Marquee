@@ -151,30 +151,28 @@ Marqueeは特にモデルレイヤーを提供しませんので、あなたの�
 
 デフォルトのマッピングルールのコンセプトを尊重する限り、Marqueeにとってルーティングは重要な問題ではありませんが、
 L<Marquee::Plugin::Router>プラグインを使用すれば、このルーティングをオーバーライドすることができます。
-
-    $app->plugin(Router => sub {
-        my $r = shift;
-        $r->route(qr{/api/member.json})->via('get')->to(sub {
-            my $res = Marquee->c->res;
-            my $member = {1 => 'sato', 2 => 'saito', 3 => 'suzuki'};
-            $res->body(Mojo::JSON->new->encode($member));
-            $res->code(200);
-            $res->headers->content_type('application/json');
-        });
+    
+    my $r = $app->route;
+    
+    $r->route(qr{/api/member.json})->via('get')->to(sub {
+        my $res = Marquee->c->res;
+        my $member = {1 => 'sato', 2 => 'saito', 3 => 'suzuki'};
+        $res->body(Mojo::JSON->new->encode($member));
+        $res->code(200);
+        $res->headers->content_type('application/json');
     });
 
 もうひとつ、プレースホルダーがどのように動くかを示した例です。
 
-    $app->plugin(Router => sub {
-        my $r = shift;
-        $r->route(qr{^/(.+\.md)?$})->to(sub {
-            my $filename = shift;
-            $md->serve_markdown($app->search_static($filename || 'readme.md'))
-        });
-        $r->route(qr{^/perldoc/(.+)})->to(sub {
-            my $module = shift;
-            $pod->serve_pod_by_name($module);
-        });
+    my $r = $app->route;
+    
+    $r->route(qr{^/(.+\.md)?$})->to(sub {
+        my $filename = shift;
+        $md->serve_markdown($app->search_static($filename || 'readme.md'))
+    });
+    $r->route(qr{^/perldoc/(.+)})->to(sub {
+        my $module = shift;
+        $pod->serve_pod_by_name($module);
     });
 
 =head1 テスト

@@ -16,25 +16,23 @@ use Mojo::Util qw'encode';
         my $md  = $self->plugin(Markdown => {no_route => 1});
         $self->document_root($self->home);
         
-        $self->plugin(Router => sub {
-            my $r = shift;
-            
-            $r->route(qr{^/(.+\.md)?$})->to(sub {
-                my $filename = shift || 'readme.md';
-                if ($self->locale) {
-                    $filename = "docs/localize/". $self->locale. '/'. $filename;
-                }
-                $md->serve_markdown($self->static->search($filename));
-                $self->strip_domain;
-            });
-            
-            $r->route(qr{^/perldoc/(.*)})->to(sub {
-                if (my $name = shift) {
-                    $pod->serve_pod_by_name($name);
-                } else {
-                    $pod->serve_index;
-                }
-            });
+        my $r = $self->route;
+        
+        $r->route(qr{^/(.+\.md)?$})->to(sub {
+            my $filename = shift || 'readme.md';
+            if ($self->locale) {
+                $filename = "docs/localize/". $self->locale. '/'. $filename;
+            }
+            $md->serve_markdown($self->static->search($filename));
+            $self->strip_domain;
+        });
+        
+        $r->route(qr{^/perldoc/(.*)})->to(sub {
+            if (my $name = shift) {
+                $pod->serve_pod_by_name($name);
+            } else {
+                $pod->serve_index;
+            }
         });
         
         $self->static->maxage(604800);

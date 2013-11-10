@@ -202,6 +202,19 @@ L<http://mojolicio.us/perldoc/Mojolicious/Guides/Growing#Testing>も参照くだ
         },
     ]);
 
+=head1 自動フォームバリデーション
+
+L<Marquee::Plugin::FormValidatorLazy> プラグインはフォーム改ざんからあなたのアプリを
+守る仕組みを提供します。
+
+    $app->plugin(FormValidatorLazy => {
+        namespace => 'form_validator_lazy',
+        action => ['/receptor1.html', '/receptor3.html'],
+        blackhole => sub {
+            Marquee->c->app->error_document->serve(400, $_[0]);
+        },
+    });
+
 =head1 デプロイメント
 
 =head2 ビルトインwebサーバー

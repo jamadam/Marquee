@@ -211,6 +211,19 @@ You can port apache htpasswd entries as follows.
         },
     ]);
 
+=head1 AUTOMATIC FORM VALIDATION
+
+L<Marquee::Plugin::FormValidatorLazy> plugin provides automatic form validation
+mechanism for protecting your app from such as form manipulation.
+
+    $app->plugin(FormValidatorLazy => {
+        namespace => 'form_validator_lazy',
+        action => ['/receptor1.html', '/receptor3.html'],
+        blackhole => sub {
+            Marquee->c->app->error_document->serve(400, $_[0]);
+        },
+    });
+
 =head1 DEPLOYMENT
 
 =head2 Built-in web server

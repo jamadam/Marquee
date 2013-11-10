@@ -137,16 +137,13 @@ Mojolicious::Plugin::FormValidatorLazy - FormValidatorLazy
 
 =head1 SYNOPSIS
 
-    plugin form_validator_lazy => {
+    $app->plugin(FormValidatorLazy => {
         namespace => 'form_validator_lazy',
-        action => ['/receptor1'],
+        action => ['/receptor1.html', '/receptor3.html'],
         blackhole => sub {
-            my $error = shift;
-            app->log($error);
-            $c->res->code(400);
-            $c->render(text => 'An error occured');
+            Marquee->c->app->error_document->serve(400, $_[0]);
         },
-    };
+    });
 
 =head1 DESCRIPTION
 

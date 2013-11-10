@@ -37,7 +37,7 @@ and implicitly serve the header. This system is more resonable
 (by comparison to PHP).
 
 ep and epl are always available and you can also add your own handler easily.
-You can also override the mapping rule with [Marquee::Router] plugin bundled
+You can also override the mapping rule with [Marquee::Plugin::Router] plugin bundled
 in core.
 
 ### Perlish template
@@ -114,7 +114,7 @@ This program is free software; you can redistribute it and/or
 modify it under the [same terms as Perl itself].
 
 [Marquee]:http://mrqe.biz/perldoc/Marquee
-[Marquee::Router]:http://mrqe.biz/perldoc/Marquee/Router
+[Marquee::Plugin::Router]:http://mrqe.biz/perldoc/Marquee/Plugin/Router
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy

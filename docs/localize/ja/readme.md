@@ -32,7 +32,7 @@ URIの意味をディレクトリ構造に対応させることは物事をシ�
 この方式は(PHPに比べ)より合理的です。
 
 epとeplは常に利用可能で、任意のハンドラーを追加することも簡単です。
-また、コアに付属の[Marquee::Router]プラグインでマッピングルールのオーバーライドも可能です。
+また、コアに付属の[Marquee::Plugin::Router]プラグインでマッピングルールのオーバーライドも可能です。
 
 ### Perl風テンプレート
 
@@ -108,7 +108,7 @@ This program is free software; you can redistribute it and/or
 modify it under the [same terms as Perl itself].
 
 [Marquee]:http://ja.mrqe.biz/perldoc/Marquee
-[Marquee::Router]:http://ja.mrqe.biz/perldoc/Marquee/Router
+[Marquee::Plugin::Router]:http://ja.mrqe.biz/perldoc/Marquee/Plugin/Router
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy

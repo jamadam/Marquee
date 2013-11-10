@@ -44,7 +44,9 @@ sub serve {
     
     my $c = Marquee->c;
     
-    if (defined (my $ret = $self->render($path))) {
+    my $ret = $self->render($path);
+    
+    if (defined $ret && ! $c->served) {
         $c->res->body(encode('UTF-8', $ret));
         $c->res->code(200);
         my $ext = ($path =~ qr{\.(\w+)(?:\.\w+)?$})[0];

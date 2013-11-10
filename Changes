@@ -1,5 +1,7 @@
 Revision history for Marquee
 
+0.28 2013/11/11
+
 0.27 2013/11/11
   - Now content type header is auto set when missing.
   - Now dynamic renderer do not overwrite existing response.

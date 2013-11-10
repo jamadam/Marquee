@@ -154,8 +154,8 @@ $t->get_ok('/serve3/')
     ->text_is('filename', 'router3.html');
 
 $t->get_ok('/router4.html')
-    ->status_is(500)
-    ->text_is('title', '500 Internal Server Error');
+    ->status_is(404)
+    ->text_is('title', '404 File Not Found');
 
 $t->post_ok('/router5.html')
     ->status_is(200);

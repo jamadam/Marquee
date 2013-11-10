@@ -44,8 +44,8 @@ $t->dom_inspector(sub {
     my $t = shift;
     $t->at('title')->text_is('Index of Modules - Pod viewer');
     $t->at('#wrapper h2')->text_is('INDEX OF MODULES');
-    $t->at('#wrapper a')->attr_is('href', './Marquee');
-    $t->at('#wrapper a')->text_is('Marquee');
+    $t->at('#wrapper a')->attr_is('href', './HTML/ValidationRules/Legacy');
+    $t->at('#wrapper a')->text_is('HTML::ValidationRules::Legacy');
     $t->at('#wrapper a:last-child')->text_is('Mojolicious::Command::marquee');
 });
 

@@ -27,7 +27,7 @@ sub register {
                 $cb->($#+ ? @captures : ());
                 
                 if (! $c->served) {
-                    $self->log->warn("Route for $regex better serves some contents");
+                    $c->app->log->warn("Route for $regex better serves some contents");
                 }
                 
                 return;

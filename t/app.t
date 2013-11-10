@@ -14,7 +14,7 @@ use Mojo::Date;
 use Mojo::Transaction::HTTP;
 use Mojo::URL;
 
-use Test::More tests => 147;
+use Test::More tests => 150;
 
 {
     my $app = Marquee->new;
@@ -156,6 +156,9 @@ $t->get_ok('/dir1/.%2findex.html')
     ->content_type_is('text/html;charset=UTF-8')
     ->header_is('Content-Length', 15)
     ->content_is(qq{dir1/index.html});
+$t->get_ok('/jquery.1.10.1.js')
+    ->status_is(200)
+    ->header_is('Content-Type', 'application/javascript');
 
 # auto escape activation
 

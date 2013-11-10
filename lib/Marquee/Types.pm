@@ -199,8 +199,10 @@ sub type {
 
 sub type_by_path {
     my ($self, $path) = @_;
-    if (my $ext = ($path =~ qr{\.(\w+)(?:\.\w+)?$})[0]) {
-        return $self->type($ext);
+    while ($path =~ s{\.(\w+)$}{}) {
+        if (my $type = $self->type($1)) {
+            return $type;
+        }
     }
 }
 

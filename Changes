@@ -5,6 +5,7 @@ Revision history for Marquee
   - Changed router api for consistency.
   - Made unserved route not tot fallback to default route.
   - Added viax method to router API.
+  - Improved MIME type detection.
 
 0.25 2013/05/31
   - Added SCSS plugin

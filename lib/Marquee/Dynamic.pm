@@ -47,7 +47,8 @@ sub serve {
     if (defined (my $ret = $self->render($path))) {
         $c->res->body(encode('UTF-8', $ret));
         $c->res->code(200);
-        if (my $type = $c->app->types->type_by_path($path)) {
+        my $ext = ($path =~ qr{\.(\w+)(?:\.\w+)?$})[0];
+        if (my $type = $c->app->types->type($ext)) {
             $c->res->headers->content_type($type);
         }
     }

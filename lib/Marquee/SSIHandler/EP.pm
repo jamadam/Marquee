@@ -32,7 +32,7 @@ sub add_function {
     my ($self, $name, $cb) = @_;
     
     if ($name =~ /\W/) {
-        croak "Function name must be consitsts of [a-bA-B0-9]";
+        croak "Function name must be consitsts of [a-zA-Z0-9]";
     }
     if ($] >= 5.016 && defined(&{"CORE::". $name})) {
         croak qq{Can't modify built-in function $name};

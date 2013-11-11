@@ -227,17 +227,6 @@ sub serve {
 }
 
 ### --
-### JSON serve
-### --
-sub serve_json {
-    my ($self, $ref) = @_;
-    my $c = Marquee->c;
-    $c->res->body(encode('UTF-8', Mojo::JSON->new->encode($ref)));
-    $c->res->code(200);
-    $c->res->headers->content_type('application/json');
-}
-
-### --
 ### serve redirect
 ### --
 sub serve_redirect {

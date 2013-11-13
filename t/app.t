@@ -147,10 +147,10 @@ $t->get_ok('/index4.html.pub')
     ->header_is('Content-Length', 15)
     ->content_is('index4.html.pub');
 $t->get_ok('/..%2f/basic.t')
-    ->status_is(404)
+    ->status_is(400)
     ->element_exists_not('body#debugScreen');
 $t->get_ok('/dir1/..%2f/..%2f/basic.t')
-    ->status_is(404);
+    ->status_is(400);
 $t->get_ok('/dir1/.%2findex.html')
     ->status_is(200)
     ->content_type_is('text/html;charset=UTF-8')

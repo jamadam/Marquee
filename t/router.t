@@ -10,7 +10,7 @@ use Test::More;
 use Test::Mojo::DOM;
 use Mojo::Date;
 
-use Test::More tests => 78;
+use Test::More tests => 82;
 
 my $app;
 my $t;
@@ -63,6 +63,9 @@ $app->log_file("$FindBin::Bin/Marquee.log");
     });
     $r->route(qr{^/serve1})->to(sub {
         MyApp->c->serve('router1.html');
+    });
+    $r->route(qr{^/serve1-2})->to(sub {
+        MyApp->c->serve;
     });
     $r->route(qr{^/serve2})->to(sub {
         MyApp->c->serve('router2.html');
@@ -143,6 +146,11 @@ $t->head_ok('/rare2/')
     ->status_is(200);
 
 $t->get_ok('/serve1/')
+    ->status_is(200)
+    ->text_is('filename', 'router1.html.ep')
+    ->text_is('test1', 'ok');
+
+$t->get_ok('/serve1-2/')
     ->status_is(200)
     ->text_is('filename', 'router1.html.ep')
     ->text_is('test1', 'ok');

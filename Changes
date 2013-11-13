@@ -1,6 +1,8 @@
 Revision history for Marquee
 
-0.28 2013/11/11
+0.28 2013/11/13
+  - Now render auto detects path if not given.
+  - Changed status code for directory traversal from 404 to 400.
 
 0.27 2013/11/11
   - Now content type header is auto set when missing.

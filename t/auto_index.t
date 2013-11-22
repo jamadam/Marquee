@@ -123,10 +123,10 @@ $t->get_ok('/some_dir/not_exists.html')
     ->status_is(404)
     ->element_exists_not('body#debugScreen');
 $t->get_ok('/..%2f')
-    ->status_is(404)
+    ->status_is(400)
     ->element_exists_not('body#debugScreen');
 $t->get_ok('/some_dir/..%2f..%2f')
-    ->status_is(404)
+    ->status_is(400)
     ->element_exists_not('body#debugScreen');
 $t->get_ok('/some_dir/.%2f/')
     ->status_is(200)
@@ -205,10 +205,10 @@ $t->get_ok('/some_dir/not_exists.html?mode=tree')
     ->status_is(404)
     ->element_exists_not('body#debugScreen');
 $t->get_ok('/..%2f?mode=tree')
-    ->status_is(404)
+    ->status_is(400)
     ->element_exists_not('body#debugScreen');
 $t->get_ok('/some_dir/..%2f..%2f?mode=tree')
-    ->status_is(404)
+    ->status_is(400)
     ->element_exists_not('body#debugScreen');
 $t->get_ok('/some_dir/.%2f/?mode=tree')
     ->status_is(200)

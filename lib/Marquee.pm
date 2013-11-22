@@ -103,10 +103,6 @@ sub dispatch {
     
     my $path = $CONTEXT->req->url->path->clone->canonicalize;
     
-    if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
-        return;
-    }
-    
     if (! $CONTEXT->served) {
         if ($path =~ $self->dynamic->handler_re) {
             $self->error_document->serve(403);
@@ -115,9 +111,7 @@ sub dispatch {
     }
     
     if (! $CONTEXT->served) {
-        my $path = _auto_fill_filename($path->clone, $self->default_file);
-        $path->leading_slash(0);
-        $self->serve($path->to_string);
+        $self->serve();
     }
     
     if (! $CONTEXT->served) {
@@ -219,6 +213,19 @@ sub plugin {
 ### --
 sub serve {
     my ($self, $path) = @_;
+    
+    if (! defined $path) {
+        $path = $CONTEXT->req->url->path->clone->canonicalize;
+        if (@{$path->parts}[0] && @{$path->parts}[0] eq '..') {
+            $self->error_document->serve(400);
+            my $path = $CONTEXT->req->url->path;
+            $self->log->fatal(qq{Bad request path "$path", possible directory traversal attempt.});
+            return;
+        }
+        $path = _auto_fill_filename($path->clone, $self->default_file);
+        $path->leading_slash(0);
+    }
+    
     if (my $try1 = $self->static->search($path)) {
         $self->hooks->emit_chain('around_static', $try1);
     } elsif (my $try2 = $self->dynamic->search($path)) {

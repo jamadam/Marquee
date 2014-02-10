@@ -184,8 +184,8 @@ Filters route by HTTP method.
 
 =head2 viax
 
-Filters route by HTTP method exclusively. The method adds two rutes at once,
-the one is same as via method, the other routes non-post requests to 404.
+Filters route by HTTP method exclusively. The method adds two routes at once
+which restricts the HTTP method to given one.
 
     $r->route(qr{^/receptor})->viax('POST')->to(sub {...});
     

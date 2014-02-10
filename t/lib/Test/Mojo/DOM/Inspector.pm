@@ -97,28 +97,28 @@ use Test::More;
   sub content_xml_is {
     my ($self, $value, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::is $self->dom(0)->content_xml, $value, $desc || 'exact match for xml';
+    Test::More::is $self->dom(0)->content, $value, $desc || 'exact match for xml';
     return $self;
   }
   
   sub content_xml_isnt {
     my ($self, $value, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::isnt $self->dom(0)->content_xml, $value, $desc || 'no match for xml';
+    Test::More::isnt $self->dom(0)->content, $value, $desc || 'no match for xml';
     return $self;
   }
   
   sub content_xml_like {
     my ($self, $value, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::like $self->dom(0)->content_xml, $value, $desc || 'xml is similar';
+    Test::More::like $self->dom(0)->content, $value, $desc || 'xml is similar';
     return $self;
   }
   
   sub content_xml_unlike {
     my ($self, $value, $desc) = @_;
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    Test::More::unlike $self->dom(0)->content_xml, $value, $desc || 'xml is not similar';
+    Test::More::unlike $self->dom(0)->content, $value, $desc || 'xml is not similar';
     return $self;
   }
   

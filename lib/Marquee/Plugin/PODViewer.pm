@@ -99,7 +99,7 @@ sub serve_pod {
         $anchor = $org . $i++ while $anchors{$anchor}++;
         push @parts, [] if $e->type eq 'h1' || !@parts;
         push @{$parts[-1]}, $text, "#$anchor";
-        $e->replace_content(qq{<a name="$anchor">$text</a>});
+        $e->content(qq{<a name="$anchor">$text</a>});
     });
     
     # Try to find a title

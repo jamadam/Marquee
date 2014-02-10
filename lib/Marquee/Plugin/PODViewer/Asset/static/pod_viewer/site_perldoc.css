@@ -71,8 +71,7 @@ body {
 		font: 0.8em Consolas, Menlo, Monaco, Courier, monospace;
 		text-align: left;
 		text-shadow: #333 0 1px 0;
-		padding-bottom: 1.5em;
-		padding-top: 1.5em;
+		padding: 1.5em;
 		white-space: pre-wrap;
 		margin-bottom: 20px;
 	}

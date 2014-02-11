@@ -29,13 +29,13 @@ Marquee - もうひとつのMojoベースのウェブフレームワーク
     
     sub new {
         my $self = shift->SUPER::new(@_);
-		
+        
         $self->document_root($self->home->rel_dir('public_html'));
         $self->log_file($self->home->rel_dir('mojo_log/Marquee.log'));
         $self->default_file('index.html');
         $self->under_development(1);
-        $self->secret('g3y3nheher');
-		
+        $self->secrets(['g3y3nheher']);
+        
         return $self;
     }
     
@@ -91,13 +91,21 @@ L<Marquee::Hooks>インスタンスを格納します。
 
     push(@{$app->roots}, 'path/to/additional_dir')
 
-=head2 C<secret>
+=head2 C<secrets>
 
 暗号化クッキーなどに使用する秘密のパスフレーズを指定します。デフォルトはランダムな文字列です。
 これを変更することで、暗号化クッキーを一度に期限切れにすることができます。
 
-    my $secret = $app->secret;
-    $app       = $app->secret('passw0rd');
+    my $secrets = $app->secrets;
+    $app       = $app->secrets(['passw0rd']);
+
+パスフレーズは最初の先頭の一つだけが新しい署名に使用されますが、
+すべてが署名の検証の対象になります。このため、パスフレーズをローテーションすることで、
+既存の署名付きクッキーを無効にすることなく、パスフレーズを更新することができます。
+先頭に新しいパスフレーズを追加し、末尾を削除するだけです。
+
+  # パスフレーズのローテーション
+  $app->secrets(['new_passw0rd', 'old_passw0rd', 'very_old_passw0rd']);
 
 =head2 C<stash>
 

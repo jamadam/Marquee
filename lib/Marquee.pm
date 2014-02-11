@@ -32,7 +32,7 @@ __PACKAGE__->attr('route' => sub {
     my $router = $_[0]->plugin(Router => sub {});
     return $router->route;
 });
-__PACKAGE__->attr(secret => sub {md5_hex($^T. $$. rand(1000000))});
+__PACKAGE__->attr(secrets => sub {[md5_hex($^T. $$. rand(1000000))]});
 __PACKAGE__->attr(stash => sub {Marquee::Stash->new});
 __PACKAGE__->attr(static => sub {Marquee::Static->new});
 __PACKAGE__->attr(types => sub { Marquee::Types->new });
@@ -341,7 +341,7 @@ Inherited application.
         $self->log_file($self->home->rel_dir('mojo_log/Marquee.log'));
         $self->default_file('index.html');
         $self->under_development(1);
-        $self->secret('g3y3nheher');
+        $self->secrets(['g3y3nheher']);
 		
         return $self;
     }
@@ -402,13 +402,21 @@ copy, and followed by bundle directories for Marquee core and plugins.
 
     push(@{$app->roots}, 'path/to/additional_dir')
 
-=head2 C<secret>
+=head2 C<secrets>
 
-A secret passphrase used for signed cookies and the like, defaults to random
+A secret passphrases used for signed cookies and the like, defaults to random
 string. By changing this, you can expire all signed cookies at once.
 
-    my $secret = $app->secret;
-    $app       = $app->secret('passw0rd');
+    my $secrets = $app->secrets;
+    $app       = $app->secrets(['passw0rd']);
+
+Only the first passphrase is used to create new signatures, but all of them for
+verification. So you can increase security without invalidating all your
+existing signed cookies by rotating passphrases, just add new ones to the
+front and remove old ones from the back.
+
+  # Rotate passphrases
+  $app->secrets(['new_passw0rd', 'old_passw0rd', 'very_old_passw0rd']);
 
 =head2 C<stash>
 

@@ -6,7 +6,7 @@ use Marquee;
 my $namespace = 'FormValidatorLazy';
 
 my $app = Marquee->new;
-$app->secret('afewfweweuhu');
+$app->secrets(['afewfweweuhu']);
 $app->document_root("$FindBin::Bin/public_form_validator_lazy");
 
 my $r = $app->plugin('Router' => sub {

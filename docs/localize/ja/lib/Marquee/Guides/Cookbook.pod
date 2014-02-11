@@ -45,7 +45,7 @@ Cookbook - Marqueeクックブック
         $self->log_file($self->home->rel_dir('mojo_log/Marquee.log'));
         $self->default_file('index.html');
         $self->under_development(1);
-        $self->secret('g4ioaseut84937');
+        $self->secrets(['g4ioaseut84937']);
         
         return $self;
     }

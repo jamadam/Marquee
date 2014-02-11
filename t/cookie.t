@@ -11,7 +11,7 @@ use Test::Mojo::DOM;
 use Marquee;
 use Mojo::Date;
 
-use Test::More tests => 70;
+use Test::More tests => 79;
 
 my $app;
 my $t;
@@ -117,7 +117,7 @@ $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
-$app->secret('aaaaaaaaaaaaaa');
+$app->secrets(['aaaaaaaaaaaaaa']);
 {
     my $r = $app->route;
     $r->route(qr{^/session_cookie/2})->to(sub {
@@ -151,6 +151,24 @@ $t->get_ok('/session_cookie/2')->status_is(200)
 $t->get_ok('/session_cookie/2')->status_is(200)
     ->content_is('Session is 23!');
 
+$app->secrets(['new-secret', 'aaaaaaaaaaaaaa']);
+
+# GET /session_cookie/2 (retry after secret rotated)
+$t->get_ok('/session_cookie/2')->status_is(200)
+    ->content_is('Session is 23!');
+
+$app->secrets(['new-secret2', 'new-secret']);
+
+# GET /session_cookie/2 (retry after secret outdated)
+$t->get_ok('/session_cookie/2')->status_is(200)
+    ->content_is('Session is missing!');
+
+$app->secrets(['new-secret', 'aaaaaaaaaaaaaa']);
+
+# GET /session_cookie/2 (retry after secret resumed)
+$t->get_ok('/session_cookie/2')->status_is(200)
+    ->content_is('Session is 23!');
+
 # GET /session_cookie/2 (session reset)
 $t->reset_session;
 ok !$t->tx, 'session reset';
@@ -163,7 +181,7 @@ $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
-$app->secret('aaaaaaaaaaaaaa');
+$app->secrets(['aaaaaaaaaaaaaa']);
 {
     my $r = $app->route;
     $r->route(qr{^/session_cookie/2})->to(sub {

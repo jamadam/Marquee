@@ -1,8 +1,14 @@
 Revision history for Marquee
 
 0.28 2013/11/13
+  - Added support for rotating secrets.
+  - Removed secret method from Marquee.
   - Now render auto detects path if not given.
   - Changed status code for directory traversal from 404 to 400.
+  - Fixed bug on viax.
+  - Updated mojo API usage in favor of v4.78.
+  - Ported latest implementation of Mojolicious::Types.
+  - Improved POD viewer a little.
 
 0.27 2013/11/11
   - Now content type header is auto set when missing.

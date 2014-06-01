@@ -66,9 +66,7 @@ C<layout/common.html.ep>という名前のベーステンプレート。
 ハンドラーは自動的に検出されますので、拡張子は必要ありません。
 
     <%= extends './layout/common.html' => begin %>
-        <% override 'title' => begin %>
-            title
-        <% end %>
+        <% override 'title' => begin %>title<% end %>
         <% override 'main' => begin %>
             <div>
                 main content<%= time %>

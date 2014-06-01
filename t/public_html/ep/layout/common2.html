@@ -1,28 +1,24 @@
 <!doctype html>
-<html>
-    <head>
-      <title><%= placeholder 'title' => begin %>DEFAULT TITLE<% end %></title>
-    </head>
-    <body>
-        <div id="main">
-            <%= placeholder 'main' => begin %>
-                DEFAULT MAIN
-            <% end %>
-        </div>
-        <div id="main2">
-            <%= placeholder 'main2' => begin %>
-                DEFAULT MAIN2
-                <current_template2><%= current_template %></current_template2>
-                <current_template3><%= current_template(0) %></current_template3>
-                <current_template4><%= current_template(1) %></current_template4>
-                <current_template5><%= current_template(2) %></current_template5>
-            <% end %>
-        </div>
-        <div id="namespace_test">
-            <%= placeholder 'namespace_test' => begin %>
-                <%= $namespace_test %>
-            <% end %>
-        </div>
-    </body>
-</html>
+
+<title><%= placeholder 'title' => begin %>DEFAULT TITLE<% end %></title>
+
+<div id="main">
+    <%= placeholder 'main' => begin %>
+        DEFAULT MAIN
+    <% end %>
+</div>
+<div id="main2">
+    <%= placeholder 'main2' => begin %>
+        DEFAULT MAIN2
+        <current_template2><%= current_template %></current_template2>
+        <current_template3><%= current_template(0) %></current_template3>
+        <current_template4><%= current_template(1) %></current_template4>
+        <current_template5><%= current_template(2) %></current_template5>
+    <% end %>
+</div>
+<div id="namespace_test">
+    <%= placeholder 'namespace_test' => begin %>
+        <%= $namespace_test %>
+    <% end %>
+</div>
 <current_template1><%= current_template %></current_template1>

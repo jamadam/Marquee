@@ -1,6 +1,5 @@
 language: perl
 perl:
-  - "5.20"
   - "5.18"
   - "5.16"
   - "5.14"
@@ -11,7 +10,7 @@ branches:
     - master
     - develop
 install:
-  - "cpanm -n Test::Pod Test::Pod::Coverage"
+  - "cpanm -n Text::Sass Text::Markdown Test::Pod Test::Pod::Coverage"
   - "cpanm -n --installdeps ."
 notifications:
   email: sugama@jamadam.com

@@ -11,6 +11,9 @@ use Marquee;
 use Mojo::Date;
 use Test::Mojo;
 
+plan skip_all => 'Text::Sass required for this test!'
+  unless eval 'use Text::Sass; 1';
+
 my $app;
 my $t;
 

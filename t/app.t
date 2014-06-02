@@ -162,7 +162,7 @@ $t->get_ok('/jquery.1.10.1.js')
 $t->get_ok('/serve.json')
     ->status_is(200)
     ->header_is('Content-Type', 'application/json')
-    ->content_is(q!{"a":1,"b":2}!);
+    ->content_is(q!{"a":1}!);
 
 # auto escape activation
 

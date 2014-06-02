@@ -9,16 +9,18 @@ my %params = (
     ABSTRACT_FROM => 'lib/Marquee.pm',
     LICENSE       => 'perl',
     PREREQ_PM     => {
+        'Mojolicious' => '5.01',
     },
     BUILD_REQUIRES => {
-        'Mojolicious'    	  => '4.78',
+        'Test::More'            => '0.98',
+        'Test::UseAllModules'   => '0.10',
     },
     META_MERGE => {
         resources => {
             repository => '',
         },
     },
-	test => {TESTS => 't/*.t t/*/*.t'},
+    test => {TESTS => 't/*.t t/*/*.t'},
 );
 
 my $eumm = $ExtUtils::MakeMaker::VERSION;

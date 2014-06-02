@@ -14,4 +14,4 @@ install:
   - "cpanm -n Test::Pod Test::Pod::Coverage"
   - "cpanm -n --installdeps ."
 notifications:
-  email: true
+  email: sugama@jamadam.com

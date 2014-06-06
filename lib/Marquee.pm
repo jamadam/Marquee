@@ -336,13 +336,13 @@ Inherited application.
     
     sub new {
         my $self = shift->SUPER::new(@_);
-		
+        
         $self->document_root($self->home->rel_dir('public_html'));
         $self->log_file($self->home->rel_dir('mojo_log/Marquee.log'));
         $self->default_file('index.html');
         $self->under_development(1);
         $self->secrets(['g3y3nheher']);
-		
+        
         return $self;
     }
     

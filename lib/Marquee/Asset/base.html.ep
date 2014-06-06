@@ -10,15 +10,15 @@
 <% end %>
 
 <h1>
-	<a href="http://mrqe.biz/" class="poweredBy">Marquee</a>
-	<%= placeholder 'h1AdditionalContent' => begin %>
-	<% end %>
+    <a href="http://mrqe.biz/" class="poweredBy">Marquee</a>
+    <%= placeholder 'h1AdditionalContent' => begin %>
+    <% end %>
 </h1>
 <div id="wrapper">
-	<%= placeholder 'mainContent' => begin %>
-	<% end %>
+    <%= placeholder 'mainContent' => begin %>
+    <% end %>
 </div>
 <div id="footer">
-	<%= placeholder 'footerContent' => begin %>
-	<% end %>
+    <%= placeholder 'footerContent' => begin %>
+    <% end %>
 </div>

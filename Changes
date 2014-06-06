@@ -1,6 +1,10 @@
 Revision history for Marquee
 
 0.30 2014/06/01
+  - Updated depencencies.
+  - Fixed a test for perl-5.8.18.
+  - Started travis ci test.
+  - Adopted scss and now csses are auto-generated.
 
 0.29 2014/06/01
   - Adopted html5 for core templates and examples.

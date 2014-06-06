@@ -15,11 +15,10 @@ use Mojo::Date;
 use Mojo::Transaction::HTTP;
 use Mojo::URL;
 use MarqueeOfficial;
+use Test::More;
 
 plan skip_all => 'Text::Markdown required for this test!'
   unless eval 'use Text::Markdown; 1';
-
-use Test::More tests => 40;
 
 $ENV{MOJO_HOME} = catdir(dirname(__FILE__), '..');
 
@@ -96,5 +95,6 @@ $t->dom_inspector(sub {
     $t->at('title')->text_is('Marquee - もうひとつのMojoベースのウェブフレームワーク - Pod viewer');
 });
 
+done_testing();
 
 __END__

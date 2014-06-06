@@ -13,7 +13,7 @@ use Marquee;
 use Mojo::Date;
 use Marquee::SSIHandler::EP;
 
-use Test::More tests => 100;
+use Test::More;
 
 ### add_function
 
@@ -200,5 +200,7 @@ $t = Test::Mojo->new($app);
 $t->get_ok('/ep/session.html');
 $t->text_is(test1 => '');
 $t->text_is(test2 => 'bar');
+
+done_testing();
 
 __END__

@@ -81,7 +81,7 @@ $app->log_file("$FindBin::Bin/Marquee.log");
     });
     $r->route(qr{^/json.json})->to(sub {
         MyApp->c->res->code(200);
-        MyApp->c->res->body(Mojo::JSON->new->encode({a => 1, b => 2}));
+        MyApp->c->res->body(Mojo::JSON->new->encode({a => 1}));
     });
 }
 $t = Test::Mojo->new($app);
@@ -177,7 +177,7 @@ $t->get_ok('/router5.html')
 $t->get_ok('/json.json')
     ->status_is(200)
     ->header_is('Content-Type', 'application/json')
-    ->content_is(q!{"a":1,"b":2}!);
+    ->content_is(q!{"a":1}!);
 
 # bridge
 

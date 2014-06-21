@@ -37,13 +37,21 @@ $t->get_ok('/scss/test1.css')
 
 is(Mojo::Date->new($t->tx->res->headers->last_modified)->epoch, ts('test1.css'));
 
-is shorten($t->tx->res->body), shorten("#test1.css { color:#fff; }");
+css_equals($t->tx->res->body, <<'EOF');
+#test1.css {
+    color:#fff;
+}
+EOF
 
 $t->get_ok('/scss/test2.css')
     ->status_is(200)
     ->header_is('Content-Type', 'text/css');
 
-is shorten($t->tx->res->body), shorten("#test2.scss { color: #fff;}");
+css_equals($t->tx->res->body, <<'EOF');
+#test2.scss {
+    color: #fff;
+}
+EOF
 
 is(Mojo::Date->new($t->tx->res->headers->last_modified)->epoch, ts('test2.scss'));
 
@@ -51,7 +59,11 @@ $t->get_ok('/scss/test3.css')
     ->status_is(200)
     ->header_is('Content-Type', 'text/css');
 
-is shorten($t->tx->res->body), shorten("#test3.css { color:#fff; }");
+css_equals($t->tx->res->body, <<'EOF');
+#test3.css {
+    color:#fff;
+}
+EOF
 
 is(Mojo::Date->new($t->tx->res->headers->last_modified)->epoch, ts('test3.css'));
 
@@ -59,15 +71,26 @@ $t->get_ok('/scss/test4.css')
     ->status_is(200)
     ->header_is('Content-Type', 'text/css');
 
-is shorten($t->tx->res->body), shorten('#test2.scss { color: #fff;}#test2.scss #test3 { color: #fff;}');
+css_equals($t->tx->res->body, <<'EOF');
+#test2.scss {
+    color: #fff;
+}
+#test2.scss #test3 {
+    color: #fff;
+}
+EOF
 
 $t->get_ok('/scss/notfound.css')
     ->status_is(404);
 
+sub css_equals {
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    return is(shorten($_[0]), shorten($_[1]), $_[2]);
+}
+
 sub shorten {
     my $css = shift;
-    $css =~ s{\r\n|\r|\n}{}g;
-    $css =~ s{\s+}{ }g;
+    $css =~ s!\s*(\:|\{|\})\s*!$1!g;
     return $css;
 }
 

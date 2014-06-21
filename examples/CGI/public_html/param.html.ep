@@ -2,8 +2,8 @@
 <title>CGI Example</title>
 <meta charset="UTF-8" />
 <% if(param('a')) { %>
-	<div>
-		param exists
-	</div>
+    <div>
+        param exists
+    </div>
 <% } %>
 <a href="./param.html?a=1">./param.html?a=1</a>

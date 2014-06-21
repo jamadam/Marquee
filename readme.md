@@ -70,7 +70,7 @@ Markdown viewer. You don't need any Apache things anymore.
 
 To install this module, run the following commands:
 
-	$ curl http://get.mrqe.biz/ | sh
+    $ curl http://get.mrqe.biz/ | sh
 
 ## DOCUMENTATIONS
 

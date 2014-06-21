@@ -8,7 +8,7 @@ This document contains some recipes to develop Marquee application.
 
 =head1 INSTALLATION
 
-	$ curl http://get.mrqe.biz/ | sh
+    $ curl http://get.mrqe.biz/ | sh
 
 =head1 GETTING STARTED
 

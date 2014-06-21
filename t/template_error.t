@@ -150,6 +150,7 @@ $t->get_ok('/template_error.html')
 
 $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
+$app->log->handle(undef);
 $app->hook(around_dispatch => sub {
     die 'hoge';
 });

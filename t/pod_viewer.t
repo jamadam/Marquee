@@ -11,7 +11,7 @@ use Test::Mojo::DOM;
 use Mojo::Date;
 use Marquee;
 
-use Test::More tests => 27;
+use Test::More tests => 25;
 
 my $app;
 my $t;
@@ -73,12 +73,10 @@ $t->get_ok('/perldoc/Marquee/SSIHandler')
     ->element_exists('a[name=SEE_ALSO]')
     ->dom_inspector(sub {
         my $t = shift;
-        $t->at('#auto_detected_see_also *:nth-child(2)')->text_is('Marquee');
-        $t->at('#auto_detected_see_also *:nth-child(3)')->text_is('Marquee::SSIHandler::EP');
-        $t->at('#auto_detected_see_also *:nth-child(4)')->text_is('Marquee::SSIHandler::EPL');
-        $t->at('#auto_detected_see_also *:nth-child(2)')->attr_is('href', '/perldoc/Marquee');
-        $t->at('#auto_detected_see_also *:nth-child(3)')->attr_is('href', '/perldoc/Marquee/SSIHandler/EP');
-        $t->at('#auto_detected_see_also *:nth-child(4)')->attr_is('href', '/perldoc/Marquee/SSIHandler/EPL');
+        is $t->find('#auto_detected_see_also a')->dom->size, 3, 'right size';
+        $t->find('#auto_detected_see_also a[href=/perldoc/Marquee]')->text_is('Marquee');
+        $t->find('#auto_detected_see_also a[href=/perldoc/Marquee/SSIHandler/EP]')->text_is('Marquee::SSIHandler::EP');
+        $t->find('#auto_detected_see_also a[href=/perldoc/Marquee/SSIHandler/EPL]')->text_is('Marquee::SSIHandler::EPL');
     });
 
 # other lib path

@@ -75,9 +75,7 @@ sub asset {
     my $pm = $class. '.pm';
     $pm =~ s{::}{/}g;
     my @seed = (substr($INC{$pm}, 0, -3), 'Asset');
-    if ($_[0]) {
-        return catdir(@seed, $_[0]);
-    }
+    return catdir(@seed, $_[0]) if ($_[0]);
     return catdir(@seed);
 }
 
@@ -175,9 +173,7 @@ sub is_directory {
     my ($self, $path) = @_;
     
     for my $root (@{$self->roots}) {
-        if (-d catdir($root, $path)) {
-            return 1;
-        }
+        return 1 if (-d catdir($root, $path));
     }
 }
 
@@ -288,9 +284,8 @@ sub _auto_fill_filename {
 sub _init {
     my $self = shift;
     
-    if ($self->{_inited}) {
-        return;
-    }
+    return if ($self->{_inited});
+    
     $self->{_inited} = 1;
     
     if (! $self->document_root || ! -d $self->document_root) {

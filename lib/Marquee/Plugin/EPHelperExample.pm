@@ -18,9 +18,7 @@ sub register {
             while($num =~ s/(.*\d)(\d\d\d)/$1,$2/){};
             return $num;
         }
-        if ($num eq '0') {
-            return 0;
-        }
+        return 0 if ($num eq '0');
         return;
     });
     

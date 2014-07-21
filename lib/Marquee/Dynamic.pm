@@ -29,9 +29,8 @@ sub search {
     for my $root (file_name_is_absolute($path) ? undef : @{$self->roots}) {
         my $base = $root ? catdir($root, $path) : $path;
         for my $ext (keys %{$self->handlers}) {
-            if (-f (my $path = "$base.$ext")) {
-                return $path;
-            }
+            my $path = "$base.$ext";
+            return $path if (-f $path);
         }
     }
 }
@@ -50,9 +49,8 @@ sub serve {
         $c->res->body(encode('UTF-8', $ret));
         $c->res->code(200);
         my $ext = ($path =~ qr{\.(\w+)(?:\.\w+)?$})[0];
-        if (my $type = $c->app->types->type($ext)) {
-            $c->res->headers->content_type($type);
-        }
+        my $type = $c->app->types->type($ext);
+        $c->res->headers->content_type($type) if ($type);
     }
 }
 
@@ -62,11 +60,9 @@ sub serve {
 sub render {
     my ($self, $path, $handler_ext) = @_;
     my $ext = $handler_ext || ($path =~ qr{\.\w+\.(\w+)$})[0];
-    if (my $handler = $self->handlers->{$ext}) {
-        return $handler->render_traceable($path);
-    } else {
-        die "SSI handler not detected for $path";
-    }
+    my $handler = $self->handlers->{$ext};
+    return $handler->render_traceable($path) if ($handler);
+    die "SSI handler not detected for $path";
 }
 
 1;

@@ -23,9 +23,7 @@
             <ul>
                 <%= iter filelist(shift) => begin %>
                     % my $name = shift;
-                    % if ($depth != 0 && $name->{name} =~ qr/\.\./) {
-                    %   return '';
-                    % }
+                    % return '' if ($depth != 0 && $name->{name} =~ qr/\.\./);
                     % if ($name->{type} eq 'dir') {
                         <li class="dir"><a class="dir" href="<%= $name->{name} %>/?mode=tree"><%= basename $name->{name} %></a></li>
                         % if ($depth < $tree_depth && $name->{name} !~ qr/\.\./) {

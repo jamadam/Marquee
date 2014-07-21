@@ -69,9 +69,7 @@ sub render {
         
         $prepend .= 'use strict;';
         for my $var (keys %{$c->stash}) {
-            if ($var =~ /^\w+$/) {
-                $prepend .= " my \$$var = stash '$var';";
-            }
+            $prepend .= " my \$$var = stash '$var';" if ($var =~ /^\w+$/);
         }
         $mt->prepend($prepend);
         
@@ -103,25 +101,17 @@ sub _init {
     $self->funcs->{session} = sub {
         shift;
         my $sesison = Marquee->c->session;
-        if ($_[0] && $_[1]) {
-            return $sesison->{$_[0]} = $_[1];
-        } elsif (! $_[0]) {
-            return $sesison;
-        } else {
-            return $sesison->{$_[0]};
-        }
+        return $sesison->{$_[0]} = $_[1] if ($_[0] && $_[1]);
+        return $sesison if (! $_[0]);
+        return $sesison->{$_[0]};
     };
     
     $self->funcs->{stash} = sub {
         shift;
         my $stash = Marquee->c->stash;
-        if ($_[0] && $_[1]) {
-            return $stash->set(@_);
-        } elsif (! $_[0]) {
-            return $stash;
-        } else {
-            return $stash->{$_[0]};
-        }
+        return $stash->set(@_) if ($_[0] && $_[1]);
+        return $stash if (! $_[0]);
+        return $stash->{$_[0]};
     };
     
     $self->funcs->{current_template} = sub {
@@ -292,16 +282,15 @@ sub _ph_name {
 sub _doc_path {
     my ($self, $path) = @_;
     
-    if ($path =~ qr{^/(.+)}) {
-        return File::Spec->canonpath($1);
-    } else {
-        $path = File::Spec->catfile(dirname($self->current_template), $path);
-        $path = File::Spec->canonpath($path);
-        for my $root (@{Marquee->c->app->roots}) {
-            last if ($path =~ s{^\Q$root\E/}{});
-        }
-        return $path;
+    return File::Spec->canonpath($1) if ($path =~ qr{^/(.+)});
+    
+    $path = File::Spec->catfile(dirname($self->current_template), $path);
+    $path = File::Spec->canonpath($path);
+    for my $root (@{Marquee->c->app->roots}) {
+        last if ($path =~ s{^\Q$root\E/}{});
     }
+    
+    return $path;
 }
 
 ### --

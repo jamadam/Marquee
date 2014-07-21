@@ -14,9 +14,8 @@ sub search {
     my ($self, $path) = @_;
     
     for my $root (file_name_is_absolute($path) ? undef : @{$self->roots}) {
-        if (-f (my $path = $root ? catdir($root, $path) : $path)) {
-            return $path;
-        }
+        my $path = $root ? catdir($root, $path) : $path;
+        return $path if (-f $path);
     }
 }
 

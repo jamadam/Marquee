@@ -4,9 +4,8 @@ use warnings;
 use Mojo::Base -base;
 
 __PACKAGE__->attr(log => sub {
-    if (my $c = Marquee->c) {
-        $c->app->log;
-    }
+    my $c = Marquee->c;
+    $c->app->log if ($c);
 });
 
 ### --

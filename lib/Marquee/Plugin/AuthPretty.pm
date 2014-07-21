@@ -12,9 +12,7 @@ __PACKAGE__->attr(realm => 'Secret Area');
 sub register {
     my ($self, $app, $entries, $storage, $expire) = @_;
     
-    if (! -d $storage) {
-        die "$storage is not a directory";
-    }
+    die "$storage is not a directory" if (! -d $storage);
     
     _vacuum($self, $storage, $expire);
     
@@ -35,9 +33,7 @@ sub register {
             
             $regex =~ s{:(.+)}{:\($1\)};
             
-            if ($path !~ $regex) {
-                next;
-            }
+            next if ($path !~ $regex);
             
             my $matched = $1;
             

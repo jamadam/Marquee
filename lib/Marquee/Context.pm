@@ -50,6 +50,8 @@ sub new {
         if (my $session = Mojo::JSON->new->decode(b64_decode($value))) {
             $self->session($session);
         }
+        my $session = Mojo::JSON->new->decode(b64_decode($value));
+        $self->session($session) if ($session);
     }
     
     return $self;
@@ -180,9 +182,7 @@ sub close {
 sub _signature {
     my ($value, $signature, @secrets) = @_;
     for (@secrets) {
-        if (secure_compare($signature, hmac_sha1_sum($value, $_))) {
-            return 1;
-        }
+        return 1 if (secure_compare($signature, hmac_sha1_sum($value, $_)));
     }
     return;
 }

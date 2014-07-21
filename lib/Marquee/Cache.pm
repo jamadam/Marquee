@@ -35,9 +35,7 @@ sub set {
         delete $cache->{shift @$stack};
     }
     
-    if (delete $cache->{$key}) {
-        $self->_vacuum;
-    }
+    $self->_vacuum if (delete $cache->{$key});
     
     push @$stack, $key;
     

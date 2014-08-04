@@ -260,7 +260,7 @@ sub to_abs {
 ### start application
 ### --
 sub start {
-    my $self = $ENV{MOJO_APP} = shift;
+    my $self = shift;
     $self->_init;
     Mojolicious::Commands->new(app => $self)->run(@_ ? @_ : @ARGV);
 }

@@ -42,7 +42,6 @@ EOF
 #  Why do they call it that?
 #  Cause it has no pigment."
 sub run {
-  $ENV{MOJO_APP} ||= 'Marquee';
   my $self   = shift;
   
   my $app = Marquee->new;

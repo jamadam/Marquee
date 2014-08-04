@@ -1,7 +1,6 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
-use FindBin;
 
 use File::Basename 'dirname';
 use File::Spec;
@@ -17,28 +16,31 @@ package OfficialSite;
 use strict;
 use warnings;
 use utf8;
+use File::Basename 'dirname';
+use File::Spec;
 use Mojo::Base 'Marquee';
 
-    sub new {
-        my $self = shift->SUPER::new(@_);
-        
-        $self->document_root($self->home->rel_dir('.'));
-        $self->default_file('index.html');
-        
-        my $r = $app->route;
-        $r->route(qr{^/admin/})->to(sub {
-            my $res = Marquee->c->tx->res;
-            $res->code(200);
-            $res->headers->content_type($app->types->type('html'));
-            $res->body('passed');
-        });
-        
-        $self->plugin(AuthPretty => [
-            qr{^/admin/} => 'Secret Area' => sub {
-                my ($username, $password) = @_;
-                return $username eq 'jamadam' && $password eq 'pass';
-            },
-        ] => "$FindBin::Bin/auth_log/");
-        
-        return $self;
-    }
+sub new {
+    my $self = shift->SUPER::new(@_);
+    
+    $self->document_root($self->home->rel_dir('.'));
+    $self->default_file('index.html');
+    $self->log_file(File::Spec->rel2abs(dirname(__FILE__). "/log/Marquee.log"));
+    
+    my $r = $self->route;
+    $r->route(qr{^/admin/})->to(sub {
+        my $res = Marquee->c->tx->res;
+        $res->code(200);
+        $res->headers->content_type($app->types->type('html'));
+        $res->body('passed');
+    });
+    
+    $self->plugin(AuthPretty => [
+        qr{^/admin/} => 'Secret Area' => sub {
+            my ($username, $password) = @_;
+            return $username eq 'jamadam' && $password eq 'pass';
+        },
+    ] => File::Spec->rel2abs(dirname(__FILE__). "/log/auth_pretty"));
+    
+    return $self;
+}

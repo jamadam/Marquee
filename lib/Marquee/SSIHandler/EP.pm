@@ -63,8 +63,8 @@ sub render {
 
         # Helpers
         $prepend .= 'my $_H = shift; my $_F = $_H->funcs;';
-        for my $name (keys %{$self->funcs}) {
-            $prepend .= "sub $name; *$name = sub {\$_F->{$name}->(\$_H, \@_)};";
+        for (keys %{$self->funcs}) {
+            $prepend .= "sub $_; local *$_ = sub {\$_F->{$_}->(\$_H, \@_)};";
         }
         
         $prepend .= 'use strict;';

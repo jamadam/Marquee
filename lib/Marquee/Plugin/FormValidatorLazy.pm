@@ -3,15 +3,13 @@ use strict;
 use warnings;
 use Mojo::Base 'Marquee::Plugin';
 use Data::Dumper;
-use Mojo::JSON;
+use Mojo::JSON qw{encode_json decode_json};
 use Mojo::Util qw{encode decode xml_escape hmac_sha1_sum secure_compare
                                                         b64_decode b64_encode};
 use HTML::ValidationRules::Legacy qw{validate extract};
 
 our $TERM_ACTION = 0;
 our $TERM_SCHEMA = 1;
-
-my $json = Mojo::JSON->new;
 
 ### ---
 ### register
@@ -105,11 +103,13 @@ EOF
 }
 
 sub serialize {
-    return b64_encode($json->encode(shift || ''), '');
+    return '' unless length($_[0]);
+    return b64_encode(encode_json($_[0]), '');
 }
 
 sub deserialize {
-    return $json->decode(b64_decode(shift || ''));
+    return unless length($_[0]);
+    return decode_json(b64_decode(shift));
 }
 
 sub sign {

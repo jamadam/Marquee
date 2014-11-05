@@ -81,7 +81,7 @@ $app->log_file("$FindBin::Bin/Marquee.log");
     });
     $r->route(qr{^/json.json})->to(sub {
         MyApp->c->res->code(200);
-        MyApp->c->res->body(Mojo::JSON->new->encode({a => 1}));
+        MyApp->c->res->body(Mojo::JSON::encode_json({a => 1}));
     });
 }
 $t = Test::Mojo->new($app);

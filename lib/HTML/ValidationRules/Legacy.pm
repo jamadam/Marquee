@@ -2,7 +2,7 @@ package HTML::ValidationRules::Legacy;
 use strict;
 use warnings;
 use Mojo::Base 'Exporter';
-use Mojo::JSON;
+use Mojo::JSON qw{true false};
 use Mojo::Util qw{decode};
 
 our @EXPORT_OK = qw(extract validate),
@@ -57,7 +57,7 @@ sub extract {
         if (! exists $tag->attr->{disabled}) {
             if ($type ne 'submit' && $type ne 'image' && $type ne 'checkbox' &&
                         ($type ne 'radio' || exists $tag->attr->{checked})) {
-                $props->{$name}->{$TERM_REQUIRED} = Mojo::JSON->true;
+                $props->{$name}->{$TERM_REQUIRED} = true;
             }
         }
             
@@ -76,7 +76,7 @@ sub extract {
     
     return {
         $TERM_PROPERTIES => $props,
-        $TERM_ADD_PROPS => Mojo::JSON->false,
+        $TERM_ADD_PROPS => false,
     };
 }
 
@@ -103,7 +103,7 @@ sub validate {
         
         my @params = $params->param($name);
         
-        if (($props->{$name}->{$TERM_REQUIRED} || '') eq Mojo::JSON->true) {
+        if (($props->{$name}->{$TERM_REQUIRED} || '') eq true) {
             if (! scalar @params) {
                 return "Field $name is required";
             }
@@ -111,6 +111,7 @@ sub validate {
         
         if (my $allowed = $props->{$name}->{$TERM_OPTIONS}) {
             for my $given (@params) {
+                next unless defined($given);
                 if (! grep {$_ eq $given} @$allowed) {
                     return "Field $name has been tampered";
                 }
@@ -118,6 +119,7 @@ sub validate {
         }
         if (exists $props->{$name}->{$TERM_MAXLENGTH}) {
             for my $given (@params) {
+                next unless defined($given);
                 if (length($given) > $props->{$name}->{$TERM_MAXLENGTH}) {
                     return "Field $name is too long";
                 }
@@ -125,6 +127,7 @@ sub validate {
         }
         if (defined $props->{$name}->{$TERM_MIN_LENGTH}) {
             for my $given (@params) {
+                next unless defined($given);
                 if (length($given) < $props->{$name}->{$TERM_MIN_LENGTH}) {
                     return "Field $name cannot be empty";
                 }
@@ -132,6 +135,7 @@ sub validate {
         }
         if (my $pattern = $props->{$name}->{$TERM_PATTERN}) {
             for my $given (@params) {
+                next unless defined($given);
                 if ($given !~ /\A$pattern\Z/) {
                     return "Field $name not match pattern";
                 }
@@ -139,6 +143,7 @@ sub validate {
         }
         if (($props->{$name}->{$TERM_TYPE} || '') eq $TERM_NUMBER) {
             for my $given (@params) {
+                next unless defined($given);
                 if ($given !~ /\A[\d\+\-\.]+\Z/) {
                     return "Field $name not match pattern";
                 }
@@ -155,7 +160,7 @@ sub validate {
             }
         }
     }
-    return;    
+    return;
 }
 
 1;

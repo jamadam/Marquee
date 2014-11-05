@@ -4,7 +4,7 @@ use Marquee;
 use Test::More tests => 187;
 use Data::Dumper;
 use Mojo::Util qw{hmac_sha1_sum b64_decode};
-use Mojo::JSON;
+use Mojo::JSON qw{decode_json};
 use utf8;
 
 my $TERM_ACTION             = 0;
@@ -789,7 +789,7 @@ sub extract_session {
     return unless $session_cookie;
     (my $value = $session_cookie->value) =~ s/--([^\-]+)$//;
     $value =~ tr/-/=/;
-    my $session = Mojo::JSON->new->decode(b64_decode $value);
+    my $session = decode_json(b64_decode $value);
     return $session;
 }
 

@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use Mojo::Base -base;
 use Mojo::Util qw{hmac_sha1_sum secure_compare b64_decode b64_encode};
+use Mojo::JSON qw{encode_json decode_json};
 
 ### ---
 ### App
@@ -47,10 +48,10 @@ sub new {
     
     if (my $value = $self->signed_cookie($self->session_name)) {
         $value =~ s/-/=/g;
-        if (my $session = Mojo::JSON->new->decode(b64_decode($value))) {
+        if (my $session = decode_json(b64_decode($value))) {
             $self->session($session);
         }
-        my $session = Mojo::JSON->new->decode(b64_decode($value));
+        my $session = decode_json(b64_decode($value));
         $self->session($session) if ($session);
     }
     
@@ -75,7 +76,7 @@ sub cookie {
         
         return $self;
     }
-    return map { $_->value } $self->req->cookie($name) if wantarray;
+    return map { $_->value } @{$self->req->every_cookie($name)} if wantarray; # TODO get rid of it
     return unless my $cookie = $self->req->cookie($name);
     return $cookie->value;
 }
@@ -161,7 +162,7 @@ sub close {
     my $session = $self->session;
     
     if (scalar keys %$session) {
-        my $value = b64_encode(Mojo::JSON->new->encode($session), '');
+        my $value = b64_encode(encode_json($session), '');
         $value =~ s/=/-/g;
         $self->signed_cookie($self->session_name, $value, {
             expires     => time + $self->session_expiration,

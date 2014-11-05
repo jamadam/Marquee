@@ -1,4 +1,4 @@
 <%
     Marquee->c->res->code(200);
-    Marquee->c->res->body(Mojo::JSON->new->encode({a => 1}));
+    Marquee->c->res->body(Mojo::JSON::encode_json({a => 1}));
 =%>

@@ -54,7 +54,7 @@ $t->get_ok('/not_found.html')
         $t->at('#request tr:nth-child(2) td.key')->content_xml_is('URL:');
         $t->at('#request tr:nth-child(2) td.value pre')->content_xml_is('/not_found.html');
         $t->at('#request tr:nth-child(3) td.key')->content_xml_is('Base URL:');
-        $t->at('#request tr:nth-child(3) td.value pre')->content_xml_like(qr'^http://localhost:');
+        $t->at('#request tr:nth-child(3) td.value pre')->content_xml_like(qr'^http://127.0.0.1:');
         $t->at('#request tr:nth-child(4) td.key')->content_xml_is('Parameters:');
         $t->at('#request tr:nth-child(4) td.value pre')->content_xml_is("{}\n");
         $t->at('#request tr:nth-child(4) td.key')->content_xml_is('Parameters:');
@@ -102,7 +102,7 @@ $t->get_ok('/not_good.html')
         $t->at('#request tr:nth-child(2) td.key')->content_xml_is('URL:');
         $t->at('#request tr:nth-child(2) td.value pre')->content_xml_is('/not_good.html');
         $t->at('#request tr:nth-child(3) td.key')->content_xml_is('Base URL:');
-        $t->at('#request tr:nth-child(3) td.value pre')->content_xml_like(qr'^http://localhost:');
+        $t->at('#request tr:nth-child(3) td.value pre')->content_xml_like(qr'^http://127.0.0.1:');
         $t->at('#request tr:nth-child(4) td.key')->content_xml_is('Parameters:');
         $t->at('#request tr:nth-child(4) td.value pre')->content_xml_is("{}\n");
         $t->at('#request tr:nth-child(4) td.key')->content_xml_is('Parameters:');

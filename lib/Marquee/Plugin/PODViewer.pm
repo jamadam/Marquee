@@ -98,7 +98,7 @@ sub serve_pod {
         my $org = $anchor;
         my $i   = 1;
         $anchor = $org . $i++ while $anchors{$anchor}++;
-        push @parts, [] if $e->type eq 'h1' || !@parts;
+        push @parts, [] if $e->tag eq 'h1' || !@parts;
         push @{$parts[-1]}, $text, "#$anchor";
         $e->content(qq{<a name="$anchor">$text</a>});
     });

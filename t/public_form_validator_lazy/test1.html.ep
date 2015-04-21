@@ -170,7 +170,7 @@
                 <legend>
                     Special chars.
                 </legend>
-                <input type="hidden" name="foo" value="やったー">
+                <input type="submit" name="foo" value="やったー">
             </fieldset>
         </form>
         <form action="/receptor1.html" method="post">

@@ -2,8 +2,10 @@ package HTML::ValidationRules::Legacy;
 use strict;
 use warnings;
 use Mojo::Base 'Exporter';
-use Mojo::JSON qw{true false};
+use Mojo::JSON;
 use Mojo::Util qw{decode};
+use Mojo::Parameters;
+use Scalar::Util qw(blessed);
 
 our @EXPORT_OK = qw(extract validate),
 
@@ -30,7 +32,7 @@ sub extract {
     
     $form->find("*[name]")->each(sub {
         my $tag = shift;
-        my $type = $tag->attr('type');
+        my $type = $tag->attr('type') || '';
         my $name = $tag->attr('name');
         $props->{$name} ||= {};
         
@@ -38,7 +40,7 @@ sub extract {
             push(@{$props->{$name}->{$TERM_OPTIONS}}, $tag->attr('value'));
         }
         
-        if ($tag->type eq 'select') {
+        if ($tag->tag eq 'select') {
             $tag->find('option')->each(sub {
                 push(@{$props->{$name}->{$TERM_OPTIONS}}, shift->attr('value'));
             });
@@ -57,7 +59,7 @@ sub extract {
         if (! exists $tag->attr->{disabled}) {
             if ($type ne 'submit' && $type ne 'image' && $type ne 'checkbox' &&
                         ($type ne 'radio' || exists $tag->attr->{checked})) {
-                $props->{$name}->{$TERM_REQUIRED} = true;
+                $props->{$name}->{$TERM_REQUIRED} = Mojo::JSON->true;
             }
         }
             
@@ -76,91 +78,77 @@ sub extract {
     
     return {
         $TERM_PROPERTIES => $props,
-        $TERM_ADD_PROPS => false,
+        $TERM_ADD_PROPS => Mojo::JSON->false,
     };
 }
 
 sub validate {
     my ($schema, $params, $charset) = @_;
     
-    if (! ref $params) {
-        $params = Mojo::Parameter->new;
-        $params->charset($charset);
-        $params->append($params);
+    if (! (blessed($params) && $params->isa('Mojo::Parameters'))) {
+        my $wrapper = Mojo::Parameters->new;
+        $wrapper->charset($charset);
+        if (blessed($params) && $params->isa('Hash::MultiValue')) {
+            $wrapper->append($params->flatten);
+        } else {
+            $wrapper->append($params);
+        }
+        $params = $wrapper;
     }
     
     my $props = $schema->{$TERM_PROPERTIES};
     
     if (! $schema->{$TERM_ADD_PROPS}) {
-        for my $name ($params->param) {
-            if (! $props->{$name}) {
-                return "Field $name is injected";
-            }
+        for my $name (@{$params->names}) {
+            return "Field $name is injected" if (! $props->{$name});
         }
     }
     
     for my $name (keys %$props) {
+        my @params = grep {defined $_} $params->param($name);
         
-        my @params = $params->param($name);
-        
-        if (($props->{$name}->{$TERM_REQUIRED} || '') eq true) {
-            if (! scalar @params) {
-                return "Field $name is required";
-            }
+        if (($props->{$name}->{$TERM_REQUIRED} || '') eq Mojo::JSON->true) {
+            return "Field $name is required" if (! scalar @params);
         }
         
         if (my $allowed = $props->{$name}->{$TERM_OPTIONS}) {
             for my $given (@params) {
-                next unless defined($given);
-                if (! grep {$_ eq $given} @$allowed) {
-                    return "Field $name has been tampered";
-                }
+                return "Field $name has been tampered"
+                                        if (! grep {$_ eq $given} @$allowed);
             }
         }
         if (exists $props->{$name}->{$TERM_MAXLENGTH}) {
             for my $given (@params) {
-                next unless defined($given);
-                if (length($given) > $props->{$name}->{$TERM_MAXLENGTH}) {
-                    return "Field $name is too long";
-                }
+                return "Field $name is too long"
+                    if (length($given) > $props->{$name}->{$TERM_MAXLENGTH});
             }
         }
         if (defined $props->{$name}->{$TERM_MIN_LENGTH}) {
             for my $given (@params) {
-                next unless defined($given);
-                if (length($given) < $props->{$name}->{$TERM_MIN_LENGTH}) {
-                    return "Field $name cannot be empty";
-                }
+                return "Field $name cannot be empty"
+                    if (length($given) < $props->{$name}->{$TERM_MIN_LENGTH});
             }
         }
         if (my $pattern = $props->{$name}->{$TERM_PATTERN}) {
             for my $given (@params) {
-                next unless defined($given);
-                if ($given !~ /\A$pattern\Z/) {
-                    return "Field $name not match pattern";
-                }
+                return "Field $name not match pattern"
+                                                if ($given !~ /\A$pattern\Z/);
             }
         }
         if (($props->{$name}->{$TERM_TYPE} || '') eq $TERM_NUMBER) {
             for my $given (@params) {
-                next unless defined($given);
-                if ($given !~ /\A[\d\+\-\.]+\Z/) {
-                    return "Field $name not match pattern";
-                }
+                return "Field $name not match pattern"
+                                if ($given !~ /\A[\d\+\-\.]+\Z/);
                 if (my $min = $props->{$name}->{$TERM_MIN}) {
-                    if ($given < $min) {
-                        return "Field $name too low";
-                    }
+                    return "Field $name too low" if ($given < $min);
                 }
                 if (my $max = $props->{$name}->{$TERM_MAX}) {
-                    if ($given > $max) {
-                        return "Field $name too great";
-                    }
+                    return "Field $name too great" if ($given > $max);
                 }
             }
         }
     }
-    return;
+    return; 
 }
 
 1;

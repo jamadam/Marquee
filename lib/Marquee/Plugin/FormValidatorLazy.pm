@@ -25,7 +25,6 @@ sub register {
     $app->hook(around_dispatch => sub {
         my $next = shift;
         my $c = Marquee->c;
-        
         my $req = $c->req;
         
         if ($req->method eq 'POST' && grep {$_ eq $req->url->path} @$actions) {
@@ -38,10 +37,12 @@ sub register {
             $req->params->remove($schema_key);
             
             if (!$wrapper) {
-                return $opt->{blackhole}->('Form schema is missing, possible hacking attempt');
+                return $opt->{blackhole}->(
+                            'Form schema is missing, possible hacking attempt');
             }
             if ($req->url->path ne $wrapper->{$TERM_ACTION}) {
-                return $opt->{blackhole}->('Action attribute has been tampered');
+                return $opt->{blackhole}->(
+                                        'Action attribute has been tampered');
             }
             
             if (my $err = validate($wrapper->{$TERM_SCHEMA}, $req->params)) {
@@ -83,9 +84,7 @@ sub inject {
         my $form    = shift;
         my $action  = $form->attr('action');
         
-        if (! grep {$_ eq $action} @$actions) {
-            return;
-        }
+        return if (! grep {$_ eq $action} @$actions);
         
         my $wrapper = sign(serialize({
             $TERM_ACTION    => $action,
@@ -103,13 +102,11 @@ EOF
 }
 
 sub serialize {
-    return '' unless length($_[0]);
-    return b64_encode(encode_json($_[0]), '');
+    return b64_encode(encode_json(shift // return), '');
 }
 
 sub deserialize {
-    return unless length($_[0]);
-    return decode_json(b64_decode(shift));
+    return decode_json(b64_decode(shift // return));
 }
 
 sub sign {
@@ -121,10 +118,9 @@ sub unsign {
     my ($value, $secret) = @_;
     if ($value && $secret && $value =~ s/--([^\-]+)$//) {
         my $sig = $1;
-        if (secure_compare($sig, hmac_sha1_sum($value, $secret))) {
-            return $value;
-        }
+        return $value if (secure_compare($sig, hmac_sha1_sum($value, $secret)));
     }
+    return;
 }
 
 1;

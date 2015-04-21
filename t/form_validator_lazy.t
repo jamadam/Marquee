@@ -1,11 +1,11 @@
-package Template_Basic;
+use strict;
+use warnings;
+use utf8;
 use Test::Mojo;
 use Marquee;
 use Test::More tests => 187;
-use Data::Dumper;
-use Mojo::Util qw{hmac_sha1_sum b64_decode};
 use Mojo::JSON qw{decode_json};
-use utf8;
+use Mojo::Util qw{hmac_sha1_sum b64_decode};
 
 my $TERM_ACTION             = 0;
 my $TERM_SCHEMA             = 1;
@@ -105,7 +105,7 @@ my $token = $t->tx->res->dom->find('form')->[0]->at("input[name=$namespace-schem
                 },
             },
         },
-    };
+    }, 'right schema';
 }
 
 my $token2 = $t->tx->res->dom->find('form')->[1]->at("input[name=$namespace-schema]")->attr('value');
@@ -301,7 +301,7 @@ my $token14 = $t->tx->res->dom->find('form')->[13]->at("input[name=$namespace-sc
             $TERM_ADD_PROPS => Mojo::JSON->false,
             $TERM_PROPERTIES => {},
         },
-    };
+    }, 'right schema';
 }
 
 my $token15 = $t->tx->res->dom->find('form')->[14]->at("input[name=$namespace-schema]")->attr('value');
@@ -350,7 +350,6 @@ my $token17 = $t->tx->res->dom->find('form')->[16]->at("input[name=$namespace-sc
             $TERM_PROPERTIES => {
                 foo => {
                     $TERM_OPTIONS => ['やったー'],
-                    $TERM_REQUIRED => Mojo::JSON->true,
                 },
             },
         },
@@ -785,14 +784,12 @@ sub extract_session {
     my $jar = $t->ua->cookie_jar;
     my $app = $t->app;
     my $session_name = 'mrqe';
-    my ($session_cookie) = grep { $_->name eq $session_name } $jar->all;
+    my ($session_cookie) = grep { $_->name eq $session_name } @{$jar->all};
     return unless $session_cookie;
     (my $value = $session_cookie->value) =~ s/--([^\-]+)$//;
     $value =~ tr/-/=/;
     my $session = decode_json(b64_decode $value);
     return $session;
 }
-
-1;
 
 __END__

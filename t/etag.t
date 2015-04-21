@@ -46,7 +46,7 @@ $t->get_ok('/etag/utf8.txt')
     ->header_is('Content-Type', 'text/plain')
     ->header_is('Content-Length', 9)
     ->header_is('ETag', '1d6aaa2d0a9ee370574a82a2a7aa5f03')
-    ->content_is($yatta_utf8);
+    ->content_is('やった');
 
 $t->get_ok('/etag/utf8.txt', {'If-None-Match' => '1d6aaa2d0a9ee370574a82a2a7aa5f03'})
     ->status_is(304)
@@ -60,7 +60,7 @@ $t->get_ok('/etag/utf8.html')
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
     ->header_is('Content-Length', 10)
     ->header_is('ETag', '07caa18dd24f49358b08d539f0828551')
-    ->content_is($yatta. "\n");
+    ->content_is("やった\n");
 
 $t->get_ok('/etag/utf8.html', {'If-None-Match' => '07caa18dd24f49358b08d539f0828551'})
     ->status_is(304)

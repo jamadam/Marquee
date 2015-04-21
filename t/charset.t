@@ -33,12 +33,12 @@ $t->get_ok('/charset/utf8.txt')
     ->status_is(200)
     ->content_type_is('text/plain')
     ->header_is('Content-Length', 9)
-    ->content_is($yatta_utf8);
+    ->content_is('やった');
 
 $t->get_ok('/charset/utf8_dynamic.html')
     ->status_is(200)
     ->content_type_is('text/html;charset=UTF-8')
     ->header_is('Content-Length', 22)
-    ->content_is('utf8_dynamic'. $yatta. "\n");
+    ->content_is('utf8_dynamicやった'. "\n");
 
 __END__

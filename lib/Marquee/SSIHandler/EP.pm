@@ -60,7 +60,10 @@ sub render {
         
         # Be a bit more relaxed for helpers
         my $prepend = q/no strict 'refs'; no warnings 'redefine';/;
-
+        
+        # document write backend API
+        $prepend .= q!sub _DW; local *_DW = sub {$_O .= _escape(shift); ''};!;
+        
         # Helpers
         $prepend .= 'my $_H = shift; my $_F = $_H->funcs;';
         for (keys %{$self->funcs}) {
@@ -87,6 +90,15 @@ sub render {
 ### --
 sub _init {
     my $self = shift;
+    
+    $self->funcs->{b} = sub {
+        shift;
+        Mojo::ByteStream->new(@_);
+    };
+    
+    $self->funcs->{docwrite} = sub {
+        return Mojo::Template::SandBox::_DW($_[1]);
+    };
     
     $self->funcs->{app} = sub {
         shift;
@@ -341,11 +353,41 @@ above.
 
 Following template functions are automatically available.
 
+=head2 C<b>
+
+shortcut for Mojo::ByteStream constructor. Mojo::ByteStream objects are
+always excluded from automatic escaping.
+
+    <%= b('<div></div>') %>
+
 =head2 C<current_template>
 
 Returns current template path.
 
     <% my $path = current_template(); %>
+
+=head2 C<docwrite>
+
+Append document content immidiately within any template syntax. The return value
+is always XML escaped unless when the input is Mojo::ByteStream object.
+
+    <%
+        if ($yes) {
+            docwrite('yes');
+        } else {
+            docwrite('nop');
+        }
+        docwrite(' is the answer!');
+    %>
+    
+The above is paraphrase of below.
+
+    % if ($yes) {
+        yes
+    % } else {
+        nop
+    % }
+    is the answer!
 
 =head2 C<extends>
 

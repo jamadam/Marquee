@@ -9,7 +9,7 @@ my %params = (
     ABSTRACT_FROM => 'lib/Marquee.pm',
     LICENSE       => 'perl',
     PREREQ_PM     => {
-        'Mojolicious' => '5.01',
+        'Mojolicious' => '6.14',
     },
     BUILD_REQUIRES => {
         'Test::More'            => '0.98',

@@ -1,6 +1,10 @@
 Revision history for Marquee
 
-0.31 2014/06/07
+0.31 2015/08/12
+  - Updated internals for latest mojolicious usage.
+  - Added FormValidatorLazy plugin for zero-configuration form validation.
+  - Improved tests.
+  - Improved documents.
 
 0.30 2014/06/07
   - Updated depencencies.

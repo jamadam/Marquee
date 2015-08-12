@@ -10,7 +10,7 @@ branches:
     - master
     - develop
 install:
-  - "cpanm -n Text::Sass Text::Markdown Test::Pod Test::Pod::Coverage"
+  - "cpanm -n Text::Markdown Test::Pod Test::Pod::Coverage"
   - "cpanm -n --installdeps ."
 notifications:
   email: sugama@jamadam.com

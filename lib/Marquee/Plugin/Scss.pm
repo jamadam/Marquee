@@ -4,7 +4,7 @@ use warnings;
 use Mojo::Base 'Marquee::Plugin';
 use IPC::Open3 qw(open3);
 use Carp ();
-use Text::Sass;
+use CSS::Sass;
 
 my $text_sass;
 
@@ -22,11 +22,11 @@ sub register {
             $self->scss(\&scss_command);
         }
     }
-    if (! $self->scss && eval { require Text::Sass }) {
+    if (! $self->scss && eval { require CSS::Sass }) {
         $self->scss(\&scss_perl);
     }
     if (! $self->scss) {
-        Carp::croak("Can't find sass gem nor Text::Sass module");
+        Carp::croak("Can't find sass gem nor CSS::Sass module");
     }
     
     $app->hook(around_dispatch => sub {
@@ -65,7 +65,7 @@ sub scss_command {
 }
 
 sub scss_perl {
-    $text_sass ||= Text::Sass->new;
+    $text_sass ||= CSS::Sass->new;
     $text_sass->scss2css(shift);
 }
 

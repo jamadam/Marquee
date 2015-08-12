@@ -5,7 +5,7 @@ use File::Basename 'dirname';
 use File::Spec::Functions qw'catdir rel2abs splitdir';
 use lib catdir(dirname(__FILE__), 'lib');
 use File::Find::Rule;
-use Text::Sass::XS;
+use CSS::Sass;
 use Try::Tiny;
 
 my @dirs = (
@@ -16,7 +16,7 @@ my @files = File::Find::Rule->file()->name('*.scss')->in(@dirs);
 
 print scalar(@files). " scss files found.\n";
 
-my $sass = Text::Sass::XS->new;
+my $sass = CSS::Sass->new(output_style => SASS_STYLE_COMPRESSED);
 my $errors = 0;
 for my $in (@files) {
     my $out = $in;

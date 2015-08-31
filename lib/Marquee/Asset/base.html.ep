@@ -10,7 +10,7 @@
 <% end %>
 
 <h1>
-    <a href="http://mrqe.biz/" class="poweredBy">Marquee</a>
+    <a href="http://mrqe.jamadam.com/" class="poweredBy">Marquee</a>
     <%= placeholder 'h1AdditionalContent' => begin %>
     <% end %>
 </h1>

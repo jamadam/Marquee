@@ -9,7 +9,7 @@ Marquee
 
 __このソフトウェアはアルファクオリティのため、定常的な使用は推奨されません。__
 
-![Komodo Edit](http://mrqe.biz/screenshot/komodo.png "Komodo Edit")
+![Komodo Edit](http://mrqe.jamadam.com/screenshot/komodo.png "Komodo Edit")
 
 ### デフォルトのURLマッピング
 
@@ -70,10 +70,10 @@ APIには、オートインデックス、PODビューワー、Markdownビュー
 
 より詳しい情報は下記のドキュメントを参照してください。
 
-- [Marquee::Guides::Cookbook](http://ja.mrqe.biz/perldoc/Marquee/Guides/Cookbook) (クックブック)
-- [Marquee](http://ja.mrqe.biz/perldoc/Marquee) (Marqueeベースクラス)
-- [モジュールインデックス](http://ja.mrqe.biz/perldoc/)
-- [Marquee::Guides::Cookbook](http://ja.mrqe.biz/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (コマンドラインインターフェース)
+- [Marquee::Guides::Cookbook](http://mrqe-ja.jamadam.com/perldoc/Marquee/Guides/Cookbook) (クックブック)
+- [Marquee](http://mrqe-ja.jamadam.com/perldoc/Marquee) (Marqueeベースクラス)
+- [モジュールインデックス](http://mrqe-ja.jamadam.com/perldoc/)
+- [Marquee::Guides::Cookbook](http://mrqe-ja.jamadam.com/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (コマンドラインインターフェース)
 
 ## スクリーンショット
 
@@ -81,15 +81,15 @@ APIには、オートインデックス、PODビューワー、Markdownビュー
 
 ### デバッグスクリーン
 
-![debug screen](http://mrqe.biz/screenshot/debug_screen.png "Debug screen")
+![debug screen](http://mrqe.jamadam.com/screenshot/debug_screen.png "Debug screen")
 
 ### オートインデックス
 
-![auto index](http://mrqe.biz/screenshot/autoindex.png "Auto Index")
+![auto index](http://mrqe.jamadam.com/screenshot/autoindex.png "Auto Index")
 
 ### オートツリー
 
-![auto tree](http://mrqe.biz/screenshot/autoindextree.png "Auto Index")
+![auto tree](http://mrqe.jamadam.com/screenshot/autoindextree.png "Auto Index")
 
 ## REPOSITORY
 
@@ -107,8 +107,8 @@ Copyright (c) 2012 [jamadam]
 This program is free software; you can redistribute it and/or
 modify it under the [same terms as Perl itself].
 
-[Marquee]:http://ja.mrqe.biz/perldoc/Marquee
-[Marquee::Plugin::Router]:http://ja.mrqe.biz/perldoc/Marquee/Plugin/Router
+[Marquee]:http://mrqe-ja.jamadam.com/perldoc/Marquee
+[Marquee::Plugin::Router]:http://mrqe-ja.jamadam.com/perldoc/Marquee/Plugin/Router
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy

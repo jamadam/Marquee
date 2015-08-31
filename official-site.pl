@@ -10,7 +10,7 @@ use MarqueeOfficial;
 
 $ENV{MOJO_HOME} = rel2abs(dirname(__FILE__));
 
-my $app = MarqueeOfficial->new(domain => 'http://mrqe.biz');
+my $app = MarqueeOfficial->new(domain => 'http://mrqe.jamadam.com');
 #$app->under_development(1);
 $app->config(hypnotoad => {
     listen => ['http://*:8002'],

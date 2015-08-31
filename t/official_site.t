@@ -25,7 +25,7 @@ $ENV{MOJO_HOME} = catdir(dirname(__FILE__), '..');
 my $app;
 my $t;
 
-$app = MarqueeOfficial->new(domain => 'http://mrqe.biz');
+$app = MarqueeOfficial->new(domain => 'http://mrqe.jamadam.com');
 $t = Test::Mojo::DOM->new($app);
 $t->get_ok('/');
 $t->status_is(200);
@@ -61,7 +61,7 @@ $t->dom_inspector(sub {
 
 ### ja
 
-$app = MarqueeOfficial->new(domain => 'http://ja.mrqe.biz', locale => 'ja');
+$app = MarqueeOfficial->new(domain => 'http://mrqe-ja.jamadam.com', locale => 'ja');
 $t = Test::Mojo::DOM->new($app);
 $t->get_ok('/');
 $t->status_is(200);

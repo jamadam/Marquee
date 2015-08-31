@@ -10,7 +10,7 @@ Cookbook - Marqueeクックブック
 
 =head1 INSTALLATION
 
-    $ curl http://get.mrqe.biz/ | sh
+    $ curl http://mrqe-get.jamadam.com/ | sh
 
 =head1 GETTING STARTED
 

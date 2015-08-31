@@ -11,7 +11,7 @@ or PHP.
 __This software is considered to be alpha quality and isn't recommended for
 regular usage.__
 
-![Komodo Edit](http://mrqe.biz/screenshot/komodo.png "Komodo Edit")
+![Komodo Edit](http://mrqe.jamadam.com/screenshot/komodo.png "Komodo Edit")
 
 ### Default URL mapping
 
@@ -70,16 +70,16 @@ Markdown viewer. You don't need any Apache things anymore.
 
 To install this module, run the following commands:
 
-    $ curl http://get.mrqe.biz/ | sh
+    $ curl http://mrqe-get.jamadam.com/ | sh
 
 ## DOCUMENTATIONS
 
 For more information refer to following documentations.
 
-- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook) (Cookbook)
-- [Marquee](http://mrqe.biz/perldoc/Marquee) (Marquee base class)
-- [Index of Modules](http://mrqe.biz/perldoc/)
-- [Marquee::Guides::Cookbook](http://mrqe.biz/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (Command line interface)
+- [Marquee::Guides::Cookbook](http://mrqe.jamadam.com/perldoc/Marquee/Guides/Cookbook) (Cookbook)
+- [Marquee](http://mrqe.jamadam.com/perldoc/Marquee) (Marquee base class)
+- [Index of Modules](http://mrqe.jamadam.com/perldoc/)
+- [Marquee::Guides::Cookbook](http://mrqe.jamadam.com/perldoc/Marquee/Guides/Cookbook#COMMAND_LINE_INTERFACE) (Command line interface)
 
 ## SCREENSHOTS
 
@@ -87,15 +87,15 @@ Here is some screenshots of how Marquee look like.
 
 ### debug screen
 
-![debug screen](http://mrqe.biz/screenshot/debug_screen.png "Debug screen")
+![debug screen](http://mrqe.jamadam.com/screenshot/debug_screen.png "Debug screen")
 
 ### Auto index
 
-![auto index](http://mrqe.biz/screenshot/autoindex.png "Auto Index")
+![auto index](http://mrqe.jamadam.com/screenshot/autoindex.png "Auto Index")
 
 ### Auto tree
 
-![auto tree](http://mrqe.biz/screenshot/autoindextree.png "Auto Index")
+![auto tree](http://mrqe.jamadam.com/screenshot/autoindextree.png "Auto Index")
 
 ## REPOSITORY
 
@@ -113,8 +113,8 @@ Copyright (c) 2012 [jamadam]
 This program is free software; you can redistribute it and/or
 modify it under the [same terms as Perl itself].
 
-[Marquee]:http://mrqe.biz/perldoc/Marquee
-[Marquee::Plugin::Router]:http://mrqe.biz/perldoc/Marquee/Plugin/Router
+[Marquee]:http://mrqe.jamadam.com/perldoc/Marquee
+[Marquee::Plugin::Router]:http://mrqe.jamadam.com/perldoc/Marquee/Plugin/Router
 [Mojolicious]:http://mojolicio.us/
 [Mason]:http://search.cpan.org/~jswartz/Mason-2.20/lib/Mason.pm
 [mojo-legacy]:https://github.com/jamadam/mojo-legacy

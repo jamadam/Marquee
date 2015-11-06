@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use Test::Mojo;
 use Marquee;
 use Test::More tests => 187;
@@ -27,19 +29,18 @@ my $app = Marquee->new;
 $app->secrets(['afewfweweuhu']);
 $app->document_root("$FindBin::Bin/public_form_validator_lazy");
 
-my $r = $app->plugin('Router' => sub {
-    my $r = shift;
+my $r = $app->plugin('Router' => sub($r) {
     
-    $r->route('/receptor1.html')->viax('post')->to(sub {
+    $r->route('/receptor1.html')->viax('post')->to(sub() {
         is(Marquee->c->tx->req->param($namespace. '-token'), undef, 'token is cleaned up');
         Marquee->c->serve('receptor1.html');
     });
     
-    $r->route('/receptor2.html')->viax('post')->to(sub {
+    $r->route('/receptor2.html')->viax('post')->to(sub() {
         Marquee->c->serve('receptor2.html');
     });
     
-    $r->route('/receptor3.html')->viax('post')->to(sub {
+    $r->route('/receptor3.html')->viax('post')->to(sub() {
         Marquee->c->serve('receptor3.html');
     });
 });
@@ -47,8 +48,8 @@ my $r = $app->plugin('Router' => sub {
 $app->plugin(FormValidatorLazy => {
     namespace => $namespace,
     action => ['/receptor1.html', '/receptor3.html'],
-    blackhole => sub {
-        Marquee->c->app->error_document->serve(400, $_[0]);
+    blackhole => sub($err) {
+        Marquee->c->app->error_document->serve(400, $err);
     },
 });
 
@@ -779,8 +780,7 @@ $t->status_is(400);
 $t->content_like(qr{schema});
 $t->content_like(qr{missing});
 
-sub extract_session {
-    my $t = shift;
+sub extract_session($t) {
     my $jar = $t->ua->cookie_jar;
     my $app = $t->app;
     my $session_name = 'mrqe';

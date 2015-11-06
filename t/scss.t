@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use FindBin;
 use File::Basename 'dirname';
 use File::Spec::Functions qw{catdir};
@@ -83,19 +85,18 @@ EOF
 $t->get_ok('/scss/notfound.css')
     ->status_is(404);
 
-sub css_equals {
+sub css_equals($got, $expected, $discription) {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    return is(shorten($_[0]), shorten($_[1]), $_[2]);
+    return is(shorten($got), shorten($expected), $discription);
 }
 
-sub shorten {
-    my $css = shift;
+sub shorten($css) {
     $css =~ s!\s*(\:|\{|\})\s*!$1!g;
     return $css;
 }
 
-sub ts {
-    my $ts = (stat $app->static->search('./scss/'. shift))[9];
+sub ts($file) {
+    my $ts = (stat $app->static->search('./scss/'. $file))[9];
     return $ts;
 }
 

@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use FindBin;
 use File::Basename 'dirname';
 use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
@@ -30,8 +32,7 @@ $t = Test::Mojo::DOM->new($app);
 $t->get_ok('/');
 $t->status_is(200);
 $t->header_is('Content-Type', 'text/html;charset=UTF-8');
-$t->dom_inspector(sub {
-    my $t = shift;
+$t->dom_inspector(sub($t) {
     $t->at('title')->text_is('Marquee - Markdown viewer');
     $t->at('#wrapper h2')->text_is('Marquee');
     $t->at('#wrapper p a')->attr_is('href', '/perldoc/Marquee');
@@ -42,8 +43,7 @@ $t->dom_inspector(sub {
 $t->get_ok('/perldoc/');
 $t->status_is(200);
 $t->header_is('Content-Type', 'text/html;charset=UTF-8');
-$t->dom_inspector(sub {
-    my $t = shift;
+$t->dom_inspector(sub($t) {
     $t->at('title')->text_is('Index of Modules - Pod viewer');
     $t->at('#wrapper h2')->text_is('INDEX OF MODULES');
     $t->at('#wrapper a')->attr_is('href', './HTML/ValidationRules/Legacy');
@@ -54,8 +54,7 @@ $t->dom_inspector(sub {
 $t->get_ok('/perldoc/Marquee');
 $t->status_is(200);
 $t->header_is('Content-Type', 'text/html;charset=UTF-8');
-$t->dom_inspector(sub {
-    my $t = shift;
+$t->dom_inspector(sub($t) {
     $t->at('title')->text_is('Marquee - Yet another Mojo based web framework - Pod viewer');
 });
 
@@ -66,8 +65,7 @@ $t = Test::Mojo::DOM->new($app);
 $t->get_ok('/');
 $t->status_is(200);
 $t->header_is('Content-Type', 'text/html;charset=UTF-8');
-$t->dom_inspector(sub {
-    my $t = shift;
+$t->dom_inspector(sub($t) {
     $t->at('title')->text_is('Marquee - Markdown viewer');
     $t->at('#wrapper h2')->text_is('Marquee');
     $t->at('#wrapper p a')->attr_is('href', '/perldoc/Marquee');
@@ -78,8 +76,7 @@ $t->dom_inspector(sub {
 $t->get_ok('/perldoc/');
 $t->status_is(200);
 $t->header_is('Content-Type', 'text/html;charset=UTF-8');
-$t->dom_inspector(sub {
-    my $t = shift;
+$t->dom_inspector(sub($t) {
     $t->at('title')->text_is('Index of Modules - Pod viewer');
     $t->at('#wrapper h2')->text_is('INDEX OF MODULES');
     $t->at('#wrapper a')->attr_is('href', './Marquee');
@@ -90,8 +87,7 @@ $t->dom_inspector(sub {
 $t->get_ok('/perldoc/Marquee');
 $t->status_is(200);
 $t->header_is('Content-Type', 'text/html;charset=UTF-8');
-$t->dom_inspector(sub {
-    my $t = shift;
+$t->dom_inspector(sub($t) {
     $t->at('title')->text_is('Marquee - もうひとつのMojoベースのウェブフレームワーク - Pod viewer');
 });
 

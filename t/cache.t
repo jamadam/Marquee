@@ -1,5 +1,7 @@
 use strict;
 use warnings;
+use feature 'signatures';
+no warnings "experimental::signatures";
 
 use Test::More tests => 32;
 
@@ -43,13 +45,12 @@ is $cache->get('yada'), 23,     'right result';
 
 $cache = Marquee::Cache->new;
 $cache->max_keys(10000);
-$cache->set(foo => 'bar', sub{1});
+$cache->set(foo => 'bar', sub($ts){1});
 is $cache->get('foo'), undef, 'has expired';
 
 $cache = Marquee::Cache->new;
 $cache->max_keys(10000);
-$cache->set(foo => 'bar', sub{
-    my $ts = shift;
+$cache->set(foo => 'bar', sub($ts) {
     is time - $ts, 1, '1 sec passed';
 });
 sleep(1);
@@ -68,7 +69,7 @@ is scalar @{$cache->{2}}, 1;
 
 # expired cache is vacuumed
 
-$cache->set('b', 'd', sub {1});
+$cache->set('b', 'd', sub($ts) {1});
 is keys %{$cache->{1}}, 2;
 is scalar @{$cache->{2}}, 2;
 is $cache->get('b'), undef;

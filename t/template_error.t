@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use FindBin;
 use File::Basename 'dirname';
 use File::Spec::Functions qw{catdir splitdir rel2abs canonpath canonpath};
@@ -42,8 +44,7 @@ $t->get_ok('/not_found.html')
     ->status_is(404)
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
     ->text_is('h1', 'Debug Screen')
-    ->dom_inspector(sub {
-        my $t = shift;
+    ->dom_inspector(sub($t) {
         $t->at('title')->text_is('Debug Screen');
         $t->at('#showcase pre')->text_is(q{File Not Found});
         
@@ -81,8 +82,7 @@ $t->get_ok('/not_good.html')
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
     ->text_is('h1', 'Debug Screen')
     ->element_exists('#context .important')
-    ->dom_inspector(sub {
-        my $t = shift;
+    ->dom_inspector(sub($t) {
         $t->at('title')->text_is('Debug Screen');
         my $path = canonpath('t/public_html/not_good.html.ep');
         $t->at('#showcase pre')->text_like(qr{Global symbol "\$nonexitsts" requires explicit package name at (.+?)\Q$path\E line 4\.});
@@ -133,8 +133,7 @@ $t->get_ok('/template_error.html')
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
     ->text_is('h1', 'Debug Screen')
     ->element_exists('#context .important')
-    ->dom_inspector(sub {
-        my $t = shift;
+    ->dom_inspector(sub($t) {
         $t->at('#request tr:nth-child(5) td.key')->content_xml_is('Stash:');
         $t->at('#request tr:nth-child(5) td.value pre')->content_xml_is("{\n  &#39;test&#39; =&gt; &#39;value&#39;\n}\n");
         $t->at('title')->text_is('Debug Screen');
@@ -151,7 +150,7 @@ $t->get_ok('/template_error.html')
 $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log->handle(undef);
-$app->hook(around_dispatch => sub {
+$app->hook(around_dispatch => sub() {
     die 'hoge';
 });
 

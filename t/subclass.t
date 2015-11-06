@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use FindBin;
 use File::Basename 'dirname';
 use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
@@ -16,18 +18,21 @@ use Test::More tests => 10;
     package SubClass;
     use Mojo::Base 'Marquee';
     use Test::More;
+    use feature 'signatures';
+    no warnings "experimental::signatures";
     
-    sub dispatch {
-        shift->SUPER::dispatch(@_);
+    sub dispatch($self, @args) {
+        $self->SUPER::dispatch(@args);
         is(Marquee->c, SubClass->c, 'right namespace');
     }
 }
 {
     package SubClass2;
     use Mojo::Base qw{Marquee};
+    use feature 'signatures';
+    no warnings "experimental::signatures";
     
-    sub dispatch {
-        my ($self) = @_;
+    sub dispatch($self) {
         $self->SUPER::dispatch;
         $self->c->res->body('overridden');
     }

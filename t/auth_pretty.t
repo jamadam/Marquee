@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use FindBin;
 use File::Basename 'dirname';
 use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
@@ -29,25 +31,25 @@ $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 
 my $r = $app->route;
-$r->route(qr{^/admin/index})->to(sub {
+$r->route(qr{^/admin/index})->to(sub() {
     my $res = Marquee->c->tx->res;
     $res->code(200);
     $res->headers->content_type($app->types->type('html'));
     $res->body('/admin/index passed');
 });
-$r->route(qr{^/admin/})->to(sub {
+$r->route(qr{^/admin/})->to(sub() {
     my $res = Marquee->c->tx->res;
     $res->code(200);
     $res->headers->content_type($app->types->type('html'));
     $res->body('/admin/ passed');
 });
-$r->route(qr{^/admin2/})->to(sub {
+$r->route(qr{^/admin2/})->to(sub() {
     my $res = Marquee->c->tx->res;
     $res->code(200);
     $res->headers->content_type($app->types->type('html'));
     $res->body('/admin2/ passed');
 });
-$r->route(qr{^/})->to(sub {
+$r->route(qr{^/})->to(sub() {
     my $res = Marquee->c->tx->res;
     $res->code(200);
     $res->headers->content_type($app->types->type('html'));
@@ -55,12 +57,10 @@ $r->route(qr{^/})->to(sub {
 });
 
 $app->plugin(AuthPretty => [
-    qr{^/admin/} => 'Secret Area' => sub {
-        my ($username, $password) = @_;
+    qr{^/admin/} => 'Secret Area' => sub($username, $password) {
         return $username eq 'jamadam' && $password eq 'pass';
     },
-    qr{^/admin2/} => 'Secret Area2' => sub {
-        my ($username, $password) = @_;
+    qr{^/admin2/} => 'Secret Area2' => sub($username, $password) {
         return $username eq 'jamadam' && $password eq 'pass2';
     },
 ] => catdir(dirname(__FILE__), 'auth_log'));

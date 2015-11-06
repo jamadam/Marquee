@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use FindBin;
 use File::Basename 'dirname';
 use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
@@ -71,8 +73,7 @@ $t->get_ok('/perldoc/Marquee/SSIHandler')
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
     ->text_is('title', 'Marquee::SSIHandler - SSI handler base class - Pod viewer')
     ->element_exists('a[name=SEE_ALSO]')
-    ->dom_inspector(sub {
-        my $t = shift;
+    ->dom_inspector(sub($t) {
         is $t->find('#auto_detected_see_also a')->dom->size, 3, 'right size';
         $t->find('#auto_detected_see_also a[href=/perldoc/Marquee]')->text_is('Marquee');
         $t->find('#auto_detected_see_also a[href=/perldoc/Marquee/SSIHandler/EP]')->text_is('Marquee::SSIHandler::EP');

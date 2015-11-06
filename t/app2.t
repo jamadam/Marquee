@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use FindBin;
 use File::Basename 'dirname';
 use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
@@ -25,61 +27,58 @@ $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 {
     my $r = $app->route;
-    $r->route(qr{^/index\.html})->to(sub {
+    $r->route(qr{^/index\.html})->to(sub() {
         MyApp->c->app->dynamic->serve("$FindBin::Bin/public_html/index2.txt.ep");
         is $_[0], undef;
     });
-    $r->route(qr{^/special\.html})->to(sub {
+    $r->route(qr{^/special\.html})->to(sub() {
         MyApp->c->app->static->serve("$FindBin::Bin/public_html/index.txt");
     });
-    $r->route(qr{^/capture/(.+)-(.+)})->to(sub {
-        my ($a, $b) = @_;
+    $r->route(qr{^/capture/(.+)-(.+)})->to(sub($a, $b) {
         MyApp->c->res->code(200);
         MyApp->c->res->body("$a-$b");
     });
-    $r->route(qr{^/capture2/(.+)?-(.+)})->to(sub {
-        my ($a, $b) = @_;
+    $r->route(qr{^/capture2/(.+)?-(.+)})->to(sub($a, $b) {
         MyApp->c->res->code(200);
         $a = defined $a ? $a : '';
         MyApp->c->res->body("$a-$b");
     });
-    $r->route(qr{^/capture3/(.+)?})->to(sub {
-        my ($a) = @_;
+    $r->route(qr{^/capture3/(.+)?})->to(sub($a) {
         MyApp->c->res->code(200);
         $a = defined $a ? $a : '';
         MyApp->c->res->body("$a");
     });
-    $r->route(qr{^/rare/})->via('get')->to(sub {
+    $r->route(qr{^/rare/})->via('get')->to(sub() {
         MyApp->c->res->code(200);
         MyApp->c->res->body('rare');
     });
-    $r->route(qr{^/rare2/})->via('get', 'head')->to(sub {
+    $r->route(qr{^/rare2/})->via('get', 'head')->to(sub() {
         MyApp->c->res->code(200);
         MyApp->c->res->body('rare');
     });
-    $r->route(qr{^/default})->to(sub {
+    $r->route(qr{^/default})->to(sub() {
         MyApp->c->res->code(200);
         MyApp->c->res->body('default');
     });
-    $r->route(qr{^/serve1})->to(sub {
+    $r->route(qr{^/serve1})->to(sub() {
         MyApp->c->serve('router1.html');
     });
-    $r->route(qr{^/serve1-2})->to(sub {
+    $r->route(qr{^/serve1-2})->to(sub() {
         MyApp->c->serve;
     });
-    $r->route(qr{^/serve2})->to(sub {
+    $r->route(qr{^/serve2})->to(sub() {
         MyApp->c->serve('router2.html');
     });
-    $r->route(qr{^/serve3})->to(sub {
+    $r->route(qr{^/serve3})->to(sub() {
         MyApp->c->serve('router3.html');
     });
-    $r->route(qr{^/router4.html})->to(sub {
+    $r->route(qr{^/router4.html})->to(sub() {
         # not served
     });
-    $r->route(qr{^/router5.html})->viax('post')->to(sub {
+    $r->route(qr{^/router5.html})->viax('post')->to(sub() {
         MyApp->c->serve('router5.html');
     });
-    $r->route(qr{^/json.json})->to(sub {
+    $r->route(qr{^/json.json})->to(sub() {
         MyApp->c->res->code(200);
         MyApp->c->res->body(Mojo::JSON::encode_json({a => 1}));
     });
@@ -186,29 +185,28 @@ $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 {
     my $r = $app->route;
-    my $bridge = $r->bridge(sub {
+    my $bridge = $r->bridge(sub($c) {
         return 0;
     });
-    $bridge->route(qr{^/index\.html})->to(sub {
+    $bridge->route(qr{^/index\.html})->to(sub() {
         my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index.html for bridge');
     });
-    $r->route(qr{^/index\.html})->to(sub {
+    $r->route(qr{^/index\.html})->to(sub() {
         my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index.html');
     });
-    my $bridge2 = $r->bridge(sub {
-        my $c = Marquee->c;
+    my $bridge2 = $r->bridge(sub($c) {
         return $c->req->headers->user_agent =~ qr{iPhone};
     });
-    $bridge2->route(qr{^/index2\.html})->to(sub {
+    $bridge2->route(qr{^/index2\.html})->to(sub() {
         my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index2.html for iPhone');
     });
-    $r->route(qr{^/index2\.html})->to(sub {
+    $r->route(qr{^/index2\.html})->to(sub() {
         my $res = Marquee->c->res;
         $res->code(200);
         $res->body('index2.html');

@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use FindBin;
 use File::Basename 'dirname';
 use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
@@ -21,11 +23,11 @@ $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 
 $app->plugin(Auth => [
-    qr{^/auth/auth\.html} => 'Secret Area2' => sub {
-        $_[0] eq 'user' && $_[1] eq 'pass';
+    qr{^/auth/auth\.html} => 'Secret Area2' => sub($user, $pass) {
+        $user eq 'user' && $pass eq 'pass';
     },
-    qr{^/auth/auth2\.html} => sub {
-        $_[0] eq 'user2' && $_[1] eq 'pass2';
+    qr{^/auth/auth2\.html} => sub($user, $pass) {
+        $user eq 'user2' && $pass eq 'pass2';
     },
 ]);
 

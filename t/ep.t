@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use FindBin;
 use File::Basename 'dirname';
 use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
@@ -20,7 +22,7 @@ use Test::More;
 my $ep = Marquee::SSIHandler::EP->new;
 
 eval {
-    $ep->add_function(myfunc => sub {});
+    $ep->add_function(myfunc => sub() {});
 };
 
 is ref $ep->funcs->{myfunc}, 'CODE';
@@ -31,7 +33,7 @@ SKIP: {
         skip('because the perl version is older than 5.016', 2);
     }
     eval {
-        $ep->add_function(time => sub {});
+        $ep->add_function(time => sub() {});
     };
     
     is $ep->funcs->{time}, undef;
@@ -39,14 +41,14 @@ SKIP: {
 }
 
 eval {
-    $ep->add_function(add_function => sub {});
+    $ep->add_function(add_function => sub() {});
 };
 
 is ref $ep->funcs->{add_function}, 'CODE';
 is $@, '';
 
 eval {
-    $ep->add_function('a b c' => sub {});
+    $ep->add_function('a b c' => sub() {});
 };
 
 is ref $ep->funcs->{'a b c'}, '';
@@ -61,8 +63,8 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
 
 eval {
-    $app->dynamic->handlers->{ep}->add_function('redefine' => sub {});
-    $app->dynamic->handlers->{ep}->add_function('redefine' => sub {});
+    $app->dynamic->handlers->{ep}->add_function('redefine' => sub() {});
+    $app->dynamic->handlers->{ep}->add_function('redefine' => sub() {});
 };
 
 is $@, '';
@@ -140,8 +142,7 @@ $t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/ep/use_layout.html')
     ->status_is(200)
-    ->dom_inspector(sub {
-        my $t = shift;
+    ->dom_inspector(sub($t) {
         $t->at('title')->text_is('タイトル');
         $t->at('#main')->text_is('メインコンテンツdynamic');
         $t->at('#main2')->text_is('DEFAULT MAIN2');
@@ -166,8 +167,7 @@ ok ! exists $app->stash->{title};
 
 $t->get_ok('/ep/use_layout2.html')
     ->status_is(200)
-    ->dom_inspector(sub {
-        my $t = shift;
+    ->dom_inspector(sub($t) {
         $t->at('title')->text_is('タイトル');
         $t->at('#main')->text_is('メインコンテンツdynamic');
         $t->at('#main2')->text_is('DEFAULT MAIN2');

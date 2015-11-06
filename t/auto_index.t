@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use FindBin;
 use File::Basename 'dirname';
 use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
@@ -31,8 +33,7 @@ close($file);
 
 $t->get_ok('/')
     ->status_is(200)
-    ->dom_inspector(sub {
-        my $t = shift;
+    ->dom_inspector(sub($t) {
         $t->at('title')
             ->text_is('Index of /');
         
@@ -81,8 +82,7 @@ $t->get_ok('/')
 
 $t->get_ok('/some_dir/')
     ->status_is(200)
-    ->dom_inspector(sub {
-        my $t = shift;
+    ->dom_inspector(sub($t) {
         
         {
             my $t = $t->at('tbody tr:nth-child(1)');
@@ -134,8 +134,7 @@ $t->get_ok('/some_dir/.%2f/')
 
 $t->get_ok('/?mode=tree')
     ->status_is(200)
-    ->dom_inspector(sub {
-        my $t = shift;
+    ->dom_inspector(sub($t) {
         $t->at('title')
             ->text_is('Index of /');
         
@@ -172,8 +171,7 @@ $t->get_ok('/?mode=tree')
 
 $t->get_ok('/some_dir/?mode=tree')
     ->status_is(200)
-    ->dom_inspector(sub {
-        my $t = shift;
+    ->dom_inspector(sub($t) {
         
         {
             my $t = $t->at('#wrapper > ul li:nth-child(1)');

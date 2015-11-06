@@ -1,6 +1,8 @@
 use strict;
 use warnings;
 use utf8;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use FindBin;
 use File::Basename 'dirname';
 use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
@@ -22,7 +24,7 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
 {
     my $r = $app->route;
-    $r->route(qr{^/session_cookie/2})->to(sub {
+    $r->route(qr{^/session_cookie/2})->to(sub() {
         my $req     = Marquee->c->req;
         my $res     = Marquee->c->res;
         my $session = $req->cookie('session');
@@ -30,7 +32,7 @@ $app->default_file('index.html');
         $res->body("Session is $value!");
         $res->code(200);
     });
-    $r->route(qr{^/session_cookie})->to(sub {
+    $r->route(qr{^/session_cookie})->to(sub() {
         my $res = Marquee->c->res;
         $res->body('Cookie set!');
         $res->code(200);
@@ -74,14 +76,14 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
 {
     my $r = $app->route;
-    $r->route(qr{^/session_cookie/2})->to(sub {
+    $r->route(qr{^/session_cookie/2})->to(sub() {
         my $res     = Marquee->c->res;
         my $session = Marquee->c->cookie('session');
         my $value   = $session ? $session : 'missing';
         $res->body("Session is $value!");
         $res->code(200);
     });
-    $r->route(qr{^/session_cookie})->to(sub {
+    $r->route(qr{^/session_cookie})->to(sub() {
         my $res = Marquee->c->res;
         $res->body('Cookie set!');
         $res->code(200);
@@ -120,14 +122,14 @@ $app->default_file('index.html');
 $app->secrets(['aaaaaaaaaaaaaa']);
 {
     my $r = $app->route;
-    $r->route(qr{^/session_cookie/2})->to(sub {
+    $r->route(qr{^/session_cookie/2})->to(sub() {
         my $res     = Marquee->c->res;
         my $session = Marquee->c->signed_cookie('session');
         my $value   = $session ? $session : 'missing';
         $res->body("Session is $value!");
         $res->code(200);
     });
-    $r->route(qr{^/session_cookie})->to(sub {
+    $r->route(qr{^/session_cookie})->to(sub() {
         my $res = Marquee->c->res;
         $res->body('Cookie set!');
         $res->code(200);
@@ -184,20 +186,20 @@ $app->default_file('index.html');
 $app->secrets(['aaaaaaaaaaaaaa']);
 {
     my $r = $app->route;
-    $r->route(qr{^/session_cookie/2})->to(sub {
+    $r->route(qr{^/session_cookie/2})->to(sub() {
         my $res     = Marquee->c->res;
         my $session = Marquee->c->session;
         my $value   = $session->{test} || 'missing';
         $res->body("Session is $value!");
         $res->code(200);
     });
-    $r->route(qr{^/session_cookie/3})->to(sub {
+    $r->route(qr{^/session_cookie/3})->to(sub() {
         my $res = Marquee->c->res;
         $res->body('Session deleted!');
         $res->code(200);
         Marquee->c->session(undef);
     });
-    $r->route(qr{^/session_cookie})->to(sub {
+    $r->route(qr{^/session_cookie})->to(sub() {
         my $res = Marquee->c->res;
         $res->body('Session set!');
         $res->code(200);

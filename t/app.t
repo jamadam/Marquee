@@ -290,7 +290,7 @@ $t->get_ok('/index.unknown')
     package MyApp;
     use Mojo::Base 'Marquee';
     
-    __PACKAGE__->attr(model => sub {MyApp::Model->new});
+    has model => sub {MyApp::Model->new};
     
     sub new {
         my $self = shift->SUPER::new(@_);

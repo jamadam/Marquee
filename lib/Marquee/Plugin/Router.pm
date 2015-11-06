@@ -4,7 +4,7 @@ use warnings;
 use Marquee::Plugin::Router::Route;
 use Mojo::Base 'Marquee::Plugin';
 
-__PACKAGE__->attr('route', sub {Marquee::Plugin::Router::Route->new});
+has route => sub {Marquee::Plugin::Router::Route->new};
 
 ### --
 ### Register the plugin into app

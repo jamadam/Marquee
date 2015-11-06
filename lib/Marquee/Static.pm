@@ -5,8 +5,8 @@ use Mojo::Base -base;
 use File::Spec::Functions;
 use Mojo::Date;
 
-__PACKAGE__->attr('maxage' => 0);
-__PACKAGE__->attr('roots');
+has 'maxage' => 0;
+has 'roots';
 
 ### --
 ### search static file

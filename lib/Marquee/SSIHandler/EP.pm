@@ -13,7 +13,7 @@ use Data::Dumper;
 ### --
 ### Function definitions for inside template
 ### --
-__PACKAGE__->attr(funcs => sub {{}});
+has funcs => sub {{}};
 
 ### --
 ### Constructor

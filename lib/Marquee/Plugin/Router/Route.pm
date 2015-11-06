@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Mojo::Base -base;
 
-__PACKAGE__->attr('aggregate', sub {Marquee::Plugin::Router::Route::_Aggregate->new});
+has aggregate => sub {Marquee::Plugin::Router::Route::_Aggregate->new};
 
 sub bridge {
     my ($self, $cb) = @_;
@@ -57,8 +57,8 @@ use strict;
 use warnings;
 use Mojo::Base -base;
 
-__PACKAGE__->attr('pointer', 0);
-__PACKAGE__->attr('data', sub{[]});
+has pointer => 0;
+has data => sub{[]};
 
 sub add {
     my ($self, $rule) = @_;

@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Mojo::Base 'Marquee::Plugin';
 
-__PACKAGE__->attr(realm => 'Secret Area');
+has realm => 'Secret Area';
 
 ### --
 ### Register the plugin into app

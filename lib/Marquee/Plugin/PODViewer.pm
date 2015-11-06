@@ -8,8 +8,8 @@ use Mojo::Base 'Marquee::Plugin';
 use Pod::Simple::HTML;
 use Pod::Simple::Search;
 
-__PACKAGE__->attr('paths', sub { [map { $_, "$_/pods" } @INC] });
-__PACKAGE__->attr('no_see_also');
+has paths => sub { [map { $_, "$_/pods" } @INC] };
+has 'no_see_also';
 
 sub register {
     my ($self, $app, $conf) = @_;

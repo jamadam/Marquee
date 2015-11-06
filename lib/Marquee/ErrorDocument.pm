@@ -10,8 +10,8 @@ my %catalog = (
     403 => 'Forbidden',
 );
 
-__PACKAGE__->attr('template', sub {Marquee->asset('error_document.html.ep')});
-__PACKAGE__->attr('status_template' => sub {{}});
+has template => sub {Marquee->asset('error_document.html.ep')};
+has status_template => sub {{}};
 
 ### --
 ### Serve error document

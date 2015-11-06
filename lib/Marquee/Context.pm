@@ -8,37 +8,37 @@ use Mojo::JSON qw{encode_json decode_json};
 ### ---
 ### App
 ### ---
-__PACKAGE__->attr('app');
+has 'app';
 
 ### ---
 ### Session
 ### ---
-__PACKAGE__->attr('session', sub {{}});
+has session => sub {{}};
 
 ### ---
 ### Restrict session to HTTPS
 ### ---
-__PACKAGE__->attr('session_secure', 0);
+has session_secure => 0;
 
 ### ---
 ### Restrict session to HTTPS
 ### ---
-__PACKAGE__->attr('session_path', '/');
+has session_path => '/';
 
 ### ---
 ### Session expiretion
 ### ---
-__PACKAGE__->attr(session_expiration => 3600);
+has session_expiration => 3600;
 
 ### ---
 ### Session name
 ### ---
-__PACKAGE__->attr(session_name => 'mrqe');
+has session_name => 'mrqe';
 
 ### ---
 ### Transaction
 ### ---
-__PACKAGE__->attr('tx');
+has 'tx';
 
 ### ---
 ### Constructor

@@ -5,11 +5,11 @@ use Mojo::Base -base;
 use File::Spec::Functions;
 use Mojo::Util qw'encode';
 
-__PACKAGE__->attr(handlers => sub {{}});
-__PACKAGE__->attr('roots');
-__PACKAGE__->attr('handler_re' => sub {
+has handlers => sub {{}};
+has 'roots';
+has handler_re => sub {
     '\.(?:'. join('|', keys %{shift->handlers}). ')$'
-});
+};
 
 ### --
 ### Add SSI handler

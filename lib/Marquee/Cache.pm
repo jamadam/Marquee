@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use Mojo::Base -base;
 
-__PACKAGE__->attr('max_keys');
+has 'max_keys';
 
 my $ATTR_CACHE      = 1;
 my $ATTR_STACK      = 2;

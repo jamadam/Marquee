@@ -4,7 +4,7 @@ use warnings;
 use Mojo::Util qw'encode hmac_sha1_sum';
 use Mojo::Base 'Marquee::Plugin';
 
-__PACKAGE__->attr(realm => 'Secret Area');
+has realm => 'Secret Area';
 
 ### --
 ### Register the plugin into app

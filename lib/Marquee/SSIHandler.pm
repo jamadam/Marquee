@@ -3,10 +3,10 @@ use strict;
 use warnings;
 use Mojo::Base -base;
 
-__PACKAGE__->attr(log => sub {
+has log => sub {
     my $c = Marquee->c;
     $c->app->log if ($c);
-});
+};
 
 ### --
 ### Get current template name recursively

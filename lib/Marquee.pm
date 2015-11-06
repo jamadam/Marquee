@@ -22,22 +22,22 @@ our $VERSION = '0.33';
 
 our $CONTEXT;
 
-__PACKAGE__->attr('document_root');
-__PACKAGE__->attr('default_file');
-__PACKAGE__->attr(dynamic => sub {Marquee::Dynamic->new});
-__PACKAGE__->attr(error_document => sub {Marquee::ErrorDocument->new});
-__PACKAGE__->attr(hooks => sub {Marquee::Hooks->new});
-__PACKAGE__->attr(roots => sub {[]});
-__PACKAGE__->attr('route' => sub {
+has 'document_root';
+has 'default_file';
+has dynamic => sub {Marquee::Dynamic->new};
+has error_document => sub {Marquee::ErrorDocument->new};
+has hooks => sub {Marquee::Hooks->new};
+has roots => sub {[]};
+has route => sub {
     my $router = $_[0]->plugin(Router => sub {});
     return $router->route;
-});
-__PACKAGE__->attr(secrets => sub {[md5_hex($^T. $$. rand(1000000))]});
-__PACKAGE__->attr(stash => sub {Marquee::Stash->new});
-__PACKAGE__->attr(static => sub {Marquee::Static->new});
-__PACKAGE__->attr(types => sub { Marquee::Types->new });
-__PACKAGE__->attr('under_development' => 0);
-__PACKAGE__->attr('x_powered_by' => 'Marquee(Perl)');
+};
+has secrets => sub {[md5_hex($^T. $$. rand(1000000))]};
+has stash => sub {Marquee::Stash->new};
+has static => sub {Marquee::Static->new};
+has types => sub { Marquee::Types->new };
+has under_development => 0;
+has x_powered_by => 'Marquee(Perl)';
 
 ### --
 ### Constructor

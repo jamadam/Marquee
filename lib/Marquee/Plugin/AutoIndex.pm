@@ -5,8 +5,8 @@ use Mojo::Base 'Marquee::Plugin';
 use Mojo::Util qw'url_unescape encode decode';
 use File::Basename 'basename';
 
-__PACKAGE__->attr(max_per_dir => 50);
-__PACKAGE__->attr(tree_depth => 4);
+has max_per_dir => 50;
+has tree_depth => 4;
 
 ### --
 ### Register the plugin into app

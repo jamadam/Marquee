@@ -126,8 +126,7 @@ L<Marquee::SSIHandler::EP>のキャッシュはファイルのutimeの変化に�
 epハンドラーに関数を追加するのは簡単です。次の例は与えられたHTMLから全てのテキストデータを抽出する関数を追加します。
 
     $app = Marquee->new;
-    $app->ssi_handlers->{ep}->add_function(html_to_text => sub {
-        my ($ep, $html) = @_;
+    $app->ssi_handlers->{ep}->add_function(html_to_text => sub($ep, $html) {
         return Mojo::DOM->new($html)->all_text;
     });
 
@@ -154,7 +153,7 @@ L<Marquee::Plugin::Router>プラグインを使用すれば、このルーティ
     
     my $r = $app->route;
     
-    $r->route(qr{/api/member.json})->via('get')->to(sub {
+    $r->route(qr{/api/member.json})->via('get')->to(sub() {
         my $res = Marquee->c->res;
         my $member = {1 => 'sato', 2 => 'saito', 3 => 'suzuki'};
         $res->body(Mojo::JSON->new->encode($member));
@@ -166,12 +165,10 @@ L<Marquee::Plugin::Router>プラグインを使用すれば、このルーティ
 
     my $r = $app->route;
     
-    $r->route(qr{^/(.+\.md)?$})->to(sub {
-        my $filename = shift;
+    $r->route(qr{^/(.+\.md)?$})->to(sub($filename) {
         $md->serve_markdown($app->search_static($filename || 'readme.md'))
     });
-    $r->route(qr{^/perldoc/(.+)})->to(sub {
-        my $module = shift;
+    $r->route(qr{^/perldoc/(.+)})->to(sub($module) {
         $pod->serve_pod_by_name($module);
     });
 
@@ -192,8 +189,7 @@ L<http://mojolicio.us/perldoc/Mojolicious/Guides/Growing#Testing>も参照くだ
     };
     
     $self->plugin(Auth => [
-        qr{^/admin/} => 'Secret Area' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
             if (my $expect = $htpasswd->{$username}) {
                 return crypt($password, $expect) eq $expect;
             }
@@ -208,8 +204,8 @@ L<Marquee::Plugin::FormValidatorLazy> プラグインはフォーム改ざんか
     $app->plugin(FormValidatorLazy => {
         namespace => 'form_validator_lazy',
         action => ['/receptor1.html', '/receptor3.html'],
-        blackhole => sub {
-            Marquee->c->app->error_document->serve(400, $_[0]);
+        blackhole => sub($err) {
+            Marquee->c->app->error_document->serve(400, $err);
         },
     });
 

@@ -9,12 +9,10 @@ Marquee::Plugin::Auth - ベーシック認証
 =head1 SYNOPSIS
     
     $self->plugin(Auth => [
-        qr{^/admin/} => 'Secret Area' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
             return $username eq 'user' &&  $password eq 'pass';
         },
-        qr{^/admin/} => 'Secret Area2' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area2' => sub($username, $password) {
             return $username eq 'user' &&  $password eq 'pass';
         },
     ]);
@@ -57,8 +55,7 @@ Apacheのhtpasswdのエントリーを下記のように移植できます。
     };
     
     $self->plugin(Auth => [
-        qr{^/admin/} => 'Secret Area' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
             if (my $expect = $htpasswd->{$username}) {
                 return crypt($password, $expect) eq $expect;
             }

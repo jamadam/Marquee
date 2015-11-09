@@ -127,8 +127,7 @@ You can easily add functions to ep handler. Following example adds a function
 that retrieves all text data out of given HTML.
 
     $app = Marquee->new;
-    $app->dynamic->handlers->{ep}->add_function(html_to_text => sub {
-        my ($ep, $html) = @_;
+    $app->dynamic->handlers->{ep}->add_function(html_to_text => sub($ep, $html) {
         return Mojo::DOM->new($html)->all_text;
     });
 
@@ -162,7 +161,7 @@ for overriding the routing.
 
     my $r = $app->route;
     
-    $r->route(qr{/api/member.json})->via('get')->to(sub {
+    $r->route(qr{/api/member.json})->via('get')->to(sub() {
         my $res = Marquee->c->res;
         my $member = {1 => 'sato', 2 => 'saito', 3 => 'suzuki'};
         
@@ -175,12 +174,10 @@ Here's another example which shows how placeholders work.
 
     my $r = $app->route;
     
-    $r->route(qr{^/(.+\.md)?$})->to(sub {
-        my $filename = shift;
+    $r->route(qr{^/(.+\.md)?$})->to(sub($filename) {
         $md->serve_markdown($app->dynamic->search($filename || 'readme.md'))
     });
-    $r->route(qr{^/perldoc/(.+)})->to(sub {
-        my $module = shift;
+    $r->route(qr{^/perldoc/(.+)})->to(sub($module) {
         $pod->serve_pod_by_name($module);
     });
 
@@ -201,8 +198,7 @@ You can port apache htpasswd entries as follows.
     };
     
     $self->plugin(Auth => [
-        qr{^/admin/} => 'Secret Area' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
             if (my $expect = $htpasswd->{$username}) {
                 return crypt($password, $expect) eq $expect;
             }
@@ -217,8 +213,8 @@ mechanism for protecting your app from such as form manipulation.
     $app->plugin(FormValidatorLazy => {
         namespace => 'form_validator_lazy',
         action => ['/receptor1.html', '/receptor3.html'],
-        blackhole => sub {
-            Marquee->c->app->error_document->serve(400, $_[0]);
+        blackhole => sub($err) {
+            Marquee->c->app->error_document->serve(400, $err);
         },
     });
 

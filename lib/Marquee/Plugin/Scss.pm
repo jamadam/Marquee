@@ -2,6 +2,8 @@ package Marquee::Plugin::Scss;
 use strict;
 use warnings;
 use Mojo::Base 'Marquee::Plugin';
+use feature 'signatures';
+no warnings "experimental::signatures";
 use IPC::Open3 qw(open3);
 use Carp ();
 use CSS::Sass;
@@ -13,8 +15,7 @@ has 'scss';
 ### --
 ### Register the plugin into app
 ### --
-sub register {
-    my ($self, $app, $options) = @_;
+sub register($self, $app) {
     
     if (`which sass`) {
         my $version = `sass -v`;
@@ -29,8 +30,7 @@ sub register {
         Carp::croak("Can't find sass gem nor CSS::Sass module");
     }
     
-    $app->hook(around_dispatch => sub {
-        my ($next) = @_;
+    $app->hook(around_dispatch => sub($next) {
         
         $next->();
         
@@ -51,8 +51,7 @@ sub register {
     });
 }
 
-sub scss_command {
-    my $body = shift;
+sub scss_command($body) {
 
     my $pid = open3(my $in, my $out, my $err, "sass", "--stdin", '--scss');
     print $in $body;
@@ -64,9 +63,9 @@ sub scss_command {
     return $buf;
 }
 
-sub scss_perl {
+sub scss_perl($scss) {
     $text_sass ||= CSS::Sass->new;
-    $text_sass->scss2css(shift);
+    $text_sass->scss2css($scss);
 }
 
 1;

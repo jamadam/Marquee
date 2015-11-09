@@ -12,8 +12,7 @@ Marquee::Cache - Cache
     $cache->max_keys(2);
     $cache->set(foo => 'bar');
     $cache->get('foo');
-    $cache->set(baz => 'yada', sub {
-        my $cached_time = shift;
+    $cache->set(baz => 'yada', sub($cached_time) {
         return $cached_time < (stat $file)[9];
     });
 
@@ -46,12 +45,12 @@ L<Marquee::Cache>は下記のインスタンスメソッドを実装します。
 指定の名前とデータでキャッシュを格納します。第3引数にて、期限切れ条件を1つ、または複数のコードリファレンスで指定できます。
 
     $cache->set(key, $data);
-    $cache->set(key, $data, sub {...});
-    $cache->set(key, $data, [sub {...}, sub {...}]);
+    $cache->set(key, $data, sub($ts) {...});
+    $cache->set(key, $data, [sub($ts) {...}, sub($ts) {...}]);
 
 各期限切れ条件は、キャッシュの生成時刻をエポック秒で受け取り、期限切れのとき真を返します。
 
-    my $expire = sub { return (time() - shift > 86400) };
+    my $expire = sub($ts) { return (time() - $ts > 86400) };
 
 =head1 SEE ALSO
 

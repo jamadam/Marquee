@@ -2,10 +2,13 @@ package Marquee::SSIHandler::EP;
 use strict;
 use warnings;
 use Mojo::Base 'Marquee::SSIHandler::EPL';
+use feature 'signatures';
+no warnings "experimental::signatures";
 use File::Basename 'dirname';
 use Mojo::ByteStream 'b';
 use Mojo::Template;
 use Mojo::Path;
+use Mojo::Util 'deprecated';
 use Encode 'decode_utf8';
 use Carp;
 use Data::Dumper;
@@ -18,9 +21,8 @@ has funcs => sub {{}};
 ### --
 ### Constructor
 ### --
-sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
+sub new($class, @args) {
+    my $self = $class->SUPER::new(@args);
     $self->_init;
     return $self;
 }
@@ -28,8 +30,7 @@ sub new {
 ### --
 ### Add function
 ### --
-sub add_function {
-    my ($self, $name, $cb) = @_;
+sub add_function($self, $name, $cb) {
     
     if ($name =~ /\W/) {
         croak "Function name must be consitsts of [a-zA-Z0-9]";
@@ -47,12 +48,11 @@ sub add_function {
 ### --
 ### ep handler
 ### --
-sub render {
-    my ($self, $path) = @_;
+sub render($self, $path) {
     
     my $c = Marquee->c;
     
-    my $mt = $self->cache($path);
+    my $mt = $self->get_cache($path);
     
     if (! $mt) {
         $mt = Mojo::Template->new();
@@ -76,7 +76,7 @@ sub render {
         }
         $mt->prepend($prepend);
         
-        $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
+        $self->set_cache($path, $mt, sub($ts) {$ts < (stat($path))[9]});
     }
     
     my $output = $mt->compiled
@@ -88,59 +88,55 @@ sub render {
 ### --
 ### load preset
 ### --
-sub _init {
-    my $self = shift;
+sub _init($self) {
     
-    $self->funcs->{b} = sub {
-        shift;
-        Mojo::ByteStream->new(@_);
+    $self->funcs->{b} = sub($self, @bytes) {
+        Mojo::ByteStream->new(@bytes);
     };
     
-    $self->funcs->{docwrite} = sub {
-        return Mojo::Template::SandBox::_DW($_[1]);
+    $self->funcs->{docwrite} = sub($self, $string) {
+        return Mojo::Template::SandBox::_DW($string);
     };
     
-    $self->funcs->{app} = sub {
-        shift;
+    $self->funcs->{app} = sub($self) {
         return Marquee->c->app;
     };
     
-    $self->funcs->{param} = sub {
-        shift;
-        return Marquee->c->req->param($_[0]);
+    $self->funcs->{param} = sub($self, $k) {
+        return Marquee->c->req->param($k);
     };
     
-    $self->funcs->{session} = sub {
-        shift;
+    $self->funcs->{session} = sub($self, $k=undef, $v=undef) {
         my $sesison = Marquee->c->session;
-        return $sesison->{$_[0]} = $_[1] if ($_[0] && $_[1]);
-        return $sesison if (! $_[0]);
-        return $sesison->{$_[0]};
+        return $sesison->{$k} = $v if ($k && $v);
+        return $sesison if (! $k);
+        return $sesison->{$k};
     };
     
-    $self->funcs->{stash} = sub {
-        shift;
+    $self->funcs->{stash} = sub($self, $k=undef, $v=undef) {
         my $stash = Marquee->c->stash;
-        return $stash->set(@_) if ($_[0] && $_[1]);
-        return $stash if (! $_[0]);
-        return $stash->{$_[0]};
+        return $stash->set($k, $v) if ($k && $v);
+        return $stash if (! $k);
+        return $stash->{$k};
     };
     
-    $self->funcs->{current_template} = sub {
-        return shift->current_template(@_);
+    $self->funcs->{current_template} = sub($self, $index=0) {
+        return $self->current_template($index);
     };
     
-    $self->funcs->{dumper} = sub {
-        shift;
-        return Data::Dumper->new([@_])->Indent(1)->Terse(1)->Dump;
+    $self->funcs->{dumper} = sub($self, @data) {
+        return Data::Dumper->new([@data])->Indent(1)->Terse(1)->Dump;
     };
     
-    $self->funcs->{to_abs} = sub {
-        return shift->_to_abs(@_);
+    $self->funcs->{to_abs} = sub($self, $path) {
+        return $self->_to_abs($path);
     };
     
-    $self->funcs->{include} = sub {
-        my ($self, $path, @args) = @_;
+    $self->funcs->{include} = sub($self, $path, $bind=undef, @bind) {
+        if (@bind) {
+            deprecated 'Array for include is DEPRECATED. Pass an hash reference instead';
+            $bind = {$bind, @bind};
+        }
         
         $path = $self->_doc_path($path);
         my $c = Marquee->c;
@@ -152,15 +148,18 @@ sub _init {
         
         if (my $path = $app->dynamic->search($path)) {
             local $c->{stash} = $c->{stash}->clone;
-            $c->{stash}->set(@args);
+            $c->{stash}->set(%$bind);
             return b($app->dynamic->render($path));
         }
         
         die "$path not found";
     };
     
-    $self->funcs->{include_as} = sub {
-        my ($self, $path, $handler, @args) = @_;
+    $self->funcs->{include_as} = sub($self, $path, $handler, $bind=undef, @bind) {
+        if (@bind) {
+            deprecated 'Array for include_as is DEPRECATED. Pass an has reference instead';
+            $bind = [$bind, @bind];
+        }
         
         $path = $self->_doc_path($path);
         my $c = Marquee->c;
@@ -168,7 +167,7 @@ sub _init {
         
         if (my $path = $app->static->search($path)) {
             local $c->{stash} = $c->{stash}->clone;
-            $c->{stash}->set(@args);
+            $c->{stash}->set(%$bind);
             return b($app->dynamic->render($path, $handler));
         }
         
@@ -178,49 +177,46 @@ sub _init {
     $self->funcs->{iter} = sub {
         my $self    = shift;
         my $block   = pop;
+        my $ref = $_[0];
+        if (@_ > 1) {
+            deprecated 'Array for iter is DEPRECATED. Pass an Array reference instead';
+            $ref = [@_];
+        }
         
         my $ret = '';
         
-        if (ref $_[0] eq 'ARRAY') {
+        if (ref $ref eq 'ARRAY') {
             my $idx = 0;
-            for my $elem (@{$_[0]}) {
+            for my $elem (@$ref) {
                 $ret .= $block->($elem, $idx++);
             }
-        } elsif (ref $_[0] eq 'HASH') {
-            for my $key (keys %{$_[0]}) {
-                $ret .= $block->($key, $_[0]->{$key});
-            }
-        } else {
-            my $idx = 0;
-            for my $elem (@_) {
-                $ret .= $block->($elem, $idx++);
+        } elsif (ref $ref eq 'HASH') {
+            for my $key (keys %$ref) {
+                $ret .= $block->($key, $ref->{$key});
             }
         }
         
         return b($ret);
     };
     
-    $self->funcs->{override} = sub {
-        my ($self, $name, $value) = @_;
+    $self->funcs->{override} = sub($self, $name, $value) {
         my $path = $self->current_template;
-        Marquee->c->stash->set(_ph_name($name) => sub {
+        Marquee->c->stash->set(_ph_name($name) => sub() {
             $self->traceable($path, $value)
         });
         return;
     };
     
-    $self->funcs->{url_for} = sub {
-        return shift->url_for(@_);
+    $self->funcs->{url_for} = sub($self, @args) {
+        return shift->url_for(@args);
     };
     
-    $self->funcs->{placeholder} = sub {
-        my ($self, $name, $defalut) = @_;
+    $self->funcs->{placeholder} = sub($self, $name, $defalut) {
         my $block = Marquee->c->stash->{_ph_name($name)} || $defalut;
         return $block->() || '';
     };
     
-    $self->funcs->{extends} = sub {
-        my ($self, $path, $block) = @_;
+    $self->funcs->{extends} = sub($self, $path, $block) {
         
         $path = $self->_doc_path($path);
         my $c = Marquee->c;
@@ -237,8 +233,7 @@ sub _init {
         die "$path not found";
     };
     
-    $self->funcs->{extends_as} = sub {
-        my ($self, $path, $handler, $block) = @_;
+    $self->funcs->{extends_as} = sub($self, $path, $handler, $block) {
 
         $path = $self->_doc_path($path);
         my $c = Marquee->c;
@@ -308,8 +303,7 @@ sub _doc_path {
 ### --
 ### abs
 ### --
-sub _to_abs {
-    my ($self, $path) = @_;
+sub _to_abs($self, $path) {
     
     (my $root, $path) = ($path =~ qr{^/(.+)})
                                 ? (Marquee->c->app->home, $1)
@@ -344,7 +338,7 @@ L<Marquee::SSIHandler::EPL> and implements the following new ones.
 
 A Hash ref that contains template functions.
 
-    $ep->funcs->{some_func} = sub {...};
+    $ep->funcs->{some_func} = sub(...) {...};
 
 You can use L</add_function> method to add a function entry instead of the code
 above.
@@ -469,8 +463,8 @@ Include a template or a static files into current template. The path can be
 relative to current template directory or relative to document root if leading
 slashed. 
 
-    <%= include('./path/to/template.html', key => value) %>
-    <%= include('/path/to/template.html', key => value) %>
+    <%= include('./path/to/template.html', {key => value}) %>
+    <%= include('/path/to/template.html', {key => value}) %>
 
 =head2 C<include_as>
 
@@ -478,7 +472,7 @@ Include a template into current template. This function is
 similar to include but you can specify the handler the template would be parsed
 with.
 
-    <%= include_as('./path/to/template.html', 'ep', key => value) %>
+    <%= include_as('./path/to/template.html', 'ep', {key => value}) %>
 
 =head2 C<override>
 
@@ -547,8 +541,7 @@ L<Marquee::SSIHandler::EPL> and implements the following new ones.
 
 Adds a function to the renderer.
 
-    $ep->add_function(html_to_text => sub {
-        my ($ep, $html) = @_;
+    $ep->add_function(html_to_text => sub($ep, $html) {
         return Mojo::DOM->new($html)->all_text;
     });
 

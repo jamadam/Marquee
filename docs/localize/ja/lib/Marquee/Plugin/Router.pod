@@ -8,7 +8,7 @@ Marquee::Plugin::Router - ルーター
     
     my $r = $app->route;
     
-    $r->route(qr{^/index\.html})->to(sub {
+    $r->route(qr{^/index\.html})->to(sub() {
         my $c = Marquee->c;
         my $req = $c->tx->req;
         my $res = $c->tx->res;
@@ -17,28 +17,28 @@ Marquee::Plugin::Router - ルーター
         $res->headers->content_type('text/html');
     });
     
-    $r->route(qr{^/special\.html})->to(sub {
+    $r->route(qr{^/special\.html})->to(sub() {
         ...
     });
     
-    $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
+    $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub($a, $b) {
         my ($a, $b) = @_;
         ...
     });
     
-    $r->route(qr{^/rare/})->via('get')->to(sub {
+    $r->route(qr{^/rare/})->via('get')->to(sub() {
         ...
     });
     
-    $r->route(qr{^/default})->to(sub {
+    $r->route(qr{^/default})->to(sub() {
         ...
     });
     
-    my $bridge = $r->bridge(sub {
+    my $bridge = $r->bridge(sub($c) {
         return 1; # or 0
     });
     
-    $bridge->route(qr{})->to(sub {...});
+    $bridge->route(qr{})->to(sub() {...});
 
 =head1 DESCRIPTION
 

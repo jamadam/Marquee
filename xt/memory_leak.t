@@ -21,11 +21,10 @@ use Test::More tests => 6;
     my $app = MyApp->new;
     $app->document_root('./');
     $app->plugin('AutoIndex');
-    $app->hook(around_static => sub {
-        my ($next, @args) = @_;
+    $app->hook(around_static => sub($next, @args) {
         return $next->(@args);
     });
-    $app->route->route(qr/index\.html/)->to(sub {
+    $app->route->route(qr/index\.html/)->to(sub() {
         MyApp->context->app->serve_static("");
     });
     my $t = Test::Mojo->new($app);

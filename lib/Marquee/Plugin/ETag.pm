@@ -2,16 +2,16 @@ package Marquee::Plugin::ETag;
 use strict;
 use warnings;
 use Mojo::Base 'Marquee::Plugin';
+use feature 'signatures';
+no warnings "experimental::signatures";
 use Mojo::ByteStream;
 
 ### --
 ### Register the plugin into app
 ### --
-sub register {
-    my ($self, $app, $generator) = @_;
+sub register($self, $app) {
     
-    $app->hook(around_dispatch => sub {
-        my ($next) = @_;
+    $app->hook(around_dispatch => sub($next) {
         
         $next->();
         
@@ -59,7 +59,7 @@ L<Marquee::Plugin> and implements the following new ones.
 
 Register the plugin.
 
-    $self->register($app, $generator);
+    $self->register($app);
 
 =head1 SEE ALSO
 

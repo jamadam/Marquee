@@ -27,12 +27,20 @@ L<Marquee::SSIHandler>の全ての属性を継承し、下記の属性を追加�
 L<Marquee::SSIHandler::EPL>は
 L<Marquee::SSIHandler>の全てのメソッドを継承し、下記を追加で実装します。
 
-=head2 C<cache>
+=head2 C<get_cache>
 
-キャッシュの保存/読み出しを行います。
+Get cache.
 
-    $epl->cache('/path/to/template.html.ep', $mt);
-    my $mt = $epl->cache('/path/to/template.html.ep');
+    my $mt = $epl->get_cache('/path/to/template.html.ep');
+
+=head2 C<set_cache>
+
+Set cache.
+
+    $epl->set_cache('/path/to/template.html.ep', $mt);
+    $epl->set_cache('/path/to/template.html.ep', $mt, sub($ts) {
+        return $ts > time() + 86400
+    });
 
 =head2 C<render>
 

@@ -2,6 +2,8 @@ package Marquee::Plugin::FormValidatorLazy;
 use strict;
 use warnings;
 use Mojo::Base 'Marquee::Plugin';
+use feature 'signatures';
+no warnings "experimental::signatures";
 use Data::Dumper;
 use Mojo::JSON qw{encode_json decode_json};
 use Mojo::Util qw{encode decode xml_escape hmac_sha1_sum secure_compare
@@ -14,16 +16,14 @@ our $TERM_SCHEMA = 1;
 ### ---
 ### register
 ### ---
-sub register {
-    my ($self, $app, $opt) = @_;
+sub register($self, $app, $opt) {
     
     my $schema_key = $opt->{namespace}. "-schema";
     my $sess_key = $opt->{namespace}. '-sessid';
     
     my $actions = ref $opt->{action} ? $opt->{action} : [$opt->{action}];
     
-    $app->hook(around_dispatch => sub {
-        my $next = shift;
+    $app->hook(around_dispatch => sub($next) {
         my $c = Marquee->c;
         my $req = $c->req;
         
@@ -73,15 +73,14 @@ sub register {
     });
 }
 
-sub inject {
-    my ($html, $actions, $token_key, $secret, $charset) = @_;
+sub inject($html, $actions, $token_key, $secret, $charset) {
     
     if (! ref $html) {
         $html = Mojo::DOM->new($charset ? decode($charset, $html) : $html);
     }
 
-    $html->find(qq{form[action][method="post"]})->each(sub {
-        my $form    = shift;
+    $html->find(qq{form[action][method="post"]})->each(sub($form, $) {
+        
         my $action  = $form->attr('action');
         
         return if (! grep {$_ eq $action} @$actions);
@@ -101,21 +100,19 @@ EOF
     return encode($charset, $html);
 }
 
-sub serialize {
-    return b64_encode(encode_json(shift // return), '');
+sub serialize($a) {
+    return b64_encode(encode_json($a // return), '');
 }
 
-sub deserialize {
-    return decode_json(b64_decode(shift // return));
+sub deserialize($a=undef) {
+    return decode_json(b64_decode($a // return));
 }
 
-sub sign {
-    my ($value, $secret) = @_;
+sub sign($value, $secret) {
     return $value. '--' . hmac_sha1_sum($value, $secret);
 }
 
-sub unsign {
-    my ($value, $secret) = @_;
+sub unsign($value, $secret) {
     if ($value && $secret && $value =~ s/--([^\-]+)$//) {
         my $sig = $1;
         return $value if (secure_compare($sig, hmac_sha1_sum($value, $secret)));
@@ -136,8 +133,8 @@ Mojolicious::Plugin::FormValidatorLazy - FormValidatorLazy
     $app->plugin(FormValidatorLazy => {
         namespace => 'form_validator_lazy',
         action => ['/receptor1.html', '/receptor3.html'],
-        blackhole => sub {
-            Marquee->c->app->error_document->serve(400, $_[0]);
+        blackhole => sub($err) {
+            Marquee->c->app->error_document->serve(400, $err);
         },
     });
 

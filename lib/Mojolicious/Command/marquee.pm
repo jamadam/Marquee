@@ -2,6 +2,8 @@ package Mojolicious::Command::marquee;
 use strict;
 use warnings;
 use Mojo::Base 'Mojolicious::Commands';
+use feature 'signatures';
+no warnings "experimental::signatures";
 
 use Getopt::Long 'GetOptions';
 use Mojo::Server::Daemon;
@@ -41,8 +43,7 @@ EOF
 # "It's an albino humping worm!
 #  Why do they call it that?
 #  Cause it has no pigment."
-sub run {
-  my $self   = shift;
+sub run($self, @args) {
   
   my $app = Marquee->new;
   my $daemon = Mojo::Server::Daemon->new;
@@ -52,19 +53,19 @@ sub run {
   local @ARGV = @_;
   my @listen;
   GetOptions(
-    'b|backlog=i'           => sub { $daemon->backlog($_[1]) },
-    'c|clients=i'           => sub { $daemon->max_clients($_[1]) },
-    'g|group=s'             => sub { $daemon->group($_[1]) },
-    'i|inactivity=i'        => sub { $daemon->inactivity_timeout($_[1]) },
+    'b|backlog=i'           => sub($v) { $daemon->backlog($v) },
+    'c|clients=i'           => sub($v) { $daemon->max_clients($v) },
+    'g|group=s'             => sub($v) { $daemon->group($v) },
+    'i|inactivity=i'        => sub($v) { $daemon->inactivity_timeout($v) },
     'l|listen=s'            => \@listen,
-    'p|proxy'               => sub { $ENV{MOJO_REVERSE_PROXY} = 1 },
-    'r|requests=i'          => sub { $daemon->max_requests($_[1]) },
-    'u|user=s'              => sub { $daemon->user($_[1]) },
-    'dr|document_root=s'    => sub { $app->document_root($_[1]) },
-    'ai|auto_index'         => sub { $app->plugin('AutoIndex') },
-    'df|default_file=s'     => sub { $app->default_file($_[1]) },
-    'ud|under_development'  => sub { $app->under_development(1) },
-    'dv|doc_viewer'         => sub {
+    'p|proxy'               => sub($v) { $ENV{MOJO_REVERSE_PROXY} = 1 },
+    'r|requests=i'          => sub($v) { $daemon->max_requests($v) },
+    'u|user=s'              => sub($v) { $daemon->user($v) },
+    'dr|document_root=s'    => sub($v) { $app->document_root($v) },
+    'ai|auto_index'         => sub() { $app->plugin('AutoIndex') },
+    'df|default_file=s'     => sub($v) { $app->default_file($v) },
+    'ud|under_development'  => sub() { $app->under_development(1) },
+    'dv|doc_viewer'         => sub() {
         $app->plugin('PODViewer');
         $app->plugin('Markdown');
       },

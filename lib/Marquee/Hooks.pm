@@ -2,12 +2,13 @@ package Marquee::Hooks;
 use strict;
 use warnings;
 use Mojo::Base 'Mojo::EventEmitter';
+use feature 'signatures';
+no warnings "experimental::signatures";
 
 ### --
 ### Emit events as chained hooks
 ### --
-sub emit_chain {
-    my ($self, $name, @args) = @_;
+sub emit_chain($self, $name, @args) {
     
     my $wrapper;
     for my $cb (@{$self->subscribers($name)}) {
@@ -35,13 +36,11 @@ Marquee::Hooks - Hooks manager
     
     my $out = '';
     
-    $hook->on(myhook => sub {
-        my ($next, $open, $close) = @_;
+    $hook->on(myhook => sub($next, $open, $close) {
         $out .= $open. 'hook1'. $close;
     });
     
-    $hook->on(myhook => sub {
-        my ($next, $open, $close) = @_;
+    $hook->on(myhook => sub($next, $open, $close) {
         $next->();
         $out .= $open. 'hook2'. $close;
     });

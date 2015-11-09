@@ -2,6 +2,8 @@ package Marquee::Static;
 use strict;
 use warnings;
 use Mojo::Base -base;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use File::Spec::Functions;
 use Mojo::Date;
 
@@ -11,8 +13,7 @@ has 'roots';
 ### --
 ### search static file
 ### --
-sub search {
-    my ($self, $path) = @_;
+sub search($self, $path) {
     
     for my $root (file_name_is_absolute($path) ? undef : @{$self->roots}) {
         my $path = $root ? catdir($root, $path) : $path;
@@ -23,8 +24,7 @@ sub search {
 ### --
 ### serve static content
 ### --
-sub serve {
-    my ($self, $path) = @_;
+sub serve($self, $path) {
     
     my $c = Marquee->c;
     my $asset = Mojo::Asset::File->new(path => $path);

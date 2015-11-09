@@ -2,17 +2,17 @@ package Marquee::Plugin::EPHelperExample;
 use strict;
 use warnings;
 use Mojo::Base 'Marquee::Plugin';
+use feature 'signatures';
+no warnings "experimental::signatures";
 use List::Util qw{min};
 
 ### --
 ### Register the plugin into app
 ### --
-sub register {
-    my ($self, $app) = @_;
+sub register($self, $app) {
     
     # Commify a number
-    $app->dynamic->handlers->{ep}->add_function(commify => sub {
-        my ($ep, $num) = @_;
+    $app->dynamic->handlers->{ep}->add_function(commify => sub($self, $ep, $num) {
         
         if ($num) {
             while($num =~ s/(.*\d)(\d\d\d)/$1,$2/){};
@@ -23,8 +23,7 @@ sub register {
     });
     
     # Mininum value out of given array
-    $app->dynamic->handlers->{ep}->add_function(min => sub {
-        my ($ep, @array) = @_;
+    $app->dynamic->handlers->{ep}->add_function(min => sub($self, $ep, @array) {
         if (ref $array[0] && ref $array[0] eq 'ARRAY') {
             @array = @{$array[0]};
         }
@@ -32,8 +31,7 @@ sub register {
     });
     
     # Maximum value out of given array
-    $app->dynamic->handlers->{ep}->add_function(max => sub {
-        my ($ep, @array) = @_;
+    $app->dynamic->handlers->{ep}->add_function(max => sub($self, $ep, @array) {
         if (ref $array[0] && ref $array[0] eq 'ARRAY') {
             @array = @{$array[0]};
         }
@@ -41,8 +39,7 @@ sub register {
     });
     
     # Replace string
-    $app->dynamic->handlers->{ep}->add_function(replace => sub {
-        my ($ep, $str, $search, $replace) = @_;
+    $app->dynamic->handlers->{ep}->add_function(replace => sub($self, $ep, $str, $search, $replace) {
         if (ref $search && ref $search eq 'Regexp') {
             $str =~ s{$search}{$replace}g;
         } else {

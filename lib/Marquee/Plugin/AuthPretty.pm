@@ -3,14 +3,15 @@ use strict;
 use warnings;
 use Mojo::Util qw'encode hmac_sha1_sum';
 use Mojo::Base 'Marquee::Plugin';
+use feature 'signatures';
+no warnings "experimental::signatures";
 
 has realm => 'Secret Area';
 
 ### --
 ### Register the plugin into app
 ### --
-sub register {
-    my ($self, $app, $entries, $storage, $expire) = @_;
+sub register($self, $app, $entries, $storage, $expire=3600) {
     
     die "$storage is not a directory" if (! -d $storage);
     
@@ -18,8 +19,7 @@ sub register {
     
     push(@{$app->roots}, __PACKAGE__->Marquee::asset());
     
-    $app->hook(around_dispatch => sub {
-        my ($next) = @_;
+    $app->hook(around_dispatch => sub($next) {
         
         my $c       = Marquee->c;
         my $path    = $c->req->url->path->clone->leading_slash(1)->to_string;
@@ -87,10 +87,7 @@ sub register {
 ### --
 ### vacuum session file directory
 ### --
-sub _vacuum {
-    my ($self, $storage, $expire) = @_;
-    
-    $expire ||= 3600;
+sub _vacuum($self, $storage, $expire) {
     
     opendir(my $dir, $storage);
     
@@ -115,12 +112,10 @@ Marquee::Plugin::AuthPretty - [EXPERIMENTAL] Pretty authentication form
 =head1 SYNOPSIS
     
     $self->plugin(AuthPretty => [
-        qr{^/admin/} => 'Secret Area' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
             return $username eq 'user' &&  $password eq 'pass';
         },
-        qr{^/admin/} => 'Secret Area2' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area2' => sub($username, $password) {
             return $username eq 'user' &&  $password eq 'pass';
         },
     ], 'path/to/storage_dir', 3600);
@@ -165,8 +160,7 @@ You can port apache htpasswd entries as follows.
     };
     
     $self->plugin(AuthPretty => [
-        qr{^/admin/} => 'Secret Area' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
             if (my $expect = $htpasswd->{$username}) {
                 return crypt($password, $expect) eq $expect;
             }

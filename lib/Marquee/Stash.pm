@@ -2,6 +2,8 @@ package Marquee::Stash;
 use strict;
 use warnings;
 use Mojo::Base -base;
+use feature 'signatures';
+no warnings "experimental::signatures";
 
 sub get {
     return $_[1] ? $_[0]->{$_[1]} : $_[0];

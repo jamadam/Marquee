@@ -85,7 +85,7 @@ EOF
 $t->get_ok('/scss/notfound.css')
     ->status_is(404);
 
-sub css_equals($got, $expected, $discription) {
+sub css_equals($got, $expected, $discription=undef) {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     return is(shorten($got), shorten($expected), $discription);
 }

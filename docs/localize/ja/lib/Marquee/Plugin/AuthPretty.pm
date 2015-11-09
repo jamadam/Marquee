@@ -7,12 +7,10 @@ Marquee::Plugin::AuthPretty - [EXPERIMENTAL] Pretty authentication form
 =head1 SYNOPSIS
     
     $self->plugin(AuthPretty => [
-        qr{^/admin/} => 'Secret Area' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
             return $username eq 'user' &&  $password eq 'pass';
         },
-        qr{^/admin/} => 'Secret Area2' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area2' => sub($username, $password) {
             return $username eq 'user' &&  $password eq 'pass';
         },
     ], 'path/to/storage_dir', 3600);
@@ -57,8 +55,7 @@ You can port apache htpasswd entries as follows.
     };
     
     $self->plugin(AuthPretty => [
-        qr{^/admin/} => 'Secret Area' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
             if (my $expect = $htpasswd->{$username}) {
                 return crypt($password, $expect) eq $expect;
             }

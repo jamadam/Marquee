@@ -3,19 +3,19 @@ use strict;
 use warnings;
 use Marquee::Plugin::Router::Route;
 use Mojo::Base 'Marquee::Plugin';
+use feature 'signatures';
+no warnings "experimental::signatures";
 
 has route => sub {Marquee::Plugin::Router::Route->new};
 
 ### --
 ### Register the plugin into app
 ### --
-sub register {
-    my ($self, $app, $generator) = @_;
+sub register($self, $app, $generator) {
     
     $generator->($self->route);
     
-    $app->hook(around_dispatch => sub {
-        my ($next) = @_;
+    $app->hook(around_dispatch => sub($next) {
         
         my $c       = Marquee->c;
         my $path    = $c->req->url->path->clone->leading_slash(1)->to_string;
@@ -50,9 +50,8 @@ Marquee::Plugin::Router - Router
 
 =head1 SYNOPSIS
     
-    $app->plugin(Router => sub {
-        my $r = shift;
-        $r->route(qr{^/index\.html})->to(sub {
+    $app->plugin(Router => sub($r) {
+        $r->route(qr{^/index\.html})->to(sub($c) {
             my $c = Marquee->c;
             my $req = $c->tx->req;
             my $res = $c->tx->res;
@@ -61,32 +60,32 @@ Marquee::Plugin::Router - Router
             $res->headers->content_type('text/html');
         });
         
-        $r->route(qr{^/special\.html})->to(sub {
+        $r->route(qr{^/special\.html})->to(sub($c) {
             ...
         });
         
-        $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
+        $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub($c) {
             my ($a, $b) = @_;
             ...
         });
         
-        $r->route(qr{^/rare/})->via('get')->to(sub {
+        $r->route(qr{^/rare/})->via('get')->to(sub($c) {
             ...
         });
         
-        $r->route(qr{^/rare/})->viax('post')->to(sub {
+        $r->route(qr{^/rare/})->viax('post')->to(sub($c) {
             ...
         });
         
-        $r->route(qr{^/default})->to(sub {
+        $r->route(qr{^/default})->to(sub($c) {
             ...
         });
         
-        my $bridge = $r->bridge(sub {
+        my $bridge = $r->bridge(sub($c) {
             return 1; # or 0
         });
         
-        $bridge->route(qr{})->to(sub {...});
+        $bridge->route(qr{})->to(sub() {...});
     });
 
 =head1 DESCRIPTION

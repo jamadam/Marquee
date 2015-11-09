@@ -2,6 +2,8 @@ package Marquee::Context;
 use strict;
 use warnings;
 use Mojo::Base -base;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use Mojo::Util qw{hmac_sha1_sum secure_compare b64_decode b64_encode};
 use Mojo::JSON qw{encode_json decode_json};
 
@@ -43,8 +45,8 @@ has 'tx';
 ### ---
 ### Constructor
 ### ---
-sub new {
-    my $self = shift->SUPER::new(@_);
+sub new($class, @args) {
+    my $self = $class->SUPER::new(@args);
     
     if (my $value = $self->signed_cookie($self->session_name)) {
         $value =~ s/-/=/g;
@@ -61,9 +63,7 @@ sub new {
 ### ---
 ### Set or Get cookie
 ### ---
-sub cookie {
-    my ($self, $name, $value, $opt) = @_;
-    $opt ||= {};
+sub cookie($self, $name, $value=undef, $opt={}) {
   
     # Response cookie
     if (defined $value) {
@@ -84,22 +84,21 @@ sub cookie {
 ### ---
 ### Alias for tx->req
 ### ---
-sub req {
-    shift->{tx}->req(@_);
+sub req($self, @args) {
+    $self->{tx}->req(@args);
 }
 
 ### ---
 ### Alias for tx->res
 ### ---
-sub res {
-    shift->{tx}->res(@_);
+sub res($self, @args) {
+    $self->{tx}->res(@args);
 }
 
 ### ---
 ### Stash
 ### ---
-sub stash {
-    my ($self, $stash) = @_;
+sub stash($self, $stash=undef) {
     if ($stash) {
         $self->{stash} = $stash;
     } else {
@@ -111,23 +110,21 @@ sub stash {
 ### ---
 ### Alias for app->render
 ### ---
-sub serve {
-    shift->{app}->serve(@_);
+sub serve($self, @args) {
+    $self->{app}->serve(@args);
 }
 
 ### ---
 ### check if status code is already set
 ### ---
-sub served {
-    return defined shift->res->code;
+sub served($self) {
+    return defined $self->res->code;
 }
 
 ### ---
 ### Set or Get signed cookie
 ### ---
-sub signed_cookie {
-    my ($self, $name, $value, $opt) = @_;
-  
+sub signed_cookie($self, $name, $value=undef, $opt={}) {
     my $secrets = $self->{app}->secrets;
     
     if (defined $value) {
@@ -156,9 +153,7 @@ sub signed_cookie {
 ### ---
 ### close
 ### ---
-sub close {
-    my $self = shift;
-    
+sub close($self) {
     my $session = $self->session;
     
     if (scalar keys %$session) {
@@ -180,8 +175,7 @@ sub close {
     }
 };
 
-sub _signature {
-    my ($value, $signature, @secrets) = @_;
+sub _signature($value, $signature, @secrets) {
     for (@secrets) {
         return 1 if (secure_compare($signature, hmac_sha1_sum($value, $_)));
     }

@@ -7,32 +7,32 @@ Marquee::Plugin::Router::Route - ルーターの生成と格納
 =head1 SYNOPSIS
     
     my $r = Marquee::Plugin::Router::Route->new;
-    $r->route(qr{^/index\.html})->to(sub {
+    $r->route(qr{^/index\.html})->to(sub() {
         ...
     });
     
-    $r->route(qr{^/special\.html})->to(sub {
+    $r->route(qr{^/special\.html})->to(sub() {
         ...
     });
     
-    $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
+    $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub($a, $b) {
         my ($a, $b) = @_;
         ...
     });
     
-    $r->route(qr{^/rare/})->via('GET', 'POST')->to(sub {
+    $r->route(qr{^/rare/})->via('GET', 'POST')->to(sub() {
         ...
     });
     
-    $r->route(qr{^/default})->to(sub {
+    $r->route(qr{^/default})->to(sub() {
         ...
     });
     
-    my $bridge = $r->bridge(sub {
+    my $bridge = $r->bridge(sub($c) {
         return 1; # or 0
     });
     
-    $bridge->route(qr{})->to(sub {...});
+    $bridge->route(qr{})->to(sub() {...});
 
 =head1 DESCRIPTION
 
@@ -54,7 +54,7 @@ L<Marquee::Plugin::Router::Route>は下記のインスタンスメソッドを�
 
 =head2 C<bridge>
 
-    my $bridge = $r->bridge(sub {
+    my $bridge = $r->bridge(sub($c) {
         my $c = shift;
         return $bool;
     });
@@ -69,7 +69,8 @@ L<Marquee::Plugin::Router::Route>は下記のインスタンスメソッドを�
 
 ルートがマッチしたときに実行されるコールバックを指定します。
 
-    $r->to(sub {...});
+    $r->to(sub() {...});
+    $r->to(sub($capture1, $capture2) {...});
 
 =head2 C<via>
 
@@ -81,8 +82,7 @@ HTTPメソッドでルートをフィルターします。
 
 ルートエントリーにマッチ条件を追加します。
 
-    $r->add_cond(sub {
-        my $c = shift;
+    $r->add_cond(sub($c) {
         return 1; # or 0
     });
 

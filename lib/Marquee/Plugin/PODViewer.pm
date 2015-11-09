@@ -5,14 +5,15 @@ use Mojo::ByteStream 'b';
 use Mojo::DOM;
 use Mojo::Util qw'url_escape unindent encode decode';
 use Mojo::Base 'Marquee::Plugin';
+use feature 'signatures';
+no warnings "experimental::signatures";
 use Pod::Simple::HTML;
 use Pod::Simple::Search;
 
 has paths => sub { [map { $_, "$_/pods" } @INC] };
 has 'no_see_also';
 
-sub register {
-    my ($self, $app, $conf) = @_;
+sub register($self, $app, $conf) {
     
     push(@{$app->roots}, __PACKAGE__->Marquee::asset());
     
@@ -20,20 +21,18 @@ sub register {
     $self->no_see_also($conf->{no_see_also} || 0);
     
     if (! $conf->{no_route}) {
-        $app->plugin('Router' => sub {
-            my $r = shift;
-            $r->route(qr{^/perldoc/(.+)})->to(sub {
-                $self->serve_pod_by_name(shift)
+        $app->plugin('Router' => sub($r) {
+            $r->route(qr{^/perldoc/(.+)})->to(sub($module) {
+                $self->serve_pod_by_name($module)
             });
-            $r->route(qr{^/perldoc/})->to(sub {
+            $r->route(qr{^/perldoc/})->to(sub() {
                 $self->serve_index;
             });
         });
     }
 }
 
-sub serve_index {
-    my ($self) = @_;
+sub serve_index($self) {
 
     my $c   = Marquee->c;
     my $app = $c->app;
@@ -59,8 +58,7 @@ sub serve_index {
     $c->res->headers->content_type($app->types->type('html'));
 }
 
-sub serve_pod {
-    my ($self, $source, $podname) = @_;
+sub serve_pod($self, $source, $podname=undef) {
     
     my $c   = Marquee->c;
     my $app = $c->app;
@@ -69,8 +67,8 @@ sub serve_pod {
     
     # Rewrite links
     my $dom = Mojo::DOM->new($html);
-    $dom->find('a[href]')->each(sub {
-        my $attr = shift->attr;
+    $dom->find('a[href]')->each(sub($e, $) {
+        my $attr = $e->attr;
         if ($attr->{href} =~ s{^http\://search\.cpan\.org/perldoc\?}{
                 $app->dynamic->handlers->{ep}->url_for('/perldoc/')
             }e) {
@@ -89,8 +87,7 @@ sub serve_pod {
     
     # Rewrite headers
     my (%anchors, @parts);
-    $dom->find('h1, h2, h3')->each(sub {
-        my $e = shift;
+    $dom->find('h1, h2, h3')->each(sub($e, $) {
         my $anchor = my $text = $e->all_text;
         $anchor =~ s/\s+/_/g;
         $anchor = url_escape $anchor, '^A-Za-z0-9_';
@@ -105,8 +102,8 @@ sub serve_pod {
     
     # Try to find a title
     my $title = 'Perldoc';
-    $dom->find('h1 + p')->first(sub {
-        $title = shift->text
+    $dom->find('h1 + p')->first(sub($e) {
+        $title = $e->text;
     });
     
     Marquee->c->stash->set(
@@ -131,8 +128,7 @@ sub serve_pod {
     $c->res->headers->content_type($app->types->type('html'));
 }
 
-sub serve_pod_by_name {
-    my ($self, $module) = @_;
+sub serve_pod_by_name($self, $module) {
     
     $module =~ s!/!\:\:!g;
     
@@ -150,8 +146,7 @@ sub serve_pod_by_name {
     $self->serve_pod(join('', <$file>), $module);
 }
 
-sub _detect_see_also {
-    my ($self, $module) = @_;
+sub _detect_see_also($self, $module) {
     
     my $search = Pod::Simple::Search->new;
     $search->inc(0);
@@ -168,8 +163,8 @@ sub _detect_see_also {
     return \@relatives;
 }
 
-sub _pod_to_html {
-    return unless defined(my $pod = shift);
+sub _pod_to_html($pod) {
+    return unless defined($pod);
   
     # Parser
     my $parser = Pod::Simple::HTML->new;

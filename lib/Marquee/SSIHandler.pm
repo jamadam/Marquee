@@ -2,6 +2,8 @@ package Marquee::SSIHandler;
 use strict;
 use warnings;
 use Mojo::Base -base;
+use feature 'signatures';
+no warnings "experimental::signatures";
 
 has log => sub {
     my $c = Marquee->c;
@@ -11,10 +13,7 @@ has log => sub {
 ### --
 ### Get current template name recursively
 ### --
-sub current_template {
-    my ($self, $index) = @_;
-    
-    $index ||= 0;
+sub current_template($self, $index=0) {
     
     my $route = Marquee->c->stash->{'mrqe.template_path'};
     
@@ -28,24 +27,21 @@ sub current_template {
 ### --
 ### render
 ### --
-sub render {
-    die "Class ". (ref $_[0]) . " must implements render method";
+sub render($self) {
+    die "Class ". (ref $self) . " must implements render method";
 }
 
 ### --
 ### traceable render
 ### --
-sub render_traceable {
-    my ($self, $path) = @_;
-    
-    return $self->traceable($path, sub {$self->render($path)});
+sub render_traceable($self, $path) {
+    return $self->traceable($path, sub() {$self->render($path)});
 }
 
 ### --
 ### Make method calls traceable
 ### --
-sub traceable {
-    my ($self, $path, $cb) = @_;
+sub traceable($self, $path, $cb) {
     
     my $stash = Marquee->c->stash;
     
@@ -68,8 +64,7 @@ Marquee::SSIHandler - SSI handler base class
     package Marquee::SSIHandler::EPL;
     use Mojo::Base 'Marquee::SSIHandler';
     
-    sub render {
-        my ($self, $path) = @_;
+    sub render($self, $path) {
         
         ...;
         
@@ -111,8 +106,7 @@ L<Marquee::SSIHandler> implements the following instance methods.
 
 Renders templates. The sub classes MUST override(implement) the method.
     
-    sub render {
-        my ($self, $path) = @_;
+    sub render($self, $path) {
         
         ...;
         
@@ -133,7 +127,7 @@ Traceably renders templates by stacking template names recursively.
 
 Invokes the callback traceable.
 
-    $handler->traceable($path, sub {...});
+    $handler->traceable($path, sub() {...});
 
 =head1 SEE ALSO
 

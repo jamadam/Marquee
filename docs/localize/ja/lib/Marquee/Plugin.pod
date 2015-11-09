@@ -30,8 +30,7 @@ L<Marquee>は、アプリケーションの挙動を拡張するために、い�
     sub register {
         my ($self, $app, $params) = @_;
         
-        $app->hook(around_dispatch => sub {
-            my ($next, @args) = @_;
+        $app->hook(around_dispatch => sub($next, @args) {
             
             my $c = Marquee->c;
             

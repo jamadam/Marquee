@@ -2,6 +2,8 @@ package Marquee::ErrorDocument;
 use strict;
 use warnings;
 use Mojo::Base -base;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use Mojo::Util qw'encode decode';
 
 my %catalog = (
@@ -16,9 +18,7 @@ has status_template => sub {{}};
 ### --
 ### Serve error document
 ### --
-sub serve {
-    my ($self, $code, $message) = @_;
-    
+sub serve($self, $code, $message=undef) {
     my $c           = Marquee->c;
     my $stash       = $c->stash;
     my $template    = ($self->status_template)->{$code} || $self->template;
@@ -26,7 +26,7 @@ sub serve {
     
     if ($c->app->under_development) {
         my $snapshot = $stash->clone;
-        $ep->add_function(snapshot => sub {$snapshot});
+        $ep->add_function(snapshot => sub($) {$snapshot});
         $template = Marquee->asset('debug_screen.html.ep');
         $message = ref $message
                 ? $message

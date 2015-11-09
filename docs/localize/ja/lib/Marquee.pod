@@ -27,8 +27,8 @@ Marquee - もうひとつのMojoベースのウェブフレームワーク
     package MyApp;
     use Mojo::Base 'Marquee';
     
-    sub new {
-        my $self = shift->SUPER::new(@_);
+    sub new($class, @args) {
+        my $self = $class->SUPER::new(@args);
         
         $self->document_root($self->home->rel_dir('public_html'));
         $self->log_file($self->home->rel_dir('mojo_log/Marquee.log'));
@@ -228,10 +228,9 @@ $app->hooks->onのエイリアスです。指定のフックポイントにコ�
 
 ディスパッチャをラップします。
 
-    $app->hook(around_dispatch => sub {
-        my ($next, @args) = @_;
+    $app->hook(around_dispatch => sub($next) {
         ### pre-process
-        $next->(@args);
+        $next->();
         ### post-process
     });
 
@@ -239,8 +238,7 @@ $app->hooks->onのエイリアスです。指定のフックポイントにコ�
 
 静的ディスパッチャーをラップします。
 
-    $app->hook(around_static => sub {
-        my ($next, @args) = @_;
+    $app->hook(around_static => sub($next, @args) {
         ### pre-process
         $next->(@args);
         ### post-process
@@ -250,8 +248,7 @@ $app->hooks->onのエイリアスです。指定のフックポイントにコ�
 
 動的ディスパッチャーをラップします。
 
-    $app->hook(around_dynamic => sub {
-        my ($next, @args) = @_;
+    $app->hook(around_dynamic => sub($next, @args) {
         ### pre-process
         $next->(@args);
         ### post-process

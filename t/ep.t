@@ -78,7 +78,6 @@ $t->get_ok('/ep/helper.html?foo=bar')
     ->content_is('bar');
 
 ### iter
-
 $t->get_ok('/ep/iter.html')
     ->status_is(200)
     ->text_is('test1 .test0', '0')
@@ -98,7 +97,6 @@ $t->get_ok('/ep/iter.html')
     ->text_is('test5 .test2', '4');
 
 # sub template inclusion
-
 $t->get_ok('/ep/include.html');
 $t->status_is(200);
 $t->text_is('filename', '/ep/include.html.ep');

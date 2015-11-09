@@ -2,6 +2,8 @@ package Marquee::Dynamic;
 use strict;
 use warnings;
 use Mojo::Base -base;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use File::Spec::Functions;
 use Mojo::Util qw'encode';
 
@@ -14,8 +16,7 @@ has handler_re => sub {
 ### --
 ### Add SSI handler
 ### --
-sub add_handler {
-    my ($self, $name, $handler) = @_;
+sub add_handler($self, $name, $handler) {
     $self->handlers->{$name} = $handler;
     return $self;
 }
@@ -23,9 +24,7 @@ sub add_handler {
 ### --
 ### search template
 ### --
-sub search {
-    my ($self, $path) = @_;
-    
+sub search($self, $path) {
     for my $root (file_name_is_absolute($path) ? undef : @{$self->roots}) {
         my $base = $root ? catdir($root, $path) : $path;
         for my $ext (keys %{$self->handlers}) {
@@ -38,9 +37,7 @@ sub search {
 ### --
 ### serve dynamic content
 ### --
-sub serve {
-    my ($self, $path) = @_;
-    
+sub serve($self, $path) {
     my $c = Marquee->c;
     
     my $ret = $self->render($path);
@@ -57,8 +54,7 @@ sub serve {
 ### --
 ### detect and render
 ### --
-sub render {
-    my ($self, $path, $handler_ext) = @_;
+sub render($self, $path, $handler_ext=undef) {
     my $ext = $handler_ext || ($path =~ qr{\.\w+\.(\w+)$})[0];
     my $handler = $self->handlers->{$ext};
     return $handler->render_traceable($path) if ($handler);

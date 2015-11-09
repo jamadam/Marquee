@@ -20,15 +20,15 @@ use File::Basename 'dirname';
 use File::Spec;
 use Mojo::Base 'Marquee';
 
-sub new {
-    my $self = shift->SUPER::new(@_);
+sub new($class, @args) {
+    my $self = $class->SUPER::new(@args);
     
     $self->document_root($self->home->rel_dir('.'));
     $self->default_file('index.html');
     $self->log_file(File::Spec->rel2abs(dirname(__FILE__). "/log/Marquee.log"));
     
     my $r = $self->route;
-    $r->route(qr{^/admin/})->to(sub {
+    $r->route(qr{^/admin/})->to(sub() {
         my $res = Marquee->c->tx->res;
         $res->code(200);
         $res->headers->content_type($app->types->type('html'));
@@ -36,8 +36,7 @@ sub new {
     });
     
     $self->plugin(AuthPretty => [
-        qr{^/admin/} => 'Secret Area' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
             return $username eq 'jamadam' && $password eq 'pass';
         },
     ] => File::Spec->rel2abs(dirname(__FILE__). "/log/auth_pretty"));

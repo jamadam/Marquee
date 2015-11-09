@@ -2,18 +2,19 @@ package Marquee::Plugin::Router::Route;
 use strict;
 use warnings;
 use Mojo::Base -base;
+use Mojo::Util 'deprecated';
+use feature 'signatures';
+no warnings "experimental::signatures";
 
 has aggregate => sub {Marquee::Plugin::Router::Route::_Aggregate->new};
 
-sub bridge {
-    my ($self, $cb) = @_;
+sub bridge($self, $cb) {
     my $r = __PACKAGE__->new(bridge => $cb);
     $r->aggregate($self->aggregate);
     return $r;
 }
 
-sub route {
-    my ($self, $regex) = @_;
+sub route($self, $regex) {
     $self->aggregate->add([$regex]);
     if ($self->{bridge}) {
         unshift(@{$self->aggregate->current->[1]}, $self->{bridge});
@@ -21,27 +22,22 @@ sub route {
     return $self;
 }
 
-sub to {
-    my ($self, $cb) = @_;
+sub to($self, $cb) {
     $self->aggregate->current->[2] = $cb;
     return $self;
 }
 
-sub via {
-    my ($self, @methods) = @_;
-    unshift(@{$self->aggregate->current->[1]}, sub {
-        my $c = shift;
+sub via($self, @methods) {
+    unshift(@{$self->aggregate->current->[1]}, sub($c) {
         return !! scalar grep{uc $_ eq uc $c->req->method} @methods;
     });
     return $self;
 }
 
-sub viax {
-    my ($self, @methods) = @_;
+sub viax($self, @methods) {
     $self->via(@methods);
     $self->aggregate->add([$self->aggregate->current->[0]]);
-    unshift(@{$self->aggregate->current->[1]}, sub {
-        my $c = shift;
+    unshift(@{$self->aggregate->current->[1]}, sub($c) {
         return ! scalar grep {uc $_ eq uc $c->req->method} @methods;
     });
     $self->aggregate->current->[2] = sub {
@@ -56,42 +52,38 @@ package Marquee::Plugin::Router::Route::_Aggregate;
 use strict;
 use warnings;
 use Mojo::Base -base;
+use feature 'signatures';
+no warnings "experimental::signatures";
 
 has pointer => 0;
 has data => sub{[]};
 
-sub add {
-    my ($self, $rule) = @_;
+sub add($self, $rule) {
     push(@{$self->data}, $rule);
     $self->last;
 }
 
-sub current {
-    my $self = shift;
+sub current($self) {
     return $self->data->[$self->pointer];
 }
 
-sub last {
-    my $self = shift;
+sub last($self) {
     my $pointer = scalar @{$self->data} - 1;
     $self->pointer($pointer);
     return $self->data->[$pointer];
 }
 
-sub next {
-    my $self = shift;
+sub next($self) {
     my $pointer = $self->pointer + 1;
     $self->pointer($pointer);
     return $self->data->[$pointer];
 }
 
-sub prev {
-    my $self = shift;
+sub prev($self) {
     my $pointer = $self->pointer - 1;
     $self->pointer($pointer);
     return $self->data->[$pointer];
 }
-
 
 1;
 
@@ -104,40 +96,40 @@ Marquee::Plugin::Router - Route generator and container
 =head1 SYNOPSIS
     
     my $r = Marquee::Plugin::Router::Route->new;
-    $r->route(qr{^/index\.html})->to(sub {
+    $r->route(qr{^/index\.html})->to(sub() {
         ...
     });
     
-    $r->route(qr{^/special\.html})->to(sub {
+    $r->route(qr{^/special\.html})->to(sub() {
         ...
     });
     
-    $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub {
+    $r->route(qr{^/capture/(.+)-(.+)\.html})->to(sub($a, $b) {
         my ($a, $b) = @_;
         ...
     });
     
-    $r->route(qr{^/rare/})->via('GET', 'POST')->to(sub {
+    $r->route(qr{^/rare/})->via('GET', 'POST')->to(sub() {
         ...
     });
     
-    $r->route(qr{^/rare/})->viax('POST')->to(sub {
+    $r->route(qr{^/rare/})->viax('POST')->to(sub() {
         ...
     });
     
-    $r->route(qr{^/rare/})->viax('post')->to(sub {
+    $r->route(qr{^/rare/})->viax('post')->to(sub() {
         ...
     });
     
-    $r->route(qr{^/default})->to(sub {
+    $r->route(qr{^/default})->to(sub() {
         ...
     });
     
-    my $bridge = $r->bridge(sub {
+    my $bridge = $r->bridge(sub($c) {
         return 1; # or 0
     });
     
-    $bridge->route(qr{})->to(sub {...});
+    $bridge->route(qr{})->to(sub() {...});
 
 =head1 DESCRIPTION
 
@@ -159,7 +151,7 @@ L<Marquee::Plugin::Router> implements the following instance methods.
 
 =head2 bridge
 
-    my $bridge = $r->bridge(sub {
+    my $bridge = $r->bridge(sub($c) {
         my $c = Marquee->c;
         return $bool;
     });
@@ -174,7 +166,8 @@ Set a regex that matches to request URI.
 
 Set an action to invoke when the route matches.
 
-    $r->to(sub {...});
+    $r->to(sub() {...});
+    $r->to(sub($capture1, $capture2) {...});
 
 =head2 via
 
@@ -187,12 +180,12 @@ Filters route by HTTP method.
 Filters route by HTTP method exclusively. The method adds two routes at once
 which restricts the HTTP method to given one.
 
-    $r->route(qr{^/receptor})->viax('POST')->to(sub {...});
+    $r->route(qr{^/receptor})->viax('POST')->to(sub() {...});
     
     # equivalent to..
 
-    $r->route(qr{^/receptor})->via('POST')->to(sub {...});
-    $r->route(qr{^/receptor})->to(sub {
+    $r->route(qr{^/receptor})->via('POST')->to(sub() {...});
+    $r->route(qr{^/receptor})->to(sub() {
         my $c = Marquee->c;
         $c->app->error_document->serve(404);
     });

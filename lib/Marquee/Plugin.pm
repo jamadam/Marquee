@@ -2,9 +2,11 @@ package Marquee::Plugin;
 use strict;
 use warnings;
 use Mojo::Base -base;
+use feature 'signatures';
+no warnings "experimental::signatures";
 
-sub register {
-    die "Class ". (ref $_[0]) . " must implements register method";
+sub register($self) {
+    die "Class ". (ref $self) . " must implements register method";
 }
 
 1;
@@ -39,11 +41,9 @@ A plugin looks like as follows.
     package Marquee::Plugin::SomePlugin;
     use Mojo::Base 'Marquee::Plugin';
     
-    sub register {
-        my ($self, $app, $params) = @_;
+    sub register($self, $app, $params) {
         
-        $app->hook(around_dispatch => sub {
-            my ($next) = @_;
+        $app->hook(around_dispatch => sub($next) {
             
             my $c = Marquee->c;
             

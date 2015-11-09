@@ -2,40 +2,37 @@ package Marquee::SSIHandler::EPL;
 use strict;
 use warnings;
 use Mojo::Base 'Marquee::SSIHandler';
+use feature 'signatures';
+no warnings "experimental::signatures";
 use Marquee::Cache;
 use Mojo::Util qw{encode md5_sum};
 use Mojo::Template;
 
 has template_cache => sub {Marquee::Cache->new};
 
+sub get_cache($self, $path) {
+    return $self->template_cache->get(md5_sum(encode('UTF-8', $path)));
+}
+
 ### --
 ### Accessor to template cache
 ### --
-sub cache {
-    my ($self, $path, $mt, $expire) = @_;
-    
-    my $cache = $self->template_cache;
-    my $key = md5_sum(encode('UTF-8', $path));
-    if ($mt) {
-        $cache->set($key, $mt, $expire);
-    } else {
-        $cache->get($key);
-    }
+sub set_cache($self, $path, $mt, $expire=undef) {
+    return $self->template_cache->set(md5_sum(encode('UTF-8', $path)), $mt, $expire);
 }
 
 ### --
 ### EPL handler
 ### --
-sub render {
-    my ($self, $path) = @_;
+sub render($self, $path) {
     
     my $c = Marquee->c;
     
-    my $mt = $self->cache($path);
+    my $mt = $self->get_cache($path);
     
     if (! $mt) {
         $mt = Mojo::Template->new;
-        $self->cache($path, $mt, sub {$_[0] < (stat($path))[9]});
+        $self->set_cache($path, $mt, sub($ts) {$ts < (stat($path))[9]});
     }
     
     my $output = $mt->compiled
@@ -75,12 +72,20 @@ L<Marquee::SSIHandler> and implements the following new ones.
 L<Marquee::SSIHandler::EPL> inherits all instance methods from
 L<Marquee::SSIHandler> and implements the following new ones.
 
-=head2 C<cache>
+=head2 C<get_cache>
 
-Get or set cache.
+Get cache.
 
-    $epl->cache('/path/to/template.html.ep', $mt);
-    my $mt = $epl->cache('/path/to/template.html.ep');
+    my $mt = $epl->get_cache('/path/to/template.html.ep');
+
+=head2 C<set_cache>
+
+Set cache.
+
+    $epl->set_cache('/path/to/template.html.ep', $mt);
+    $epl->set_cache('/path/to/template.html.ep', $mt, sub($ts) {
+        return $ts > time() + 86400
+    });
 
 =head2 C<render>
 

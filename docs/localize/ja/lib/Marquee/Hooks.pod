@@ -12,13 +12,11 @@ Marquee::Hooks - フックマネージャー
     
     my $out = '';
     
-    $hook->on(myhook => sub {
-        my ($next, $open, $close) = @_;
+    $hook->on(myhook => sub($next, $open, $close) {
         $out .= $open. 'hook1'. $close;
     });
     
-    $hook->on(myhook => sub {
-        my ($next, $open, $close) = @_;
+    $hook->on(myhook => sub($next, $open, $close) {
         $next->();
         $out .= $open. 'hook2'. $close;
     });

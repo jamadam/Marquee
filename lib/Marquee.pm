@@ -2,6 +2,8 @@ package Marquee;
 use strict;
 use warnings;
 use Mojo::Base 'Mojo';
+use feature 'signatures';
+no warnings "experimental::signatures";
 use File::Spec::Functions;
 use Digest::MD5 qw(md5_hex);
 use Carp;
@@ -42,21 +44,18 @@ has x_powered_by => 'Marquee(Perl)';
 ### --
 ### Constructor
 ### --
-sub new {
-    my $self = shift->SUPER::new(@_);
+sub new($class, @args) {
+    my $self = $class->SUPER::new(@args);
     
     ### hook points
-    $self->hook(around_dispatch => sub {
-        shift;
+    $self->hook(around_dispatch => sub($) {
         $CONTEXT->app->dispatch;
     });
-    $self->hook(around_static => sub {
-        shift;
-        $CONTEXT->app->static->serve(@_);
+    $self->hook(around_static => sub($, @args) {
+        $CONTEXT->app->static->serve(@args);
     });
-    $self->hook(around_dynamic => sub {
-        shift;
-        $CONTEXT->app->dynamic->serve(@_);
+    $self->hook(around_dynamic => sub($, @args) {
+        $CONTEXT->app->dynamic->serve(@args);
     });
     
     $self->dynamic->add_handler(
@@ -70,34 +69,32 @@ sub new {
 ### ---
 ### Asset directory
 ### ---
-sub asset {
-    my $class = shift;
+sub asset($class, $name=undef) {
     my $pm = $class. '.pm';
     $pm =~ s{::}{/}g;
     my @seed = (substr($INC{$pm}, 0, -3), 'Asset');
-    return catdir(@seed, $_[0]) if ($_[0]);
+    return catdir(@seed, $name) if ($name);
     return catdir(@seed);
 }
 
 ### --
 ### Shortcut for context
 ### --
-sub c {
-    return $_[1] ? $CONTEXT = $_[1] : $CONTEXT;
+sub c($, $set=undef) {
+    return $set ? $CONTEXT = $set : $CONTEXT;
 }
 
 ### --
 ### Accessor for localized context
 ### --
-sub context {
-    return $_[1] ? $CONTEXT = $_[1] : $CONTEXT;
+sub context($, $set=undef) {
+    return $set ? $CONTEXT = $set : $CONTEXT;
 }
 
 ### --
 ### dispatch
 ### --
-sub dispatch {
-    my ($self) = @_;
+sub dispatch($self) {
     
     my $path = $CONTEXT->req->url->path->clone->canonicalize;
     
@@ -125,8 +122,7 @@ sub dispatch {
 ### --
 ### handler
 ### --
-sub handler {
-    my ($self, $tx) = @_;
+sub handler($self, $tx) {
     
     local $CONTEXT = Marquee::Context->new(app => $self, tx => $tx);
     
@@ -162,16 +158,14 @@ sub handler {
 ### --
 ### Add hook
 ### --
-sub hook {
-    shift->hooks->on(@_);
+sub hook($self, @args) {
+    $self->hooks->on(@args);
 }
 
 ### --
 ### Check if the path is a directory or not
 ### --
-sub is_directory {
-    my ($self, $path) = @_;
-    
+sub is_directory($self, $path) {
     for my $root (@{$self->roots}) {
         return 1 if (-d catdir($root, $path));
     }
@@ -180,15 +174,14 @@ sub is_directory {
 ### --
 ### Set log file path
 ### --
-sub log_file {
-    return shift->log->path(shift);
+sub log_file($self, $path) {
+    return $self->log->path($path);
 }
 
 ### --
 ### Register plugin
 ### --
-sub plugin {
-    my ($self, $name, @args) = @_;
+sub plugin($self, $name, @args) {
     
     unless ($name =~ s/^\+//) {
         $name = "Marquee::Plugin\::$name";
@@ -207,8 +200,7 @@ sub plugin {
 ### --
 ### serve
 ### --
-sub serve {
-    my ($self, $path) = @_;
+sub serve($self, $path=undef) {
     
     if (! defined $path) {
         $path = $CONTEXT->req->url->path->clone->canonicalize;
@@ -232,9 +224,7 @@ sub serve {
 ### --
 ### serve redirect
 ### --
-sub serve_redirect {
-    my ($self, $uri) = @_;
-    
+sub serve_redirect($self, $uri) {
     $CONTEXT->res->code(301);
     $CONTEXT->res->headers->location($self->to_abs($uri)->to_string);
 }
@@ -242,8 +232,7 @@ sub serve_redirect {
 ### --
 ### generate absolute uri
 ### --
-sub to_abs {
-    my ($self, $url) = @_;
+sub to_abs($self, $url) {
     
     $url = Mojo::URL->new($url);
     
@@ -259,18 +248,15 @@ sub to_abs {
 ### --
 ### start application
 ### --
-sub start {
-    my $self = shift;
+sub start($self, @args) {
     $self->_init;
-    Mojolicious::Commands->new(app => $self)->run(@_ ? @_ : @ARGV);
+    Mojolicious::Commands->new(app => $self)->run(@args ? @args : @ARGV);
 }
 
 ### --
 ### auto fill files
 ### --
-sub _auto_fill_filename {
-    my ($path, $default) = @_;
-    
+sub _auto_fill_filename($path, $default=undef) {
     if ($default && ($path->trailing_slash || ! @{$path->parts})) {
         push(@{$path->parts}, $default);
         $path->trailing_slash(0);
@@ -281,8 +267,7 @@ sub _auto_fill_filename {
 ### --
 ### init
 ### --
-sub _init {
-    my $self = shift;
+sub _init($self) {
     
     return if ($self->{_inited});
     
@@ -329,8 +314,8 @@ Inherited application.
     package MyApp;
     use Mojo::Base 'Marquee';
     
-    sub new {
-        my $self = shift->SUPER::new(@_);
+    sub new($class, @args) {
+        my $self = $class->SUPER::new(@args);
         
         $self->document_root($self->home->rel_dir('public_html'));
         $self->log_file($self->home->rel_dir('mojo_log/Marquee.log'));
@@ -529,8 +514,7 @@ These hooks are currently available:
 
 Wraps dispatch process.
 
-    $app->hook(around_dispatch => sub {
-        my ($next) = @_;
+    $app->hook(around_dispatch => sub($next) {
         ### pre-process
         $next->();
         ### post-process
@@ -540,8 +524,7 @@ Wraps dispatch process.
 
 Wraps static dispatch process.
 
-    $app->hook(around_static => sub {
-        my ($next, @args) = @_;
+    $app->hook(around_static => sub($next, @args) {
         ### pre-process
         $next->(@args);
         ### post-process
@@ -551,8 +534,7 @@ Wraps static dispatch process.
 
 Wraps dynamic dispatch process.
 
-    $app->hook(around_dynamic => sub {
-        my ($next, @args) = @_;
+    $app->hook(around_dynamic => sub($next, @args) {
         ### pre-process
         $next->(@args);
         ### post-process

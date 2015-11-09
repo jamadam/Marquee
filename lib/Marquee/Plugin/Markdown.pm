@@ -5,11 +5,12 @@ use Mojo::ByteStream 'b';
 use Mojo::DOM;
 use Mojo::Util qw'encode decode';
 use Mojo::Base 'Marquee::Plugin';
+use feature 'signatures';
+no warnings "experimental::signatures";
 use Text::Markdown 'markdown';
 use File::Find;
 
-sub register {
-    my ($self, $app, $conf) = @_;
+sub register($self, $app, $conf) {
     
     push(@{$app->roots}, __PACKAGE__->Marquee::asset());
     
@@ -17,17 +18,16 @@ sub register {
     
         my $r = $app->route;
         
-        $r->route(qr{^/markdown/(.+\.md$)})->to(sub {
-            $self->serve_markdown(shift)
+        $r->route(qr{^/markdown/(.+\.md$)})->to(sub($name) {
+            $self->serve_markdown($name)
         });
-        $r->route(qr{^/markdown/(.*/)?$})->to(sub {
-            $self->serve_index(($_[0] || ''));
+        $r->route(qr{^/markdown/(.*/)?$})->to(sub($name) {
+            $self->serve_index(($name || ''));
         });
     }
 }
 
-sub serve_index {
-    my ($self, $path) = @_;
+sub serve_index($self, $path) {
 
     my $c   = Marquee->c;
     my $app = $c->app;
@@ -58,8 +58,7 @@ sub serve_index {
     $c->res->headers->content_type($app->types->type('html'));
 }
 
-sub serve_markdown {
-    my ($self, $path) = @_;
+sub serve_markdown($self, $path) {
     
     my $c = Marquee->c;
     my $app = $c->app;
@@ -68,15 +67,15 @@ sub serve_markdown {
     my $html = markdown(decode('UTF-8', join('', <$file>)));
     my $dom = Mojo::DOM->new($html);
     
-    $dom->find('pre code')->each(sub {
-        my $attr = shift->attr;
+    $dom->find('pre code')->each(sub($e, $) {
+        my $attr = $e->attr;
         my $class = $attr->{class};
         $attr->{class} = defined $class ? "$class prettyprint" : 'prettyprint';
     });
     
     my $title = 'Markdown Viewer';
-    $dom->find('h1,h2,h3,h4,h5')->first(sub {
-        $title = shift->text;
+    $dom->find('h1,h2,h3,h4,h5')->first(sub($e) {
+        $title = $e->text;
     });
 
     Marquee->c->stash->set(

@@ -2,6 +2,8 @@ package Marquee::Types;
 use strict;
 use warnings;
 use Mojo::Base -base;
+use feature 'signatures';
+no warnings "experimental::signatures";
 
 has types => sub {{
     "3gp"     => ["video/3gpp"],
@@ -173,8 +175,7 @@ has types => sub {{
     "zip"     => ["application/zip"],
 }};
 
-sub detect {
-    my ($self, $accept, $prioritize) = @_;
+sub detect($self, $accept, $prioritize) {
   
     # Extract and prioritize MIME types
     my %types;
@@ -194,15 +195,13 @@ sub detect {
     return [map { @{defined $reverse{$_} ? $reverse{$_} : []} } @detected];
 }
 
-sub type {
-    my ($self, $ext, $type) = @_;
+sub type($self, $ext, $type=undef) {
     return $self->types->{lc $ext}[0] unless $type;
     $self->types->{lc $ext} = ref $type ? $type : [$type];
     return $self;
 }
 
-sub type_by_path {
-    my ($self, $path) = @_;
+sub type_by_path($self, $path) {
     while ($path =~ s{\.(\w+)$}{}) {
         my $type = $self->type($1);
         return $type if ($type);

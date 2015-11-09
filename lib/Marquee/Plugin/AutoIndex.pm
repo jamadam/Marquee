@@ -2,6 +2,8 @@ package Marquee::Plugin::AutoIndex;
 use strict;
 use warnings;
 use Mojo::Base 'Marquee::Plugin';
+use feature 'signatures';
+no warnings "experimental::signatures";
 use Mojo::Util qw'url_unescape encode decode';
 use File::Basename 'basename';
 
@@ -11,13 +13,11 @@ has tree_depth => 4;
 ### --
 ### Register the plugin into app
 ### --
-sub register {
-    my ($self, $app, $args) = @_;
+sub register($self, $app) {
     
     push(@{$app->roots}, __PACKAGE__->Marquee::asset());
     
-    $app->hook(around_dispatch => sub {
-        my ($next) = @_;
+    $app->hook(around_dispatch => sub($next) {
         
         $next->();
         
@@ -44,8 +44,7 @@ sub register {
 ### ---
 ### Server directory tree
 ### ---
-sub serve_tree {
-    my ($self, $path) = @_;
+sub serve_tree($self, $path) {
     
     my $c   = Marquee->c;
     my $app = Marquee->c->app;
@@ -58,8 +57,8 @@ sub serve_tree {
     );
     
     my $ep = Marquee::SSIHandler::EP->new;
-    $ep->add_function(filelist => sub {
-        return _file_list($self, $_[1], $path);
+    $ep->add_function(filelist => sub($ep, $cpath) {
+        return _file_list($self, $cpath, $path);
     });
     
     $c->res->body(
@@ -75,8 +74,7 @@ sub serve_tree {
 ### ---
 ### Render file list
 ### ---
-sub serve_index {
-    my ($self, $path) = @_;
+sub serve_index($self, $path) {
     
     my $c = Marquee->c;
     my $app = $c->app;
@@ -101,8 +99,8 @@ sub serve_index {
 ### ---
 ### File list
 ### ---
-sub _file_list {
-    my ($self, $cpath, $path) = @_;
+sub _file_list($self, $cpath, $path) {
+    
     my $app = Marquee->c->app;
     
     $cpath ||= $path;
@@ -149,8 +147,7 @@ sub _file_list {
 ### ---
 ### Get file utime
 ### ---
-sub _file_timestamp {
-    my $path = shift;
+sub _file_timestamp($path) {
     my @dt = localtime((stat($path))[9]);
     return sprintf('%d-%02d-%02d %02d:%02d',
                         1900 + $dt[5], $dt[4] + 1, $dt[3], $dt[2], $dt[1]);
@@ -159,8 +156,7 @@ sub _file_timestamp {
 ### ---
 ### Get file size
 ### ---
-sub _file_size {
-    my $path = shift;
+sub _file_size($path) {
     return ((stat($path))[7] > 1024)
         ? sprintf("%.1f",(stat($path))[7] / 1024) . 'KB'
         : (stat($path))[7]. 'B';

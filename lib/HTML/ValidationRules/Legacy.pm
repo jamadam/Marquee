@@ -2,6 +2,8 @@ package HTML::ValidationRules::Legacy;
 use strict;
 use warnings;
 use Mojo::Base 'Exporter';
+use feature 'signatures';
+no warnings "experimental::signatures";
 use Mojo::JSON;
 use Mojo::Util qw{decode};
 use Mojo::Parameters;
@@ -21,8 +23,7 @@ our $TERM_TYPE               = 'type';
 our $TERM_ADD_PROPS          = 'additionalProperties';
 our $TERM_NUMBER             = 'number';
 
-sub extract {
-    my ($form, $charset) = @_;
+sub extract($form, $charset=undef) {
     my $props   = {};
     my @required;
     
@@ -30,8 +31,7 @@ sub extract {
         $form = Mojo::DOM->new($charset ? decode($charset, $form) : $form);
     }
     
-    $form->find("*[name]")->each(sub {
-        my $tag = shift;
+    $form->find("*[name]")->each(sub($tag, $) {
         my $type = $tag->attr('type') || '';
         my $name = $tag->attr('name');
         $props->{$name} ||= {};
@@ -41,8 +41,8 @@ sub extract {
         }
         
         if ($tag->tag eq 'select') {
-            $tag->find('option')->each(sub {
-                push(@{$props->{$name}->{$TERM_OPTIONS}}, shift->attr('value'));
+            $tag->find('option')->each(sub($e, $) {
+                push(@{$props->{$name}->{$TERM_OPTIONS}}, $e->attr('value'));
             });
         }
         
@@ -82,8 +82,7 @@ sub extract {
     };
 }
 
-sub validate {
-    my ($schema, $params, $charset) = @_;
+sub validate($schema, $params, $charset=undef) {
     
     if (! (blessed($params) && $params->isa('Mojo::Parameters'))) {
         my $wrapper = Mojo::Parameters->new;

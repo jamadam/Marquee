@@ -2,17 +2,17 @@ package Marquee::Plugin::Auth;
 use strict;
 use warnings;
 use Mojo::Base 'Marquee::Plugin';
+use feature 'signatures';
+no warnings "experimental::signatures";
 
 has realm => 'Secret Area';
 
 ### --
 ### Register the plugin into app
 ### --
-sub register {
-    my ($self, $app, $entries) = @_;
+sub register($self, $app, $entries) {
     
-    $app->hook(around_dispatch => sub {
-        my ($next) = @_;
+    $app->hook(around_dispatch => sub($next) {
         
         my $c    = Marquee->c;
         my $path = $c->req->url->path->clone->leading_slash(1)->to_string;
@@ -25,7 +25,7 @@ sub register {
             
             if ($path =~ $regex) {
                 my $auth = $c->req->url->to_abs->userinfo || ':';
-                if (! $cb->(split(/:/, $auth), 2)) {
+                if (! $cb->(split(/:/, $auth, 2))) {
                     $c->res->headers->www_authenticate("Basic realm=$realm");
                     $c->res->code(401);
                     return;
@@ -50,12 +50,10 @@ Marquee::Plugin::Auth - Basic Authentication
 =head1 SYNOPSIS
     
     $self->plugin(Auth => [
-        qr{^/admin/} => 'Secret Area' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
             return $username eq 'user' &&  $password eq 'pass';
         },
-        qr{^/admin/} => 'Secret Area2' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area2' => sub($username, $password) {
             return $username eq 'user' &&  $password eq 'pass';
         },
     ]);
@@ -100,8 +98,7 @@ You can port apache htpasswd entries as follows.
     };
     
     $self->plugin(Auth => [
-        qr{^/admin/} => 'Secret Area' => sub {
-            my ($username, $password) = @_;
+        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
             if (my $expect = $htpasswd->{$username}) {
                 return crypt($password, $expect) eq $expect;
             }

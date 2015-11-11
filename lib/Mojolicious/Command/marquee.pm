@@ -53,19 +53,19 @@ sub run($self, @args) {
   local @ARGV = @_;
   my @listen;
   GetOptions(
-    'b|backlog=i'           => sub($v) { $daemon->backlog($v) },
-    'c|clients=i'           => sub($v) { $daemon->max_clients($v) },
-    'g|group=s'             => sub($v) { $daemon->group($v) },
-    'i|inactivity=i'        => sub($v) { $daemon->inactivity_timeout($v) },
+    'b|backlog=i'           => sub($k, $v) { $daemon->backlog($v) },
+    'c|clients=i'           => sub($k, $v) { $daemon->max_clients($v) },
+    'g|group=s'             => sub($k, $v) { $daemon->group($v) },
+    'i|inactivity=i'        => sub($k, $v) { $daemon->inactivity_timeout($v) },
     'l|listen=s'            => \@listen,
-    'p|proxy'               => sub($v) { $ENV{MOJO_REVERSE_PROXY} = 1 },
-    'r|requests=i'          => sub($v) { $daemon->max_requests($v) },
-    'u|user=s'              => sub($v) { $daemon->user($v) },
-    'dr|document_root=s'    => sub($v) { $app->document_root($v) },
-    'ai|auto_index'         => sub() { $app->plugin('AutoIndex') },
-    'df|default_file=s'     => sub($v) { $app->default_file($v) },
-    'ud|under_development'  => sub() { $app->under_development(1) },
-    'dv|doc_viewer'         => sub() {
+    'p|proxy'               => sub($k, $v) { $ENV{MOJO_REVERSE_PROXY} = 1 },
+    'r|requests=i'          => sub($k, $v) { $daemon->max_requests($v) },
+    'u|user=s'              => sub($k, $v) { $daemon->user($v) },
+    'dr|document_root=s'    => sub($k, $v) { $app->document_root($v) },
+    'ai|auto_index'         => sub($k, $v) { $app->plugin('AutoIndex') },
+    'df|default_file=s'     => sub($k, $v) { $app->default_file($v) },
+    'ud|under_development'  => sub($k, $v) { $app->under_development(1) },
+    'dv|doc_viewer'         => sub($k, $v) {
         $app->plugin('PODViewer');
         $app->plugin('Markdown');
       },

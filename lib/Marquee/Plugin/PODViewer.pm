@@ -13,7 +13,7 @@ use Pod::Simple::Search;
 has paths => sub { [map { $_, "$_/pods" } @INC] };
 has 'no_see_also';
 
-sub register($self, $app, $conf) {
+sub register($self, $app, $conf={}) {
     
     push(@{$app->roots}, __PACKAGE__->Marquee::asset());
     

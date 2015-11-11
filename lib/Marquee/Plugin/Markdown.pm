@@ -10,7 +10,7 @@ no warnings "experimental::signatures";
 use Text::Markdown 'markdown';
 use File::Find;
 
-sub register($self, $app, $conf) {
+sub register($self, $app, $conf={}) {
     
     push(@{$app->roots}, __PACKAGE__->Marquee::asset());
     

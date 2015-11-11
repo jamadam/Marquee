@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
-WriteMakefile({
+WriteMakefile(
   NAME          => 'Marquee',
   VERSION_FROM  => 'lib/Marquee.pm',
   ABSTRACT_FROM => 'lib/Marquee.pm',
@@ -32,4 +32,4 @@ WriteMakefile({
     'Mojolicious' => '6.14',
   },
   test => {TESTS => 't/*.t t/*/*.t'}
-});
+);

@@ -1,5 +1,7 @@
 use strict;
 use warnings;
+use feature 'signatures';
+no warnings "experimental::signatures";
 use Test::Memory::Cycle;
 use Test::More;
 use Marquee;

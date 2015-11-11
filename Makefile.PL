@@ -13,7 +13,7 @@ WriteMakefile(
     dynamic_config => 0,
     'meta-spec'    => {version => 2},
     no_index       => {directory => ['examples', 't']},
-    prereqs        => {runtime => {requires => {perl => '5.020001'}}},
+    prereqs        => {runtime => {requires => {perl => '5.020000'}}},
     resources      => {
       bugtracker => {web => 'https://github.com/jamadam/Marquee/issues'},
       homepage   => 'http://marquee.jamadam.com',

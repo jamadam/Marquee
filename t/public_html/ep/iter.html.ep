@@ -4,12 +4,6 @@
         <div class="test<%= $idx %>"><%= $num %></div>
     <% end %>
 </test1>
-<test2>
-    <%= iter 0, 1, 2 => begin %>
-        <% my ($num, $idx) = @_; %>
-        <div class="test<%= $idx%>"><%= $num %></div>
-    <% end %>
-</test2>
 <test3>
     <%= iter {foo => 'FOO', bar => 'BAR', baz => 'BAZ'} => begin %>
         <% my ($key, $value) = @_; %>
@@ -17,20 +11,8 @@
     <% end %>
 </test3>
 <test4>
-    <%= iter bless(['FOO'], 'Class'), bless(['BAR'], 'Class'), bless(['BAZ'], 'Class') => begin %>
+    <%= iter [bless(['FOO'], 'Class'), bless(['BAR'], 'Class'), bless(['BAZ'], 'Class')] => begin %>
         <% my ($elem, $idx) = @_; %>
         <div class="test<%= $idx %>"><%= $elem->[0] %></div>
     <% end %>
 </test4>
-<test5>
-    <%
-        sub contextual {
-            return (2,3,4) if wantarray;
-            return 2;
-        };
-    %>
-    <%= iter contextual() => begin %>
-        <% my ($elem, $idx) = @_; %>
-        <div class="test<%= $idx %>"><%= $elem %></div>
-    <% end %>
-</test5>

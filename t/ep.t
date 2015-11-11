@@ -83,18 +83,12 @@ $t->get_ok('/ep/iter.html')
     ->text_is('test1 .test0', '0')
     ->text_is('test1 .test1', '1')
     ->text_is('test1 .test2', '2')
-    ->text_is('test2 .test0', '0')
-    ->text_is('test2 .test1', '1')
-    ->text_is('test2 .test2', '2')
     ->text_is('test3 .testfoo', 'FOO')
     ->text_is('test3 .testbar', 'BAR')
     ->text_is('test3 .testbaz', 'BAZ')
     ->text_is('test4 .test0', 'FOO')
     ->text_is('test4 .test1', 'BAR')
-    ->text_is('test4 .test2', 'BAZ')
-    ->text_is('test5 .test0', '2')
-    ->text_is('test5 .test1', '3')
-    ->text_is('test5 .test2', '4');
+    ->text_is('test4 .test2', 'BAZ');
 
 # sub template inclusion
 $t->get_ok('/ep/include.html');

@@ -175,7 +175,7 @@ has types => sub {{
     "zip"     => ["application/zip"],
 }};
 
-sub detect($self, $accept, $prioritize) {
+sub detect($self, $accept, $prioritize=undef) {
   
     # Extract and prioritize MIME types
     my %types;
@@ -212,19 +212,19 @@ sub type_by_path($self, $path) {
 
 =head1 NAME
 
-Mojolicious::Types - MIME types
+Marquee::Types - MIME types
 
 =head1 SYNOPSIS
 
-  use Mojolicious::Types;
+  use Marquee::Types;
 
-  my $types = Mojolicious::Types->new;
+  my $types = Marquee::Types->new;
   $types->type(foo => 'text/foo');
   say $types->type('foo');
 
 =head1 DESCRIPTION
 
-L<Mojolicious::Types> manages MIME types for L<Mojolicious>.
+L<Marquee::Types> manages MIME types for L<Marquee>.
 
     "3gp"     => "video/3gpp",
     "a"       => "application/octet-stream",
@@ -398,7 +398,7 @@ The most common ones are already defined.
 
 =head1 ATTRIBUTES
 
-L<Mojolicious::Types> implements the following attributes.
+L<Marquee::Types> implements the following attributes.
 
 =head2 C<types>
 
@@ -409,7 +409,7 @@ List of MIME types.
 
 =head1 METHODS
 
-L<Mojolicious::Types> inherits all methods from L<Mojo::Base> and implements
+L<Marquee::Types> inherits all methods from L<Mojo::Base> and implements
 the following ones.
 
 =head2 C<detect>
@@ -440,6 +440,6 @@ Detect MIME type out of path name.
 
 =head1 SEE ALSO
 
-L<Mojolicious>, L<Mojolicious::Guides>, L<http://mojolicio.us>.
+L<Marquee>, L<Marquee::Guides>, L<http://mojolicio.us>.
 
 =cut

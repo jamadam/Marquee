@@ -14,7 +14,7 @@ use Test::Path qw'path_is path_like';
 use Mojo::Date;
 use Marquee;
 
-use Test::More tests => 83;
+use Test::More tests => 85;
 
 my $app;
 my $t;
@@ -85,7 +85,8 @@ $t->get_ok('/not_good.html')
     ->dom_inspector(sub($t) {
         $t->at('title')->text_is('Debug Screen');
         my $path = canonpath('t/public_html/not_good.html.ep');
-        $t->at('#showcase pre')->text_like(qr{Global symbol "\$nonexitsts" requires explicit package name at (.+?)\Q$path\E line 4\.});
+        $t->at('#showcase pre')->text_like(qr{^Global symbol "\$nonexitsts" requires explicit package name});
+        $t->at('#showcase pre')->text_like(qr{at (.+?)\Q$path\E line 4\.$});
         $t->at('#context tr:nth-child(1) td.key')->text_is('1.');
         $t->at('#context tr:nth-child(1) td.value pre')->content_xml_is('&lt;filename&gt;not_good.html.ep&lt;/filename&gt;');
         $t->at('#context tr:nth-child(2) td.key')->text_is('2.');
@@ -138,7 +139,8 @@ $t->get_ok('/template_error.html')
         $t->at('#request tr:nth-child(5) td.value pre')->content_xml_is("{\n  &#39;test&#39; =&gt; &#39;value&#39;\n}\n");
         $t->at('title')->text_is('Debug Screen');
         my $path = canonpath('/t/public_html/template_error/1.html.ep');
-        $t->at('#showcase pre')->text_like(qr{Global symbol "\$nonexist" requires explicit package name at (.+)\Q$path\E line 2.});
+        $t->at('#showcase pre')->text_like(qr{^Global symbol "\$nonexist" requires explicit package name});
+        $t->at('#showcase pre')->text_like(qr{at (.+)\Q$path\E line 2.$});
         $t->at('#context tr:nth-child(1) td.key')->text_is('1.');
         $t->at('#context tr:nth-child(1) td.value pre')->content_xml_is('&lt;filename&gt;/template_error/1.html.ep&lt;/filename&gt;');
         $t->at('#context tr:nth-child(2) td.key')->text_is('2.');

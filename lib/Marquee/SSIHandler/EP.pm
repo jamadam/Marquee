@@ -80,7 +80,7 @@ sub render($self, $path) {
     }
     
     my $output = $mt->compiled
-            ? $mt->interpret($self, $c) : $mt->render_file($path, $self, $c);
+            ? $mt->process($self, $c) : $mt->render_file($path, $self, $c);
     
     return ref $output ? die $output : $output;
 }

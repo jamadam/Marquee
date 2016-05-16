@@ -8,6 +8,7 @@ use Marquee;
 use Test::More tests => 187;
 use Mojo::JSON qw{decode_json};
 use Mojo::Util qw{hmac_sha1_sum b64_decode};
+use FindBin;
 
 my $TERM_ACTION             = 0;
 my $TERM_SCHEMA             = 1;

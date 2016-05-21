@@ -1,6 +1,9 @@
 Revision history for Marquee
 
-0.35 2016/03/30
+0.36 2016/05/21
+
+0.35 2016/05/21
+  - Fixed test
 
 0.34 2016/03/30
   - Updated dependent version of perl to 6.57

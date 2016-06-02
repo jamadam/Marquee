@@ -18,15 +18,16 @@ usage: $0 marquee [OPTIONS]
 
 These options are available:
   
-  -dr, --document_root <path>  Set document root path, defaults to current dir.
-  -df, --default_file <name>   Set default file name and activate auto fill.
   -ai, --auto_index            Activate auto index, defaults to 0.
-  -dv, --doc_viewer            Activate markdown viewer.
-  -ud, --under_development     Activate debug screen for server-side include.
   -b, --backlog <size>         Set listen backlog size, defaults to
                                SOMAXCONN.
   -c, --clients <number>       Set maximum number of concurrent clients,
                                defaults to 1000.
+  -dr, --document_root <path>  Set document root path, defaults to current dir.
+  -de, --delay                 Sleep given seconds before response to emulate
+                               distant server.
+  -df, --default_file <name>   Set default file name and activate auto fill.
+  -dv, --doc_viewer            Activate markdown viewer.
   -g, --group <name>           Set group name for process.
   -i, --inactivity <seconds>   Set inactivity timeout, defaults to the value
                                of MOJO_INACTIVITY_TIMEOUT or 15.
@@ -38,8 +39,7 @@ These options are available:
   -r, --requests <number>      Set maximum number of requests per keep-alive
                                connection, defaults to 25.
   -u, --user <name>            Set username for process.
-  -de, --delay                 Sleep given seconds before response to emulate
-                               distant server.
+  -ud, --under_development     Activate debug screen for server-side include.
 EOF
 
 # "It's an albino humping worm!
@@ -55,25 +55,25 @@ sub run($self, @args) {
   local @ARGV = @_;
   my @listen;
   GetOptions(
+    'ai|auto_index'         => sub($k, $v) { $app->plugin('AutoIndex') },
     'b|backlog=i'           => sub($k, $v) { $daemon->backlog($v) },
     'c|clients=i'           => sub($k, $v) { $daemon->max_clients($v) },
+    'de|delay=i'              => sub($k, $v) {
+      $app->route->route(qr{.})->to(sub { sleep($v) and $app->serve });
+    },
+    'df|default_file=s'     => sub($k, $v) { $app->default_file($v) },
+    'dr|document_root=s'    => sub($k, $v) { $app->document_root($v) },
+    'dv|doc_viewer'         => sub($k, $v) {
+        $app->plugin('PODViewer');
+        $app->plugin('Markdown');
+      },
     'g|group=s'             => sub($k, $v) { $daemon->group($v) },
     'i|inactivity=i'        => sub($k, $v) { $daemon->inactivity_timeout($v) },
     'l|listen=s'            => \@listen,
     'p|proxy'               => sub($k, $v) { $ENV{MOJO_REVERSE_PROXY} = 1 },
     'r|requests=i'          => sub($k, $v) { $daemon->max_requests($v) },
     'u|user=s'              => sub($k, $v) { $daemon->user($v) },
-    'dr|document_root=s'    => sub($k, $v) { $app->document_root($v) },
-    'ai|auto_index'         => sub($k, $v) { $app->plugin('AutoIndex') },
-    'df|default_file=s'     => sub($k, $v) { $app->default_file($v) },
     'ud|under_development'  => sub($k, $v) { $app->under_development(1) },
-    'dv|doc_viewer'         => sub($k, $v) {
-        $app->plugin('PODViewer');
-        $app->plugin('Markdown');
-      },
-    'de|delay=i'              => sub($k, $v) {
-      $app->route->route(qr{.})->to(sub { sleep($v) and $app->serve });
-    },
   );
   
   $app->document_root || $app->document_root('./');

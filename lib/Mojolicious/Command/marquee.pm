@@ -38,6 +38,8 @@ These options are available:
   -r, --requests <number>      Set maximum number of requests per keep-alive
                                connection, defaults to 25.
   -u, --user <name>            Set username for process.
+  -de, --delay                 Sleep given seconds before response to emulate
+                               distant server.
 EOF
 
 # "It's an albino humping worm!
@@ -69,6 +71,9 @@ sub run($self, @args) {
         $app->plugin('PODViewer');
         $app->plugin('Markdown');
       },
+    'de|delay=i'              => sub($k, $v) {
+      $app->route->route(qr{.})->to(sub { sleep($v) and $app->serve });
+    },
   );
   
   $app->document_root || $app->document_root('./');

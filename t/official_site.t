@@ -45,7 +45,7 @@ $t->status_is(200);
 $t->header_is('Content-Type', 'text/html;charset=UTF-8');
 $t->dom_inspector(sub($t) {
     $t->at('title')->text_is('Index of Modules - Pod viewer');
-    $t->at('#wrapper h2')->text_is('INDEX OF MODULES');
+    $t->at('#wrapper h2')->text_like(qr{\s*INDEX OF MODULES\s*});
     $t->at('#wrapper a')->attr_is('href', './HTML/ValidationRules/Legacy');
     $t->at('#wrapper a')->text_is('HTML::ValidationRules::Legacy');
     $t->at('#wrapper a:last-child')->text_is('Mojolicious::Command::marquee');
@@ -78,7 +78,7 @@ $t->status_is(200);
 $t->header_is('Content-Type', 'text/html;charset=UTF-8');
 $t->dom_inspector(sub($t) {
     $t->at('title')->text_is('Index of Modules - Pod viewer');
-    $t->at('#wrapper h2')->text_is('INDEX OF MODULES');
+    $t->at('#wrapper h2')->text_like(qr{\s*INDEX OF MODULES\s*});
     $t->at('#wrapper a')->attr_is('href', './Marquee');
     $t->at('#wrapper a')->text_is('Marquee');
     $t->at('#wrapper a:last-child')->text_is('Mojolicious::Command::marquee');

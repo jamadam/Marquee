@@ -43,7 +43,7 @@ $app->under_development(1);
 $t->get_ok('/not_found.html')
     ->status_is(404)
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
-    ->text_is('h1', 'Debug Screen')
+    ->text_like('h1', qr{\s*Debug Screen\s*})
     ->dom_inspector(sub($t) {
         $t->at('title')->text_is('Debug Screen');
         $t->at('#showcase pre')->text_is(q{File Not Found});
@@ -80,7 +80,7 @@ $t->get_ok('/not_found.html')
 $t->get_ok('/not_good.html')
     ->status_is(500)
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
-    ->text_is('h1', 'Debug Screen')
+    ->text_like('h1', qr{\s*Debug Screen\s*})
     ->element_exists('#context .important')
     ->dom_inspector(sub($t) {
         $t->at('title')->text_is('Debug Screen');
@@ -132,7 +132,7 @@ $app->stash->set(test => 'value');
 $t->get_ok('/template_error.html')
     ->status_is(500)
     ->header_is('Content-Type', 'text/html;charset=UTF-8')
-    ->text_is('h1', 'Debug Screen')
+    ->text_like('h1', qr{\s*Debug Screen\s*})
     ->element_exists('#context .important')
     ->dom_inspector(sub($t) {
         $t->at('#request tr:nth-child(5) td.key')->content_xml_is('Stash:');

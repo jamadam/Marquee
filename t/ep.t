@@ -136,8 +136,8 @@ $t->get_ok('/ep/use_layout.html')
     ->status_is(200)
     ->dom_inspector(sub($t) {
         $t->at('title')->text_is('タイトル');
-        $t->at('#main')->text_is('メインコンテンツdynamic');
-        $t->at('#main2')->text_is('DEFAULT MAIN2');
+        $t->at('#main')->text_like(qr{\s*メインコンテンツdynamic\s*});
+        $t->at('#main2')->text_like(qr{\s*DEFAULT MAIN2\s*});
         path_is $t->at('current_template1')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout.html.ep";
         $t->at('current_template2')->text_is("");
         path_is $t->at('use_layout current_template3')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout.html.ep";
@@ -150,7 +150,7 @@ $t->get_ok('/ep/use_layout.html')
         path_is $t->at('layout #main2 current_template3')->dom->[0]->text, "$FindBin::Bin/public_html/ep/layout/common.html.ep";
         path_is $t->at('layout #main2 current_template4')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout.html.ep";
         $t->at('layout #main2 current_template5')->text_is("");
-        $t->at('layout #namespace_test')->text_is("global stash content");
+        $t->at('layout #namespace_test')->text_like(qr{\s*global stash content\s*});
     });
 
 ok ! exists $app->stash->{title};
@@ -161,8 +161,8 @@ $t->get_ok('/ep/use_layout2.html')
     ->status_is(200)
     ->dom_inspector(sub($t) {
         $t->at('title')->text_is('タイトル');
-        $t->at('#main')->text_is('メインコンテンツdynamic');
-        $t->at('#main2')->text_is('DEFAULT MAIN2');
+        $t->at('#main')->text_like(qr{\s*メインコンテンツdynamic\s*});
+        $t->at('#main2')->text_like(qr{\s*DEFAULT MAIN2\s*});
         path_is $t->at('current_template1')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout2.html.ep";
         $t->at('current_template2')->text_is("");
         path_is $t->at('use_layout current_template3')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout2.html.ep";
@@ -174,7 +174,7 @@ $t->get_ok('/ep/use_layout2.html')
         path_is $t->at('layout #main2 current_template3')->dom->[0]->text, "$FindBin::Bin/public_html/ep/layout/common2.html";
         path_is $t->at('layout #main2 current_template4')->dom->[0]->text, "$FindBin::Bin/public_html/ep/use_layout2.html.ep";
         $t->at('layout #main2 current_template5')->text_is("");
-        $t->at('layout #namespace_test')->text_is("global stash content");
+        $t->at('layout #namespace_test')->text_like(qr{\s*global stash content\s*});
     });
 
 ok ! exists $app->stash->{title};

@@ -9,6 +9,7 @@ use Digest::MD5 qw(md5_hex);
 use Carp;
 use Mojo::Asset::File;
 use Mojo::URL;
+use Mojo::Home;
 use Mojolicious::Commands;
 use Mojo::Exception;
 use Marquee::Context;
@@ -28,6 +29,7 @@ has 'document_root';
 has 'default_file';
 has dynamic => sub {Marquee::Dynamic->new};
 has error_document => sub {Marquee::ErrorDocument->new};
+has home => sub { Mojo::Home->new->detect(ref shift) };
 has hooks => sub {Marquee::Hooks->new};
 has roots => sub {[]};
 has route => sub {

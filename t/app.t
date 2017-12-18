@@ -14,7 +14,7 @@ use Mojo::Date;
 use Mojo::Transaction::HTTP;
 use Mojo::URL;
 
-use Test::More tests => 154;
+use Test::More tests => 153;
 
 {
     my $app = Marquee->new;
@@ -225,8 +225,7 @@ $t->get_ok('/index.txt')
     ->header_is('Content-Length', 20)
     ->header_is('Last-Modified', $mtime);
 $t->get_ok('/index.txt', {'If-Modified-Since' => $mtime})
-    ->status_is(304)
-    ->header_is('Content-Length', 0);
+    ->status_is(304);
 
 ### add mime type
 

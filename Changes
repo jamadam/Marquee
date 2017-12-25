@@ -1,6 +1,9 @@
 Revision history for Marquee
 
 0.38 2016/06/15
+  - Updated dependent version of Mojolicious.
+  - Confirmed change on content-length behavior on Mojolicious.
+  - Ported home method of Mojo class.
 
 0.37 2016/06/15
   - Fixed tests

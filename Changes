@@ -1,6 +1,7 @@
 Revision history for Marquee
 
-0.39 2017/12/25
+0.39 2018/03/30
+  - Fixes in favor of Mojolicious 7.71
 
 0.38 2017/12/25
   - Updated dependent version of Mojolicious.

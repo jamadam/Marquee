@@ -1,7 +1,7 @@
 package Marquee;
 use strict;
 use warnings;
-use Mojo::Base 'Mojo';
+use Mojo::Base -base;
 use feature 'signatures';
 no warnings "experimental::signatures";
 use File::Spec::Functions;
@@ -12,6 +12,7 @@ use Mojo::URL;
 use Mojo::Home;
 use Mojolicious::Commands;
 use Mojo::Exception;
+use Mojo::Log;
 use Marquee::Context;
 use Marquee::Dynamic;
 use Marquee::ErrorDocument;
@@ -30,7 +31,21 @@ has 'default_file';
 has dynamic => sub {Marquee::Dynamic->new};
 has error_document => sub {Marquee::ErrorDocument->new};
 has home => sub { Mojo::Home->new->detect(ref shift) };
+has log              => sub {
+  my $self = shift;
+
+  # Check if we have a log directory that is writable
+  my $log  = Mojo::Log->new;
+  my $home = $self->home;
+  my $mode = $self->mode;
+  $log->path($home->child('log', "$mode.log"))
+    if -d $home->child('log') && -w _;
+
+  # Reduced log output outside of development mode
+  return $mode eq 'development' ? $log : $log->level('info');
+};
 has hooks => sub {Marquee::Hooks->new};
+has mode     => sub { $ENV{MOJO_MODE} || $ENV{PLACK_ENV} || 'development' };
 has roots => sub {[]};
 has route => sub {
     my $router = $_[0]->plugin(Router => sub {});
@@ -77,6 +92,10 @@ sub asset($class, $name=undef) {
     my @seed = (substr($INC{$pm}, 0, -3), 'Asset');
     return catdir(@seed, $name) if ($name);
     return catdir(@seed);
+}
+
+sub build_tx {
+  return Mojo::Transaction::HTTP->new;
 }
 
 ### --

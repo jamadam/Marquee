@@ -219,6 +219,12 @@ sub plugin($self, $name, @args) {
 }
 
 ### --
+### server
+### mojo v7.80 (commit:57310d5)
+### --
+sub server { }
+
+### --
 ### serve
 ### --
 sub serve($self, $path=undef) {

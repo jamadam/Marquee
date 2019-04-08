@@ -65,7 +65,7 @@ $app->plugin(AuthPretty => [
     },
 ] => catdir(dirname(__FILE__), 'auth_log'));
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/')
     ->status_is(200)

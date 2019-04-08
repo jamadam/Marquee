@@ -31,7 +31,7 @@ $app->plugin(Auth => [
     },
 ]);
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/index.txt')
     ->status_is(200)

@@ -31,7 +31,7 @@ if ($@) {
 }
 $app->_init();
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/scss/test1.css')
     ->status_is(200)

@@ -24,7 +24,7 @@ $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 my $yatta = 'やった';
 my $yatta_utf8 = b($yatta)->encode('UTF-8')->to_string;

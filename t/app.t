@@ -58,7 +58,7 @@ $app = Marquee->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/')
     ->status_is(404);
@@ -72,7 +72,7 @@ $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/dir1')
     ->status_is(301)
@@ -200,7 +200,7 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 $app->dynamic->add_handler(test => _TestHandler->new);
 $app->dynamic->add_handler(test2 => _Test2Handler->new);
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/index2.html')
     ->status_is(200);
@@ -243,7 +243,7 @@ $t->get_ok('/index.unknown')
     $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/Marquee.log");
-    $t = Test::Mojo->new($app);
+    $t = Test::Mojo::DOM->new($app);
     $t->get_ok('/path_base.html');
     path_is $app->home, "$FindBin::Bin/public_html";
     path_is $ENV{'MARQUEE_BASE_PATH'}, "/public_html";
@@ -255,7 +255,7 @@ $t->get_ok('/index.unknown')
     $app->log_file("$FindBin::Bin/Marquee.log");
     $app->default_file('index.html');
     
-    $t = Test::Mojo->new($app);
+    $t = Test::Mojo::DOM->new($app);
     
     $t->get_ok('/path_base.html')
         ->status_is(200)
@@ -302,7 +302,7 @@ $app = MyApp->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/model.html')
     ->status_is(200)

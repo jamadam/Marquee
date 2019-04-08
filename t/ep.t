@@ -69,7 +69,7 @@ eval {
 
 is $@, '';
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 # param
 
@@ -181,14 +181,14 @@ ok ! exists $app->stash->{title};
 
 ### session
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 $t->get_ok('/ep/session.html');
 $t->text_is(test1 => '');
 $t->text_is(test2 => 'bar');
 $t->get_ok('/ep/session.html');
 $t->text_is(test1 => 'bar');
 $t->text_is(test2 => 'bar');
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 $t->get_ok('/ep/session.html');
 $t->text_is(test1 => '');
 $t->text_is(test2 => 'bar');

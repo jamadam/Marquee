@@ -25,7 +25,7 @@ $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
 $app->plugin('ETag');
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/etag/ascii.txt')
     ->status_is(200)

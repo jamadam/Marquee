@@ -45,7 +45,7 @@ $app = SubClass->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 $app->default_file('index.html');
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/dir1/index.html')
     ->status_is(200)
@@ -57,7 +57,7 @@ $app = SubClass2->new;
 $app->document_root("$FindBin::Bin/public_html");
 $app->log_file("$FindBin::Bin/Marquee.log");
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/index.txt')
     ->status_is(200)

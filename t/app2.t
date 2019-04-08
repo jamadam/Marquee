@@ -83,7 +83,7 @@ $app->log_file("$FindBin::Bin/Marquee.log");
         MyApp->c->res->body(Mojo::JSON::encode_json({a => 1}));
     });
 }
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/index.html')
     ->status_is(200)
@@ -212,7 +212,7 @@ $app->log_file("$FindBin::Bin/Marquee.log");
         $res->body('index2.html');
     });
 };
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/index.html')
     ->status_is(200)

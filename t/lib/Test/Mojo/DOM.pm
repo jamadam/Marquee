@@ -2,6 +2,16 @@ package Test::Mojo::DOM;
 use Mojo::Base 'Test::Mojo';
 use Test::Mojo::DOM::Inspector;
 our $VERSION = '0.04';
+  
+  sub new {
+    my $self = shift->SUPER::new;
+  
+    return $self unless my $app = shift;
+  
+    my @args = @_ ? {config => {config_override => 1, %{shift()}}} : ();
+    return $self->app(
+      ref $app ? $app : Mojo::Server->new->build_app($app, @args));
+  }
 
   sub dom_inspector {
     my ($self, $cb) = @_;

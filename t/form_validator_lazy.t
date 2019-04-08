@@ -3,7 +3,11 @@ use warnings;
 use utf8;
 use feature 'signatures';
 no warnings "experimental::signatures";
-use Test::Mojo;
+use File::Basename 'dirname';
+use File::Spec::Functions qw{catdir splitdir rel2abs canonpath};
+use lib catdir(dirname(__FILE__), '../lib');
+use lib catdir(dirname(__FILE__), 'lib');
+use Test::Mojo::DOM;
 use Marquee;
 use Test::More tests => 187;
 use Mojo::JSON qw{decode_json};
@@ -70,7 +74,7 @@ is_deeply deserialize(serialize(["\\\/"])), ["\\\/"];
 is_deeply deserialize(serialize(["\/\/"])), ["\/\/"];
 is_deeply deserialize(serialize(["やったー"])), ["やったー"];
 
-my $t = Test::Mojo->new($app);
+my $t = Test::Mojo::DOM->new($app);
 my $dom;
 
 $t->get_ok('/test1.html');

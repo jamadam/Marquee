@@ -46,7 +46,7 @@ $app->default_file('index.html');
     });
 }
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 # GET /session_cookie
 $t->get_ok('/session_cookie')
@@ -91,7 +91,7 @@ $app->default_file('index.html');
     });
 };
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 # GET /session_cookie
 $t->get_ok('/session_cookie')
@@ -137,7 +137,7 @@ $app->secrets(['aaaaaaaaaaaaaa']);
     });
 }
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 # GET /session_cookie
 $t->get_ok('/session_cookie')
@@ -207,8 +207,8 @@ $app->secrets(['aaaaaaaaaaaaaa']);
     });
 }
 
-$t = Test::Mojo->new($app);
-$t2 = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
+$t2 = Test::Mojo::DOM->new($app);
 
 # GET /session_cookie
 $t->get_ok('/session_cookie')

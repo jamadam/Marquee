@@ -21,7 +21,7 @@ my $t;
     $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/Marquee.log");
-    $t = Test::Mojo->new($app);
+    $t = Test::Mojo::DOM->new($app);
     
     $t->get_ok('/template_cache/cache.html')
         ->status_is(200);
@@ -41,7 +41,7 @@ my $t;
     $app = Marquee->new;
     $app->document_root("$FindBin::Bin/public_html");
     $app->log_file("$FindBin::Bin/Marquee.log");
-    $t = Test::Mojo->new($app);
+    $t = Test::Mojo::DOM->new($app);
     
     $t->get_ok('/template_cache/cache3.html')
         ->status_is(200);

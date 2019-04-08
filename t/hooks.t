@@ -48,7 +48,7 @@ $app->hook(around_static => my $hook2 = sub($next, @args) {
 is $app->hooks->subscribers('around_static')->[1], $hook1, 'right hook order';
 is $app->hooks->subscribers('around_static')->[2], $hook2, 'right hook order';
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/index.txt')
     ->status_is(200)
@@ -67,7 +67,7 @@ $app->hook(around_static => sub($next, @args) {
     return $app;
 });
 
-$t = Test::Mojo->new($app);
+$t = Test::Mojo::DOM->new($app);
 
 $t->get_ok('/index.txt')
     ->status_is(200)

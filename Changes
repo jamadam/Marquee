@@ -1,6 +1,7 @@
 Revision history for Marquee
 
-0.41 xxxx/xx/xx
+0.41 2019/04/12
+  - Fix tests for Mojolicious 7.93 and later
 
 0.40 2018/05/21
   - Fix for Mojolicious 7.80

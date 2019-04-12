@@ -22,7 +22,7 @@ use Marquee::SSIHandler::EPL;
 use Marquee::Stash;
 use Marquee::Static;
 use Marquee::Types;
-our $VERSION = '0.41';
+our $VERSION = '0.42';
 
 our $CONTEXT;
 

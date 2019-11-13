@@ -19,11 +19,13 @@ use utf8;
 use File::Basename 'dirname';
 use File::Spec;
 use Mojo::Base 'Marquee';
+use feature 'signatures';
+no warnings 'experimental::signatures';
 
 sub new($class, @args) {
     my $self = $class->SUPER::new(@args);
     
-    $self->document_root($self->home->rel_dir('.'));
+    $self->document_root($self->home->rel_file('.'));
     $self->default_file('index.html');
     $self->log_file(File::Spec->rel2abs(dirname(__FILE__). "/log/Marquee.log"));
     
@@ -36,7 +38,7 @@ sub new($class, @args) {
     });
     
     $self->plugin(AuthPretty => [
-        qr{^/admin/} => 'Secret Area' => sub($username, $password) {
+        qr{^/admin/} => 'Secret Area' => sub($username,$password) {
             return $username eq 'jamadam' && $password eq 'pass';
         },
     ] => File::Spec->rel2abs(dirname(__FILE__). "/log/auth_pretty"));

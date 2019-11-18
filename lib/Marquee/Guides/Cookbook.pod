@@ -15,9 +15,18 @@ This document contains some recipes to develop Marquee application.
 Here is a smallest Marquee application.
 
     use Marquee;
+
+    my $app = Marquee->new(document_root => '/tmp');
+
+    $app->start;
     
+Or alternatively :
+    
+    use Marquee;
+
     my $app = Marquee->new;
-    
+    $app->document_root('/tmp');
+
     $app->start;
 
 You also can separate the app into a class (shown below) and

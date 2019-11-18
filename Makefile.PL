@@ -29,7 +29,7 @@ WriteMakefile(
     'Test::UseAllModules'   => '0.10',
   },
   PREREQ_PM => {
-    'Mojolicious' => '8.13',
+    'Mojolicious' => '8.26',
   },
   test => {TESTS => 't/*.t t/*/*.t'}
 );

@@ -13,6 +13,8 @@ use Mojo::Home;
 use Mojolicious::Commands;
 use Mojo::Exception;
 use Mojo::Log;
+use Mojo::Transaction::HTTP;
+use Mojo::Util;
 use Marquee::Context;
 use Marquee::Dynamic;
 use Marquee::ErrorDocument;
@@ -97,6 +99,8 @@ sub asset($class, $name=undef) {
 sub build_tx {
   return Mojo::Transaction::HTTP->new;
 }
+
+sub config { Mojo::Util::_stash(config   => @_) }
 
 ### --
 ### Shortcut for context
@@ -505,6 +509,21 @@ The following is an example for getting bundle files of arbitrary module.
 
 L<Marquee> inherits all instance methods from L<Mojo> and implements the
 following new ones.
+
+=head2 config
+
+    my $hash = $app->config;
+    my $foo  = $app->config('foo');
+    $app     = $app->config({foo => 'bar', baz => 23});
+    $app     = $app->config(foo => 'bar', baz => 23);
+
+Application configuration.
+
+    # Remove value
+    my $foo = delete $app->config->{foo};
+    
+    # Assign multiple values at once
+    $app->config(foo => 'test', bar => 23);
 
 =head2 C<c>
 

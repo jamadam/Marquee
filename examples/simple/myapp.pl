@@ -14,5 +14,5 @@ $app->document_root($app->home->rel_file('public_html'));
 $app->log_file(File::Spec->rel2abs(dirname(__FILE__). "/log/Marquee.log"));
 $app->default_file('index.html');
 $app->plugin('AutoIndex');
-#$app->config(hypnotoad => {listen => ['http://*:8002']});
+$app->config(hypnotoad => {listen => ['http://*:8002']});
 $app->start;

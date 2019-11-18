@@ -99,8 +99,7 @@ Here is some screenshots of how Marquee look like.
 
 ## REPOSITORY
 
-[https://github.com/jamadam/Marquee]
-[https://github.com/jamadam/Marquee]:https://github.com/jamadam/Marquee
+[Marquee](https://github.com/jamadam/Marquee)
 
 ## CREDIT
 

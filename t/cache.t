@@ -1,9 +1,9 @@
 use strict;
 use warnings;
-use feature 'signatures';
+use feature qw(signatures state);
 no warnings "experimental::signatures";
 
-use Test::More tests => 32;
+use Test::More tests => 34;
 
 use_ok 'Marquee::Cache';
 
@@ -51,9 +51,11 @@ is $cache->get('foo'), undef, 'has expired';
 $cache = Marquee::Cache->new;
 $cache->max_keys(10000);
 $cache->set(foo => 'bar', sub($ts) {
-    is time - $ts, 1, '1 sec passed';
+    ok $ts, 'given';
+    state $a = 0;
+    return $a++ > 0;
 });
-sleep(1);
+is $cache->get('foo'), 'bar', 'has expired';
 is $cache->get('foo'), undef, 'has expired';
 
 $cache = Marquee::Cache->new();
